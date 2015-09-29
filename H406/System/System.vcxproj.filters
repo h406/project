@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{9caeba80-75e2-4660-a310-9fdcce079848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{776af547-7526-47d3-950b-5980f611fae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="node">
+      <UniqueIdentifier>{cc67170c-8c1d-495d-b31a-1d42101c14cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\stdafx">
+      <UniqueIdentifier>{5d8f145b-b2c9-41e8-993c-45151bcb6d7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app">
+      <UniqueIdentifier>{07728cde-d483-4cbd-8c08-6a6715006846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer">
+      <UniqueIdentifier>{aa24dd8c-172e-435b-b6d1-bff68dc0e388}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="window.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="node.cpp">
+      <Filter>node</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>common\stdafx</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>app</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="system.h" />
+    <ClInclude Include="window.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="node.h">
+      <Filter>node</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>common\stdafx</Filter>
+    </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
