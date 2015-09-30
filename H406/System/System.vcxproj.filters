@@ -19,6 +19,12 @@
     <Filter Include="renderer">
       <UniqueIdentifier>{aa24dd8c-172e-435b-b6d1-bff68dc0e388}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{02054cee-fa1c-4d04-955b-af662e7f8b9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\manager">
+      <UniqueIdentifier>{cfc54f44-582d-48b3-b160-bcae75866ebb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -35,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="renderer.cpp">
       <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="textureManager.cpp">
+      <Filter>renderer\manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +68,12 @@
     </ClInclude>
     <ClInclude Include="common.h">
       <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="comptr.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="textureManager.h">
+      <Filter>renderer\manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
 #define _RENDERER_H_
 
 class App;
+class TextureManager;
 
 //==============================================================================
 //  class
@@ -34,6 +35,8 @@ private:
   // •K—v‚ÈMatrix
   Matrix _mtxProj;
   Matrix _mtxView;
+
+  TextureManager* _textureManager;
 };
 
 #endif
