@@ -6,6 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{43B9BAFE-C1A4-436B-A694-BBF7B1AA2DF5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "System", "System\System.vcxproj", "{3659DEA9-6A89-4136-9A92-C445EAE2F877}"
+	ProjectSection(ProjectDependencies) = postProject
+		{395D452A-8D82-4819-88D3-45678DA101E3} = {395D452A-8D82-4819-88D3-45678DA101E3}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shader", "Shader\Shader.vcxproj", "{395D452A-8D82-4819-88D3-45678DA101E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{3659DEA9-6A89-4136-9A92-C445EAE2F877}.Debug|Win32.Build.0 = Debug|Win32
 		{3659DEA9-6A89-4136-9A92-C445EAE2F877}.Release|Win32.ActiveCfg = Release|Win32
 		{3659DEA9-6A89-4136-9A92-C445EAE2F877}.Release|Win32.Build.0 = Release|Win32
+		{395D452A-8D82-4819-88D3-45678DA101E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{395D452A-8D82-4819-88D3-45678DA101E3}.Debug|Win32.Build.0 = Debug|Win32
+		{395D452A-8D82-4819-88D3-45678DA101E3}.Release|Win32.ActiveCfg = Release|Win32
+		{395D452A-8D82-4819-88D3-45678DA101E3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

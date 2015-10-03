@@ -1,74 +1,67 @@
 //==============================================================================
 //
-// app[app.cpp]
-// Author : Yasuaki Yamashita : 2015/09/28
+// camera[camera.cpp]
+// Author : Yasuaki Yamashita : 2015/10/01
 //
 //==============================================================================
 
 //******************************************************************************
 // include
 //******************************************************************************
-#include "app.h"
-#include "renderer.h"
-#include "input.h"
+#include "camera.h"
 
 //==============================================================================
-// instance
+// 
 //------------------------------------------------------------------------------
-App& App::instance(int width,int height) {
-  static App app(width,height);
-  return app;
+void Camera::CameraEx::update() {
+  // ビューマトリックス
+  D3DXMatrixIdentity(&_mtxView); // ビューマトリックスの初期化
+  D3DXMatrixLookAtLH(&_mtxView,&_posCameraP,&_posCameraR,&_vecCameraU);
 }
 
 //==============================================================================
-// const
+//
 //------------------------------------------------------------------------------
-App::App(int width,int height)
-  : Window(width,height)
-  ,_baceNode(nullptr)
-  ,_renderer(new Renderer(this))
-  ,_input(new Input()){
-
-  
+Camera::Camera() {
+  _cameraList.clear();
 }
 
 //==============================================================================
-// dest
+//
 //------------------------------------------------------------------------------
-App::~App() {
-  if(_baceNode != nullptr) {
-    _baceNode->release();
-    _baceNode = nullptr;
+Camera::~Camera() {
+  for(auto& cam : _cameraList) {
+    SafeDelete(cam);
   }
-
-  SafeDelete(_renderer);
-  SafeDelete(_input);
+  _cameraList.clear();
 }
 
 //==============================================================================
-// update
+// createCamera
 //------------------------------------------------------------------------------
-void App::update() {
-  if(_baceNode != nullptr)
-    _baceNode->updateChild();
-
-  _renderer->draw(_baceNode);
+CameraBace* Camera::createCamera() {
+  auto cam = new CameraEx();
+  _cameraList.push_back(cam);
+  return cam;
 }
 
 //==============================================================================
-// setBaceNode
+//
 //------------------------------------------------------------------------------
-void App::setBaceNode(node* baceNode) {
-  if(baceNode == nullptr) {
-    return;
-  }
-
-  if(_baceNode != nullptr) {
-    _baceNode->release();
-  }
-
-  _baceNode = baceNode;
+void Camera::releaseCamera(CameraBace* camera) {
+  auto it = remove_if(_cameraList.begin(),_cameraList.end(),[camera](CameraEx* cam) {return camera == cam;});
+  _cameraList.erase(it);
+  SafeDelete(camera);
 }
 
+//==============================================================================
+//
+//------------------------------------------------------------------------------
+void Camera::update() {
+  for(auto& cam : _cameraList) {
+    if(cam->isUpdate())
+      update();
+  }
+}
 
 //EOF

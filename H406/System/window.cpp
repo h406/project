@@ -29,7 +29,7 @@ Window::Window(int width,int height)
   ,_nCountFPS(0) {
 
   // メモリーク検出フラグ
-  //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+  _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
   //ウィンドウクラス作成
   WNDCLASSEX wcex =

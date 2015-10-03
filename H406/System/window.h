@@ -28,6 +28,8 @@ public:
 
   void setTitle(const char* text);
 
+  void exit(int errcode = 0) { _bExitApplication = true; }
+
 protected:
 
   Window(int width,int height);

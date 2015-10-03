@@ -16,5 +16,12 @@
 #include "window.h"
 #include "app.h"
 
+#include "texture.h"
+#include "shader.h"
+#include "camera.h"
+
+#include "iObject.h"
+#include "xFileObject.h"
+
 #endif
 //EOF

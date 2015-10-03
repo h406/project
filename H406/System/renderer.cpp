@@ -10,11 +10,33 @@
 //******************************************************************************
 #include "app.h"
 #include "renderer.h"
+#include "texture.h"
+#include "camera.h"
+#include "shader.h"
 
 //==============================================================================
 // renderer
 //------------------------------------------------------------------------------
 Renderer::Renderer(const App* app) {
+  
+  // デバイス
+  createDevice(app->getWindowSize(), app->getHWnd());
+
+  // テクスチャマネージャ
+  _texture = new Texture(this);
+
+  // カメラ
+  _camera = new Camera();
+
+  // シェーダ
+  _shader = new Shader(this);
+}
+
+//==============================================================================
+// デバイス生成
+//------------------------------------------------------------------------------
+void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
+
   D3DDISPLAYMODE d3ddm;
   D3DPRESENT_PARAMETERS d3dpp;	// ディスプレイへの出力方法を決める情報
 
@@ -31,9 +53,6 @@ Renderer::Renderer(const App* app) {
     return;
   }
 
-  // window
-  const SIZE& windowSize = app->getWindowSize();
-
   ZeroMemory(&d3dpp,sizeof(d3dpp));	// 0でbitを初期化
   d3dpp.BackBufferWidth = windowSize.cx;	// バッファーの幅
   d3dpp.BackBufferHeight = windowSize.cy;	// バッファーの高さ
@@ -45,7 +64,7 @@ Renderer::Renderer(const App* app) {
   d3dpp.AutoDepthStencilFormat = D3DFMT_D16;	// 16bitに指定
   d3dpp.FullScreen_RefreshRateInHz = 0;  // 他のウィンドウもいるので、レートを指定しない
   d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE; // 描画を即時に指定(リフレッシュレートとの不一致を考慮)
-  d3dpp.hDeviceWindow = app->getHWnd();
+  d3dpp.hDeviceWindow = hWnd;
 
   // デバイスオブジェクトの生成
   // [デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
@@ -86,10 +105,6 @@ Renderer::Renderer(const App* app) {
   // いらない
   pD3D->Release();
 
-  // ビューマトリックス
-  D3DXMatrixIdentity(&_mtxView); // ビューマトリックスの初期化
-  //D3DXMatrixLookAtLH(&_mtxView,&_posCameraP,&_posCameraR,&_vecCameraU);
-
   // プロジェクションマトリックス
   D3DXMatrixIdentity(&_mtxProj);
   D3DXMatrixPerspectiveFovLH(&_mtxProj,		// プロジェクションマトリックスの初期化
@@ -107,6 +122,7 @@ Renderer::Renderer(const App* app) {
   vp.MaxZ = 1;
   vp.MinZ = 0;
   _pD3DDevice->SetViewport(&vp);
+
 }
 
 //==============================================================================
@@ -114,6 +130,9 @@ Renderer::Renderer(const App* app) {
 //------------------------------------------------------------------------------
 Renderer::~Renderer() {
   SafeRelease(_pD3DDevice);
+  SafeDelete(_texture);
+  SafeDelete(_camera);
+  SafeDelete(_shader);
 }
 
 //==============================================================================

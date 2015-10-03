@@ -8,13 +8,13 @@
 //******************************************************************************
 // include
 //******************************************************************************
-#include "textureManager.h"
+#include "texture.h"
 #include "renderer.h"
 
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-TextureManager::TextureManager(const Renderer* renderer)
+Texture::Texture(const Renderer* renderer)
   :_renderer(renderer) {
 
   // 1x1の白色tgaテクスチャ
@@ -31,7 +31,7 @@ TextureManager::TextureManager(const Renderer* renderer)
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-TextureManager::~TextureManager() {
+Texture::~Texture() {
   for(auto& obj : _TexList) {
     SafeRelease(obj);
   }
@@ -42,7 +42,7 @@ TextureManager::~TextureManager() {
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-unsigned int TextureManager::createTexture(const char* filename) {
+unsigned int Texture::createTexture(const char* filename) {
   auto it = _TexMap.find(filename);
   if(it != _TexMap.end()) return it->second;
   LPDIRECT3DTEXTURE9 tex = nullptr;
@@ -56,14 +56,14 @@ unsigned int TextureManager::createTexture(const char* filename) {
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-LPDIRECT3DTEXTURE9 TextureManager::getTexture(unsigned int id) {
+LPDIRECT3DTEXTURE9 Texture::getTexture(unsigned int id) {
   return _TexList[id];
 }
 
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-LPDIRECT3DTEXTURE9 TextureManager::getTexture(const char* filename) {
+LPDIRECT3DTEXTURE9 Texture::getTexture(const char* filename) {
   auto it = _TexMap.find(filename);
   if(it == _TexMap.end()) return nullptr;
   return _TexList[it->second];

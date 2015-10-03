@@ -11,7 +11,9 @@
 #define _RENDERER_H_
 
 class App;
-class TextureManager;
+class Texture;
+class Camera;
+class Shader;
 
 //==============================================================================
 //  class
@@ -28,15 +30,31 @@ public:
   const Matrix& getViewMtx() const { return _mtxView; }
   const Matrix& getProjMtx() const { return _mtxProj; }
 
+  Texture* getTexture() const { return _texture; }
+  Camera* getCamera() const { return _camera; }
+  Shader* getShader() const { return _shader; }
+
+private:
+  void createDevice(const SIZE& windowSize, HWND hWnd);
+
 private:
   //device
   LPDIRECT3DDEVICE9 _pD3DDevice;
 
-  // 必要なMatrix
+  // ProjectonMatrix
   Matrix _mtxProj;
+
+  // ViewMatrix
   Matrix _mtxView;
 
-  TextureManager* _textureManager;
+  // テクスチャマネージャ
+  Texture* _texture;
+  
+  // cam
+  Camera* _camera;
+
+  // シェーダ
+  Shader* _shader;
 };
 
 #endif

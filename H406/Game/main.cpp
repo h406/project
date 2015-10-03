@@ -25,9 +25,8 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
   UnusedParam(lpCmdLine);
   UnusedParam(nCmdShow);
 
-
   App& app = App::instance(1280,720);
-  app.setTitle("adad");
+  app.setTitle("H406");
   return app.run();
 }
 

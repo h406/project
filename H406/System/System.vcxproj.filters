@@ -22,8 +22,17 @@
     <Filter Include="object">
       <UniqueIdentifier>{02054cee-fa1c-4d04-955b-af662e7f8b9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="renderer\manager">
+    <Filter Include="input">
+      <UniqueIdentifier>{b4045ff4-031b-46b1-885c-52a5829a0ce8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\camera">
+      <UniqueIdentifier>{d23a35e2-5580-4f87-9dc8-6446bfab3939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\texture">
       <UniqueIdentifier>{cfc54f44-582d-48b3-b160-bcae75866ebb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\shader">
+      <UniqueIdentifier>{68fbb458-c545-40f5-a4c0-85117cb25f21}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,8 +51,20 @@
     <ClCompile Include="renderer.cpp">
       <Filter>renderer</Filter>
     </ClCompile>
-    <ClCompile Include="textureManager.cpp">
-      <Filter>renderer\manager</Filter>
+    <ClCompile Include="texture.cpp">
+      <Filter>renderer\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>renderer\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>renderer\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="xFileObject.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -69,11 +90,35 @@
     <ClInclude Include="common.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="comptr.h">
-      <Filter>common</Filter>
+    <ClInclude Include="texture.h">
+      <Filter>renderer\texture</Filter>
     </ClInclude>
-    <ClInclude Include="textureManager.h">
-      <Filter>renderer\manager</Filter>
+    <ClInclude Include="camera.h">
+      <Filter>renderer\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraBace.h">
+      <Filter>renderer\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="iShader.h">
+      <Filter>renderer\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="iObject.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="xFileObject.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="vInput.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="iInput.h">
+      <Filter>input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
