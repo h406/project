@@ -10,11 +10,11 @@
 #ifndef _XFILEOBJECT_H_
 #define _XFILEOBJECT_H_
 
-#include "iObject.h"
+#include "iDrawObject.h"
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class XFileObject : public iObject {
+class XFileObject : public iDrawObject {
 public:
   bool init(const char* file);
   virtual void update();

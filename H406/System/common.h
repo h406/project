@@ -37,5 +37,11 @@ inline void SafeDeleteArray(_T*& p) {
   }
 }
 
+// g‚í‚È‚¢•Ï”—p
+template <class  _T>
+void inline UnusedParam(_T param) {
+  (param);
+}
+
 #endif
 //EOF

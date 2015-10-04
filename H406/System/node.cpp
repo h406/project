@@ -17,12 +17,30 @@ node::node()
   :_parent(nullptr)
   ,_zOrder(0)
   ,_zOrderChenged(false)
+  ,_destroy(false)
   ,_pos(0.f,0.f,0.f)
   ,_rot(0.f,0.f,0.f)
   ,_scl(1.f,1.f,1.f)
-  ,_destroy(false)
 {
 }
+
+//==============================================================================
+// updateChild
+//------------------------------------------------------------------------------
+void node::updateWorldMtx() {
+  D3DXMATRIX mtxTmp;
+  D3DXMatrixIdentity(&_mtxWorld);// ワールドマトリックスの初期化
+  D3DXMatrixScaling(&mtxTmp,_scl.x,_scl.y,_scl.z);
+  D3DXMatrixMultiply(&_mtxWorld,&_mtxWorld,&mtxTmp);
+  D3DXMatrixRotationYawPitchRoll(&mtxTmp,_rot.y,_rot.x,_rot.z);		// 回転
+  D3DXMatrixMultiply(&_mtxWorld,&_mtxWorld,&mtxTmp);
+  D3DXMatrixTranslation(&mtxTmp,_pos.x,_pos.y,_pos.z);			// 位置
+  D3DXMatrixMultiply(&_mtxWorld,&_mtxWorld,&mtxTmp);
+
+  if(_parent != nullptr)
+    _mtxWorld = _mtxWorld * _parent->getWorldMtx();
+}
+
 
 //==============================================================================
 // updateChild
@@ -39,14 +57,14 @@ void node::updateChild() {
     return;
   }
 
-  // zOrder
-  if(_zOrderChenged) {
-    _childList.sort([](node*& obj1,node*& obj2) {return obj1->_zOrder < obj2->_zOrder;});
-    _zOrderChenged = false;
-  }
+  zOderCheck();
+
+  if(_worldChenged)
+    updateWorldMtx();
   
   // update
   for(node*& obj : _childList) {
+    if(_worldChenged) obj->_worldChenged = true;
     obj->updateChild();
   }
 }
@@ -124,6 +142,17 @@ void node::addChild(node* node) {
 //------------------------------------------------------------------------------
 void node::removeChild(node* node) {
   _removeList.push_back(node);
+}
+
+//==============================================================================
+// zOderCheck
+//------------------------------------------------------------------------------
+void node::zOderCheck() {
+  // zOrder
+  if(_zOrderChenged) {
+    _childList.sort([](node*& obj1,node*& obj2) {return obj1->_zOrder < obj2->_zOrder;});
+    _zOrderChenged = false;
+  }
 }
 
 //EOF

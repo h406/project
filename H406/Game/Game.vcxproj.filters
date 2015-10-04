@@ -4,10 +4,16 @@
     <Filter Include="common">
       <UniqueIdentifier>{4821ad1f-9627-47be-bb8f-812b405cf89f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="title">
+      <UniqueIdentifier>{06c12657-07b8-4ba0-ac92-ca9c7c3ba242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -15,5 +21,8 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="title.cpp">
+      <Filter>title</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

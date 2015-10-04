@@ -12,12 +12,14 @@
 
 #include "vInput.h"
 
+class Input;
+
 //*****************************************************************************
 // ƒNƒ‰ƒXéŒ¾
 //*****************************************************************************
 class iInput {
 public:
-  virtual void init(void) = 0;
+  virtual void init(Input *) = 0;
   virtual void uninit(void) = 0;
   virtual void update(void) = 0;
 

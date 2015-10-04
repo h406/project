@@ -20,7 +20,6 @@ Shader::Shader(Renderer* renderer)
   ,_nowVtxShader(nullptr)
   ,_renderer(renderer) {
 
-
   //TODO shaderê∂ê¨
   /*
   // ê∂ê¨
@@ -162,8 +161,8 @@ unsigned int Shader::createPixShader(const char * file) {
     file,
     nullptr,
     nullptr,
-    "PS",
-    "ps_2_0",
+    "main",
+    "ps_3_0",
     0,
     &code,
     &err,
@@ -208,8 +207,8 @@ unsigned int Shader::createVtxShader(const char * file) {
     file,
     nullptr,
     nullptr,
-    "VS",
-    "vs_2_0",
+    "main",
+    "vs_3_0",
     0,
     &code,
     &err,

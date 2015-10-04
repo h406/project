@@ -29,9 +29,27 @@ public:
   bool isRelease(VK_INPUT vk) const;
   bool isRepeat(VK_INPUT vk) const;
 
+  // インプットデバイス
+  LPDIRECTINPUT8 getInputDevice(void) const { return _pInputDevice; }
+
+  // リピート用タイム
+  int getRepeatStartTime(void) const { return _nRepeatStartTime; }
+  int getRepeatSleepTime(void) const { return _nRepeatSleepTime; }
+
+  // リピート用セッタ
+  void setRepeatStartTime(int time) { _nRepeatStartTime = time; }
+  void setRepeatSleepTime(int time) { _nRepeatSleepTime = time; }
+
 private:
   vector<iInput*> _inputList;
 
+  // インプット用デバイス
+  LPDIRECTINPUT8 _pInputDevice;
+
+  // リピート入力が始まるまでの時間(フレーム数)
+  int _nRepeatStartTime;
+  // リピート入力が繰り返すまでの時間(フレーム数)
+  int _nRepeatSleepTime;
 };
 
 #endif

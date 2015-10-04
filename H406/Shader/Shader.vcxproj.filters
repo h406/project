@@ -4,8 +4,57 @@
     <Filter Include="ps">
       <UniqueIdentifier>{493aa31b-576c-4510-85b2-756919cf0790}</UniqueIdentifier>
     </Filter>
+    <Filter Include="uniform">
+      <UniqueIdentifier>{84ffa5d0-bedb-487b-b407-edd3df9e55e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="struct">
+      <UniqueIdentifier>{9d833346-c689-4167-8295-ee4272abcc72}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vs">
       <UniqueIdentifier>{19e79d94-e0c0-42c6-b8da-df1df24667fb}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="inputPS.hlsli">
+      <Filter>struct</Filter>
+    </None>
+    <None Include="texSamp0.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="inputVS.hlsli">
+      <Filter>struct</Filter>
+    </None>
+    <None Include="outputVS.hlsli">
+      <Filter>struct</Filter>
+    </None>
+    <None Include="world.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="wvp.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="material.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="proj.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="uvAnim.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="screenSize.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ps_bace.hlsl">
+      <Filter>ps</Filter>
+    </FxCompile>
+    <FxCompile Include="vs_model.hlsl">
+      <Filter>vs</Filter>
+    </FxCompile>
+    <FxCompile Include="vs_2d.hlsl">
+      <Filter>vs</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

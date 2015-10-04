@@ -14,6 +14,8 @@
 
 class Renderer;
 class Input;
+class node;
+using iScene = node;
 
 //==============================================================================
 // App
@@ -24,7 +26,7 @@ public:
   const Renderer* getRenderer() const { return _renderer; }
   const Input* getInput() const { return _input; }
 
-  void setBaceNode(node* baceNode);
+  void setBaceScene(iScene* baceScene);
 
 protected:
   void update();
@@ -33,7 +35,7 @@ private:
   App(int width, int height);
   virtual ~App();
 
-  node* _baceNode;
+  iScene* _baceScene;
   Renderer* _renderer;
   Input* _input;
 };

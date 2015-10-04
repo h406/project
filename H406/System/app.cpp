@@ -11,6 +11,8 @@
 #include "app.h"
 #include "renderer.h"
 #include "input.h"
+#include "node.h"
+#include "iScene.h"
 
 //==============================================================================
 // instance
@@ -25,7 +27,7 @@ App& App::instance(int width,int height) {
 //------------------------------------------------------------------------------
 App::App(int width,int height)
   : Window(width,height)
-  ,_baceNode(nullptr)
+  ,_baceScene(nullptr)
   ,_renderer(new Renderer(this))
   ,_input(new Input()){
 
@@ -36,9 +38,9 @@ App::App(int width,int height)
 // dest
 //------------------------------------------------------------------------------
 App::~App() {
-  if(_baceNode != nullptr) {
-    _baceNode->release();
-    _baceNode = nullptr;
+  if(_baceScene != nullptr) {
+    _baceScene->release();
+    _baceScene = nullptr;
   }
 
   SafeDelete(_renderer);
@@ -49,25 +51,27 @@ App::~App() {
 // update
 //------------------------------------------------------------------------------
 void App::update() {
-  if(_baceNode != nullptr)
-    _baceNode->updateChild();
+  _input->update();
 
-  _renderer->draw(_baceNode);
+  if(_baceScene != nullptr)
+    _baceScene->updateChild();
+
+  _renderer->draw(_baceScene);
 }
 
 //==============================================================================
 // setBaceNode
 //------------------------------------------------------------------------------
-void App::setBaceNode(node* baceNode) {
-  if(baceNode == nullptr) {
+void App::setBaceScene(iScene* baceScene) {
+  if(baceScene == nullptr) {
     return;
   }
 
-  if(_baceNode != nullptr) {
-    _baceNode->release();
+  if(_baceScene != nullptr) {
+    _baceScene->release();
   }
 
-  _baceNode = baceNode;
+  _baceScene = baceScene;
 }
 
 

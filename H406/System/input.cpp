@@ -11,11 +11,30 @@
 #include "input.h"
 #include "iInput.h"
 #include "vInput.h"
+#include "app.h"
+#include "keyboard.h"
 
 //==============================================================================
 // input
 //------------------------------------------------------------------------------
-Input::Input() {
+Input::Input() :_pInputDevice (nullptr) {
+  // Inputオブジェクト生成判定
+  if(_pInputDevice == nullptr) {
+    // Inputオブジェクトの生成
+    if(FAILED(DirectInput8Create(App::instance().getHInst(),
+      DIRECTINPUT_VERSION,
+      IID_IDirectInput8,
+      (void **)&_pInputDevice,
+      nullptr))) {
+      // 生成失敗
+      MessageBox(NULL,"Inputオブジェクトの生成に失敗しました","エラー",MB_OK | MB_ICONHAND);
+      return;
+    }
+  }
+
+  auto key = new KeyBoard();
+  key->init(this);
+  _inputList.push_back(key);
 
 }
 
@@ -28,6 +47,12 @@ Input::~Input() {
     SafeDelete(obj);
   }
   _inputList.clear();
+}
+
+void Input::update() {
+  for(auto& obj : _inputList) {
+    obj->update();
+  }
 }
 
 //==============================================================================

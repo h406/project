@@ -15,13 +15,17 @@
 #include "node.h"
 #include "window.h"
 #include "app.h"
+#include "input.h"
 
 #include "texture.h"
 #include "shader.h"
 #include "camera.h"
 
-#include "iObject.h"
+#include "iDrawObject.h"
 #include "xFileObject.h"
+
+#include "iScene.h"
+#include "iLayer.h"
 
 #endif
 //EOF

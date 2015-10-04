@@ -38,7 +38,7 @@ public :
   }
 
   // update
-  void updateChild();
+  virtual void updateChild();
   void drawChild(const Renderer* renderer);
 
   // release
@@ -60,23 +60,25 @@ public :
   const Vec3& getRot() { return _rot; }
   const Vec3& getScl() { return _scl; }
 
-  void setPos(const Vec3& pos) { _pos = pos; }
-  void setRot(const Vec3& rot) { _rot = rot; }
-  void setScl(const Vec3& scl) { _scl = scl; }
+  void setPos(const Vec3& pos) { _worldChenged = true; _pos = pos; }
+  void setRot(const Vec3& rot) { _worldChenged = true; _rot = rot; }
+  void setScl(const Vec3& scl) { _worldChenged = true; _scl = scl; }
+
+  const Matrix& getWorldMtx() { return _mtxWorld; }
 
 protected:
   // node
   node();
   virtual ~node() {};
 
-  // 位置など
-  Vec3 _pos;
-  Vec3 _rot;
-  Vec3 _scl;
-
 private:
+
   // 削除チェック
   void removeCheck();
+
+  void zOderCheck();
+
+  void updateWorldMtx();
 
   // 親
   node* _parent;
@@ -95,6 +97,15 @@ private:
 
   bool _destroy;
 
+
+  Matrix _mtxWorld;
+
+  // 位置など
+  Vec3 _pos;
+  Vec3 _rot;
+  Vec3 _scl;
+
+  bool _worldChenged;
 };
 
 #endif

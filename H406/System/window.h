@@ -28,7 +28,7 @@ public:
 
   void setTitle(const char* text);
 
-  void exit(int errcode = 0) { _bExitApplication = true; }
+  void exit() { _bExitApplication = true; }
 
 protected:
 

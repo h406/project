@@ -5,16 +5,8 @@
 //
 //==============================================================================
 
-//==============================================================================
-// Anonymous namespace
-//------------------------------------------------------------------------------
-namespace {
-  // égÇÌÇ»Ç¢ïœêîóp
-  template <class  _T>
-  void inline UnusedParam(_T param) {
-    (param);
-  }
-}
+
+#include "title.h"
 
 //------------------------------------------------------------------------------
 // WinMain
@@ -27,6 +19,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
   App& app = App::instance(1280,720);
   app.setTitle("H406");
+  app.setBaceScene(Title::create<Title>());
   return app.run();
 }
 

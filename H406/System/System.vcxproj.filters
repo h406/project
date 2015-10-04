@@ -34,6 +34,21 @@
     <Filter Include="renderer\shader">
       <UniqueIdentifier>{68fbb458-c545-40f5-a4c0-85117cb25f21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="input\keyboard">
+      <UniqueIdentifier>{1dab5002-2596-4fe9-ac4d-2ba3cecbae88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\xinput">
+      <UniqueIdentifier>{784aaf71-6286-4e5c-805f-efe830707a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input\dinput">
+      <UniqueIdentifier>{70eaed8e-8bac-459d-b395-8c346e9b8c8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\drawObject">
+      <UniqueIdentifier>{d4f9e1f2-4dc5-4b14-9b50-edc6804e2454}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\gameObject">
+      <UniqueIdentifier>{cac65ade-860c-4c33-b62f-21a9446cae41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -60,11 +75,14 @@
     <ClCompile Include="shader.cpp">
       <Filter>renderer\shader</Filter>
     </ClCompile>
-    <ClCompile Include="xFileObject.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="input.cpp">
       <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboard.cpp">
+      <Filter>input\keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="xFileObject.cpp">
+      <Filter>object\drawObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,12 +123,6 @@
     <ClInclude Include="iShader.h">
       <Filter>renderer\shader</Filter>
     </ClInclude>
-    <ClInclude Include="iObject.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="xFileObject.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>input</Filter>
     </ClInclude>
@@ -119,6 +131,21 @@
     </ClInclude>
     <ClInclude Include="iInput.h">
       <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="keyboard.h">
+      <Filter>input\keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="xFileObject.h">
+      <Filter>object\drawObject</Filter>
+    </ClInclude>
+    <ClInclude Include="iLayer.h">
+      <Filter>object\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="iScene.h">
+      <Filter>object\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="iDrawObject.h">
+      <Filter>object\drawObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
