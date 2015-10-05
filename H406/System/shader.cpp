@@ -12,6 +12,33 @@
 #include "renderer.h"
 #include "iShader.h"
 
+namespace {
+  inline bool isfile(const char *filename) {
+    FILE  *fp = nullptr;
+    fopen_s(&fp, filename,"r");
+    if(fp == nullptr)
+      return false;
+    fclose(fp);
+    return true;
+  }
+
+  // return のポインターは必ず消去
+ inline DWORD* fileread(const char* filename) {
+    FILE *fp = nullptr;
+    long size;
+    fopen_s(&fp,filename,"r");
+    fseek(fp,0,SEEK_END);
+    size = ftell(fp);
+    fseek(fp,0,SEEK_SET);
+    DWORD* dat = new DWORD[size];
+    fread_s(dat,size * sizeof(DWORD),size,1,fp);
+    fclose(fp);
+    return dat;
+  }
+
+  const string kBaceShaderFolder("./data/shader/");
+}
+
 //==============================================================================
 // Shader
 //------------------------------------------------------------------------------
@@ -20,22 +47,21 @@ Shader::Shader(Renderer* renderer)
   ,_nowVtxShader(nullptr)
   ,_renderer(renderer) {
 
-  //TODO shader生成
-  /*
-  // 生成
-  createVtxShader("vs_model.fx");
-  createVtxShader("vs_fog.fx");
-  createVtxShader("vs_velocity.fx");
-  createVtxShader("vs_far.fx");
-  createVtxShader("vs_parpix.fx");
-
-  // 
-  createPixelShader("ps_original.fx");
-  createPixelShader("ps_akarui.fx");
-  createPixelShader("ps_motionBlur.fx");
-  createPixelShader("ps_far.fx");
-  createPixelShader("ps_parpix.fx");
-  */
+  /// シェーダフォルダを全て読み込む
+  namespace sys = std::tr2::sys;
+  sys::path p(kBaceShaderFolder);
+  std::for_each(sys::directory_iterator(p),sys::directory_iterator(),
+    [this](const sys::path& p) {
+    if(sys::is_regular_file(p)) { // ファイルなら...
+      const string& file = p.filename();
+      if(file[0] == 'p' && file[1] == 's') {
+        createPixShader((kBaceShaderFolder + file).c_str());
+      }
+      else if(file[0] == 'v' && file[1] == 's') {
+        createVtxShader((kBaceShaderFolder + file).c_str());
+      }
+    }
+  });
 }
 
 //==============================================================================
@@ -151,42 +177,42 @@ void Shader::setPixShader(unsigned int id) {
 //------------------------------------------------------------------------------
 unsigned int Shader::createPixShader(const char * file) {
   HRESULT hr;
-  LPD3DXBUFFER err;
-  LPD3DXBUFFER code;
   auto pDevice = _renderer->getDevice();
   PixShader* pixelShader = new PixShader();
 
-  // Pixelシェーダコンパイル
-  hr = D3DXCompileShaderFromFile(
-    file,
-    nullptr,
-    nullptr,
-    "main",
-    "ps_3_0",
-    0,
-    &code,
-    &err,
-    &pixelShader->_constTable);
-  if(FAILED(hr)) {
-    MessageBoxA(NULL,(LPCSTR)err->GetBufferPointer(),("D3DXCompileShaderFromFile"),MB_OK);
-    err->Release();
+  if(!isfile(file)) {
+    MessageBoxA(NULL,"そんなファイルネェ","error",MB_OK);
+    App::instance().exit();
     return 0;
   }
+
+  DWORD* shader = fileread(file);
+
+  // constTable取得
+  hr = D3DXGetShaderConstantTable(shader, &pixelShader->_constTable);
+  if(FAILED(hr)) {
+    MessageBoxA(NULL,"よくわからんけどエラー",("D3DXGetShaderConstantTable"),MB_OK);
+    App::instance().exit();
+    SafeDeleteArray(shader);
+    return 0;
+  }
+
   // ピクセルシェーダ生成
-  hr = pDevice->CreatePixelShader(
-    (DWORD*)code->GetBufferPointer(),
-    &pixelShader->_shader);
+  hr = pDevice->CreatePixelShader(shader, &pixelShader->_shader);
   if(FAILED(hr)) {
     MessageBox(NULL,TEXT("PixelShaderFailed"),TEXT("CreatePixelShader"),MB_OK);
+    App::instance().exit();
+    SafeDeleteArray(shader);
     return 0;
   }
-  code->Release();
 
   pixelShader->filename = file;
 
   // インサート
   _pixShaderList.push_back(pixelShader);
   _pixShaderMap.insert(std::pair<std::string,unsigned int>(file,_pixShaderList.size() - 1));
+
+  SafeDeleteArray(shader);
 
   return _pixShaderList.size() - 1;
 }
@@ -195,38 +221,35 @@ unsigned int Shader::createPixShader(const char * file) {
 // Shader
 //------------------------------------------------------------------------------
 unsigned int Shader::createVtxShader(const char * file) {
-  HRESULT hr;
-  LPD3DXBUFFER err;
-  LPD3DXBUFFER code;
+  HRESULT hr = MB_OK;
   auto pDevice = _renderer->getDevice();
-
   VtxShader* vtxShader = new VtxShader();
 
-  // Vtxシェーダコンパイル
-  hr = D3DXCompileShaderFromFile(
-    file,
-    nullptr,
-    nullptr,
-    "main",
-    "vs_3_0",
-    0,
-    &code,
-    &err,
-    &vtxShader->_constTable);
-  if(FAILED(hr)) {
-    MessageBox(NULL,(LPCSTR)err->GetBufferPointer(),TEXT("D3DXCompileShaderFromFile"),MB_OK);
-    err->Release();
+  if(!isfile(file)) {
+    MessageBoxA(NULL,"そんなファイルネェ","error",MB_OK);
+    App::instance().exit();
     return 0;
   }
+
+  DWORD* shader = fileread(file);
+
+  // constTable取得
+  //hr = D3DXGetShaderConstantTable(shader,&vtxShader->_constTable);
+  if(FAILED(hr)) {
+    MessageBoxA(NULL,"よくわからんけどエラー",("D3DXGetShaderConstantTable"),MB_OK);
+    App::instance().exit();
+    SafeDeleteArray(shader);
+    return 0;
+  }
+
   // 頂点シェーダ生成
-  hr = pDevice->CreateVertexShader(
-    (DWORD*)code->GetBufferPointer(),
-    &vtxShader->_shader);
+  hr = pDevice->CreateVertexShader(shader, &vtxShader->_shader);
   if(FAILED(hr)) {
     MessageBox(NULL,TEXT("VertexShaderFailed"),TEXT("CreateVertexShader"),MB_OK);
+    App::instance().exit();
+    SafeDeleteArray(shader);
     return 0;
   }
-  code->Release();
 
   vtxShader->filename = file;
 
@@ -234,6 +257,7 @@ unsigned int Shader::createVtxShader(const char * file) {
   _vtxShaderList.push_back(vtxShader);
   _vtxShaderMap.insert(std::pair<std::string,unsigned int>(file,_vtxShaderList.size() - 1));
 
+  SafeDeleteArray(shader);
   return _vtxShaderList.size() - 1;
 }
 //EOF

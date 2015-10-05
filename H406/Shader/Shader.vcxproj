@@ -50,7 +50,9 @@
     </Link>
     <FxCompile>
       <ShaderModel>3.0</ShaderModel>
-      <ObjectFileOutput>$(SolutionDir)data/shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(SolutionDir)Game/data/shader/%(Filename).cso</ObjectFileOutput>
+      <ShaderType>
+      </ShaderType>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,7 +70,9 @@
     </Link>
     <FxCompile>
       <ShaderModel>3.0</ShaderModel>
-      <ObjectFileOutput>$(SolutionDir)data/shader/%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(SolutionDir)Game/data/shader/%(Filename).cso</ObjectFileOutput>
+      <ShaderType>
+      </ShaderType>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -79,10 +83,14 @@
     <FxCompile Include="vs_2d.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AssemblyCode</AssemblerOutput>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AssemblyCode</AssemblerOutput>
     </FxCompile>
     <FxCompile Include="vs_model.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AssemblyCode</AssemblerOutput>
+      <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AssemblyCode</AssemblerOutput>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
