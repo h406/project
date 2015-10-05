@@ -10,7 +10,6 @@
 #include "outputVS.hlsli"
 
 #include "world.hlsli"
-#include "wvp.hlsli"
 #include "material.hlsli"
 
 #include "proj.hlsli"

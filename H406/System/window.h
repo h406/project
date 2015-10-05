@@ -30,6 +30,8 @@ public:
 
   void exit() { _bExitApplication = true; }
 
+  int getFps() const { return _nCountFPS; }
+
 protected:
 
   Window(int width,int height);

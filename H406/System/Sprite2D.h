@@ -20,14 +20,16 @@ public:
   bool init();
   bool init(const char* file);
   virtual void update();
-  void draw(Renderer* renderer);
+  void draw(const Renderer* renderer);
   void uninit();
 
-private:
   Sprite2D() {};
   virtual ~Sprite2D() {};
+private:
 
   unsigned int _textureID;
+
+  D3DXCOLOR _color;
 
 };
 

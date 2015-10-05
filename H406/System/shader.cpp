@@ -86,13 +86,13 @@ Shader::~Shader() {
 }
 
 
-inline unsigned int Shader::getVtxShader(const char* fileName) const {
+unsigned int Shader::getVtxShader(const char* fileName) const {
   auto it = _vtxShaderMap.find(fileName);
   if(it == _vtxShaderMap.end()) return 0;
   return it->second;
 }
 
-inline unsigned int Shader::getPixShader(const char* fileName) const {
+unsigned int Shader::getPixShader(const char* fileName) const {
   auto it = _pixShaderMap.find(fileName);
   if(it == _pixShaderMap.end()) return 0;
   return it->second;

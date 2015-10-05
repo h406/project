@@ -23,7 +23,7 @@ struct VtxShader;
 class iDrawObject : public node {
 public:
   virtual void update() = 0;
-  virtual void draw(Renderer* renderer) = 0;
+  virtual void draw(const Renderer* renderer) { UnusedParam(renderer); }
   virtual void uninit() = 0;
 
 protected:

@@ -144,6 +144,9 @@ bool Renderer::draw(node* baceNode) {
     // シーンのクリア
     _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(100,100,100),1.0f,0);
 
+    // ベースピクセルシェーダー
+    _shader->setPixShader("ps_bace.cso");
+    
     // ベースノード
     if(baceNode != nullptr) {
       baceNode->drawChild(this);

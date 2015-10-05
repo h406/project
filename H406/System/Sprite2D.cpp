@@ -67,6 +67,11 @@ bool Sprite2D::init() {
   // シェーダ
   _vtxShaderID = renderer->getShader()->getVtxShader("vs_2d.cso");
 
+  // 色
+  _color = D3DXCOLOR(1,1,1,1);
+
+  _textureID = 0;
+
   return true;
 }
 
@@ -78,12 +83,20 @@ bool Sprite2D::init(const char* file) {
 //==============================================================================
 //
 //------------------------------------------------------------------------------
-void Sprite2D::draw(Renderer* renderer) {
-  auto pDevice = App::instance().getRenderer()->getDevice();
+void Sprite2D::draw(const  Renderer* renderer) {
+  auto pDevice = renderer->getDevice();
   static D3DXMATRIX mtxWorld,mtxTmp;
   static float uvAnims[4];
   const float sinb = sinf(getRot().y);
   const float cosb = cosf(getRot().y);
+
+  // projMtx
+  const D3DXMATRIX mtxProj(
+    2 / (float)App::instance().getWindowSize().cx,0.0f,0.0f,0.0f,
+    0.0f,-2 / (float)App::instance().getWindowSize().cy,0.0f,0.0f,
+    0.0f,0.0f,1.0f,0.0f,
+    -1.0f,1.0f,0.0f,1.0f
+  );
 
   D3DXMatrixIdentity(&mtxWorld);
 
@@ -115,23 +128,53 @@ void Sprite2D::draw(Renderer* renderer) {
   uvAnims[2] = 0; //uvAnims[0] * (sprite->_anim % sprite->_numU) + (uvAnims[0] / sprite->_size.x * sprite->_texPos.x);
   uvAnims[3] = 0; //uvAnims[1] * (sprite->_anim / sprite->_numU) + (uvAnims[1] / sprite->_size.y * sprite->_texPos.y);
 
-  // シェーダ設定
-  g_2DEffect->SetMatrix(g_2DHandle.world,&mtxWorld);
+  auto shader = renderer->getShader();
 
-  // テクスチャ設定
-  g_2DEffect->SetTexture(g_2DHandle.tex,g_TexList[sprite->_tex]);
+  shader->setVtxShader(_vtxShaderID);
+
+  auto vtxShader = shader->getNowVtxShader();
+
+  vtxShader->_constTable->SetMatrix(pDevice, "gWorld",&mtxWorld);
+
+  UINT nSamplerIndex = shader->getNowPixShader()->_constTable->GetSamplerIndex("TexSamp0");
+
+  pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+
+  vtxShader->_constTable->SetMatrix(pDevice,"gProj",&mtxProj);
 
   // 色
-  g_2DEffect->SetFloatArray(g_2DHandle.col,sprite->_col,4);
+  vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",_color,4);
 
   // uv
-  g_2DEffect->SetFloatArray(g_2DHandle.uvAnim,uvAnims,4);
+  vtxShader->_constTable->SetFloatArray(pDevice,"gUVAnim",uvAnims,4);
 
-  // コミット
-  g_2DEffect->CommitChanges();
+  // WindowSize適用
+  const float pWindowSize[] = {(float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy};
+  vtxShader->_constTable->SetFloatArray(pDevice,"gScreenSize",pWindowSize,sizeof(pWindowSize) / sizeof(float));
+
+  // デクラレーション設定
+  pDevice->SetVertexDeclaration(_p2DDec);
+
+  // 頂点送信
+  pDevice->SetStreamSource(0,_vtxBuff,0,sizeof(VERTEX_2D));
 
   // 描画
   pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);
+}
+
+//==============================================================================
+//
+//------------------------------------------------------------------------------
+void Sprite2D::update() {
+
+}
+
+//==============================================================================
+//
+//------------------------------------------------------------------------------
+void Sprite2D::uninit() {
+  SafeRelease(_vtxBuff);
+  SafeRelease(_p2DDec);
 }
 
 //EOF
