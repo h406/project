@@ -17,8 +17,8 @@ Sprite2D * test = nullptr;
 //------------------------------------------------------------------------------
 bool Title::init() {
 
-  test = Sprite2D::create<Sprite2D>();
-  test->setScl({100,100,1});
+  test = Sprite2D::create<Sprite2D>("./data/texture/akira000.png");
+  test->setSize(360,720);
   this->addChild(test);
 
   return true;
@@ -27,9 +27,29 @@ bool Title::init() {
 void Title::update() {
   auto input = App::instance().getInput();
 
+  auto pos = test->getPos();
   if(input->isPress(VK_INPUT::UP)) {
-    App::instance().exit();
+    pos.y -= 1;
   }
+  if(input->isPress(VK_INPUT::DOWN)) {
+    pos.y += 1;
+  }
+  if(input->isPress(VK_INPUT::LEFT)) {
+    pos.x -= 1;
+  }
+  if(input->isPress(VK_INPUT::RIGHT)) {
+    pos.x += 1;
+  }
+  test->setPos(pos);
+
+  auto rot = test->getRot().y;
+  if(input->isPress(VK_INPUT::_1)) {
+    rot -= 0.1f;
+  }
+  if(input->isPress(VK_INPUT::_2)) {
+    rot += 0.1f;
+  }
+  test->setRotY(rot);
 
   char title[255];
   sprintf_s(title,"%d",App::instance().getFps());

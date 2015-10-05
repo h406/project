@@ -99,6 +99,14 @@ unsigned int Shader::getPixShader(const char* fileName) const {
 }
 
 
+VtxShader* Shader::getVtxShader(unsigned int id) const {
+  return _vtxShaderList[id];
+}
+
+PixShader* Shader::getPixShader(unsigned int id) const {
+  return _pixShaderList[id];
+}
+
 //==============================================================================
 // Shader
 //------------------------------------------------------------------------------

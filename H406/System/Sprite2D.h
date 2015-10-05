@@ -23,9 +23,13 @@ public:
   void draw(const Renderer* renderer);
   void uninit();
 
-  Sprite2D() {};
-  virtual ~Sprite2D() {};
+  void setSizeW(float w) { _worldChenged = true; _scl.x = w; }
+  void setSizeH(float h) { _worldChenged = true; _scl.y = h; }
+  void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
+
 private:
+
+  void updateWorldMtx();
 
   unsigned int _textureID;
 

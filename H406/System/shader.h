@@ -25,6 +25,9 @@ public:
   unsigned int getVtxShader(const char* fileName) const;
   unsigned int getPixShader(const char* fileName) const;
 
+  VtxShader* getVtxShader(unsigned int id) const;
+  PixShader* getPixShader(unsigned int id) const;
+
   void setVtxShader(unsigned int id);
   void setVtxShader(const char* fileName);
   void setPixShader(unsigned int id);

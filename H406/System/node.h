@@ -56,9 +56,25 @@ public :
     _parent = node;
   }
 
-  const Vec3& getPos() { return _pos; }
-  const Vec3& getRot() { return _rot; }
-  const Vec3& getScl() { return _scl; }
+  const Vec3& getPos() const { return _pos; }
+  const Vec3& getRot() const { return _rot; }
+  const Vec3& getScl() const { return _scl; }
+
+  void setPosX(float x) { _worldChenged = true; _pos.x = x; }
+  void setPosY(float y) { _worldChenged = true; _pos.y = y; }
+  void setPosZ(float z) { _worldChenged = true; _pos.z = z; }
+
+  void setRotX(float x) { _worldChenged = true; _rot.x = x; }
+  void setRotY(float y) { _worldChenged = true; _rot.y = y; }
+  void setRotZ(float z) { _worldChenged = true; _rot.z = z; }
+
+  void setSclX(float x) { _worldChenged = true; _scl.x = x; }
+  void setSclY(float y) { _worldChenged = true; _scl.y = y; }
+  void setSclZ(float z) { _worldChenged = true; _scl.z = z; }
+
+  void setPos(float x, float y, float z) { setPosX(x); setPosY(y); setPosZ(z); }
+  void setRot(float x, float y, float z) { setRotX(x); setRotY(y); setRotZ(z); }
+  void setScl(float x, float y, float z) { setSclX(x); setSclY(y); setSclZ(z); }
 
   void setPos(const Vec3& pos) { _worldChenged = true; _pos = pos; }
   void setRot(const Vec3& rot) { _worldChenged = true; _rot = rot; }
@@ -71,14 +87,23 @@ protected:
   node();
   virtual ~node() {};
 
+  // 位置など
+  Vec3 _pos;
+  Vec3 _rot;
+  Vec3 _scl;
+
+  virtual void updateWorldMtx();
+
+  Matrix _mtxWorld;
+
+  bool _worldChenged;
+
 private:
 
   // 削除チェック
   void removeCheck();
 
   void zOderCheck();
-
-  void updateWorldMtx();
 
   // 親
   node* _parent;
@@ -97,14 +122,6 @@ private:
 
   bool _destroy;
 
-  Matrix _mtxWorld;
-
-  // 位置など
-  Vec3 _pos;
-  Vec3 _rot;
-  Vec3 _scl;
-
-  bool _worldChenged;
 };
 
 #endif

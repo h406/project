@@ -31,7 +31,6 @@ App::App(int width,int height)
   ,_renderer(new Renderer(this))
   ,_input(new Input()){
 
-  
 }
 
 //==============================================================================
