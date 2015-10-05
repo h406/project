@@ -49,6 +49,9 @@
     <Filter Include="object\gameObject">
       <UniqueIdentifier>{cac65ade-860c-4c33-b62f-21a9446cae41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\drawObject\xfile">
+      <UniqueIdentifier>{6ecc3594-f283-4b23-a43b-f91b32de47e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -82,7 +85,7 @@
       <Filter>input\keyboard</Filter>
     </ClCompile>
     <ClCompile Include="xFileObject.cpp">
-      <Filter>object\drawObject</Filter>
+      <Filter>object\drawObject\xfile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +138,6 @@
     <ClInclude Include="keyboard.h">
       <Filter>input\keyboard</Filter>
     </ClInclude>
-    <ClInclude Include="xFileObject.h">
-      <Filter>object\drawObject</Filter>
-    </ClInclude>
     <ClInclude Include="iLayer.h">
       <Filter>object\gameObject</Filter>
     </ClInclude>
@@ -146,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="iDrawObject.h">
       <Filter>object\drawObject</Filter>
+    </ClInclude>
+    <ClInclude Include="xFileObject.h">
+      <Filter>object\drawObject\xfile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

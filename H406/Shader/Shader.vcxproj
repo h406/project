@@ -49,10 +49,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <FxCompile>
-      <ShaderModel>2.0</ShaderModel>
+      <ShaderModel>3.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)Game/data/shader/%(Filename).cso</ObjectFileOutput>
       <ShaderType>
       </ShaderType>
+      <EnableDebuggingInformation>false</EnableDebuggingInformation>
+      <DisableOptimizations>false</DisableOptimizations>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,10 +71,11 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <FxCompile>
-      <ShaderModel>2.0</ShaderModel>
+      <ShaderModel>3.0</ShaderModel>
       <ObjectFileOutput>$(SolutionDir)Game/data/shader/%(Filename).cso</ObjectFileOutput>
       <ShaderType>
       </ShaderType>
+      <DisableOptimizations>true</DisableOptimizations>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

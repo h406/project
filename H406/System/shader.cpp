@@ -234,7 +234,7 @@ unsigned int Shader::createVtxShader(const char * file) {
   DWORD* shader = fileread(file);
 
   // constTableéÊìæ
-  //hr = D3DXGetShaderConstantTable(shader,&vtxShader->_constTable);
+  hr = D3DXGetShaderConstantTable(shader,&vtxShader->_constTable);
   if(FAILED(hr)) {
     MessageBoxA(NULL,"ÇÊÇ≠ÇÌÇ©ÇÁÇÒÇØÇ«ÉGÉâÅ[",("D3DXGetShaderConstantTable"),MB_OK);
     App::instance().exit();
