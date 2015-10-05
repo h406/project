@@ -18,8 +18,13 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
   UnusedParam(nCmdShow);
 
   App& app = App::instance(1280,720);
+
+  // タイトル
   app.setTitle("H406");
+
+  // 最初のシーン
   app.setBaceScene(Title::create<Title>());
+
   return app.run();
 }
 

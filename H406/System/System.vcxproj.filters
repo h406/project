@@ -52,6 +52,9 @@
     <Filter Include="object\drawObject\xfile">
       <UniqueIdentifier>{6ecc3594-f283-4b23-a43b-f91b32de47e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\drawObject\Sprite2D">
+      <UniqueIdentifier>{102d5ec4-e59b-4a6f-ac9b-97d264d47e98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="xFileObject.cpp">
       <Filter>object\drawObject\xfile</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite2D.cpp">
+      <Filter>object\drawObject\Sprite2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="xFileObject.h">
       <Filter>object\drawObject\xfile</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite2D.h">
+      <Filter>object\drawObject\Sprite2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

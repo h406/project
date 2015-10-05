@@ -97,7 +97,6 @@ private:
 
   bool _destroy;
 
-
   Matrix _mtxWorld;
 
   // ˆÊ’u‚È‚Ç

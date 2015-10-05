@@ -67,7 +67,7 @@ bool XFileObject::init(const char* file) {
   setPos(Vec3(0.f,0.f,0.f));
 
   // TODO シェーダなんとかする
-  _vtxShader = renderer->getShader()->getVtxShader("");
+  _vtxShaderID = renderer->getShader()->getVtxShader("");
 
   return true;
 }

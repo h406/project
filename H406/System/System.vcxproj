@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sprite2D.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="input.cpp" />
@@ -31,6 +32,7 @@
     <ClCompile Include="xFileObject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sprite2D.h" />
     <ClInclude Include="app.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cameraBace.h" />

@@ -1,33 +1,33 @@
 //==============================================================================
 //
-// xFileObject[xFileObject.h]
-// Author : Yasuaki Yamashita : 2015/06/29
+// Sprite2d[Sprite2d.h]
+// Author : Yasuaki Yamashita : 2015/10/05
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _XFILEOBJECT_H_
-#define _XFILEOBJECT_H_
+#ifndef _SPRITE2D_H_
+#define _SPRITE2D_H_
 
 #include "iDrawObject.h"
+
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class XFileObject : public iDrawObject {
+class Sprite2D : public iDrawObject{
 public:
+  bool init();
   bool init(const char* file);
   virtual void update();
   void draw(Renderer* renderer);
   void uninit();
 
 private:
-  XFileObject() {};
-  virtual ~XFileObject() {};
-  LPD3DXMESH _pD3DXMesh;         // メッシュ情報へのポインタ
-  LPD3DXBUFFER _pD3DXBuffMat;    // マテリアル情報へのポインタ
-  DWORD _nNumMat;                // マテリアル情報の数
+  Sprite2D() {};
+  virtual ~Sprite2D() {};
 
+  unsigned int _textureID;
 
 };
 

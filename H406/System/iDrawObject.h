@@ -27,7 +27,9 @@ public:
   virtual void uninit() = 0;
 
 protected:
-  VtxShader* _vtxShader;
+  unsigned int _vtxShaderID;
+  LPDIRECT3DVERTEXBUFFER9 _vtxBuff;
+  LPDIRECT3DVERTEXDECLARATION9 _p2DDec;
 };
 
 #endif

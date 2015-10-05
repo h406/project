@@ -22,10 +22,8 @@ public:
   Shader(Renderer* renderer);
   ~Shader();
 
-  inline VtxShader* getVtxShader(unsigned int id) const;
-  inline VtxShader* getVtxShader(const char* fileName) const;
-  inline PixShader* getPixShader(unsigned int id) const;
-  inline PixShader* getPixShader(const char* fileName) const;
+  inline unsigned int getVtxShader(const char* fileName) const;
+  inline unsigned int getPixShader(const char* fileName) const;
 
   void setVtxShader(unsigned int id);
   void setVtxShader(const char* fileName);

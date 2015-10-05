@@ -55,10 +55,10 @@ Shader::Shader(Renderer* renderer)
     if(sys::is_regular_file(p)) { // ファイルなら...
       const string& file = p.filename();
       if(file[0] == 'p' && file[1] == 's') {
-        createPixShader((kBaceShaderFolder + file).c_str());
+        createPixShader(file.c_str());
       }
       else if(file[0] == 'v' && file[1] == 's') {
-        createVtxShader((kBaceShaderFolder + file).c_str());
+        createVtxShader(file.c_str());
       }
     }
   });
@@ -86,24 +86,16 @@ Shader::~Shader() {
 }
 
 
-inline VtxShader* Shader::getVtxShader(unsigned int id) const {
-  return _vtxShaderList[id];
-}
-
-inline VtxShader* Shader::getVtxShader(const char* fileName) const {
+inline unsigned int Shader::getVtxShader(const char* fileName) const {
   auto it = _vtxShaderMap.find(fileName);
-  if(it == _vtxShaderMap.end()) return nullptr;
-  return getVtxShader(it->second);
+  if(it == _vtxShaderMap.end()) return 0;
+  return it->second;
 }
 
-inline PixShader* Shader::getPixShader(unsigned int id) const {
-  return _pixShaderList[id];
-}
-
-inline PixShader* Shader::getPixShader(const char* fileName) const {
+inline unsigned int Shader::getPixShader(const char* fileName) const {
   auto it = _pixShaderMap.find(fileName);
-  if(it == _pixShaderMap.end()) return nullptr;
-  return getPixShader(it->second);
+  if(it == _pixShaderMap.end()) return 0;
+  return it->second;
 }
 
 
@@ -180,13 +172,13 @@ unsigned int Shader::createPixShader(const char * file) {
   auto pDevice = _renderer->getDevice();
   PixShader* pixelShader = new PixShader();
 
-  if(!isfile(file)) {
+  if(!isfile((kBaceShaderFolder + file).c_str())) {
     MessageBoxA(NULL,"そんなファイルネェ","error",MB_OK);
     App::instance().exit();
     return 0;
   }
 
-  DWORD* shader = fileread(file);
+  DWORD* shader = fileread((kBaceShaderFolder + file).c_str());
 
   // constTable取得
   hr = D3DXGetShaderConstantTable(shader, &pixelShader->_constTable);
@@ -225,13 +217,13 @@ unsigned int Shader::createVtxShader(const char * file) {
   auto pDevice = _renderer->getDevice();
   VtxShader* vtxShader = new VtxShader();
 
-  if(!isfile(file)) {
+  if(!isfile((kBaceShaderFolder + file).c_str())) {
     MessageBoxA(NULL,"そんなファイルネェ","error",MB_OK);
     App::instance().exit();
     return 0;
   }
 
-  DWORD* shader = fileread(file);
+  DWORD* shader = fileread((kBaceShaderFolder + file).c_str());
 
   // constTable取得
   hr = D3DXGetShaderConstantTable(shader,&vtxShader->_constTable);
