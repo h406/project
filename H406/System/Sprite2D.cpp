@@ -70,7 +70,14 @@ bool Sprite2D::init() {
   // 色
   _color = D3DXCOLOR(1,1,1,1);
 
+  // テクスチャID
   _textureID = 0;
+
+  // 色々初期化
+  _numU = 1;
+  _numV = 1;
+  _animID = 0;
+  _texPos = {0,0};
 
   return true;
 }
@@ -123,10 +130,10 @@ void Sprite2D::draw(const  Renderer* renderer) {
   mtxWorld = mtxTmp * mtxWorld;
 
   // uvアニメーション計算
-  uvAnims[0] = 1; //1.f / sprite->_numU;
-  uvAnims[1] = 1; //1.f / sprite->_numV;
-  uvAnims[2] = 0; //uvAnims[0] * (sprite->_anim % sprite->_numU) + (uvAnims[0] / sprite->_size.x * sprite->_texPos.x);
-  uvAnims[3] = 0; //uvAnims[1] * (sprite->_anim / sprite->_numU) + (uvAnims[1] / sprite->_size.y * sprite->_texPos.y);
+  uvAnims[0] = 1.f / _numU;
+  uvAnims[1] = 1.f / _numV;
+  uvAnims[2] = uvAnims[0] * (_animID % _numU) + (uvAnims[0] / getScl().x * _texPos.x);
+  uvAnims[3] = uvAnims[1] * (_animID / _numU) + (uvAnims[1] / getScl().y * _texPos.y);
 
   auto shader = renderer->getShader();
 

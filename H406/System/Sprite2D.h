@@ -15,7 +15,7 @@
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Sprite2D : public iDrawObject{
+class Sprite2D : public iDrawObject {
 public:
   bool init();
   bool init(const char* file);
@@ -28,6 +28,11 @@ public:
 private:
 
   unsigned int _textureID;
+
+  unsigned int _numU;
+  unsigned int _numV;
+  unsigned int _animID;
+  Vec2 _texPos;
 
   D3DXCOLOR _color;
 
