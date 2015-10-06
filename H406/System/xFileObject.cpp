@@ -45,6 +45,9 @@ bool XFileObject::init(const char* file) {
     D3DDECL_END()
   };
 
+  // 頂点
+  pDevice->CreateVertexDeclaration(vElement,&_p3DDec);
+
   // クローンメッシュの作成
   LPD3DXMESH pTempMesh;
   _pD3DXMesh->CloneMesh(D3DXMESH_SYSTEMMEM,&vElement[0],pDevice,&pTempMesh);
@@ -62,12 +65,7 @@ bool XFileObject::init(const char* file) {
   SafeRelease(pAdjBuff);
   SafeRelease(pTempMesh);
 
-  setScl(Vec3(1.f,1.f,1.f));
-  setRot(Vec3(0.f,0.f,0.f));
-  setPos(Vec3(0.f,0.f,0.f));
-
-  // TODO シェーダなんとかする
-  _vtxShaderID = renderer->getShader()->getVtxShader("");
+  _vtxShaderID = renderer->getShader()->getVtxShader("vs_model.cso");
 
   return true;
 }
@@ -82,32 +80,35 @@ void XFileObject::update() {
 //==============================================================================
 // draw
 //------------------------------------------------------------------------------
-void XFileObject::draw(Renderer* renderer) {
+void XFileObject::draw(const Renderer* renderer) {
   D3DXMATERIAL *pD3DXMat;
   D3DMATERIAL9 matDef;// 元々のマテリアル情報;
   const auto pDevice = renderer->getDevice();
+  renderer->getShader()->setVtxShader(_vtxShaderID);
   const auto vtxShader = renderer->getShader()->getNowVtxShader();
   const auto pixcelShader = renderer->getShader()->getNowPixShader();
 
-  pDevice->GetMaterial(&matDef);						// 現在のマテリアルを取得
+  // デクラレーション設定
+  pDevice->SetVertexDeclaration(_p3DDec);
+  
+  // 現在のマテリアルを取得
+  pDevice->GetMaterial(&matDef);
   pD3DXMat = (D3DXMATERIAL*)_pD3DXBuffMat->GetBufferPointer();
 
-  const float material[4] = {1,1,1,1};
-  pixcelShader->_constTable->SetFloatArray(pDevice,"gMaterial",material,sizeof(material) / sizeof(float));
-  vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",material,sizeof(material) / sizeof(float));
+  Matrix wvp = getWorldMtx() * renderer->getCamera()->getViewMtx() * renderer->getProjMtx();
 
-  Matrix wvp = getWorldMtx() * renderer->getViewMtx() * renderer->getProjMtx();
-
-  vtxShader->_constTable->SetMatrix(pDevice,"gWorld",&getWorldMtx());
+  vtxShader->_constTable->SetMatrix(pDevice,"gWorld", &getWorldMtx());
   vtxShader->_constTable->SetMatrix(pDevice,"gWVP",&wvp);
 
   // モデルの描画
   for(int nCntMat = 0; nCntMat < (int)_nNumMat; nCntMat++) {
-    pixcelShader->_constTable->SetFloatArray(pDevice,"gMaterial",(float*)&pD3DXMat[nCntMat].MatD3D.Diffuse,4);
-    _pD3DXMesh->DrawSubset(nCntMat);// モデルのパーツを描画
+    vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",(float*)&pD3DXMat[nCntMat].MatD3D.Diffuse,4);
+    // モデルのパーツを描画
+    _pD3DXMesh->DrawSubset(nCntMat);
   }
 
-  pDevice->SetMaterial(&matDef);		// マテリアルを元に戻す
+  // マテリアルを元に戻す
+  pDevice->SetMaterial(&matDef);
 }
 
 //==============================================================================
@@ -116,7 +117,7 @@ void XFileObject::draw(Renderer* renderer) {
 void XFileObject::uninit() {
   SafeRelease(_pD3DXMesh);
   SafeRelease(_pD3DXBuffMat);
-
+  SafeRelease(_p3DDec);
 }
 
 //EOF

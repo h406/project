@@ -139,6 +139,8 @@ Renderer::~Renderer() {
 // draw
 //------------------------------------------------------------------------------
 bool Renderer::draw(node* baceNode) {
+  _camera->update();
+
   // シーンの描画開始
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
     // シーンのクリア

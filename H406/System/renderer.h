@@ -26,8 +26,6 @@ public:
   bool draw(node* baceNode);
 
   LPDIRECT3DDEVICE9 getDevice() const { return _pD3DDevice; }
-
-  const Matrix& getViewMtx() const { return _mtxView; }
   const Matrix& getProjMtx() const { return _mtxProj; }
 
   Texture* getTexture() const { return _texture; }
@@ -43,9 +41,6 @@ private:
 
   // ProjectonMatrix
   Matrix _mtxProj;
-
-  // ViewMatrix
-  Matrix _mtxView;
 
   // テクスチャマネージャ
   Texture* _texture;

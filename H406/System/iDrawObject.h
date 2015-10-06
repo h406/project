@@ -28,8 +28,6 @@ public:
 
 protected:
   unsigned int _vtxShaderID;
-  LPDIRECT3DVERTEXBUFFER9 _vtxBuff;
-  LPDIRECT3DVERTEXDECLARATION9 _p2DDec;
 };
 
 #endif

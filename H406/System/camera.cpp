@@ -17,6 +17,8 @@ void Camera::CameraEx::update() {
   // ビューマトリックス
   D3DXMatrixIdentity(&_mtxView); // ビューマトリックスの初期化
   D3DXMatrixLookAtLH(&_mtxView,&_posCameraP,&_posCameraR,&_vecCameraU);
+
+  _update = false;
 }
 
 //==============================================================================
@@ -60,7 +62,7 @@ void Camera::releaseCamera(CameraBace* camera) {
 void Camera::update() {
   for(auto& cam : _cameraList) {
     if(cam->isUpdate())
-      update();
+      cam->update();
   }
 }
 

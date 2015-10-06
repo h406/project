@@ -27,6 +27,8 @@ public :
 
   void setCurrentCamera(CameraBace* camera) { _currentCam = camera; }
 
+  const Matrix& getViewMtx() { return _currentCam->getViewMtx(); }
+
 private:
   class CameraEx : public CameraBace {
   public:

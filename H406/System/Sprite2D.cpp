@@ -78,21 +78,6 @@ bool Sprite2D::init() {
   _animID = 0;
   _texPos = {0,0};
 
-  // projMtx
-  const D3DXMATRIX mtxProj(
-    2 / (float)App::instance().getWindowSize().cx,0.0f,0.0f,0.0f,
-    0.0f,-2 / (float)App::instance().getWindowSize().cy,0.0f,0.0f,
-    0.0f,0.0f,1.0f,0.0f,
-    -1.0f,1.0f,0.0f,1.0f
-    );
-
-  // projMtx
-  vtxShader->_constTable->SetMatrix(pDevice,"gProj",&mtxProj);
-
-  // WindowSize
-  const float pWindowSize[] = {(float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy};
-  vtxShader->_constTable->SetFloatArray(pDevice,"gScreenSize",pWindowSize,sizeof(pWindowSize) / sizeof(float));
-
   return true;
 }
 
@@ -129,6 +114,21 @@ void Sprite2D::draw(const  Renderer* renderer) {
 
   // uv
   vtxShader->_constTable->SetFloatArray(pDevice,"gUVAnim",uvAnims,4);
+
+  // projMtx
+  const D3DXMATRIX mtxProj(
+    2 / (float)App::instance().getWindowSize().cx,0.0f,0.0f,0.0f,
+    0.0f,-2 / (float)App::instance().getWindowSize().cy,0.0f,0.0f,
+    0.0f,0.0f,1.0f,0.0f,
+    -1.0f,1.0f,0.0f,1.0f
+    );
+
+  // projMtx
+  vtxShader->_constTable->SetMatrix(pDevice,"gProj",&mtxProj);
+
+  // WindowSize
+  const float pWindowSize[] = {(float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy};
+  vtxShader->_constTable->SetFloatArray(pDevice,"gScreenSize",pWindowSize,sizeof(pWindowSize) / sizeof(float));
 
   // デクラレーション設定
   pDevice->SetVertexDeclaration(_p2DDec);

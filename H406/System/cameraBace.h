@@ -26,7 +26,7 @@ public:
     :_update(true)
     ,_posCameraP(Vec3(0,0,0))
     ,_posCameraR(Vec3(0,0,0))
-    ,_vecCameraU(Vec3(0,0,0)) {
+    ,_vecCameraU(Vec3(0,1,0)) {
   }
   virtual ~CameraBace() {}
 

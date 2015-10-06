@@ -18,17 +18,18 @@ class XFileObject : public iDrawObject {
 public:
   bool init(const char* file);
   virtual void update();
-  void draw(Renderer* renderer);
+  void draw(const Renderer* renderer);
   void uninit();
 
-private:
   XFileObject() {};
   virtual ~XFileObject() {};
+
+private:
   LPD3DXMESH _pD3DXMesh;         // メッシュ情報へのポインタ
   LPD3DXBUFFER _pD3DXBuffMat;    // マテリアル情報へのポインタ
   DWORD _nNumMat;                // マテリアル情報の数
 
-
+  LPDIRECT3DVERTEXDECLARATION9 _p3DDec;
 };
 
 #endif

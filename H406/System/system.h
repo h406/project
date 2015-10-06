@@ -17,6 +17,7 @@
 #include "app.h"
 #include "input.h"
 
+#include "renderer.h"
 #include "texture.h"
 #include "shader.h"
 #include "camera.h"
