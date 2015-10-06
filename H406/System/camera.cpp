@@ -61,8 +61,9 @@ void Camera::releaseCamera(CameraBace* camera) {
 //------------------------------------------------------------------------------
 void Camera::update() {
   for(auto& cam : _cameraList) {
-    if(cam->isUpdate())
+    if(cam->isUpdate()) {
       cam->update();
+    }
   }
 }
 

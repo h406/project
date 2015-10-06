@@ -85,6 +85,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);			// アルファブレンドの有効化
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
+  _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
 
   //---- サンプラーステートの設定 ----
   // テクスチャUV値の繰り返し設定(テクスチャの繰り返し描画指定)
