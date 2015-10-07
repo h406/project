@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="effect.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="Sprite2D.cpp" />
     <ClCompile Include="app.cpp" />
     <ClCompile Include="camera.cpp" />
@@ -33,6 +35,8 @@
     <ClCompile Include="xFileObject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="effect.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite3D.h" />
     <ClInclude Include="Sprite2D.h" />
     <ClInclude Include="app.h" />
@@ -86,7 +90,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)effekseer/lib/x86/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)effekseer/lib/x86/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>

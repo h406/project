@@ -13,6 +13,7 @@
 #include "input.h"
 #include "node.h"
 #include "iScene.h"
+#include "sound.h"
 
 //==============================================================================
 // instance
@@ -28,9 +29,9 @@ App& App::instance(int width,int height) {
 App::App(int width,int height)
   : Window(width,height)
   ,_baceScene(nullptr)
-  ,_renderer(new Renderer(this))
+  ,_sound(new Sound())
   ,_input(new Input()){
-
+  _renderer = new Renderer(this);
 }
 
 //==============================================================================
@@ -44,6 +45,7 @@ App::~App() {
 
   SafeDelete(_renderer);
   SafeDelete(_input);
+  SafeDelete(_sound);
 }
 
 //==============================================================================

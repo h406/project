@@ -21,6 +21,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "camera.h"
+#include "effect.h"
 
 #include "iDrawObject.h"
 #include "xFileObject.h"
@@ -29,6 +30,8 @@
 
 #include "iScene.h"
 #include "iLayer.h"
+
+#include "sound.h"
 
 #endif
 //EOF

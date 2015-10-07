@@ -13,15 +13,15 @@
 //==============================================================================
 // STLのデバッグ機能をOFFにする
 //------------------------------------------------------------------------------
-#ifndef _SECURE_SCL
-#define _SECURE_SCL (0)
-#endif
-#ifndef _HAS_ITERATOR_DEBUGGING
-#define _HAS_ITERATOR_DEBUGGING (0)
-#endif
-#ifndef  _ITERATOR_DEBUG_LEVEL
-#define  _ITERATOR_DEBUG_LEVEL 0
-#endif
+//#ifndef _SECURE_SCL
+//#define _SECURE_SCL (0)
+//#endif
+//#ifndef _HAS_ITERATOR_DEBUGGING
+//#define _HAS_ITERATOR_DEBUGGING (0)
+//#endif
+//#ifndef  _ITERATOR_DEBUG_LEVEL
+//#define  _ITERATOR_DEBUG_LEVEL 0
+//#endif
 
 //==============================================================================
 // lib

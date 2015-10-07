@@ -26,11 +26,11 @@ bool Title::init() {
   
   auto cam = App::instance().getRenderer()->getCamera();
   cam1 = cam->createCamera();
-
-  cam1->setPosP({0,50,-200});
+  
+  cam1->setPosP({100 ,50,-200});
   cam1->setPosR({0,0,0});
   cam->setCurrentCamera(cam1);
-
+  
   test = Sprite3D::create<Sprite3D>("./data/texture/akira000.png");
   test->setSize(36,72);
   this->addChild(test);
@@ -40,30 +40,36 @@ bool Title::init() {
 
 void Title::update() {
   auto input = App::instance().getInput();
-  
-  auto pos = test->getPos();
-  if(input->isPress(VK_INPUT::UP)) {
-    pos.y -= 1;
-  }
-  if(input->isPress(VK_INPUT::DOWN)) {
-    pos.y += 1;
-  }
-  if(input->isPress(VK_INPUT::LEFT)) {
-    pos.x -= 1;
-  }
-  if(input->isPress(VK_INPUT::RIGHT)) {
-    pos.x += 1;
-  }
-  test->setPos(pos);
-  
-  if(input->isPress(VK_INPUT::_1)) {
-    rot -= 0.1f;
-  }
-  if(input->isPress(VK_INPUT::_2)) {
-    rot += 0.1f;
-  }
 
-  this->setRotY(rot);
+
+  if(input->isPress(VK_INPUT::UP)) {
+    auto effect = App::instance().getRenderer()->getEffect();
+    effect->play("test.efk",Vec3(0,0,0));
+  }
+  
+   auto pos = test->getPos();
+   if(input->isPress(VK_INPUT::UP)) {
+     pos.y -= 1;
+   }
+   if(input->isPress(VK_INPUT::DOWN)) {
+     pos.y += 1;
+   }
+   if(input->isPress(VK_INPUT::LEFT)) {
+     pos.x -= 1;
+   }
+   if(input->isPress(VK_INPUT::RIGHT)) {
+     pos.x += 1;
+   }
+   test->setPos(pos);
+   
+   if(input->isPress(VK_INPUT::_1)) {
+     rot -= 0.1f;
+   }
+   if(input->isPress(VK_INPUT::_2)) {
+     rot += 0.1f;
+   }
+   
+   this->setRotY(rot);
 
   //cam1->setPosP({cosf(rot) * 200, 50,sinf(rot) * 200});
   

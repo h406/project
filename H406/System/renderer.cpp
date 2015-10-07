@@ -13,6 +13,7 @@
 #include "texture.h"
 #include "camera.h"
 #include "shader.h"
+#include "effect.h"
 
 //==============================================================================
 // renderer
@@ -30,6 +31,9 @@ Renderer::Renderer(const App* app) {
 
   // シェーダ
   _shader = new Shader(this);
+
+  // effect
+  _effect = new Effect(this);
 }
 
 //==============================================================================
@@ -111,7 +115,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   D3DXMatrixPerspectiveFovLH(&_mtxProj,		// プロジェクションマトリックスの初期化
     D3DX_PI / 4.0f,				// 視野角
     (float)windowSize.cx / (float)windowSize.cy,	// アスペクト比
-    100.0f,						// rear値
+    0.0f,						// rear値
     1000.0f);					// far値
 
   // ビューポート設定
@@ -123,7 +127,6 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   vp.MaxZ = 1;
   vp.MinZ = 0;
   _pD3DDevice->SetViewport(&vp);
-
 }
 
 //==============================================================================
@@ -134,13 +137,16 @@ Renderer::~Renderer() {
   SafeDelete(_texture);
   SafeDelete(_camera);
   SafeDelete(_shader);
+  SafeDelete(_effect);
 }
 
 //==============================================================================
-// draw
+// update
 //------------------------------------------------------------------------------
 void Renderer::update() {
   _camera->update();
+
+  _effect->update();
 }
 
 //==============================================================================
@@ -159,6 +165,9 @@ bool Renderer::draw(node* baceNode) {
     if(baceNode != nullptr) {
       baceNode->drawChild(this);
     }
+
+    // エフェクト表示
+    _effect->draw();
 
     // シーンの描画終了
     _pD3DDevice->EndScene();

@@ -15,6 +15,7 @@
 class Renderer;
 class Input;
 class node;
+class Sound;
 using iScene = node;
 
 //==============================================================================
@@ -25,6 +26,7 @@ public:
   static App& instance(int width = 0,int height = 0);
   const Renderer* getRenderer() const { return _renderer; }
   const Input* getInput() const { return _input; }
+  Sound* getSound() { return _sound; }
 
   void setBaceScene(iScene* baceScene);
 
@@ -38,6 +40,7 @@ private:
   iScene* _baceScene;
   Renderer* _renderer;
   Input* _input;
+  Sound* _sound;
 };
 
 

@@ -104,7 +104,6 @@ void XFileObject::draw(const Renderer* renderer) {
   vtxShader->_constTable->SetMatrix(pDevice,"gWorld", &getWorldMtx());
   vtxShader->_constTable->SetMatrix(pDevice,"gWVP",&wvp);
 
-  auto texture = renderer->getTexture()->getTexture(_textureID);
   UINT nSamplerIndex = renderer->getShader()->getNowPixShader()->_constTable->GetSamplerIndex("TexSamp0");
   pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
 
