@@ -90,21 +90,32 @@ Window::~Window() {
 int Window::run() {
   // メッセージ変数を用意
   MSG msg;
+  // FPSのため変数
+  DWORD dwExecLastTime = 0; // 任意のFPS制御するために
+  DWORD dwFPSLastTime = 0;  // 現在のFPS計測するために
+  DWORD dwCurrentTime = 0;  // 現在時刻格納用
+  DWORD dwFrameCount = 0;   // 任意秒の間に更新描画がされた回数を格納
+
 
   // ウィンドウ表示
   ShowWindow(_hWnd,SW_SHOWDEFAULT);	// 非クライアント領域のみ表示
   UpdateWindow(_hWnd);			// クライアント領域が表示される
 
-  // TODO 排他制御しっかりする
-  std::thread main([this]() {
-    // FPSのため変数
-    DWORD dwExecLastTime = 0; // 任意のFPS制御するために
-    DWORD dwFPSLastTime = 0;  // 現在のFPS計測するために
-    DWORD dwCurrentTime = 0;  // 現在時刻格納用
-    DWORD dwFrameCount = 0;   // 任意秒の間に更新描画がされた回数を格納
 
-    // メッセージループ
-    for(;!_bExitApplication;) {
+  for(;;) {
+    if(PeekMessage(&msg,NULL,0,0,PM_REMOVE) != 0)	// メッセージが来たとき
+    {
+      //---- Windows プログラム ----
+      if(msg.message == WM_QUIT) {
+        _bExitApplication = true;
+        break;
+      }
+      else {
+        TranslateMessage(&msg);	// キー入力メッセージを文字メッセージに変換
+        DispatchMessage(&msg);	// メッセージをWndProcにディスパッチ
+      }
+    }
+    else {
       //---- DirectX プログラム ----
       // FPS計測(500msに何回更新描画が行われたか)
       dwCurrentTime = timeGetTime();
@@ -131,25 +142,7 @@ int Window::run() {
         dwFrameCount++;
       }
     }
-  });
-
-  for(;;) {
-    if(PeekMessage(&msg,NULL,0,0,PM_REMOVE) != 0)	// メッセージが来たとき
-    {
-      //---- Windows プログラム ----
-      if(msg.message == WM_QUIT) {
-        _bExitApplication = true;
-        break;
-      }
-      else {
-        TranslateMessage(&msg);	// キー入力メッセージを文字メッセージに変換
-        DispatchMessage(&msg);	// メッセージをWndProcにディスパッチ
-      }
-    }
   }
-
-  //スレッドの処理が終了するまで待機
-  main.join();
 
   return 0;
 }

@@ -25,6 +25,7 @@
 #include "iDrawObject.h"
 #include "xFileObject.h"
 #include "Sprite2D.h"
+#include "Sprite3D.h"
 
 #include "iScene.h"
 #include "iLayer.h"

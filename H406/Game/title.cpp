@@ -23,12 +23,12 @@ bool Title::init() {
   
   auto cam = App::instance().getRenderer()->getCamera();
   auto cam1 = cam->createCamera();
-  cam1->setPosP({0,100,100});
+  cam1->setPosP({0,100,-100});
   cam1->setPosR({0,0,0});
   cam->setCurrentCamera(cam1);
 
   test = Sprite2D::create<Sprite2D>("./data/texture/akira000.png");
-  test->setSize(360,720);
+  test->setSize(36,72);
   this->addChild(test);
 
   return true;
