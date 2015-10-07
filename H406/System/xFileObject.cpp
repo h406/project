@@ -13,6 +13,17 @@
 #include "renderer.h"
 #include "shader.h"
 
+namespace {
+  // 頂点要素の配列作成
+  const D3DVERTEXELEMENT9 vElement[] = {
+    {0,0,D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_POSITION,0},  // 座標
+    {0,12,D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_NORMAL,0},   // 法線
+    {0,28,D3DDECLTYPE_FLOAT4,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_COLOR,0},    // 色々
+    {0,44,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,0}, // UV
+    D3DDECL_END()
+  };
+}
+
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
@@ -37,14 +48,6 @@ bool XFileObject::init(const char* file) {
     return false;
   }
 
-  // 頂点要素の配列作成
-  const D3DVERTEXELEMENT9 vElement[] = {
-    {0,0,D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_POSITION,0},	// 座標
-    {0,28,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,0},	// UV
-    {0,12,D3DDECLTYPE_FLOAT3,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_NORMAL,0},	// 法線
-    D3DDECL_END()
-  };
-
   // 頂点
   pDevice->CreateVertexDeclaration(vElement,&_p3DDec);
 
@@ -64,6 +67,9 @@ bool XFileObject::init(const char* file) {
   // あとかたづけ
   SafeRelease(pAdjBuff);
   SafeRelease(pTempMesh);
+
+  // 白色
+  _textureID = 0;
 
   _vtxShaderID = renderer->getShader()->getVtxShader("vs_model.cso");
 
@@ -86,7 +92,6 @@ void XFileObject::draw(const Renderer* renderer) {
   const auto pDevice = renderer->getDevice();
   renderer->getShader()->setVtxShader(_vtxShaderID);
   const auto vtxShader = renderer->getShader()->getNowVtxShader();
-  const auto pixcelShader = renderer->getShader()->getNowPixShader();
 
   // デクラレーション設定
   pDevice->SetVertexDeclaration(_p3DDec);
@@ -99,6 +104,10 @@ void XFileObject::draw(const Renderer* renderer) {
 
   vtxShader->_constTable->SetMatrix(pDevice,"gWorld", &getWorldMtx());
   vtxShader->_constTable->SetMatrix(pDevice,"gWVP",&wvp);
+
+  auto texture = renderer->getTexture()->getTexture(_textureID);
+  UINT nSamplerIndex = renderer->getShader()->getNowPixShader()->_constTable->GetSamplerIndex("TexSamp0");
+  pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
 
   // モデルの描画
   for(int nCntMat = 0; nCntMat < (int)_nNumMat; nCntMat++) {

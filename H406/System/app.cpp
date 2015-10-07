@@ -52,8 +52,11 @@ App::~App() {
 void App::update() {
   _input->update();
 
-  if(_baceScene != nullptr)
+  if(_baceScene != nullptr) {
     _baceScene->updateChild();
+    _renderer->update();
+    _baceScene->updateMtxChild();
+  }
 
   _renderer->draw(_baceScene);
 }

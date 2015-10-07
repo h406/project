@@ -67,8 +67,6 @@ bool Sprite2D::init() {
   // シェーダ
   _vtxShaderID = renderer->getShader()->getVtxShader("vs_2d.cso");
 
-  auto vtxShader = renderer->getShader()->getVtxShader(_vtxShaderID);
-
   // 色
   _color = D3DXCOLOR(1,1,1,1);
 
@@ -147,10 +145,10 @@ void Sprite2D::updateWorldMtx() {
   D3DXMATRIX mtxTmp;
   const float sinb = sinf(getRot().y);
   const float cosb = cosf(getRot().y);
-
   D3DXMatrixIdentity(&_mtxWorld);
-  // 移動行列
   D3DXMatrixIdentity(&mtxTmp);
+
+  // 移動行列
   mtxTmp._41 = getPos().x;
   mtxTmp._42 = getPos().y;
   _mtxWorld = mtxTmp * _mtxWorld;

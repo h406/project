@@ -48,7 +48,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
     return;
   }
 
-  // 現在のディスプレイモードを取得
+  // 現在のディ3スプレイモードを取得
   if(FAILED(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT,&d3ddm))) {
     return;
   }
@@ -139,10 +139,15 @@ Renderer::~Renderer() {
 //==============================================================================
 // draw
 //------------------------------------------------------------------------------
-bool Renderer::draw(node* baceNode) {
+void Renderer::update() {
   _camera->update();
+}
 
-  // シーンの描画開始
+//==============================================================================
+// draw
+//------------------------------------------------------------------------------
+bool Renderer::draw(node* baceNode) {
+    // シーンの描画開始
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
     // シーンのクリア
     _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(100,100,100),1.0f,0);

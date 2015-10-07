@@ -82,6 +82,8 @@ public :
 
   const Matrix& getWorldMtx() { return _mtxWorld; }
 
+  void updateMtxChild();
+
 protected:
   // node
   node();

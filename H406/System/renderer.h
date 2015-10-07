@@ -24,6 +24,7 @@ public:
   ~Renderer();
 
   bool draw(node* baceNode);
+  void update();
 
   LPDIRECT3DDEVICE9 getDevice() const { return _pD3DDevice; }
   const Matrix& getProjMtx() const { return _mtxProj; }
