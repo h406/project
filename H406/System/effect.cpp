@@ -118,6 +118,11 @@ int Effect::play(const char* file,const Vec3& pos) {
 // effect
 //------------------------------------------------------------------------------
 Effect::~Effect() {
+  // エフェクトリリース
+  for(auto effect : _effectList) {
+    SafeRelease(effect);
+  }
+
   // エフェクト管理用インスタンスを破棄
   _effekseerManager->Destroy();
   // サウンド用インスタンスを破棄
