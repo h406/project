@@ -90,6 +90,9 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
   _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
+  _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0xff);
+
+  _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
   _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
   //---- サンプラーステートの設定 ----
@@ -116,7 +119,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   D3DXMatrixPerspectiveFovLH(&_mtxProj,		// プロジェクションマトリックスの初期化
     D3DX_PI / 4.0f,				// 視野角
     (float)windowSize.cx / (float)windowSize.cy,	// アスペクト比
-    0.0f,						// rear値
+    1.0f,						// rear値
     1000.0f);					// far値
 
   // ビューポート設定

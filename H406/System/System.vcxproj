@@ -92,11 +92,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)effekseer/lib/x86/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)effekseer/lib/x86/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
