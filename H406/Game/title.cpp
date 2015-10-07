@@ -11,8 +11,11 @@
 #include "title.h"
 
 
-Sprite2D * test = nullptr;
+Sprite3D * test = nullptr;
 XFileObject* test2 = nullptr;
+CameraBace* cam1 = nullptr;
+
+float rot = 0.f;
 
 //------------------------------------------------------------------------------
 // 
@@ -22,12 +25,13 @@ bool Title::init() {
   this->addChild(test2);
   
   auto cam = App::instance().getRenderer()->getCamera();
-  auto cam1 = cam->createCamera();
-  cam1->setPosP({0,100,-100});
+  cam1 = cam->createCamera();
+
+  cam1->setPosP({0,50,-200});
   cam1->setPosR({0,0,0});
   cam->setCurrentCamera(cam1);
 
-  test = Sprite2D::create<Sprite2D>("./data/texture/akira000.png");
+  test = Sprite3D::create<Sprite3D>("./data/texture/akira000.png");
   test->setSize(36,72);
   this->addChild(test);
 
@@ -52,14 +56,16 @@ void Title::update() {
   }
   test->setPos(pos);
   
-  auto rot = test->getRot().y;
   if(input->isPress(VK_INPUT::_1)) {
     rot -= 0.1f;
   }
   if(input->isPress(VK_INPUT::_2)) {
     rot += 0.1f;
   }
-  test->setRotY(rot);
+
+  this->setRotY(rot);
+
+  //cam1->setPosP({cosf(rot) * 200, 50,sinf(rot) * 200});
   
   char title[255];
   sprintf_s(title,"%d",App::instance().getFps());

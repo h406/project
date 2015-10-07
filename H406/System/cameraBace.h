@@ -18,9 +18,13 @@ class CameraBace {
 public:
   const Matrix& getViewMtx() const { return _mtxView; }
 
-  void setPosP(const Vec3 posP) { _update = true; _posCameraP = posP; }
-  void setPosR(const Vec3 posR) { _update = true; _posCameraR = posR; }
-  void setVecU(const Vec3 posU) { _update = true; _vecCameraU = posU; }
+  void setPosP(const Vec3& posP) { _update = true; _posCameraP = posP; }
+  void setPosR(const Vec3& posR) { _update = true; _posCameraR = posR; }
+  void setVecU(const Vec3& posU) { _update = true; _vecCameraU = posU; }
+
+  const Vec3& getPosP() const { return _posCameraP; }
+  const Vec3& getPosR() const { return _posCameraR; }
+  const Vec3& getVecU() const { return _vecCameraU; }
 
   CameraBace()
     :_update(true)
