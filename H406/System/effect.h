@@ -35,6 +35,13 @@ public:
   int play(unsigned int id,const Vec3& pos);
   int play(const char* file,const Vec3& pos);
 
+  void stop(int id);
+  void setPos(int id,const Vec3& pos);
+  void setRot(int id,const Vec3& rot);
+  void setScl(int id,const Vec3& scl);
+  bool isExists(int id) const;
+
+
 private:
   // エフェクト
   EffekseerRenderer::Renderer* _effekseerRenderer;

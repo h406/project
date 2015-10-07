@@ -93,11 +93,45 @@ Effect::Effect(const Renderer* renderer) {
 //==============================================================================
 // effect
 //------------------------------------------------------------------------------
+void Effect::stop(int id) {
+  _effekseerManager->StopEffect(id);
+}
+
+//==============================================================================
+// effect
+//------------------------------------------------------------------------------
+void Effect::setPos(int id,const Vec3& pos) {
+  _effekseerManager->SetLocation(id,pos.x,pos.y,pos.z);
+}
+
+//==============================================================================
+// effect
+//------------------------------------------------------------------------------
+void Effect::setRot(int id,const Vec3& rot) {
+  _effekseerManager->SetRotation(id,rot.x,rot.y,rot.z);
+}
+
+//==============================================================================
+// effect
+//------------------------------------------------------------------------------
+void Effect::setScl(int id,const Vec3& scl) {
+  _effekseerManager->SetScale(id,scl.x,scl.y,scl.z);
+}
+
+
+//==============================================================================
+// effect
+//------------------------------------------------------------------------------
+bool Effect::isExists(int id) const {
+  return _effekseerManager->Exists(id);
+}
+
+//==============================================================================
+// effect
+//------------------------------------------------------------------------------
 int Effect::play(unsigned int id, const Vec3& pos) {
   //エフェクトの再生
-  auto ret = _effekseerManager->Play(_effectList[id],pos.x,pos.y,pos.z);
-  _effekseerManager->SetScale(ret,10,10,10);
-  return ret;
+  return  _effekseerManager->Play(_effectList[id],pos.x,pos.y,pos.z);
 }
 
 //==============================================================================
@@ -147,6 +181,7 @@ void Effect::update() {
   // カメラ行列の更新
   _effekseerRenderer->SetCameraMatrix(view);
 
+  //TODO 
   // 3Dサウンド用リスナー設定の更新
   //_effekseerSound->SetListener(リスナー位置,注目点,上方向ベクトル);
 

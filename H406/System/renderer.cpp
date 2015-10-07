@@ -90,8 +90,8 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
   _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
-  _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0xff);
-
+  _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,TRUE);
+  _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0x66);
   _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
   _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
@@ -100,8 +100,8 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
   _pD3DDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
   // テクスチャの拡縮時の補間設定
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR);	// 線形処理(縮小)
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR);	// 線形処理(拡大)
+  _pD3DDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(縮小)
+  _pD3DDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(拡大)
 
   //---- テクスチャステージステートの設定 ----
   // 不透明テクスチャにα値を適用させる
