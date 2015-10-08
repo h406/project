@@ -115,10 +115,10 @@ void KeyBoard::update() {
       _aKeyState[nCntKey] = (unsigned)(_aKeyState[nCntKey]) >> 4;
 
       // トリガ情報の作成
-      aKeyState[nCntKey] += ((((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4) ^ (aKeyState[nCntKey] & KEYBOARD_PRESS)) & (aKeyState[nCntKey] & KEYBOARD_PRESS)) >> 1;
+      aKeyState[nCntKey] |= ((((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4) ^ (aKeyState[nCntKey] & KEYBOARD_PRESS)) & (aKeyState[nCntKey] & KEYBOARD_PRESS)) >> 1;
 
       // リリース情報の作成
-      aKeyState[nCntKey] += ((((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4) ^ (aKeyState[nCntKey] & KEYBOARD_PRESS)) & ((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4)) >> 2;
+      aKeyState[nCntKey] |= ((((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4) ^ (aKeyState[nCntKey] & KEYBOARD_PRESS)) & ((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4)) >> 2;
 
       // リピート情報の作成
       _aKeyRepeatCnt[nCntKey] = (_aKeyRepeatCnt[nCntKey] * (aKeyState[nCntKey] / KEYBOARD_PRESS)) + 1;

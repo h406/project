@@ -37,7 +37,7 @@ Input::Input() :_pInputDevice (nullptr) {
   _inputList.push_back(key);
 
   setRepeatStartTime(1);
-  setRepeatSleepTime(10);
+  setRepeatSleepTime(10000);
 }
 
 //==============================================================================

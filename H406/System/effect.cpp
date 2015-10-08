@@ -36,10 +36,10 @@ namespace {
 //==============================================================================
 // effect
 //------------------------------------------------------------------------------
-Effect::Effect(const Renderer* renderer) {
+bool Effect::init() {
 
   // 描画用インスタンスの生成
-  _effekseerRenderer = ::EffekseerRendererDX9::Renderer::Create(renderer->getDevice(),2000);
+  _effekseerRenderer = ::EffekseerRendererDX9::Renderer::Create(App::instance().getRenderer()->getDevice(),2000);
 
   // エフェクト管理用インスタンスの生成
   _effekseerManager = ::Effekseer::Manager::Create(2000);
@@ -88,6 +88,7 @@ Effect::Effect(const Renderer* renderer) {
     }
   });
 
+  return true;
 }
 
 //==============================================================================
@@ -100,24 +101,23 @@ void Effect::stop(int id) {
 //==============================================================================
 // effect
 //------------------------------------------------------------------------------
-void Effect::setPos(int id,const Vec3& pos) {
+void Effect::setEffectPos(int id,const Vec3& pos) {
   _effekseerManager->SetLocation(id,pos.x,pos.y,pos.z);
 }
 
 //==============================================================================
 // effect
 //------------------------------------------------------------------------------
-void Effect::setRot(int id,const Vec3& rot) {
+void Effect::setEffectRot(int id,const Vec3& rot) {
   _effekseerManager->SetRotation(id,rot.x,rot.y,rot.z);
 }
 
 //==============================================================================
 // effect
 //------------------------------------------------------------------------------
-void Effect::setScl(int id,const Vec3& scl) {
+void Effect::setEffectScl(int id,const Vec3& scl) {
   _effekseerManager->SetScale(id,scl.x,scl.y,scl.z);
 }
-
 
 //==============================================================================
 // effect
@@ -151,7 +151,7 @@ int Effect::play(const char* file,const Vec3& pos) {
 //==============================================================================
 // effect
 //------------------------------------------------------------------------------
-Effect::~Effect() {
+void Effect::uninit() {
   // エフェクトリリース
   for(auto effect : _effectList) {
     SafeRelease(effect);
@@ -169,34 +169,49 @@ Effect::~Effect() {
 // update
 //------------------------------------------------------------------------------
 void Effect::update() {
-  Effekseer::Matrix44 proj,view;
-  const Renderer* renderer = App::instance().getRenderer();
-  auto camera = renderer->getCamera();
-
-  memcpy(&proj,&renderer->getProjMtx(),sizeof(Effekseer::Matrix44));
-  memcpy(&view,&camera->getViewMtx(),sizeof(Effekseer::Matrix44));
-  
-  // 投影行列の更新
-  _effekseerRenderer->SetProjectionMatrix(proj);
-  // カメラ行列の更新
-  _effekseerRenderer->SetCameraMatrix(view);
-
-  //TODO 
-  // 3Dサウンド用リスナー設定の更新
-  //_effekseerSound->SetListener(リスナー位置,注目点,上方向ベクトル);
-
-  // 全てのエフェクトの更新
-  _effekseerManager->Update();
 
 }
 
 //==============================================================================
 // draw
 //------------------------------------------------------------------------------
-void Effect::draw() {
+void Effect::draw(const Renderer* renderer) {
   _effekseerRenderer->BeginRendering();
   _effekseerManager->Draw();
   _effekseerRenderer->EndRendering();
+}
+
+//==============================================================================
+// updateWorldMtx
+//------------------------------------------------------------------------------
+void Effect::updateWorldMtx() {
+  Effekseer::Matrix44 proj,view;
+  D3DXMATRIX temp;
+  const Renderer* renderer = App::instance().getRenderer();
+  const Camera* camera = renderer->getCamera();
+
+  // 親呼び出し
+  node::updateWorldMtx();
+
+  temp = _mtxWorld * camera->getViewMtx();
+  memcpy(&proj,&renderer->getProjMtx(),sizeof(Effekseer::Matrix44));
+  memcpy(&view,&temp,sizeof(Effekseer::Matrix44));
+
+  // カメラ取得
+  Effekseer::Vector3D p,r,u;
+  memcpy(&p,&camera->getCurrentCamera()->getPosP(),sizeof(Effekseer::Vector3D));
+  memcpy(&r,&camera->getCurrentCamera()->getPosR(),sizeof(Effekseer::Vector3D));
+  memcpy(&u,&camera->getCurrentCamera()->getVecU(),sizeof(Effekseer::Vector3D));
+  
+  // 投影行列の更新
+  _effekseerRenderer->SetProjectionMatrix(proj);
+  // カメラ行列の更新
+  _effekseerRenderer->SetCameraMatrix(view);
+  // 3Dサウンド用リスナー設定の更新
+  _effekseerSound->SetListener(p,r,u);
+
+  // 全てのエフェクトの更新
+  _effekseerManager->Update();
 }
 
 //EOF

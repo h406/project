@@ -27,6 +27,9 @@ public:
   void setSizeH(float h) { _worldChenged = true; _scl.y = h; }
   void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
 
+protected:
+  virtual NodeType getNodeType() const { return NodeType::normal3D; }
+
 private:
   unsigned int _textureID;
 

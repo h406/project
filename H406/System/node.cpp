@@ -22,6 +22,7 @@ node::node()
   ,_rot(0.f,0.f,0.f)
   ,_scl(1.f,1.f,1.f)
   ,_worldChenged(true)
+  ,_visible(true)
 {
 }
 
@@ -83,8 +84,7 @@ void node::updateChild() {
 // updateMtxChild
 //------------------------------------------------------------------------------
 void node::updateMtxChild() {
-  if(_worldChenged)
-  {
+  if(_worldChenged) {
     updateWorldMtx();
   }
 
@@ -100,14 +100,16 @@ void node::updateMtxChild() {
 //==============================================================================
 // drawChild
 //------------------------------------------------------------------------------
-void node::drawChild(const Renderer* renderer) {
-  this->draw(renderer);
-  
+void node::drawChild(const Renderer* renderer, NodeType type) {
+  if(_visible && type == this->getNodeType()) {
+    this->draw(renderer);
+  }
+
   // 削除リストチェック
   removeCheck();
 
   for(node* obj : _childList) {
-    obj->drawChild(renderer);
+    obj->drawChild(renderer, type);
   }
 }
 

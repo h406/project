@@ -19,28 +19,34 @@ namespace EffekseerSound { class Sound; }
 
 class Renderer;
 
+#include "iDrawObject.h"
+
+using EffectHandle = int;
+using EffectFileHandle = unsigned int;
+
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Effect {
+class Effect : public iDrawObject {
 public:
-  Effect(const Renderer*);
-  ~Effect();
+  bool init();
+  void uninit();
 
   void update();
-  void draw(); 
+  void draw(const Renderer* renderer);
 
-  int getID(const char* file);
+  EffectFileHandle getID(const char* file);
+  EffectHandle play(EffectFileHandle id,const Vec3& pos);
+  EffectHandle play(const char* file,const Vec3& pos);
 
-  int play(unsigned int id,const Vec3& pos);
-  int play(const char* file,const Vec3& pos);
+  void stop(EffectHandle effectid);
+  void setEffectPos(EffectHandle effectid,const Vec3& pos);
+  void setEffectRot(EffectHandle effectid,const Vec3& rot);
+  void setEffectScl(EffectHandle effectid,const Vec3& scl);
+  bool isExists(EffectHandle effectid) const;
 
-  void stop(int id);
-  void setPos(int id,const Vec3& pos);
-  void setRot(int id,const Vec3& rot);
-  void setScl(int id,const Vec3& scl);
-  bool isExists(int id) const;
-
+protected:
+  virtual NodeType getNodeType() const { return NodeType::effect; }
 
 private:
   // エフェクト
@@ -48,8 +54,10 @@ private:
   Effekseer::Manager* _effekseerManager;
   EffekseerSound::Sound*  _effekseerSound;
 
-  map<string,unsigned int> _effectMap;
+  map<string,EffectFileHandle> _effectMap;
   vector<Effekseer::Effect*> _effectList;
+
+  void updateWorldMtx();
 };
 #endif
 //EOF

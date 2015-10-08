@@ -15,6 +15,8 @@ Sprite3D * test = nullptr;
 XFileObject* test2 = nullptr;
 CameraBace* cam1 = nullptr;
 
+Effect* effect = nullptr;
+
 int id = -1;
 
 float rot = D3DX_PI * -0.5f;
@@ -37,32 +39,31 @@ bool Title::init() {
   cam1->setPosR({0,0,0});
   cam->setCurrentCamera(cam1);
 
+  effect = Effect::create<Effect>();
+  effect->setScl(Vec3(10,10,10));
+  this->addChild(effect);
+
   return true;
 }
 
 void Title::update() {
   auto input = App::instance().getInput();
-  auto effect = App::instance().getRenderer()->getEffect();
+  auto pos = effect->getPos();
 
-  auto pos = test->getPos();
 
-  if(!effect->isExists(id)) {
-    id = -1;
+  if(input->isPress(VK_INPUT::_3)) {
+    id = effect->play("test.efk",Vec3(0,0,0));
   }
 
-  if(input->isPress(VK_INPUT::_3) && id == -1) {
-    id = effect->play("test2.efk",pos);
-    //effect->setRot(id,{0,0,D3DX_PI * 0.5f});
-  }
   if(input->isRelease(VK_INPUT::_4)) {
     App::instance().getSound()->play("./data/sound/se/cursor.wav",false);
   }
 
   if(input->isPress(VK_INPUT::UP)) {
-    pos.y -= 1;
+    pos.y += 1;
   }
   if(input->isPress(VK_INPUT::DOWN)) {
-    pos.y += 1;
+    pos.y -= 1;
   }
   if(input->isPress(VK_INPUT::LEFT)) {
     pos.x -= 1;
@@ -70,11 +71,7 @@ void Title::update() {
   if(input->isPress(VK_INPUT::RIGHT)) {
     pos.x += 1;
   }
-  test->setPos(pos);
-
-  if(id != -1) {
-    effect->setPos(id,pos);
-  }
+  effect->setPos(pos);
 
   if(input->isPress(VK_INPUT::_1)) {
     rot -= 0.1f;
@@ -83,9 +80,9 @@ void Title::update() {
     rot += 0.1f;
   }
 
-  //this->setRotY(rot);
+  effect->setRotZ(rot);
 
-  cam1->setPosP({cosf(rot) * 200,50,sinf(rot) * 200});
+  //cam1->setPosP({cosf(rot) * 200,50,sinf(rot) * 200});
 
   char title[255];
   sprintf_s(title,"%d",App::instance().getFps());

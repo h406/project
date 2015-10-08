@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="effect.h" />
+    <ClInclude Include="nodeType.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite3D.h" />
     <ClInclude Include="Sprite2D.h" />

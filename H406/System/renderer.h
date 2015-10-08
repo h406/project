@@ -34,7 +34,6 @@ public:
   Texture* getTexture() const { return _texture; }
   Camera* getCamera() const { return _camera; }
   Shader* getShader() const { return _shader; }
-  Effect* getEffect() const { return _effect; }
 
 private:
   void createDevice(const SIZE& windowSize, HWND hWnd);
@@ -54,10 +53,6 @@ private:
 
   // シェーダ
   Shader* _shader;
-
-  // effect
-  Effect* _effect;
-
 };
 
 #endif

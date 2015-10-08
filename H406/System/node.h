@@ -10,6 +10,8 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
+#include "nodeType.h"
+
 //==============================================================================
 //
 //------------------------------------------------------------------------------
@@ -39,7 +41,7 @@ public :
 
   // update
   virtual void updateChild();
-  void drawChild(const Renderer* renderer);
+  void drawChild(const Renderer* renderer,NodeType type);
 
   // release
   void release();
@@ -84,6 +86,9 @@ public :
 
   void updateMtxChild();
 
+  void setVisible(bool visible) { _visible = visible; }
+  bool isVisible() const { return _visible; }
+
 protected:
   // node
   node();
@@ -99,6 +104,10 @@ protected:
   Matrix _mtxWorld;
 
   bool _worldChenged;
+
+  virtual NodeType getNodeType() const { return NodeType::default; }
+
+  node* getParent() const { return _parent; }
 
 private:
 
@@ -122,8 +131,11 @@ private:
   // 
   bool _zOrderChenged;
 
+  // çÌèú
   bool _destroy;
 
+  // ï\é¶Ç∑ÇÈÇ©
+  bool _visible;
 };
 
 #endif

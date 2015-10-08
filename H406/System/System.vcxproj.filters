@@ -58,11 +58,11 @@
     <Filter Include="object\drawObject\Sprite3D">
       <UniqueIdentifier>{63c9b345-8d2e-44f7-8130-9deb69def469}</UniqueIdentifier>
     </Filter>
-    <Filter Include="renderer\effect">
-      <UniqueIdentifier>{b3d6d703-033d-4295-9ae2-3ee7fde07524}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sound">
       <UniqueIdentifier>{8b599e31-bbe5-4ce3-8e52-3bee9834b848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\drawObject\effect">
+      <UniqueIdentifier>{f1bd2725-e684-4f1a-8e5f-c7ac9270ee82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -105,11 +105,11 @@
     <ClCompile Include="Sprite3D.cpp">
       <Filter>object\drawObject\Sprite3D</Filter>
     </ClCompile>
-    <ClCompile Include="effect.cpp">
-      <Filter>renderer\effect</Filter>
-    </ClCompile>
     <ClCompile Include="sound.cpp">
       <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>object\drawObject\effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,11 +180,14 @@
     <ClInclude Include="Sprite3D.h">
       <Filter>object\drawObject\Sprite3D</Filter>
     </ClInclude>
-    <ClInclude Include="effect.h">
-      <Filter>renderer\effect</Filter>
-    </ClInclude>
     <ClInclude Include="sound.h">
       <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="nodeType.h">
+      <Filter>node</Filter>
+    </ClInclude>
+    <ClInclude Include="effect.h">
+      <Filter>object\drawObject\effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

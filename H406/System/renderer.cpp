@@ -13,7 +13,6 @@
 #include "texture.h"
 #include "camera.h"
 #include "shader.h"
-#include "effect.h"
 
 //==============================================================================
 // renderer
@@ -31,9 +30,6 @@ Renderer::Renderer(const App* app) {
 
   // シェーダ
   _shader = new Shader(this);
-
-  // effect
-  _effect = new Effect(this);
 }
 
 //==============================================================================
@@ -141,7 +137,6 @@ Renderer::~Renderer() {
   SafeDelete(_texture);
   SafeDelete(_camera);
   SafeDelete(_shader);
-  SafeDelete(_effect);
 }
 
 //==============================================================================
@@ -149,8 +144,6 @@ Renderer::~Renderer() {
 //------------------------------------------------------------------------------
 void Renderer::update() {
   _camera->update();
-
-  _effect->update();
 }
 
 //==============================================================================
@@ -167,11 +160,15 @@ bool Renderer::draw(node* baceNode) {
     
     // ベースノード
     if(baceNode != nullptr) {
-      baceNode->drawChild(this);
-    }
+      // 普通の3D
+      baceNode->drawChild(this, NodeType::normal3D);
 
-    // エフェクト表示
-    _effect->draw();
+      // エフェクト
+      baceNode->drawChild(this,NodeType::effect);
+
+      // 普通の2D
+      baceNode->drawChild(this,NodeType::normal2D);
+    }
 
     // シーンの描画終了
     _pD3DDevice->EndScene();
