@@ -23,6 +23,8 @@ public:
   void draw(const Renderer* renderer);
   void uninit();
 
+  void setColor(const D3DXCOLOR& color) { _color = color; }
+
 protected:
   virtual NodeType getNodeType() const { return NodeType::normal3D; }
 
