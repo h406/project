@@ -27,6 +27,7 @@
 #include "xFileObject.h"
 #include "Sprite2D.h"
 #include "Sprite3D.h"
+#include "MeshField.h"
 
 #include "iScene.h"
 #include "iLayer.h"

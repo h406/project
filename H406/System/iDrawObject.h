@@ -26,8 +26,16 @@ public:
   virtual void draw(const Renderer* renderer) { UnusedParam(renderer); }
   virtual void uninit() = 0;
 
+  void setTexture(unsigned int id) {
+    _textureID = id;
+  }
+
+  void setTexture(const char* file) {
+    _textureID = App::instance().getRenderer()->getTexture()->createTexture(file);
+  }
 protected:
   unsigned int _vtxShaderID;
+  unsigned int _textureID;
 };
 
 #endif

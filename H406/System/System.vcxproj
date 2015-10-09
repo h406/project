@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="effect.cpp" />
+    <ClCompile Include="MeshField.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Sprite2D.cpp" />
     <ClCompile Include="app.cpp" />
@@ -36,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="effect.h" />
+    <ClInclude Include="MeshField.h" />
     <ClInclude Include="nodeType.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite3D.h" />

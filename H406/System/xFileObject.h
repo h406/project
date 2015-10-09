@@ -32,8 +32,6 @@ private:
   LPD3DXBUFFER _pD3DXBuffMat;    // マテリアル情報へのポインタ
   DWORD _nNumMat;                // マテリアル情報の数
 
-  unsigned int _textureID;
-
   LPDIRECT3DVERTEXDECLARATION9 _p3DDec;
 };
 

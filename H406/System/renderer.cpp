@@ -90,20 +90,23 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0x66);
   _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
   _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+  _pD3DDevice->SetRenderState(D3DRS_SHADEMODE,D3DSHADE_GOURAUD);
 
-  //---- サンプラーステートの設定 ----
-  // テクスチャUV値の繰り返し設定(テクスチャの繰り返し描画指定)
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
-  // テクスチャの拡縮時の補間設定
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(縮小)
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(拡大)
+  for(int i = 0; i < 4; ++i) {
+    //---- サンプラーステートの設定 ----
+    // テクスチャUV値の繰り返し設定(テクスチャの繰り返し描画指定)
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
+    // テクスチャの拡縮時の補間設定
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(縮小)
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(拡大)
 
-  //---- テクスチャステージステートの設定 ----
-  // 不透明テクスチャにα値を適用させる
-  _pD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAOP,D3DTOP_MODULATE); // 透過をブレンド
-  _pD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG1,D3DTA_TEXTURE);	// 引数１：テクスチャを指定 
-  _pD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG2,D3DTA_CURRENT);	// 引数２：現在のポリゴンの不透明度を指定
+    //---- テクスチャステージステートの設定 ----
+    // 不透明テクスチャにα値を適用させる
+    _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAOP,D3DTOP_MODULATE); // 透過をブレンド
+    _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAARG1,D3DTA_TEXTURE);	// 引数１：テクスチャを指定 
+    _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAARG2,D3DTA_CURRENT);	// 引数２：現在のポリゴンの不透明度を指定
+  }
 
   _pD3DDevice->SetRenderState(D3DRS_LIGHTING,FALSE);
 
@@ -116,7 +119,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
     D3DX_PI / 4.0f,				// 視野角
     (float)windowSize.cx / (float)windowSize.cy,	// アスペクト比
     1.0f,						// rear値
-    1000.0f);					// far値
+    6000.0f);					// far値
 
   // ビューポート設定
   D3DVIEWPORT9 vp;
@@ -165,6 +168,15 @@ bool Renderer::draw(node* baceNode) {
 
       // エフェクト
       baceNode->drawChild(this,NodeType::effect);
+
+      for(int i = 0; i < 4; ++i) {
+        //---- サンプラーステートの設定 ----
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);
+      }
+
 
       // 普通の2D
       baceNode->drawChild(this,NodeType::normal2D);

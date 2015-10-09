@@ -12,35 +12,6 @@
 #include "input.h"
 #include "vInput.h"
 
-namespace {
-  // キーボード情報未設定
-  const BYTE KEYBOARD_NONE = (0x00);
-
-  // キーボードプレス情報
-  const BYTE KEYBOARD_PRESS = (0x80);
-
-  // キーボードトリガ情報
-  const BYTE KEYBOARD_TRIGGER = (0x40);
-
-  // キーボードリリース情報
-  const BYTE KEYBOARD_RELEASE = (0x20);
-
-  // キーボードリピート情報
-  const BYTE KEYBOARD_REPEAT = (0x10);
-
-  // 前回キーボードプレス情報
-  const BYTE KEYBOARD_PRESS_OLD = (0x08);
-
-  // 前回キーボードトリガ情報
-  const BYTE KEYBOARD_TRIGGER_OLD = (0x04);
-
-  // 前回キーボードリリース情報
-  const BYTE KEYBOARD_RELEASE_OLD = (0x02);
-
-  // 前回キーボードリピート情報
-  const BYTE KEYBOARD_REPEAT_OLD = (0x01);
-}
-
 KeyBoard::KeyBoard()
   :_pKeyboradDevice(nullptr) {
 }
@@ -91,6 +62,11 @@ void KeyBoard::init(Input* input) {
   _InputVTKey[(int)VK_INPUT::_8] = DIK_W;
   _InputVTKey[(int)VK_INPUT::_9] = DIK_E;
   _InputVTKey[(int)VK_INPUT::_10] = DIK_C;
+
+  memset(_aKeyState,0,sizeof(_aKeyState));
+  memset(_aKeyTrigger,0,sizeof(_aKeyTrigger));
+  memset(_aKeyRelease,0,sizeof(_aKeyRelease));
+  memset(_aKeyRepeat,0,sizeof(_aKeyRepeat));
 }
 
 void KeyBoard::uninit() {
@@ -102,37 +78,32 @@ void KeyBoard::uninit() {
 void KeyBoard::update() {
   // 入力情報格納ワーク
   BYTE aKeyState[256];
-  // ループカウンタ
-  int nCntKey;
-
-  const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
-  const int repeatSleepTime = App::instance().getInput()->getRepeatSleepTime();
+  // const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
+  // const int repeatSleepTime = App::instance().getInput()->getRepeatSleepTime();
 
   // デバイス情報の取得
   if(SUCCEEDED(_pKeyboradDevice->GetDeviceState(sizeof(aKeyState),&aKeyState[0]))) {
-    for(nCntKey = 0; nCntKey < 256; nCntKey++) {
-      // 前回情報の保存
-      _aKeyState[nCntKey] = (unsigned)(_aKeyState[nCntKey]) >> 4;
+    for(int nCntKey = 0; nCntKey < 256; nCntKey++) {
+      // トリガー作成
+      _aKeyTrigger[nCntKey] = (aKeyState[nCntKey] ^ _aKeyState[nCntKey]) & aKeyState[nCntKey];
+      // リリース作成
+      _aKeyRelease[nCntKey] = (aKeyState[nCntKey] ^ _aKeyState[nCntKey]) & ~aKeyState[nCntKey];
+      // プレス作成
+      _aKeyState[nCntKey] = aKeyState[nCntKey];
 
-      // トリガ情報の作成
-      aKeyState[nCntKey] |= ((((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4) ^ (aKeyState[nCntKey] & KEYBOARD_PRESS)) & (aKeyState[nCntKey] & KEYBOARD_PRESS)) >> 1;
-
-      // リリース情報の作成
-      aKeyState[nCntKey] |= ((((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4) ^ (aKeyState[nCntKey] & KEYBOARD_PRESS)) & ((_aKeyState[nCntKey] & KEYBOARD_PRESS_OLD) << 4)) >> 2;
-
-      // リピート情報の作成
-      _aKeyRepeatCnt[nCntKey] = (_aKeyRepeatCnt[nCntKey] * (aKeyState[nCntKey] / KEYBOARD_PRESS)) + 1;
-      aKeyState[nCntKey] += (BYTE)(((_aKeyRepeatCnt[nCntKey] / repeatStartTime) << 4) | ((aKeyState[nCntKey] & KEYBOARD_TRIGGER) >> 2));
-      if(_aKeyRepeatCnt[nCntKey] / repeatStartTime >= 1) {
-        _aKeyRepeatCnt[nCntKey] -= (BYTE)repeatSleepTime;
+      // リピート作成
+      if(_aKeyState[nCntKey] & 0x80) {
+        //0x80で止めておく
+        if(_aKeyRepeat[nCntKey] < 0x80) {
+          _aKeyRepeat[nCntKey]++;
+        }
       }
-
-      // グローバルへ移す
-      _aKeyState[nCntKey] += aKeyState[nCntKey];
+      else {
+        _aKeyRepeat[nCntKey] = 0;
+      }
     }
   }
   else {
-
     // 配列のクリア
     memset(_aKeyState,0,sizeof(_aKeyState));
 
@@ -142,21 +113,20 @@ void KeyBoard::update() {
 }
 
 bool KeyBoard::isPress(VK_INPUT vk) const {
-  return (_aKeyState[_InputVTKey[(int)vk]] & KEYBOARD_PRESS) ? true : false;
+  return _aKeyState[_InputVTKey[(int)vk]] & 0x80 ? true : false;
 }
-
 
 bool KeyBoard::isTrigger(VK_INPUT vk) const {
-  return (_aKeyState[_InputVTKey[(int)vk]] & KEYBOARD_TRIGGER) ? true : false;
+  return _aKeyTrigger[_InputVTKey[(int)vk]] & 0x80 ? true : false;
 }
 
-
 bool KeyBoard::isRelease(VK_INPUT vk) const {
-  return (_aKeyState[_InputVTKey[(int)vk]] & KEYBOARD_RELEASE) ? true : false;
+  return _aKeyRelease[_InputVTKey[(int)vk]] & 0x80 ? true : false;
 }
 
 bool KeyBoard::isRepeat(VK_INPUT vk) const {
-  return (_aKeyState[_InputVTKey[(int)vk]] & KEYBOARD_REPEAT) ? true : false;
+  const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
+  return ((_aKeyRepeat[_InputVTKey[(int)vk]] > repeatStartTime) || (isTrigger(vk))) ? true : false;
 }
 
 //EOF

@@ -49,9 +49,6 @@
     <Filter Include="object\gameObject">
       <UniqueIdentifier>{cac65ade-860c-4c33-b62f-21a9446cae41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="object\drawObject\xfile">
-      <UniqueIdentifier>{6ecc3594-f283-4b23-a43b-f91b32de47e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="object\drawObject\Sprite2D">
       <UniqueIdentifier>{102d5ec4-e59b-4a6f-ac9b-97d264d47e98}</UniqueIdentifier>
     </Filter>
@@ -61,8 +58,14 @@
     <Filter Include="sound">
       <UniqueIdentifier>{8b599e31-bbe5-4ce3-8e52-3bee9834b848}</UniqueIdentifier>
     </Filter>
-    <Filter Include="object\drawObject\effect">
+    <Filter Include="object\drawObject\MeshField">
+      <UniqueIdentifier>{761aa14c-80a2-4472-a914-9ada40a0d4b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\drawObject\Effect">
       <UniqueIdentifier>{f1bd2725-e684-4f1a-8e5f-c7ac9270ee82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\drawObject\xfile">
+      <UniqueIdentifier>{6ecc3594-f283-4b23-a43b-f91b32de47e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,7 +112,10 @@
       <Filter>sound</Filter>
     </ClCompile>
     <ClCompile Include="effect.cpp">
-      <Filter>object\drawObject\effect</Filter>
+      <Filter>object\drawObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshField.cpp">
+      <Filter>object\drawObject\MeshField</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +193,10 @@
       <Filter>node</Filter>
     </ClInclude>
     <ClInclude Include="effect.h">
-      <Filter>object\drawObject\effect</Filter>
+      <Filter>object\drawObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshField.h">
+      <Filter>object\drawObject\MeshField</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

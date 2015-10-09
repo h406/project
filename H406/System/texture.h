@@ -30,7 +30,6 @@ private:
   vector<LPDIRECT3DTEXTURE9> _TexList;
   map<string,unsigned int> _TexMap;
   const Renderer* _renderer;
-
 };
 
 #endif

@@ -34,8 +34,6 @@ private:
 
   void updateWorldMtx();
 
-  unsigned int _textureID;
-
   unsigned int _numU;
   unsigned int _numV;
   unsigned int _animID;

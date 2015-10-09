@@ -14,8 +14,10 @@
 Sprite3D * test = nullptr;
 XFileObject* test2 = nullptr;
 CameraBace* cam1 = nullptr;
+CameraBace* cam2 = nullptr;
 
 Effect* effect = nullptr;
+MeshField* field = nullptr;
 
 int id = -1;
 
@@ -34,14 +36,22 @@ bool Title::init() {
 
   auto cam = App::instance().getRenderer()->getCamera();
   cam1 = cam->createCamera();
-
-  cam1->setPosP({0,50,-200});
+  cam1->setPosP({0,100,-200});
   cam1->setPosR({0,0,0});
-  cam->setCurrentCamera(cam1);
+  cam->setCamera(cam1);
+
+  cam2 = cam->createCamera();
+  cam2->setPosP({0,300,-900});
+  cam2->setPosR({0,0,0});
+
 
   effect = Effect::create<Effect>();
   effect->setScl(Vec3(10,10,10));
   this->addChild(effect);
+
+  field = MeshField::create<MeshField>(50, 50, 1000.f, 1000.f);
+  field->setTexture("./data/texture/tx_grass1.tga");
+  this->addChild(field);
 
   return true;
 }
@@ -51,12 +61,15 @@ void Title::update() {
   auto pos = effect->getPos();
 
 
-  if(input->isPress(VK_INPUT::_3)) {
-    id = effect->play("test.efk",Vec3(0,0,0));
+  if(input->isRelease(VK_INPUT::_3)) {
+    id = effect->play("test2.efk",Vec3(0,0,0));
+    App::instance().getRenderer()->getCamera()->setCamera(cam1,30);
   }
 
   if(input->isRelease(VK_INPUT::_4)) {
     App::instance().getSound()->play("./data/sound/se/cursor.wav",false);
+
+    App::instance().getRenderer()->getCamera()->setCamera(cam2,30);
   }
 
   if(input->isPress(VK_INPUT::UP)) {

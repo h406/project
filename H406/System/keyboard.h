@@ -35,10 +35,11 @@ public :
 protected:
   // 仮想キーボード配列
   BYTE _InputVTKey[int(VK_INPUT::MAX)];
-  // キー情報ワーク
+  
   BYTE _aKeyState[256];
-  // リピートカウンタ
-  BYTE _aKeyRepeatCnt[256];
+  BYTE _aKeyTrigger[256];
+  BYTE _aKeyRelease[256];
+  BYTE _aKeyRepeat[256];
 
 private:
   LPDIRECTINPUTDEVICE8 _pKeyboradDevice;
