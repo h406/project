@@ -35,12 +35,14 @@
 //==============================================================================
 // include system
 //------------------------------------------------------------------------------
+#include <libwebsockets.h>
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <time.h>
 #define DIRECTINPUT_VERSION (0x0800)	// dinput.hÇÃëOÇ…èëÇ≠Ç±Ç∆ÅI
+#include <time.h>
 #include <dinput.h>
+#include <mmsystem.h>
 
 //==============================================================================
 // include stl
@@ -53,6 +55,8 @@
 #include <algorithm>
 #include <filesystem>
 #include <thread>
+#include <mutex>
+#include <functional>
 
 using namespace std;
 

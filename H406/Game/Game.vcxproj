@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

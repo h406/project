@@ -33,6 +33,7 @@
     </ClCompile>
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="window.cpp" />
+    <ClCompile Include="wsInput.cpp" />
     <ClCompile Include="xFileObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +63,7 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="vInput.h" />
     <ClInclude Include="window.h" />
+    <ClInclude Include="wsInput.h" />
     <ClInclude Include="xFileObject.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -94,12 +96,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -13,6 +13,7 @@
 #include "vInput.h"
 #include "app.h"
 #include "keyboard.h"
+#include "wsInput.h"
 
 //==============================================================================
 // input
@@ -35,6 +36,10 @@ Input::Input() :_pInputDevice (nullptr) {
   auto key = new KeyBoard();
   key->init(this);
   _inputList.push_back(key);
+
+  auto ws = new WsInput();
+  ws->init(this);
+  _inputList.push_back(ws);
 
   setRepeatStartTime(15);
   setRepeatSleepTime(5);

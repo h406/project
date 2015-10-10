@@ -33,6 +33,7 @@ public:
   void setTexture(const char* file) {
     _textureID = App::instance().getRenderer()->getTexture()->createTexture(file);
   }
+  iDrawObject() :_textureID(0) {};
 protected:
   unsigned int _vtxShaderID;
   unsigned int _textureID;
