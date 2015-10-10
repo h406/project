@@ -29,6 +29,7 @@ void WsInput::init(Input* input) {
   memset(_trigger,0,sizeof(_trigger));
   memset(_release,0,sizeof(_release));
   memset(_repeat,0,sizeof(_repeat));
+  _jairo = Vec3(0,0,0);
   _thread.swap(thread(WsInput::wsConnect,this));
 }
 
@@ -46,13 +47,26 @@ void WsInput::uninit() {
 // update
 //------------------------------------------------------------------------------
 void WsInput::update() {
+  for(auto& it : _press) {
+    it = false;
+  }
 
-  // _mutex.lock();
-  // for(auto& i : _press) {
-  //   if(i)
-  //     i = false;
-  // }
-  // _mutex.unlock();
+  if(abs(_jairo.x) > 10) {
+    if(_jairo.x > 0) {
+      _press[(int)VK_INPUT::RIGHT] = true;
+    }
+    else {
+      _press[(int)VK_INPUT::LEFT] = true;
+    }
+  }
+  if(abs(_jairo.y) > 10) {
+    if(_jairo.y < 0) {
+      _press[(int)VK_INPUT::UP] = true;
+    }
+    else {
+      _press[(int)VK_INPUT::DOWN] = true;
+    }
+  }
 }
 
 //==============================================================================
@@ -143,23 +157,33 @@ int WsInput::wsCallBackData(
     // memcpy(_instance->_sendData,in,strlen((char*)in));
     // libwebsocket_callback_on_writable_all_protocol(libwebsockets_get_protocol(wsi));
 
-    int key = atoi(&data[1]) - 37;
-    bool d = data[0] == 'd' ? true : false;
+    float dat = (float)atof(&data[1]);
+    char d = data[0];
 
     _instance->_mutex.lock();
-    if(key == 0) {
-      _instance->_press[(int)VK_INPUT::LEFT] = d;
-    }
-    if(key == 1) {
-      _instance->_press[(int)VK_INPUT::UP] = d;
-    }
-    if(key == 2) {
-      _instance->_press[(int)VK_INPUT::RIGHT] = d;
-    }
-    if(key == 3) {
-      _instance->_press[(int)VK_INPUT::DOWN] = d;
-    }
+    if(d == 'b')
+      _instance->_jairo.y = dat;
+    if(d == 'g')
+      _instance->_jairo.z = dat;
+    if(d == 'a')
+      _instance->_jairo.x = dat;
+
     _instance->_mutex.unlock();
+
+    //_instance->_mutex.lock();
+    //if(key == 0) {
+    //  _instance->_press[(int)VK_INPUT::LEFT] = d;
+    //}
+    //if(key == 1) {
+    //  _instance->_press[(int)VK_INPUT::UP] = d;
+    //}
+    //if(key == 2) {
+    //  _instance->_press[(int)VK_INPUT::RIGHT] = d;
+    //}
+    //if(key == 3) {
+    //  _instance->_press[(int)VK_INPUT::DOWN] = d;
+    //}
+    //_instance->_mutex.unlock();
   }
   break;
 

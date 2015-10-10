@@ -40,6 +40,8 @@ private:
   mutex _mutex;
   thread _thread;
 
+  Vec3 _jairo;
+
   bool _press[(int)VK_INPUT::MAX];
   bool _trigger[(int)VK_INPUT::MAX];
   bool _release[(int)VK_INPUT::MAX];
