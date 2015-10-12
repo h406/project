@@ -19,7 +19,8 @@ namespace EffekseerSound { class Sound; }
 
 class Renderer;
 
-#include "iDrawObject.h"
+#include "DrawObject.h"
+#include "CreateFunc.h"
 
 using EffectHandle = int;
 using EffectFileHandle = unsigned int;
@@ -27,8 +28,10 @@ using EffectFileHandle = unsigned int;
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Effect : public iDrawObject {
+class Effect : public DrawObject, public CreateFunc<Effect> {
 public:
+  using CreateFunc::create;
+
   bool init();
   void uninit();
 

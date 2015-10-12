@@ -10,6 +10,7 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
 
+class node;
 class App;
 class Texture;
 class Camera;

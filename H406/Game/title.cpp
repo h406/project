@@ -33,7 +33,7 @@ int id = -1;
 //------------------------------------------------------------------------------
 bool Title::init() {
 
-  akr = Sprite3D::create<Sprite3D>("./data/texture/akira000.png");
+  akr = Sprite3D::create("./data/texture/akira000.png");
   akr->setSize(36,72);
   this->addChild(akr);
 
@@ -47,11 +47,11 @@ bool Title::init() {
   cam2->setPosP({0,0,0});
   cam2->setPosR({0,0,0});
 
-  field = MeshField::create<MeshField>(1, 1, 1000.f, 1000.f);
+  field = MeshField::create(1, 1, 1000.f, 1000.f);
   field->setColor(D3DXCOLOR(0,0,0,1));
   this->addChild(field);
 
-  effect = Effect::create<Effect>();
+  effect = Effect::create();
   effect->setScl(Vec3(10,10,10));
   this->addChild(effect);
   
@@ -59,7 +59,7 @@ bool Title::init() {
 
   for(int x = 0; x < numx; x++) {
     for(int y = 0; y < numy; y++) {
-      fieldMap[x][y] = Sprite3D::create<Sprite3D>();
+      fieldMap[x][y] = Sprite3D::create();
       fieldMap[x][y]->setSize(bordSize.x - 5,bordSize.y - 5);
       fieldMap[x][y]->setPos(Vec3(x * bordSize.x - 1000.f * 0.5f + bordSize.x * 0.5f,00.1f,y * bordSize.y - 1000.f * 0.5f + bordSize.y * 0.5f));
       fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);
@@ -91,8 +91,8 @@ void Title::update() {
   moveVec += (moveDest - moveVec) * 0.1f;
   akr->setPos(pos + moveVec);
 
-  int idx = (pos.x + 500) / (1000 / (float)numx);
-  int idy = (pos.z + 500) / (1000 / (float)numy);
+  int idx = int((pos.x + 500) / (1000 / (float)numx));
+  int idy = int((pos.z + 500) / (1000 / (float)numy));
 
   if(idx >= 0 && idx < numy && idy >= 0 && idy < numy) {
     fieldMap[idx][idy]->setColor(D3DXCOLOR(0,0,1,1));

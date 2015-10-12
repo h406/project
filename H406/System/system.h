@@ -23,8 +23,8 @@
 #include "camera.h"
 #include "effect.h"
 
-#include "iDrawObject.h"
-#include "xFileObject.h"
+#include "DrawObject.h"
+#include "XFileObject.h"
 #include "Sprite2D.h"
 #include "Sprite3D.h"
 #include "MeshField.h"

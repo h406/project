@@ -10,13 +10,16 @@
 #ifndef _MESHFIELD_H_
 #define _MESHFIELD_H_
 
-#include "iDrawObject.h"
+#include "DrawObject.h"
+#include "CreateFunc.h"
 
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class MeshField : public iDrawObject {
+class MeshField : public DrawObject, public CreateFunc<MeshField> {
 public:
+  using CreateFunc::create;
+
   bool init(int nNumBlockX,int nNumBlockZ,float fSizeBlockX,float fSizeBlockZ);
 
   virtual void update();

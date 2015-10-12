@@ -89,6 +89,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="title.h" />
   </ItemGroup>

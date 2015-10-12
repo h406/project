@@ -180,9 +180,6 @@
     <ClInclude Include="iScene.h">
       <Filter>object\gameObject</Filter>
     </ClInclude>
-    <ClInclude Include="iDrawObject.h">
-      <Filter>object\drawObject</Filter>
-    </ClInclude>
     <ClInclude Include="xFileObject.h">
       <Filter>object\drawObject\xfile</Filter>
     </ClInclude>
@@ -206,6 +203,12 @@
     </ClInclude>
     <ClInclude Include="wsInput.h">
       <Filter>input\websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateFunc.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawObject.h">
+      <Filter>object\drawObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

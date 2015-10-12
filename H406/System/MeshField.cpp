@@ -11,6 +11,8 @@
 #include "MeshField.h"
 #include "app.h"
 #include "renderer.h"
+#include "shader.h"
+#include "camera.h"
 
 namespace {
   struct VERTEX_3D {

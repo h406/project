@@ -13,6 +13,7 @@
 #include "app.h"
 #include "texture.h"
 #include "shader.h"
+#include "camera.h"
 
 namespace {
   struct VERTEX_3D {

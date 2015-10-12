@@ -11,6 +11,7 @@
 #include "KeyBoard.h"
 #include "input.h"
 #include "vInput.h"
+#include "app.h"
 
 KeyBoard::KeyBoard()
   :_pKeyboradDevice(nullptr) {

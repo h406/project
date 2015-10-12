@@ -10,13 +10,16 @@
 #ifndef _SPRITE2D_H_
 #define _SPRITE2D_H_
 
-#include "iDrawObject.h"
+#include "DrawObject.h"
+#include "CreateFunc.h"
 
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Sprite2D : public iDrawObject {
+class Sprite2D : public DrawObject,public CreateFunc<Sprite2D> {
 public:
+  using CreateFunc::create;
+
   bool init();
   bool init(const char* file);
   virtual void update();

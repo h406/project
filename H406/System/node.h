@@ -26,19 +26,6 @@ public :
   virtual void draw(const Renderer* ) {};
   virtual void uninit() = 0;
 
-  // create
-  template<class Derived, class... Args>
-  static Derived* create(Args&&... args) {
-    auto p = new Derived();
-    if(p->init(std::forward<Args>(args)...)) {
-      return p;
-    }
-    else {
-      delete p;
-      return nullptr;
-    }
-  }
-
   // update
   virtual void updateChild();
   void drawChild(const Renderer* renderer,NodeType type);

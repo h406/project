@@ -13,6 +13,7 @@
 #include "texture.h"
 #include "camera.h"
 #include "shader.h"
+#include "node.h"
 
 //==============================================================================
 // renderer

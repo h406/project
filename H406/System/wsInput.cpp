@@ -22,6 +22,8 @@ WsInput* WsInput::_instance = nullptr;
 // WsInput
 //------------------------------------------------------------------------------
 void WsInput::init(Input* input) {
+  UnusedParam(input);
+
   _instance = this;
   _isend = false;
   memset(_sendData,0,sizeof(_sendData));
@@ -30,7 +32,9 @@ void WsInput::init(Input* input) {
   memset(_release,0,sizeof(_release));
   memset(_repeat,0,sizeof(_repeat));
   _jairo = Vec3(0,0,0);
-  _thread.swap(thread(WsInput::wsConnect,this));
+
+  thread tmp = thread(WsInput::wsConnect,this);
+  _thread.swap(tmp);
 }
 
 //==============================================================================
@@ -198,14 +202,17 @@ bool WsInput::isPress(VK_INPUT vk) const {
 }
 
 bool WsInput::isTrigger(VK_INPUT vk) const {
+  UnusedParam(vk);
   return false;
 }
 
 bool WsInput::isRelease(VK_INPUT vk) const {
+  UnusedParam(vk);
   return false;
 }
 
 bool WsInput::isRepeat(VK_INPUT vk) const {
+  UnusedParam(vk);
   return false;
 }
 

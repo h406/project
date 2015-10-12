@@ -12,6 +12,7 @@
 #include "renderer.h"
 #include "app.h"
 #include "camera.h"
+#include "sound.h"
 
 // effect
 #include "Effekseer.h"

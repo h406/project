@@ -12,6 +12,7 @@
 #include "app.h"
 #include "renderer.h"
 #include "shader.h"
+#include "camera.h"
 
 namespace {
   // ’¸“_—v‘f‚Ì”z—ñì¬
