@@ -96,11 +96,9 @@ int Window::run() {
   DWORD dwCurrentTime = 0;  // 現在時刻格納用
   DWORD dwFrameCount = 0;   // 任意秒の間に更新描画がされた回数を格納
 
-
   // ウィンドウ表示
   ShowWindow(_hWnd,SW_SHOWDEFAULT);	// 非クライアント領域のみ表示
   UpdateWindow(_hWnd);			// クライアント領域が表示される
-
 
   for(;;) {
     if(PeekMessage(&msg,NULL,0,0,PM_REMOVE) != 0)	// メッセージが来たとき

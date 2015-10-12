@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="MeshField.cpp" />
     <ClCompile Include="sound.cpp" />

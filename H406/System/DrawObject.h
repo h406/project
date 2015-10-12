@@ -13,12 +13,7 @@
 /*
 表示するオブジェクト
 */
-
-#include "app.h"
-#include "renderer.h"
-#include "texture.h"
-#include "node.h"
-struct VtxShader;
+class Renderer;
 
 //==============================================================================
 // 
@@ -29,14 +24,10 @@ public:
   virtual void draw(const Renderer* renderer) { UnusedParam(renderer); }
   virtual void uninit() = 0;
 
-  void setTexture(unsigned int id) {
-    _textureID = id;
-  }
+  void setTexture(unsigned int id);
+  void setTexture(const char* file);
 
-  void setTexture(const char* file) {
-    _textureID = App::instance().getRenderer()->getTexture()->createTexture(file);
-  }
-  DrawObject() :_textureID(0) {};
+  DrawObject();
 protected:
   unsigned int _vtxShaderID;
   unsigned int _textureID;

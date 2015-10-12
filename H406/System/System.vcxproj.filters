@@ -4,9 +4,6 @@
     <Filter Include="common">
       <UniqueIdentifier>{9caeba80-75e2-4660-a310-9fdcce079848}</UniqueIdentifier>
     </Filter>
-    <Filter Include="window">
-      <UniqueIdentifier>{776af547-7526-47d3-950b-5980f611fae4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="node">
       <UniqueIdentifier>{cc67170c-8c1d-495d-b31a-1d42101c14cd}</UniqueIdentifier>
     </Filter>
@@ -55,9 +52,6 @@
     <Filter Include="object\drawObject\Sprite3D">
       <UniqueIdentifier>{63c9b345-8d2e-44f7-8130-9deb69def469}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sound">
-      <UniqueIdentifier>{8b599e31-bbe5-4ce3-8e52-3bee9834b848}</UniqueIdentifier>
-    </Filter>
     <Filter Include="object\drawObject\MeshField">
       <UniqueIdentifier>{761aa14c-80a2-4472-a914-9ada40a0d4b7}</UniqueIdentifier>
     </Filter>
@@ -69,6 +63,12 @@
     </Filter>
     <Filter Include="input\websocket">
       <UniqueIdentifier>{3adcf578-ab46-4bee-83d9-fb13ae9c4558}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="renderer\sound">
+      <UniqueIdentifier>{8b599e31-bbe5-4ce3-8e52-3bee9834b848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{776af547-7526-47d3-950b-5980f611fae4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,7 +112,7 @@
       <Filter>object\drawObject\Sprite3D</Filter>
     </ClCompile>
     <ClCompile Include="sound.cpp">
-      <Filter>sound</Filter>
+      <Filter>renderer\sound</Filter>
     </ClCompile>
     <ClCompile Include="effect.cpp">
       <Filter>object\drawObject\Effect</Filter>
@@ -122,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="wsInput.cpp">
       <Filter>input\websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawObject.cpp">
+      <Filter>object\drawObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,7 +193,7 @@
       <Filter>object\drawObject\Sprite3D</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">
-      <Filter>sound</Filter>
+      <Filter>renderer\sound</Filter>
     </ClInclude>
     <ClInclude Include="nodeType.h">
       <Filter>node</Filter>
