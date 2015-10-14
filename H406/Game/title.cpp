@@ -9,6 +9,7 @@
 // include
 //******************************************************************************
 #include "title.h"
+#include "../System/meshCylinder.h"
 
 namespace {
 
@@ -22,6 +23,7 @@ CameraBace* cam1 = nullptr;
 CameraBace* cam2 = nullptr;
 MeshField* field = nullptr;
 Sprite3D* fieldMap[numx][numy] = {nullptr};
+MeshCylinder* cylinder = nullptr;
 
 Effect* effect = nullptr;
 Vec3 moveVec(0,0,0);
@@ -66,6 +68,10 @@ bool Title::init() {
       this->addChild(fieldMap[x][y]);
     }
   }
+
+  cylinder = MeshCylinder::create(8, 4, 80.0f, 80.0f);
+  cylinder->setColor(D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
+  this->addChild(cylinder);
 
   return true;
 }
