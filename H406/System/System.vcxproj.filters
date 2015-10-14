@@ -129,6 +129,9 @@
     <ClCompile Include="DrawObject.cpp">
       <Filter>object\drawObject</Filter>
     </ClCompile>
+    <ClCompile Include="directInput.cpp">
+      <Filter>input\dinput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h" />
@@ -218,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="DrawObject.h">
       <Filter>object\drawObject</Filter>
+    </ClInclude>
+    <ClInclude Include="directInput.h">
+      <Filter>input\dinput</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

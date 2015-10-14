@@ -76,16 +76,16 @@ void Title::update() {
 
   Vec3 moveDest(0,0,0);
 
-  if(input->isPress(VK_INPUT::UP)) {
+  if(input->isPress(0, VK_INPUT::UP)) {
     moveDest.z += 5;
   }
-  if(input->isPress(VK_INPUT::DOWN)) {
+  if(input->isPress(0, VK_INPUT::DOWN)) {
     moveDest.z -= 5;
   }
-  if(input->isPress(VK_INPUT::LEFT)) {
+  if(input->isPress(0, VK_INPUT::LEFT)) {
     moveDest.x -= 5;
   }
-  if(input->isPress(VK_INPUT::RIGHT)) {
+  if(input->isPress(0, VK_INPUT::RIGHT)) {
     moveDest.x += 5;
   }
   moveVec += (moveDest - moveVec) * 0.1f;
@@ -101,7 +101,7 @@ void Title::update() {
   cam2->setPosP(pos + Vec3(0,20, -100));
   cam2->setPosR(pos);
 
-  if(input->isTrigger(VK_INPUT::_1)) {
+  if(input->isTrigger(1, VK_INPUT::_1)) {
     App::instance().getRenderer()->getCamera()->setCamera(cam1,10);
     effect->setPos(pos);
 
@@ -109,7 +109,7 @@ void Title::update() {
     id = effect->play("test2.efk",Vec3(0,0,0));
     
   }
-  if(input->isTrigger(VK_INPUT::_2)) {
+  if(input->isTrigger(1, VK_INPUT::_2)) {
 
     App::instance().getRenderer()->getCamera()->setCamera(cam2,10);
   }
