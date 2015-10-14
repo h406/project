@@ -30,6 +30,7 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="window.cpp" />
     <ClCompile Include="xFileObject.cpp" />
+    <ClCompile Include="xinput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sprite2D.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="vInput.h" />
     <ClInclude Include="window.h" />
     <ClInclude Include="xFileObject.h" />
+    <ClInclude Include="xinput.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{3659DEA9-6A89-4136-9A92-C445EAE2F877}</ProjectGuid>

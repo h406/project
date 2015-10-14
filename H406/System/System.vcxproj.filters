@@ -93,6 +93,9 @@
     <ClCompile Include="Sprite2D.cpp">
       <Filter>object\drawObject\Sprite2D</Filter>
     </ClCompile>
+    <ClCompile Include="xinput.cpp">
+      <Filter>input\xinput</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h" />
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="Sprite2D.h">
       <Filter>object\drawObject\Sprite2D</Filter>
+    </ClInclude>
+    <ClInclude Include="xinput.h">
+      <Filter>input\xinput</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
