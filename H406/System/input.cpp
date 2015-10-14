@@ -40,20 +40,29 @@ Input::Input() :_pInputDevice(nullptr) {
   key->init(this);
   _inputList.push_back(key);
   
-  auto pad = new xInput();
-  pad->init(this);
-  _inputList.push_back(pad);
-
   auto ws = new WsInput();
   ws->init(this);
   _inputList.push_back(ws);
 
-  auto dInput = new DirectInput();
-  dInput->init(this);
-  if (dInput->getEnableDevise(0)){
-    _inputList.push_back(dInput);
+  auto xinput = new xInput();
+  xinput->init(this);
+  if (xinput->getConnectDevice(0))
+  {
+	  _inputList.push_back(xinput);
   }
-
+  else
+  {
+	  SafeDelete(xinput);
+	  auto dInput = new DirectInput();
+	  dInput->init(this);
+	  if (dInput->getEnableDevise(0)){
+		  _inputList.push_back(dInput);
+	  }
+	  else
+	  {
+		  SafeDelete(dInput);
+	  }
+  }
   setRepeatStartTime(15);
   setRepeatSleepTime(5);
 }
