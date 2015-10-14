@@ -16,8 +16,9 @@
 #pragma comment(lib,"Xinput.lib")
 #include <XInput.h>
 
-#define CONTROL_DEVICE_MAX	(2)
 #define CONTROL_DEVICE_KEY_MAX	(14)
+#define CONTROL_STICK_RANGE_MAX (32768)
+
 
 //コントローラーの状態
 struct CONTROLER_STATE
@@ -35,32 +36,29 @@ public:
 	void uninit(void);
 	void update(void);
 
-	bool isPress(VK_INPUT vk)const;
-	bool isTrigger(VK_INPUT vk)const;
-	bool isRelease(VK_INPUT vk)const;
-	bool isRepeat(VK_INPUT vk)const;
+  bool isPress(int id,VK_INPUT vk) const;
+  bool isTrigger(int id,VK_INPUT vk) const;
+  bool isRelease(int id,VK_INPUT vk) const;
+  bool isRepeat(int id,VK_INPUT vk) const;
 
-	// デバイス接続中か調べる Numberはコントローラ番号
-	bool getConnectDevice() { return _controlDevice[_nControlDeviceNumber].bConnected ? true : false; }
+	// デバイス接続中か調べる
+	bool getConnectDevice() { return _controlDevice.bConnected ? true : false; }
 
 	// デバイスステートの更新
 	HRESULT UpdateControllerState(void);
 
-	// キー操作を受け取るデバイス番号を変更
-	void setControlDevice(int nNumber){ _nControlDeviceNumber = nNumber; }
-
 protected:
 	// キー情報ワーク
-	BYTE _wButtons[CONTROL_DEVICE_MAX][CONTROL_DEVICE_KEY_MAX];
-	// リピートカウンタ
-	int _wButtonsRepeatCnt[CONTROL_DEVICE_MAX][CONTROL_DEVICE_KEY_MAX];
+	BYTE _aButtons[CONTROL_DEVICE_KEY_MAX];
+	BYTE _aButtonsTrigger[CONTROL_DEVICE_KEY_MAX];
+	BYTE _aButtonsRelease[CONTROL_DEVICE_KEY_MAX];
+	BYTE _aButtonsRepeat[CONTROL_DEVICE_KEY_MAX];
 
 
 private:
-	CONTROLER_STATE _controlDevice[CONTROL_DEVICE_MAX];
-	XINPUT_STATE _oldControlDevice[CONTROL_DEVICE_MAX];
+	CONTROLER_STATE _controlDevice;
+	XINPUT_STATE _oldControlDevice;
 	LPDIRECTINPUTDEVICE8 _pKeyboradDevice;
-	int _nControlDeviceNumber;
 };
 #endif
 //EOF

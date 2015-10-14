@@ -13,30 +13,12 @@
 #include "vInput.h"
 
 
-namespace {
-	// キーボード情報未設定
-	const BYTE KEY_NONE = (0x00);
-
-	// キーボードプレス情報
-	const BYTE KEY_PRESS = (0x01);
-
-	// キーボードトリガ情報
-	const BYTE KEY_TRIGGER = (0x02);
-
-	// キーボードリリース情報
-	const BYTE KEY_RELEASE = (0x04);
-
-	// キーボードリピート情報
-	const BYTE KEY_REPEAT = (0x08);
-}
-
 xInput::xInput() 
 :_pKeyboradDevice(nullptr){
 
 }
 
 void xInput::init(Input* input) {
-	_nControlDeviceNumber = 0;
 	//コントローラーの情報を更新
 	UpdateControllerState();
 
@@ -66,6 +48,11 @@ void xInput::init(Input* input) {
 
 	// キーボードへのアクセス権の取得
 	_pKeyboradDevice->Acquire();
+
+	memset(_aButtons, 0, sizeof(_aButtons));
+	memset(_aButtonsTrigger, 0, sizeof(_aButtonsTrigger));
+	memset(_aButtonsRelease, 0, sizeof(_aButtonsRelease));
+	memset(_aButtonsRepeat, 0, sizeof(_aButtonsRepeat));
 }
 
 void xInput::uninit() {
@@ -75,99 +62,94 @@ void xInput::uninit() {
 }
 
 void xInput::update() {
-	//コントローラーデバイス分だけループ
-	for (int nDeviceNum = 0; nDeviceNum < CONTROL_DEVICE_MAX; nDeviceNum++)
-	{
-		//コントローラーの情報を更新
-		UpdateControllerState();
-		//コントローラーが接続中かどうか 
-		if (_controlDevice[nDeviceNum].bConnected){
-			//コントローラーの入力に変化があるかどうか
-			if (_controlDevice[nDeviceNum].state.dwPacketNumber != _oldControlDevice[nDeviceNum].dwPacketNumber){
-				// 入力情報格納ワーク
-				WORD Buttons = _controlDevice[nDeviceNum].state.Gamepad.wButtons;
+	//コントローラーの情報を更新
+	UpdateControllerState();
+	//コントローラーが接続中かどうか 
+	if (_controlDevice.bConnected){
+		// 入力情報格納ワーク
+		WORD wButtons = _controlDevice.state.Gamepad.wButtons;
+		SHORT sThumbLX = _controlDevice.state.Gamepad.sThumbLX;
+		SHORT sThumbLY = _controlDevice.state.Gamepad.sThumbLY;
 
-				const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
-				const int repeatSleepTime = App::instance().getInput()->getRepeatSleepTime();
+		// 入力情報をステート毎に分離して管理
+		BYTE aKeyState[CONTROL_DEVICE_KEY_MAX];
+		int nCntKey = 0;
+		//方向キー　受け取り
+		aKeyState[0] = (wButtons & XINPUT_GAMEPAD_DPAD_LEFT) ? 1 : 0;
+		aKeyState[1] = (wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) ? 1 : 0;
+		aKeyState[2] = (wButtons & XINPUT_GAMEPAD_DPAD_UP) ? 1 : 0;
+		aKeyState[3] = (wButtons & XINPUT_GAMEPAD_DPAD_DOWN) ? 1 : 0;
 
-				// 入力情報をステート毎に分離して管理
-				BYTE aKeyState[CONTROL_DEVICE_KEY_MAX];
-				int nCntKey = 0;
-				//方向キー　受け取り
-				aKeyState[0] = (Buttons & XINPUT_GAMEPAD_DPAD_LEFT) ? 1 : 0;
-				aKeyState[1] = (Buttons & XINPUT_GAMEPAD_DPAD_RIGHT) ? 1 : 0;
-				aKeyState[2] = (Buttons & XINPUT_GAMEPAD_DPAD_UP) ? 1 : 0;
-				aKeyState[3] = (Buttons & XINPUT_GAMEPAD_DPAD_DOWN) ? 1 : 0;
+		//アナログスティック　受け取り(方向キーとOR制御で取る) アナログスティック半倒し以上で取る
+		aKeyState[0] = aKeyState[0] | ((sThumbLX < - CONTROL_STICK_RANGE_MAX/2) ? 1 : 0);
+		aKeyState[1] = aKeyState[1] | ((sThumbLX > CONTROL_STICK_RANGE_MAX/2) ? 1 : 0);
+		aKeyState[2] = aKeyState[2] | ((sThumbLY > CONTROL_STICK_RANGE_MAX/2) ? 1 : 0);
+		aKeyState[3] = aKeyState[3] | ((sThumbLY < -CONTROL_STICK_RANGE_MAX/2) ? 1 : 0);
 
-				//ABXYボタン受け取り ABXYの順
-				aKeyState[4] = (Buttons & XINPUT_GAMEPAD_A) ? 1 : 0;
-				aKeyState[5] = (Buttons & XINPUT_GAMEPAD_B) ? 1 : 0;
-				aKeyState[6] = (Buttons & XINPUT_GAMEPAD_X) ? 1 : 0;
-				aKeyState[7] = (Buttons & XINPUT_GAMEPAD_Y) ? 1 : 0;
+		//ABXYボタン受け取り ABXYの順
+		aKeyState[4] = (wButtons & XINPUT_GAMEPAD_A) ? 1 : 0;
+		aKeyState[5] = (wButtons & XINPUT_GAMEPAD_B) ? 1 : 0;
+		aKeyState[6] = (wButtons & XINPUT_GAMEPAD_X) ? 1 : 0;
+		aKeyState[7] = (wButtons & XINPUT_GAMEPAD_Y) ? 1 : 0;
 
-				//L1 R1受け取り
-				aKeyState[8] = (Buttons & XINPUT_GAMEPAD_LEFT_THUMB) ? 1 : 0;
-				aKeyState[9] = (Buttons & XINPUT_GAMEPAD_RIGHT_THUMB) ? 1 : 0;
+		//L1 R1受け取り
+		aKeyState[8] = (wButtons & XINPUT_GAMEPAD_LEFT_THUMB) ? 1 : 0;
+		aKeyState[9] = (wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) ? 1 : 0;
 
-				//左右スティックボタン行けとり
-				aKeyState[10] = (Buttons & XINPUT_GAMEPAD_LEFT_SHOULDER) ? 1 : 0;
-				aKeyState[11] = (Buttons & XINPUT_GAMEPAD_RIGHT_SHOULDER) ? 1 : 0;
+		//左右スティックボタン行けとり
+		aKeyState[10] = (wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) ? 1 : 0;
+		aKeyState[11] = (wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) ? 1 : 0;
 
-				//start backボタン受け取り
-				aKeyState[12] = (Buttons & XINPUT_GAMEPAD_START) ? 1 : 0;
-				aKeyState[13] = (Buttons & XINPUT_GAMEPAD_BACK) ? 1 : 0;
+		//start backボタン受け取り
+		aKeyState[12] = (wButtons & XINPUT_GAMEPAD_START) ? 1 : 0;
+		aKeyState[13] = (wButtons & XINPUT_GAMEPAD_BACK) ? 1 : 0;
 
-				for (nCntKey = 0; nCntKey < CONTROL_DEVICE_KEY_MAX; nCntKey++) {
-					// 前回情報の保存
-					BYTE wButtonsOld = _wButtons[nDeviceNum][nCntKey];
+		for (nCntKey = 0; nCntKey < CONTROL_DEVICE_KEY_MAX; nCntKey++) {
+			// トリガー作成 現在トリガーが押している間常にON
+			_aButtonsTrigger[nCntKey] = (aKeyState[nCntKey] ^ _aButtons[nCntKey]) & aKeyState[nCntKey];
+		
+			// リリース作成　現在離した後他のキーが押されるまでON
+			_aButtonsRelease[nCntKey] = (aKeyState[nCntKey] ^ _aButtons[nCntKey]) & ~aKeyState[nCntKey];
 
-					// トリガ情報の作成
-					aKeyState[nCntKey] += ((aKeyState[nCntKey] ^ wButtonsOld)& aKeyState[nCntKey]) << 1;
+			// グローバルへ移す
+			_aButtons[nCntKey] = aKeyState[nCntKey];
 
-					// リリース情報の作成
-					aKeyState[nCntKey] += ((aKeyState[nCntKey] ^ wButtonsOld) & ~wButtonsOld) << 2;
+			// リピート作成
+			if (_aButtons[nCntKey] & 0x01) {
+				//0x20になったら0に戻す
+				(_aButtonsRepeat[nCntKey] < 0x20) ? _aButtonsRepeat[nCntKey]++ : _aButtonsRepeat[nCntKey] = 0;
+			}
+			else {
+				_aButtonsRepeat[nCntKey] = 0;
+			}
+		}//for
 
-					// リピート情報の作成
-					_wButtonsRepeatCnt[nDeviceNum][nCntKey] = (_wButtonsRepeatCnt[nDeviceNum][nCntKey] * (aKeyState[nCntKey] / KEY_PRESS)) + 1;
+	}//if　接続確認
+	//接続が切れていたら
+	else{
+		// 配列のクリア
 
-					aKeyState[nCntKey] += (BYTE)(((_wButtonsRepeatCnt[nDeviceNum][nCntKey] / repeatStartTime)) | ((aKeyState[nCntKey] & KEY_TRIGGER))) << 3;
-					if (_wButtonsRepeatCnt[nDeviceNum][nCntKey] / repeatStartTime >= 1) {
-						_wButtonsRepeatCnt[nDeviceNum][nCntKey] -= (BYTE)repeatSleepTime;
-					}//if
+	}//else
 
-					// グローバルへ移す
-					_wButtons[nDeviceNum][nCntKey] = aKeyState[nCntKey];
-				}//for
-
-				//現在の状態を保存
-				_oldControlDevice[nDeviceNum].dwPacketNumber = _controlDevice[nDeviceNum].state.dwPacketNumber;
-			}//if 状態変化確認
-
-		}//if　接続確認
-		//接続が切れていたら
-		else{
-			// 配列のクリア
-
-		}//else
-	}//for コントローラー数のループ
 }
 
-bool xInput::isPress(VK_INPUT vk) const {
-	return (_wButtons[_nControlDeviceNumber][(int)vk] & KEY_PRESS) ? true : false;
+bool xInput::isPress(int id, VK_INPUT vk) const {
+	return (_aButtons[(int)vk]) ? true : false;
 }
 
 
-bool xInput::isTrigger(VK_INPUT vk) const {
-	return (_wButtons[_nControlDeviceNumber][(int)vk] & KEY_TRIGGER) ? true : false;
+bool xInput::isTrigger(int id,VK_INPUT vk) const {
+	return (_aButtonsTrigger[(int)vk]) ? true : false;
 }
 
 
-bool xInput::isRelease(VK_INPUT vk) const {
-	return (_wButtons[_nControlDeviceNumber][(int)vk] & KEY_RELEASE) ? true : false;
+bool xInput::isRelease(int id,VK_INPUT vk) const {
+	return (_aButtonsRelease[(int)vk]) ? true : false;
 }
 
-bool xInput::isRepeat(VK_INPUT vk) const {
-	return (_wButtons[_nControlDeviceNumber][(int)vk] & KEY_REPEAT) ? true : false;
+bool xInput::isRepeat(int id,VK_INPUT vk) const {
+	const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
+	return (_aButtonsRepeat[(int)vk] >= 0x20 ) ? true : false;
 }
 
 //コントローラーの状態を更新する
@@ -176,12 +158,12 @@ HRESULT xInput::UpdateControllerState(void)
 	//接続状態を受け取る変数を定義
 	DWORD dwResult;
 	//コントローラーの状態を受け取る
-	dwResult = XInputGetState(_nControlDeviceNumber, &_controlDevice[_nControlDeviceNumber].state);
+	dwResult = XInputGetState(0, &_controlDevice.state);
 	//接続中ならば　接続状態をTRUEに 接続成功:ERROR_SUCCESS 接続失敗:ERROR_DEVICE_NOT_CONNECTEDが入っている
 	if (dwResult == ERROR_SUCCESS)
-		_controlDevice[_nControlDeviceNumber].bConnected = true;
+		_controlDevice.bConnected = true;
 	else
-		_controlDevice[_nControlDeviceNumber].bConnected = false;
+		_controlDevice.bConnected = false;
 	//成功したかどうかを返す
 	return S_OK;
 }
