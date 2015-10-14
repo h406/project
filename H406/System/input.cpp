@@ -53,6 +53,9 @@ Input::Input() :_pInputDevice(nullptr) {
   if (dInput->getEnableDevise(0)){
     _inputList.push_back(dInput);
   }
+  else {
+    SafeDelete(dInput);
+  }
 
   setRepeatStartTime(15);
   setRepeatSleepTime(5);

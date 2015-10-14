@@ -15,6 +15,7 @@ class App;
 class Texture;
 class Camera;
 class Shader;
+class Sprite2D;
 
 class Effect;
 
@@ -36,6 +37,9 @@ public:
   Camera* getCamera() const { return _camera; }
   Shader* getShader() const { return _shader; }
 
+  void setFadeBG(Sprite2D* sprite) { _fadeBG = sprite; }
+  Sprite2D* getFadeBG() const { return _fadeBG; }
+
 private:
   void createDevice(const SIZE& windowSize, HWND hWnd);
 
@@ -54,6 +58,9 @@ private:
 
   // シェーダ
   Shader* _shader;
+
+  // フェード
+  Sprite2D* _fadeBG;
 };
 
 #endif

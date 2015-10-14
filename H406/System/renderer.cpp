@@ -31,6 +31,9 @@ Renderer::Renderer(const App* app) {
 
   // シェーダ
   _shader = new Shader(this);
+
+  // フェード
+  _fadeBG = nullptr;
 }
 
 //==============================================================================
@@ -141,6 +144,10 @@ Renderer::~Renderer() {
   SafeDelete(_texture);
   SafeDelete(_camera);
   SafeDelete(_shader);
+
+  if(_fadeBG != nullptr) {
+    _fadeBG->release();
+  }
 }
 
 //==============================================================================
@@ -148,6 +155,11 @@ Renderer::~Renderer() {
 //------------------------------------------------------------------------------
 void Renderer::update() {
   _camera->update();
+
+  if(_fadeBG != nullptr) {
+    _fadeBG->updateChild();
+    _fadeBG->updateMtxChild();
+  }
 }
 
 //==============================================================================
@@ -178,9 +190,13 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);
       }
 
-
       // 普通の2D
       baceNode->drawChild(this,NodeType::normal2D);
+    }
+
+    // フェード用
+    if(_fadeBG != nullptr) {
+      _fadeBG->draw(this);
     }
 
     // シーンの描画終了

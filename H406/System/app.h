@@ -18,6 +18,19 @@ class node;
 class Sound;
 using iScene = node;
 
+class BaceNextScene {
+public:
+  virtual node* create() = 0;
+};
+
+template <class _SCENE>
+class NextScene : public BaceNextScene {
+public:
+  node* create() {
+    return _SCENE::create();
+  }
+};
+
 //==============================================================================
 // App
 //------------------------------------------------------------------------------
@@ -30,6 +43,15 @@ public:
 
   void setBaceScene(iScene* baceScene);
 
+  template <class _SCENE>
+  bool createNextScene() {
+    if(_nextScene == nullptr && _fadeTime == 0) {
+      _nextScene = new NextScene<_SCENE>();
+      return true;
+    }
+    return false;
+  }
+
 protected:
   void update();
 
@@ -41,6 +63,9 @@ private:
   Renderer* _renderer;
   Input* _input;
   Sound* _sound;
+
+  BaceNextScene* _nextScene;
+  float _fadeTime;
 };
 
 

@@ -87,6 +87,8 @@ void Title::update() {
   }
   if(input->isPress(0, VK_INPUT::RIGHT)) {
     moveDest.x += 5;
+
+    App::instance().createNextScene<Title>();
   }
   moveVec += (moveDest - moveVec) * 0.1f;
   akr->setPos(pos + moveVec);

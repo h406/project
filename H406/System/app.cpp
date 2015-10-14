@@ -30,8 +30,16 @@ App::App(int width,int height)
   : Window(width,height)
   ,_baceScene(nullptr)
   ,_sound(new Sound())
-  ,_input(new Input()){
+  ,_input(new Input())
+  ,_fadeTime(0){
   _renderer = new Renderer(this);
+
+
+  auto fadeBG = Sprite2D::create();
+  fadeBG->setSize(App::instance().getWindowSize().cx,App::instance().getWindowSize().cy);
+  fadeBG->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f,0);
+  fadeBG->setColor(D3DXCOLOR(1,1,1,1));
+  _renderer->setFadeBG(fadeBG);
 }
 
 //==============================================================================
@@ -54,6 +62,22 @@ App::~App() {
 void App::update() {
   _input->update();
 
+  if(_nextScene != nullptr) {
+    _fadeTime += 0.1f;
+    if(_fadeTime > 1.f) {
+      _fadeTime = 1.f;
+    }
+  }
+  else if(_fadeTime > 0) {
+    _fadeTime -= 0.1f;
+    if(_fadeTime < 0) {
+      _fadeTime = 0;
+    }
+  }
+  auto fadeBG = _renderer->getFadeBG();
+  fadeBG->setColor(D3DXCOLOR(1,1,1,_fadeTime));
+
+
   if(_baceScene != nullptr) {
     _baceScene->updateChild();
     _renderer->update();
@@ -61,6 +85,11 @@ void App::update() {
   }
 
   _renderer->draw(_baceScene);
+
+  if(_nextScene != nullptr && _fadeTime == 1.f) {
+    setBaceScene(_nextScene->create());
+    SafeDelete(_nextScene);
+  }
 }
 
 //==============================================================================
