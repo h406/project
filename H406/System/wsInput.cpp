@@ -197,21 +197,21 @@ int WsInput::wsCallBackData(
 }
 
 
-bool WsInput::isPress(VK_INPUT vk) const {
+bool WsInput::isPress(int id, VK_INPUT vk) const {
   return _press[(int)vk];
 }
 
-bool WsInput::isTrigger(VK_INPUT vk) const {
+bool WsInput::isTrigger(int id, VK_INPUT vk) const {
   UnusedParam(vk);
   return false;
 }
 
-bool WsInput::isRelease(VK_INPUT vk) const {
+bool WsInput::isRelease(int id, VK_INPUT vk) const {
   UnusedParam(vk);
   return false;
 }
 
-bool WsInput::isRepeat(VK_INPUT vk) const {
+bool WsInput::isRepeat(int id, VK_INPUT vk) const {
   UnusedParam(vk);
   return false;
 }

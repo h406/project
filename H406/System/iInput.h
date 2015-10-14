@@ -23,10 +23,10 @@ public:
   virtual void uninit(void) = 0;
   virtual void update(void) = 0;
 
-  virtual bool isPress(VK_INPUT vk) const = 0;
-  virtual bool isTrigger(VK_INPUT vk) const = 0;
-  virtual bool isRelease(VK_INPUT vk) const = 0;
-  virtual bool isRepeat(VK_INPUT vk) const = 0;
+  virtual bool isPress(int id, VK_INPUT vk) const = 0;
+  virtual bool isTrigger(int id, VK_INPUT vk) const = 0;
+  virtual bool isRelease(int id, VK_INPUT vk) const = 0;
+  virtual bool isRepeat(int id, VK_INPUT vk) const = 0;
 };
 #endif
 //EOF

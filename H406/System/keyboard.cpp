@@ -113,21 +113,21 @@ void KeyBoard::update() {
   }
 }
 
-bool KeyBoard::isPress(VK_INPUT vk) const {
+bool KeyBoard::isPress(int id, VK_INPUT vk) const {
   return _aKeyState[_InputVTKey[(int)vk]] & 0x80 ? true : false;
 }
 
-bool KeyBoard::isTrigger(VK_INPUT vk) const {
+bool KeyBoard::isTrigger(int id, VK_INPUT vk) const {
   return _aKeyTrigger[_InputVTKey[(int)vk]] & 0x80 ? true : false;
 }
 
-bool KeyBoard::isRelease(VK_INPUT vk) const {
+bool KeyBoard::isRelease(int id, VK_INPUT vk) const {
   return _aKeyRelease[_InputVTKey[(int)vk]] & 0x80 ? true : false;
 }
 
-bool KeyBoard::isRepeat(VK_INPUT vk) const {
+bool KeyBoard::isRepeat(int id, VK_INPUT vk) const {
   const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
-  return ((_aKeyRepeat[_InputVTKey[(int)vk]] > repeatStartTime) || (isTrigger(vk))) ? true : false;
+  return ((_aKeyRepeat[_InputVTKey[(int)vk]] > repeatStartTime) || (isTrigger(id, vk))) ? true : false;
 }
 
 //EOF

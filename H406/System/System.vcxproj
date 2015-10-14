@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="directInput.cpp" />
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="MeshField.cpp" />
@@ -39,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CreateFunc.h" />
+    <ClInclude Include="directInput.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="MeshField.h" />
     <ClInclude Include="nodeType.h" />

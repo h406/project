@@ -24,10 +24,10 @@ public :
   void uninit(void);
   void update(void);
 
-  bool isPress(VK_INPUT vk) const;
-  bool isTrigger(VK_INPUT vk) const;
-  bool isRelease(VK_INPUT vk) const;
-  bool isRepeat(VK_INPUT vk) const;
+  bool isPress(int id, VK_INPUT vk) const;
+  bool isTrigger(int id, VK_INPUT vk) const;
+  bool isRelease(int id, VK_INPUT vk) const;
+  bool isRepeat(int id, VK_INPUT vk) const;
 
   // デバイスがあるか調べる
   bool getEnableDevise(void) { return _pKeyboradDevice ? true : false; }

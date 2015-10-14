@@ -24,10 +24,10 @@ public:
 
   void update();
 
-  bool isPress(VK_INPUT vk) const;
-  bool isTrigger(VK_INPUT vk) const;
-  bool isRelease(VK_INPUT vk) const;
-  bool isRepeat(VK_INPUT vk) const;
+  bool isPress(int id, VK_INPUT vk) const;
+  bool isTrigger(int id, VK_INPUT vk) const;
+  bool isRelease(int id, VK_INPUT vk) const;
+  bool isRepeat(int id, VK_INPUT vk) const;
 
   // インプットデバイス
   LPDIRECTINPUT8 getInputDevice(void) const { return _pInputDevice; }
