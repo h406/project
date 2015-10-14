@@ -15,6 +15,7 @@
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="meshCylinder.cpp" />
+    <ClCompile Include="meshDome.cpp" />
     <ClCompile Include="MeshField.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Sprite2D.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="directInput.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="meshCylinder.h" />
+    <ClInclude Include="meshDome.h" />
     <ClInclude Include="MeshField.h" />
     <ClInclude Include="nodeType.h" />
     <ClInclude Include="sound.h" />

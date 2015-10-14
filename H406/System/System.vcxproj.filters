@@ -73,6 +73,9 @@
     <Filter Include="object\drawObject\MeshSylinder">
       <UniqueIdentifier>{fe3ba076-93c8-4fc0-a8d3-736ad723d102}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\drawObject\MeshDome">
+      <UniqueIdentifier>{d75fc395-545f-4fca-8c2b-3a4cf918ee71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -137,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="meshCylinder.cpp">
       <Filter>object\drawObject\MeshSylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="meshDome.cpp">
+      <Filter>object\drawObject\MeshDome</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="meshCylinder.h">
       <Filter>object\drawObject\MeshSylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="meshDome.h">
+      <Filter>object\drawObject\MeshDome</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 //******************************************************************************
 #include "title.h"
 #include "../System/meshCylinder.h"
+#include "../System/meshDome.h"
 
 namespace {
 
@@ -24,6 +25,7 @@ CameraBace* cam2 = nullptr;
 MeshField* field = nullptr;
 Sprite3D* fieldMap[numx][numy] = {nullptr};
 MeshCylinder* cylinder = nullptr;
+MeshDome* dome = nullptr;
 
 Effect* effect = nullptr;
 Vec3 moveVec(0,0,0);
@@ -69,9 +71,13 @@ bool Title::init() {
     }
   }
 
-  cylinder = MeshCylinder::create(8, 4, 80.0f, 80.0f);
-  cylinder->setColor(D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f));
+  cylinder = MeshCylinder::create(10, 4, 40.0f, 80.0f);
+  cylinder->setTexture("./data/texture/akira001.png");
   this->addChild(cylinder);
+
+  dome = MeshDome::create(20, 20, 50.0f, 50.0f);
+  dome->setColor(D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f));
+  this->addChild(dome);
 
   return true;
 }

@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// meshCylinder [meshCylinder.cpp]
+// meshDome [meshDome.cpp]
 // Author : masato masuda : 2015/10/14
 //
 //==============================================================================
@@ -8,7 +8,7 @@
 //******************************************************************************
 // include
 //******************************************************************************
-#include "meshCylinder.h"
+#include "meshDome.h"
 #include "app.h"
 #include "renderer.h"
 #include "shader.h"
@@ -35,7 +35,7 @@ namespace {
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool MeshCylinder::init(int nNumBlockX,int nNumBlockZ,float fSizeBlockX,float fSizeBlockZ) {
+bool MeshDome::init(int nNumBlockX,int nNumBlockZ,float fSizeBlockX,float fSizeBlockZ) {
   _nNumBlockX = nNumBlockX;
   _nNumBlockY = nNumBlockZ;
 
@@ -94,45 +94,48 @@ bool MeshCylinder::init(int nNumBlockX,int nNumBlockZ,float fSizeBlockX,float fS
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-void MeshCylinder::initVtx() {
+void MeshDome::initVtx() {
 
   VERTEX_3D *pVtx = nullptr;
   WORD *pIndex = nullptr;
   int vtxWork = 0;
 
   // 半径の計算
-  float	cylinderVtxX = 0 - ((_nNumBlockX * _fSizeBlockX)) * 0.5f;
-  float	cylinderVtxY = 0 - ((_nNumBlockY * _fSizeBlockY)) * 0.5f;
+  float	domeVtxX = 0 - ((_nNumBlockX * _fSizeBlockX)) * 0.5f;
+  float	domeVtxY = 0 - ((_nNumBlockY * _fSizeBlockY)) * 0.5f;
 
   // 頂点バッファ設定
   _vtxBuff->Lock(0,0,(void **)&pVtx,0);
 
-  for (float cntZ = 0.0f; cntZ <= _nNumBlockY; cntZ++)
+  for (float cntY = 0.0f; cntY <= _nNumBlockY; cntY++)
   {
     for (float cntX = 0.0f; cntX <= _nNumBlockX; cntX++)
     {
       // 角度の算出
+      float	domeLength = (_nNumBlockX * _fSizeBlockX) * 0.5f;
+
       float	angle = (float)(((D3DX_PI * 2) / _nNumBlockX) * cntX);
-      float	length = (_nNumBlockX * _fSizeBlockX) * 0.5f;
+      float	angleY = (float)(((D3DX_PI * 0.5f) / _nNumBlockY) * cntY);
+      float	lengthXZ = cos(angleY) * domeLength;
 
       // 座標
-      pVtx[vtxWork].vtx = D3DXVECTOR3((-cos(angle) * length),
-        (-(cntZ * _fSizeBlockY)) - (cylinderVtxY * 2),
-        (sin(angle) * length));
+      pVtx[vtxWork].vtx = D3DXVECTOR3((cos(angle) * lengthXZ),
+        ((sin(angleY) * domeLength) + domeVtxY) + ((_nNumBlockY  * _fSizeBlockY) * 0.5f),
+        (sin(angle) * lengthXZ));
 
       // 法線
       pVtx[vtxWork].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
       // テクスチャー
-      //pVtx[vtxWork].tex = D3DXVECTOR2((float)(cntX / _nNumBlockX), (float)(cntZ / _nNumBlockX));
-      pVtx[vtxWork].tex = D3DXVECTOR2(cntX, cntZ);
+      pVtx[vtxWork].tex = D3DXVECTOR2(-(cntX / _nNumBlockX), -(cntY / _nNumBlockY));
+      //pVtx[ vtxWork ].tex = D3DXVECTOR2( cntX, cntY );
 
       // ワーク更新
       vtxWork++;
     }
 
     // 座標始点Xを戻す
-    cylinderVtxX = 0 - (_nNumBlockX  * _fSizeBlockX) * 0.5f;
+    domeVtxX = 0 - (_nNumBlockX  * _fSizeBlockX) * 0.5f;
   }
 
   _vtxBuff->Unlock();
@@ -141,19 +144,20 @@ void MeshCylinder::initVtx() {
   _indexBuff->Lock(0,0,(void **)&pIndex,0);
 
   int idxCnt = 0;
-  for (int indexCnt = 0; indexCnt < _nNumVertexIndex; indexCnt++){
+  for (int indexCnt = 0; indexCnt < _nNumVertexIndex; indexCnt++)
+  {
     // 重複している場合
     if (indexCnt != 0 && (((indexCnt - (2 * _nNumBlockX + 2)) % ((2 * _nNumBlockX + 2) + 2) == 0)
       || (indexCnt - ((2 * _nNumBlockX + 2) + 2)) % ((2 * _nNumBlockX + 2) + 2) == 0)){
       // 前回と同じインデックス番号を入れる
       pIndex[indexCnt] = pIndex[indexCnt - 1];
       idxCnt--;
-    }else{
+    } else {
       // 重複していない場合
       pIndex[indexCnt] = (WORD)((_nNumBlockX + 1) + (idxCnt / 2)) - (WORD)((idxCnt % 2) * (_nNumBlockX + 1));
     }
 
-    // ワーク用
+    // ワーク用カウントインクリメント
     idxCnt++;
   }
 
@@ -163,7 +167,7 @@ void MeshCylinder::initVtx() {
 //==============================================================================
 // uninit
 //------------------------------------------------------------------------------
-void MeshCylinder::uninit() {
+void MeshDome::uninit() {
   SafeRelease(_vtxBuff);
   SafeRelease(_indexBuff);
   SafeRelease(_p3DDec);
@@ -174,14 +178,14 @@ void MeshCylinder::uninit() {
 //==============================================================================
 // update
 //------------------------------------------------------------------------------
-void MeshCylinder::update() {
+void MeshDome::update() {
 
 }
 
 //==============================================================================
 // draw
 //------------------------------------------------------------------------------
-void MeshCylinder::draw(const Renderer* renderer) {
+void MeshDome::draw(const Renderer* renderer) {
 
   auto pDevice = renderer->getDevice();
   auto shader = renderer->getShader();
