@@ -34,7 +34,7 @@ public :
 
 protected:
   // 仮想キーボード配列
-  BYTE _InputVTKey[int(VK_INPUT::MAX)];
+  BYTE _InputVTKey[4][int(VK_INPUT::MAX)];
   
   BYTE _aKeyState[256];
   BYTE _aKeyTrigger[256];
