@@ -10,11 +10,15 @@
 #ifndef _TITLE_H_
 #define _TITLE_H_
 
+#include "CreateFunc.h"
+
 //==============================================================================
 // 
 //==============================================================================
-class Title : public iScene {
+class Title : public iScene ,public CreateFunc<Title> {
 public:
+  using CreateFunc::create;
+
   bool init();
   void update();
   void uninit();

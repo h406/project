@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
   app.setTitle("H406");
 
   // Å‰‚ÌƒV[ƒ“
-  app.setBaceScene(Title::create<Title>());
+  app.setBaceScene(Title::create());
 
   return app.run();
 }

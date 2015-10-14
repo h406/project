@@ -13,6 +13,7 @@
 #include "texture.h"
 #include "camera.h"
 #include "shader.h"
+#include "node.h"
 
 //==============================================================================
 // renderer
@@ -48,7 +49,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
     return;
   }
 
-  // 現在のディスプレイモードを取得
+  // 現在のディ3スプレイモードを取得
   if(FAILED(pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT,&d3ddm))) {
     return;
   }
@@ -86,20 +87,27 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
   _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
+  _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,TRUE);
+  _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0x66);
+  _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
+  _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+  _pD3DDevice->SetRenderState(D3DRS_SHADEMODE,D3DSHADE_GOURAUD);
 
-  //---- サンプラーステートの設定 ----
-  // テクスチャUV値の繰り返し設定(テクスチャの繰り返し描画指定)
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
-  // テクスチャの拡縮時の補間設定
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR);	// 線形処理(縮小)
-  _pD3DDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR);	// 線形処理(拡大)
+  for(int i = 0; i < 4; ++i) {
+    //---- サンプラーステートの設定 ----
+    // テクスチャUV値の繰り返し設定(テクスチャの繰り返し描画指定)
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
+    // テクスチャの拡縮時の補間設定
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(縮小)
+    _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);	// 線形処理(拡大)
 
-  //---- テクスチャステージステートの設定 ----
-  // 不透明テクスチャにα値を適用させる
-  _pD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAOP,D3DTOP_MODULATE); // 透過をブレンド
-  _pD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG1,D3DTA_TEXTURE);	// 引数１：テクスチャを指定 
-  _pD3DDevice->SetTextureStageState(0,D3DTSS_ALPHAARG2,D3DTA_CURRENT);	// 引数２：現在のポリゴンの不透明度を指定
+    //---- テクスチャステージステートの設定 ----
+    // 不透明テクスチャにα値を適用させる
+    _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAOP,D3DTOP_MODULATE); // 透過をブレンド
+    _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAARG1,D3DTA_TEXTURE);	// 引数１：テクスチャを指定 
+    _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAARG2,D3DTA_CURRENT);	// 引数２：現在のポリゴンの不透明度を指定
+  }
 
   _pD3DDevice->SetRenderState(D3DRS_LIGHTING,FALSE);
 
@@ -111,8 +119,8 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   D3DXMatrixPerspectiveFovLH(&_mtxProj,		// プロジェクションマトリックスの初期化
     D3DX_PI / 4.0f,				// 視野角
     (float)windowSize.cx / (float)windowSize.cy,	// アスペクト比
-    100.0f,						// rear値
-    1000.0f);					// far値
+    1.0f,						// rear値
+    6000.0f);					// far値
 
   // ビューポート設定
   D3DVIEWPORT9 vp;
@@ -123,7 +131,6 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   vp.MaxZ = 1;
   vp.MinZ = 0;
   _pD3DDevice->SetViewport(&vp);
-
 }
 
 //==============================================================================
@@ -137,12 +144,17 @@ Renderer::~Renderer() {
 }
 
 //==============================================================================
+// update
+//------------------------------------------------------------------------------
+void Renderer::update() {
+  _camera->update();
+}
+
+//==============================================================================
 // draw
 //------------------------------------------------------------------------------
 bool Renderer::draw(node* baceNode) {
-  _camera->update();
-
-  // シーンの描画開始
+    // シーンの描画開始
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
     // シーンのクリア
     _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(100,100,100),1.0f,0);
@@ -152,7 +164,23 @@ bool Renderer::draw(node* baceNode) {
     
     // ベースノード
     if(baceNode != nullptr) {
-      baceNode->drawChild(this);
+      // 普通の3D
+      baceNode->drawChild(this, NodeType::normal3D);
+
+      // エフェクト
+      baceNode->drawChild(this,NodeType::effect);
+
+      for(int i = 0; i < 4; ++i) {
+        //---- サンプラーステートの設定 ----
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);
+      }
+
+
+      // 普通の2D
+      baceNode->drawChild(this,NodeType::normal2D);
     }
 
     // シーンの描画終了

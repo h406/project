@@ -10,6 +10,8 @@
 #ifndef _NODE_H_
 #define _NODE_H_
 
+#include "nodeType.h"
+
 //==============================================================================
 //
 //------------------------------------------------------------------------------
@@ -24,22 +26,9 @@ public :
   virtual void draw(const Renderer* ) {};
   virtual void uninit() = 0;
 
-  // create
-  template<class Derived, class... Args>
-  static Derived* create(Args&&... args) {
-    auto p = new Derived();
-    if(p->init(std::forward<Args>(args)...)) {
-      return p;
-    }
-    else {
-      delete p;
-      return nullptr;
-    }
-  }
-
   // update
   virtual void updateChild();
-  void drawChild(const Renderer* renderer);
+  void drawChild(const Renderer* renderer,NodeType type);
 
   // release
   void release();
@@ -82,6 +71,11 @@ public :
 
   const Matrix& getWorldMtx() { return _mtxWorld; }
 
+  void updateMtxChild();
+
+  void setVisible(bool visible) { _visible = visible; }
+  bool isVisible() const { return _visible; }
+
 protected:
   // node
   node();
@@ -97,6 +91,10 @@ protected:
   Matrix _mtxWorld;
 
   bool _worldChenged;
+
+  virtual NodeType getNodeType() const { return NodeType::default; }
+
+  node* getParent() const { return _parent; }
 
 private:
 
@@ -120,8 +118,11 @@ private:
   // 
   bool _zOrderChenged;
 
+  // çÌèú
   bool _destroy;
 
+  // ï\é¶Ç∑ÇÈÇ©
+  bool _visible;
 };
 
 #endif

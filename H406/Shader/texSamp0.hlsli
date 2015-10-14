@@ -9,9 +9,9 @@
 #define _TEXSAMP0_H_
 
 // テクスチャ
-uniform texture gTexSamp0;
+texture  gTex0;
 sampler TexSamp0 = sampler_state {
-  Texture = <gTexSamp0>;
+  Texture = <gTex0>;
   MinFilter = ANISOTROPIC;
   MaxAnisotropy = 8;
   MagFilter = LINEAR;

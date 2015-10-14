@@ -10,13 +10,16 @@
 #ifndef _SPRITE2D_H_
 #define _SPRITE2D_H_
 
-#include "iDrawObject.h"
+#include "DrawObject.h"
+#include "CreateFunc.h"
 
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Sprite2D : public iDrawObject {
+class Sprite2D : public DrawObject,public CreateFunc<Sprite2D> {
 public:
+  using CreateFunc::create;
+
   bool init();
   bool init(const char* file);
   virtual void update();
@@ -27,11 +30,12 @@ public:
   void setSizeH(float h) { _worldChenged = true; _scl.y = h; }
   void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
 
+protected:
+  virtual NodeType getNodeType() const { return NodeType::normal2D; }
+
 private:
 
   void updateWorldMtx();
-
-  unsigned int _textureID;
 
   unsigned int _numU;
   unsigned int _numV;

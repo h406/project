@@ -11,6 +11,7 @@
 #include "shader.h"
 #include "renderer.h"
 #include "iShader.h"
+#include "app.h"
 
 namespace {
   inline bool isfile(const char *filename) {

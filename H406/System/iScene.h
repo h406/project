@@ -16,6 +16,5 @@
 #include "node.h"
 using iScene = node;
 
-
 #endif
 //EOF

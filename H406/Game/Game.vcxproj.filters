@@ -9,11 +9,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="title.h">
+      <Filter>title</Filter>
+    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="title.h">
-      <Filter>title</Filter>
+    <ClInclude Include="CreateFunc.h">
+      <Filter>common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@
 // 
 //------------------------------------------------------------------------------
 class Camera {
-public :
+public:
 
   void update();
 
@@ -25,9 +25,12 @@ public :
   CameraBace* createCamera();
   void releaseCamera(CameraBace* camera);
 
-  void setCurrentCamera(CameraBace* camera) { _currentCam = camera; }
+  void setCamera(CameraBace* camera) { _currentCam = camera; }
 
-  const Matrix& getViewMtx() { return _currentCam->getViewMtx(); }
+  const Matrix& getViewMtx() const { return _currentCam->getViewMtx(); }
+  const CameraBace* getCurrentCamera() const { return _currentCam; }
+
+  void setCamera(CameraBace* camera,int frame);
 
 private:
   class CameraEx : public CameraBace {
@@ -42,6 +45,12 @@ private:
   list<CameraEx*> _cameraList;
 
   CameraBace* _currentCam;
+  CameraBace* _defaultCam;
+
+  CameraBace* _destCamera;
+  CameraBace* _moveToCamera;
+  int _nowFrame;
+  int _maxFrame;
 };
 
 #endif

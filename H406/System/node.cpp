@@ -21,6 +21,8 @@ node::node()
   ,_pos(0.f,0.f,0.f)
   ,_rot(0.f,0.f,0.f)
   ,_scl(1.f,1.f,1.f)
+  ,_worldChenged(true)
+  ,_visible(true)
 {
 }
 
@@ -28,14 +30,27 @@ node::node()
 // updateChild
 //------------------------------------------------------------------------------
 void node::updateWorldMtx() {
-  D3DXMATRIX mtxTmp;
-  D3DXMatrixIdentity(&_mtxWorld);// ワールドマトリックスの初期化
-  D3DXMatrixScaling(&mtxTmp,_scl.x,_scl.y,_scl.z);
-  D3DXMatrixMultiply(&_mtxWorld,&_mtxWorld,&mtxTmp);
-  D3DXMatrixRotationYawPitchRoll(&mtxTmp,_rot.y,_rot.x,_rot.z);		// 回転
-  D3DXMatrixMultiply(&_mtxWorld,&_mtxWorld,&mtxTmp);
-  D3DXMatrixTranslation(&mtxTmp,_pos.x,_pos.y,_pos.z);			// 位置
-  D3DXMatrixMultiply(&_mtxWorld,&_mtxWorld,&mtxTmp);
+  D3DXMATRIX mtxRot;
+  D3DXMatrixRotationYawPitchRoll(&mtxRot,_rot.y,_rot.x,_rot.z);
+  _mtxWorld._11 = _scl.x * mtxRot._11;
+  _mtxWorld._12 = _scl.x * mtxRot._12;
+  _mtxWorld._13 = _scl.x * mtxRot._13;
+  _mtxWorld._14 = 0.0f;
+
+  _mtxWorld._21 = _scl.y * mtxRot._21;
+  _mtxWorld._22 = _scl.y * mtxRot._22;
+  _mtxWorld._23 = _scl.y * mtxRot._23;
+  _mtxWorld._24 = 0.0f;
+
+  _mtxWorld._31 = _scl.z * mtxRot._31;
+  _mtxWorld._32 = _scl.z * mtxRot._32;
+  _mtxWorld._33 = _scl.z * mtxRot._33;
+  _mtxWorld._34 = 0.0f;
+
+  _mtxWorld._41 = _pos.x;
+  _mtxWorld._42 = _pos.y;
+  _mtxWorld._43 = _pos.z;
+  _mtxWorld._44 = 1.0f;
 
   if(_parent != nullptr)
     _mtxWorld = _mtxWorld * _parent->getWorldMtx();
@@ -58,28 +73,43 @@ void node::updateChild() {
   }
 
   zOderCheck();
-
-  if(_worldChenged)
-    updateWorldMtx();
   
   // update
-  for(node*& obj : _childList) {
-    if(_worldChenged) obj->_worldChenged = true;
+  for(node* obj : _childList) {
     obj->updateChild();
+  }
+}
+
+//==============================================================================
+// updateMtxChild
+//------------------------------------------------------------------------------
+void node::updateMtxChild() {
+  if(_worldChenged) {
+    updateWorldMtx();
+  }
+
+  // update
+  for(node* obj : _childList) {
+    if(_worldChenged) {
+      obj->_worldChenged = true;
+    }
+    obj->updateMtxChild();
   }
 }
 
 //==============================================================================
 // drawChild
 //------------------------------------------------------------------------------
-void node::drawChild(const Renderer* renderer) {
-  this->draw(renderer);
-  
+void node::drawChild(const Renderer* renderer, NodeType type) {
+  if(_visible && type == this->getNodeType()) {
+    this->draw(renderer);
+  }
+
   // 削除リストチェック
   removeCheck();
 
-  for(node*& obj : _childList) {
-    obj->drawChild(renderer);
+  for(node* obj : _childList) {
+    obj->drawChild(renderer, type);
   }
 }
 
@@ -88,7 +118,7 @@ void node::drawChild(const Renderer* renderer) {
 //------------------------------------------------------------------------------
 void node::release() {
 
-  for(node*& obj : _childList) {
+  for(node* obj : _childList) {
     obj->release();
   }
 
@@ -150,7 +180,7 @@ void node::removeChild(node* node) {
 void node::zOderCheck() {
   // zOrder
   if(_zOrderChenged) {
-    _childList.sort([](node*& obj1,node*& obj2) {return obj1->_zOrder < obj2->_zOrder;});
+    _childList.sort([](node* obj1,node* obj2) {return obj1->_zOrder < obj2->_zOrder;});
     _zOrderChenged = false;
   }
 }
