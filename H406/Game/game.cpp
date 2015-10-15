@@ -167,8 +167,12 @@ void Game::update() {
   }
 
   const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
+  float length = D3DXVec3Length(&(playerPos[0] - playerPos[1]));
+  float rot = atan2(600,-900);
 
-  _mainCamera->setPosP({camvec.x,600,-900});
+  if(length < 300) length = 300;
+
+  _mainCamera->setPosP(Vec3(0,sinf(rot) * length,cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec);
   
  
