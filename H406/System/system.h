@@ -28,6 +28,8 @@
 #include "Sprite2D.h"
 #include "Sprite3D.h"
 #include "MeshField.h"
+#include "meshCylinder.h"
+#include "meshDome.h"
 
 #include "iScene.h"
 #include "iLayer.h"
