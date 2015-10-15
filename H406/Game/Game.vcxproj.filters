@@ -7,6 +7,9 @@
     <Filter Include="title">
       <UniqueIdentifier>{06c12657-07b8-4ba0-ac92-ca9c7c3ba242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{d232d028-e9c3-4a99-aee2-8a2010099a42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -18,6 +21,9 @@
     <ClInclude Include="CreateFunc.h">
       <Filter>common</Filter>
     </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -26,6 +32,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="title.cpp">
       <Filter>title</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

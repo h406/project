@@ -22,6 +22,9 @@ public:
   bool init();
   void update();
   void uninit();
+
+private:
+  Sprite2D* _BGSprite;
 };
 
 #endif
