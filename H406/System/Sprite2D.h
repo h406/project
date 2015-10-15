@@ -31,6 +31,10 @@ public:
   void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
   void setColor(const D3DXCOLOR& color) { _color = color; }
 
+  void setNumU(int u) { _numU = u; }
+  void setNumV(int v) { _numV = v; }
+  void setAnimID(int id) { _animID = id; }
+
 protected:
   virtual NodeType getNodeType() const { return NodeType::normal2D; }
 

@@ -32,6 +32,8 @@ public:
 
   void setCamera(CameraBace* camera,int frame);
 
+  void allClearCamera();
+
 private:
   class CameraEx : public CameraBace {
   public:

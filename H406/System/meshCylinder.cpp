@@ -35,12 +35,12 @@ namespace {
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool MeshCylinder::init(int nNumBlockX,int nNumBlockZ,float fSizeBlockX,float fSizeBlockZ) {
+bool MeshCylinder::init(int nNumBlockX,int nNumBlockZ,float fRad, float fSizeBlockY) {
   _nNumBlockX = nNumBlockX;
   _nNumBlockY = nNumBlockZ;
 
-  _fSizeBlockX = fSizeBlockX;
-  _fSizeBlockY = fSizeBlockZ;
+  _fSizeBlockY = fSizeBlockY;
+  _fRad = fRad;
 
   _nNumVertex = (_nNumBlockX + 1) * (_nNumBlockY + 1);
   _nNumVertexIndex = ((_nNumBlockX * 2 + 2) * _nNumBlockY) + (_nNumBlockY * 2 - 2);
@@ -99,10 +99,8 @@ void MeshCylinder::initVtx() {
   VERTEX_3D *pVtx = nullptr;
   WORD *pIndex = nullptr;
   int vtxWork = 0;
-
-  // 半径の計算
-  float	cylinderVtxX = 0 - ((_nNumBlockX * _fSizeBlockX)) * 0.5f;
-  float	cylinderVtxY = 0 - ((_nNumBlockY * _fSizeBlockY)) * 0.5f;
+  const float cylinderVtxY = -((_nNumBlockY * _fSizeBlockY));
+  const float fSizeBlockX = 2 * D3DX_PI * _fRad / (float)_nNumBlockX;
 
   // 頂点バッファ設定
   _vtxBuff->Lock(0,0,(void **)&pVtx,0);
@@ -112,27 +110,27 @@ void MeshCylinder::initVtx() {
     for (float cntX = 0.0f; cntX <= _nNumBlockX; cntX++)
     {
       // 角度の算出
-      float	angle = (float)(((D3DX_PI * 2) / _nNumBlockX) * cntX);
-      float	length = (_nNumBlockX * _fSizeBlockX) * 0.5f;
+      const float angle = (float)(((D3DX_PI * 2) / _nNumBlockX) * cntX);
 
       // 座標
-      pVtx[vtxWork].vtx = D3DXVECTOR3((-cos(angle) * length),
-        (-(cntZ * _fSizeBlockY)) - (cylinderVtxY * 2),
-        (sin(angle) * length));
+      pVtx[vtxWork].vtx = D3DXVECTOR3((-cos(angle) * _fRad),
+        (-(cntZ * _fSizeBlockY)) - (cylinderVtxY),
+        (sin(angle) * _fRad));
 
       // 法線
       pVtx[vtxWork].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 
       // テクスチャー
       //pVtx[vtxWork].tex = D3DXVECTOR2((float)(cntX / _nNumBlockX), (float)(cntZ / _nNumBlockX));
-      pVtx[vtxWork].tex = D3DXVECTOR2(cntX, cntZ);
+      pVtx[vtxWork].tex = D3DXVECTOR2(cntX,cntZ);
+
+
+      pVtx[vtxWork].tex = D3DXVECTOR2(((float)fSizeBlockX / (float)_fSizeBlockY) / _nNumBlockX * cntX,1.0f / (float)_nNumBlockY*(float)cntZ);
+
 
       // ワーク更新
       vtxWork++;
     }
-
-    // 座標始点Xを戻す
-    cylinderVtxX = 0 - (_nNumBlockX  * _fSizeBlockX) * 0.5f;
   }
 
   _vtxBuff->Unlock();

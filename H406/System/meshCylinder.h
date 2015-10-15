@@ -19,7 +19,7 @@ public:
 
   using CreateFunc::create;
 
-  bool init(int nNumBlockX,int nNumBlockZ,float fSizeBlockX,float fSizeBlockZ);
+  bool init(int nNumBlockX,int nNumBlockZ,float fRad,float fSizeBlockY);
 
   virtual void update();
   void draw(const Renderer* renderer);
@@ -41,7 +41,8 @@ private:
   int _nNumBlockX, _nNumBlockY;     // ブロック数
   int _nNumVertex;                  // 総頂点数
   int _nNumPolygon;                 // 総ポリゴン数
-  float _fSizeBlockX,_fSizeBlockY;  // ブロックサイズ
+  float _fSizeBlockY;               // ブロックサイズ
+  float _fRad;
   int _nNumVertexIndex;
 
   D3DXVECTOR3* _pVtxList;

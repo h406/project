@@ -42,10 +42,7 @@ Camera::Camera()
 //
 //------------------------------------------------------------------------------
 Camera::~Camera() {
-  for(auto& cam : _cameraList) {
-    SafeDelete(cam);
-  }
-  _cameraList.clear();
+  allClearCamera();
 }
 
 //==============================================================================
@@ -83,6 +80,16 @@ void Camera::setCamera(CameraBace* moveToCamera,int frame) {
   _destCamera = _currentCam;
   memcpy(_defaultCam,_currentCam,sizeof(CameraBace));
   setCamera(_defaultCam);
+}
+
+//==============================================================================
+///
+//------------------------------------------------------------------------------
+void Camera::allClearCamera() {
+  for(auto& cam : _cameraList) {
+    SafeDelete(cam);
+  }
+  _cameraList.clear();
 }
 
 //==============================================================================

@@ -96,6 +96,7 @@ void App::update() {
 // setBaceNode
 //------------------------------------------------------------------------------
 void App::setBaceScene(iScene* baceScene) {
+
   if(baceScene == nullptr) {
     return;
   }

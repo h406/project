@@ -34,7 +34,8 @@ public:
   void uninit();
 
 private:
-  
+  int _freezeTime;
+  int _bultime;
 
   Sprite3D * _player[2];
   CameraBace* _playerCam[2];
@@ -44,6 +45,13 @@ private:
   FIELD_ID _field[kNUM_X][kNUM_Y];
 
   CameraBace* _mainCamera;
+
+  float _numSpriteScl[2];
+  int _num[2];
+  Sprite2D* _numSprite[2];
+
+  Sprite2D* _plus[2];
+  Sprite2D* _plusNum[2];
 
   Effect* _effect;
   Vec3 _playerMoveVec[2];
