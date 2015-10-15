@@ -17,6 +17,34 @@ bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
   const Vec2 bordSize = Vec2(1000 / (float)kNUM_X,1000 / (float)kNUM_Y);
 
+  auto backBG = MeshCylinder::create(60,10,30.f,30.f);
+  backBG->setColor(D3DXCOLOR(1,1,1,1));
+  backBG->setTexture("./data/texture/akira001.png");
+  this->addChild(backBG);
+
+  auto ground = MeshField::create(100,100,5000.f,5000.f);
+  ground->setTexture("./data/texture/pave006.bmp");
+  ground->setPos(Vec3(0,-1,0));
+  this->addChild(ground);
+
+  MeshField* fence = MeshField::create(10,10,1000.f,100.f);
+  fence->setTexture("./data/texture/face_fence01.png");
+  fence->setRot(Vec3(D3DX_PI * -0.5f,0,0));
+  fence->setPos(Vec3(0,50,500));
+  this->addChild(fence);
+
+  fence = MeshField::create(10,10,1000.f,100.f);
+  fence->setTexture("./data/texture/face_fence01.png");
+  fence->setRot(Vec3(D3DX_PI * -0.5f,D3DX_PI * -0.5f,0));
+  fence->setPos(Vec3(-500,50,0));
+  this->addChild(fence);
+
+  fence = MeshField::create(10,10,1000.f,100.f);
+  fence->setTexture("./data/texture/face_fence01.png");
+  fence->setRot(Vec3(D3DX_PI * -0.5f,D3DX_PI * 0.5f,0));
+  fence->setPos(Vec3(500,50,0));
+  this->addChild(fence);
+
   _player[0] = Sprite3D::create("./data/texture/akira000.png");
   _player[0]->setSize(36 * 2,72 * 2);
   _player[0]->setPos(-500 + bordSize.x * 0.5f,0,0);
@@ -168,7 +196,7 @@ void Game::update() {
 
   const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
   float length = D3DXVec3Length(&(playerPos[0] - playerPos[1]));
-  float rot = atan2(600,-900);
+  const float rot = 2.55359006;//atan2(600,-900);
 
   if(length < 300) length = 300;
 

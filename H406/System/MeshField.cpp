@@ -107,7 +107,7 @@ void MeshField::initVtx() {
     for(int x = 0; x < _nNumBlockX + 1; x++) {
       pVtx->vtx = D3DXVECTOR3(x*(_fSizeBlockX / (float)_nNumBlockX) - _fSizeBlockX / 2.0f,0.f,z*(-(abs(_fSizeBlockY) / (float)_nNumBlockX)) + _fSizeBlockY / 2.0f);
       pVtx->nor = D3DXVECTOR3(0.0f,0.0f,0.0f);
-      pVtx->tex = D3DXVECTOR2(_fSizeBlockX / _fSizeBlockY / _nNumBlockX*x * 3,1 / (float)_nNumBlockY*(float)z*3.f);
+      pVtx->tex = D3DXVECTOR2(_fSizeBlockX / _fSizeBlockY / _nNumBlockX*x,1 / (float)_nNumBlockY*(float)z);
 
       _pVtxList[z * (_nNumBlockX + 1) + x] = pVtx->vtx;
       pVtx++;
