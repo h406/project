@@ -23,38 +23,42 @@
 //------------------------------------------------------------------------------
 Input::Input() :_pInputDevice(nullptr) {
   // Inputオブジェクト生成判定
-  if (_pInputDevice == nullptr) {
+  if(_pInputDevice == nullptr) {
     // Inputオブジェクトの生成
-    if (FAILED(DirectInput8Create(App::instance().getHInst(),
+    if(FAILED(DirectInput8Create(App::instance().getHInst(),
       DIRECTINPUT_VERSION,
       IID_IDirectInput8,
       (void **)&_pInputDevice,
       nullptr))) {
       // 生成失敗
-      MessageBox(NULL, "Inputオブジェクトの生成に失敗しました", "エラー", MB_OK | MB_ICONHAND);
+      MessageBox(NULL,"Inputオブジェクトの生成に失敗しました","エラー",MB_OK | MB_ICONHAND);
       return;
     }
   }
-  
+
   auto key = new KeyBoard();
   key->init(this);
   _inputList.push_back(key);
-  
-  auto pad = new xInput();
-  pad->init(this);
-  _inputList.push_back(pad);
 
   auto ws = new WsInput();
   ws->init(this);
   _inputList.push_back(ws);
 
-  auto dInput = new DirectInput();
-  dInput->init(this);
-  if (dInput->getEnableDevise(0)){
-    _inputList.push_back(dInput);
+  auto xinput = new xInput();
+  xinput->init(this);
+  if(xinput->getConnectDevice(0)) {
+    _inputList.push_back(xinput);
   }
   else {
-    SafeDelete(dInput);
+    SafeDelete(xinput);
+    auto dInput = new DirectInput();
+    dInput->init(this);
+    if(dInput->getEnableDevise(0)) {
+      _inputList.push_back(dInput);
+    }
+    else {
+      SafeDelete(dInput);
+    }
   }
 
   setRepeatStartTime(15);
@@ -81,27 +85,27 @@ void Input::update() {
 //==============================================================================
 //
 //------------------------------------------------------------------------------
-bool Input::isPress(int id, VK_INPUT vk) const {
+bool Input::isPress(int id,VK_INPUT vk) const {
   for(auto& obj : _inputList) {
-    if(obj->isPress(id, vk)) return true;
+    if(obj->isPress(id,vk)) return true;
   }
   return false;
 }
-bool Input::isTrigger(int id, VK_INPUT vk) const {
+bool Input::isTrigger(int id,VK_INPUT vk) const {
   for(auto& obj : _inputList) {
-    if (obj->isTrigger(id, vk)) return true;
+    if(obj->isTrigger(id,vk)) return true;
   }
   return false;
 }
-bool Input::isRelease(int id, VK_INPUT vk) const {
+bool Input::isRelease(int id,VK_INPUT vk) const {
   for(auto& obj : _inputList) {
-    if (obj->isRelease(id, vk)) return true;
+    if(obj->isRelease(id,vk)) return true;
   }
   return false;
 }
-bool Input::isRepeat(int id, VK_INPUT vk)  const {
+bool Input::isRepeat(int id,VK_INPUT vk)  const {
   for(auto& obj : _inputList) {
-    if (obj->isRepeat(id, vk)) return true;
+    if(obj->isRepeat(id,vk)) return true;
   }
   return false;
 }
