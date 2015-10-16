@@ -153,6 +153,7 @@ bool Game::init() {
   memset(_field,0,sizeof(_field));
 
   _freezeTime = 0;
+  _bultime = 0;
 
   return true;
 }

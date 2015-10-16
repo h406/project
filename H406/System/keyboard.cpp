@@ -55,7 +55,7 @@ void KeyBoard::init(Input* input) {
   _InputVTKey[0][(int)VK_INPUT::UP] = DIK_UP;
   _InputVTKey[0][(int)VK_INPUT::DOWN] = DIK_DOWN;
   _InputVTKey[0][(int)VK_INPUT::_1] = DIK_RSHIFT;
-  // _InputVTKey[0][(int)VK_INPUT::_2] = DIK_D;
+  _InputVTKey[0][(int)VK_INPUT::_2] = DIK_D;
   // _InputVTKey[0][(int)VK_INPUT::_3] = DIK_S;
   // _InputVTKey[0][(int)VK_INPUT::_4] = DIK_A;
   // _InputVTKey[0][(int)VK_INPUT::_5] = DIK_LSHIFT;
