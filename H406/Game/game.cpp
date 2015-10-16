@@ -111,7 +111,7 @@ bool Game::init() {
 
   _plus[1] = Sprite2D::create("./data/texture/num.png");
   _plus[1]->setSize(128,128);
-  _plus[1]->setPos(1280 - 128,200,0);
+  _plus[1]->setPos(1280 - 255 ,328,0);
   _plus[1]->setNumU(11);
   _plus[1]->setAnimID(10);
   _plus[1]->setVisible(true);
@@ -129,7 +129,7 @@ bool Game::init() {
 
   _plusNum[1] = Sprite2D::create("./data/texture/num.png");
   _plusNum[1]->setSize(128,128);
-  _plusNum[1]->setPos(1280 - 128,200,0);
+  _plusNum[1]->setPos(1280 - 128, 328,0);
   _plusNum[1]->setNumU(11);
   _plusNum[1]->setAnimID(10);
   _plusNum[1]->setVisible(true);
@@ -154,6 +154,8 @@ bool Game::init() {
 
   _freezeTime = 0;
   _bultime = 0;
+  _freezeTimePlayer[0] = 0;
+  _freezeTimePlayer[1] = 0;
 
   return true;
 }
@@ -173,44 +175,62 @@ void Game::update() {
     _player[0]->getPos(),
     _player[1]->getPos(),
   };
-  if(_freezeTime == 0) {
-    for(int i = 0; i < 2; i++) {
-      if(input->isPress(i,VK_INPUT::UP)) {
-        moveDest[i].z += 5;
-      }
-      if(input->isPress(i,VK_INPUT::DOWN)) {
-        moveDest[i].z -= 5;
-      }
-      if(input->isPress(i,VK_INPUT::LEFT)) {
-        moveDest[i].x -= 5;
-      }
-      if(input->isPress(i,VK_INPUT::RIGHT)) {
-        moveDest[i].x += 5;
-      }
+  if (_freezeTime == 0) {
+    for (int i = 0; i < 2; i++) {
+      if (_freezeTimePlayer[i] == 0)
+      {
+        if (input->isPress(i, VK_INPUT::UP)) {
+          moveDest[i].z += 5;
+        }
+        if (input->isPress(i, VK_INPUT::DOWN)) {
+          moveDest[i].z -= 5;
+        }
+        if (input->isPress(i, VK_INPUT::LEFT)) {
+          moveDest[i].x -= 5;
+        }
+        if (input->isPress(i, VK_INPUT::RIGHT)) {
+          moveDest[i].x += 5;
+        }
+        moveDest[i].y -= 5.0;
 
-      _playerMoveVec[i] += (moveDest[i] - _playerMoveVec[i]) * 0.1f;
-      playerPos[i] += _playerMoveVec[i];
+        _playerMoveVec[i] += (moveDest[i] - _playerMoveVec[i]) * 0.1f;
+        playerPos[i] += _playerMoveVec[i];
 
-      if(playerPos[i].x < -500) {
-        playerPos[i].x = -500 + abs(playerPos[i].x + 500);
-        _playerMoveVec[i].x *= -1;
+        if (playerPos[i].x < -500) {
+          playerPos[i].x = -500 + abs(playerPos[i].x + 500);
+          _playerMoveVec[i].x *= -1;
+        }
+        if (playerPos[i].z < -500) {
+          playerPos[i].z = -500 + abs(playerPos[i].z + 500);
+          _playerMoveVec[i].z *= -1;
+        }
+        if (playerPos[i].x > 500) {
+          playerPos[i].x = 500 - (playerPos[i].x - 500);
+          _playerMoveVec[i].x *= -1;
+        }
+        if (playerPos[i].z > 500) {
+          playerPos[i].z = 500 - (playerPos[i].z - 500);
+          _playerMoveVec[i].z *= -1;
+        }
+        if (playerPos[i].y < 0.0f){
+          playerPos[i].y = 0.0f;
+        }
+        _player[i]->setPos(playerPos[i]);
       }
-      if(playerPos[i].z < -500) {
-        playerPos[i].z = -500 + abs(playerPos[i].z + 500);
-        _playerMoveVec[i].z *= -1;
+      else{
+        _freezeTimePlayer[i]--;
+
+        moveDest[i].y -= 5.0;
+
+        _playerMoveVec[i] += (moveDest[i] - _playerMoveVec[i]) * 0.1f;
+        playerPos[i] += _playerMoveVec[i];
+        if (playerPos[i].y < 0.0f){
+          playerPos[i].y = 0.0f;
+        }
+        _player[i]->setPos(playerPos[i]);
       }
-      if(playerPos[i].x > 500) {
-        playerPos[i].x = 500 - (playerPos[i].x - 500);
-        _playerMoveVec[i].x *= -1;
-      }
-      if(playerPos[i].z > 500) {
-        playerPos[i].z = 500 - (playerPos[i].z - 500);
-        _playerMoveVec[i].z *= -1;
-      }
-      _player[i]->setPos(playerPos[i]);
     }
   }
-
   
   const int _playerID[2][2] = {
     {int((playerPos[0].x + 500) / (1000 / (float)kNUM_X)),int((playerPos[0].z + 500) / (1000 / (float)kNUM_Y))},
@@ -227,6 +247,10 @@ void Game::update() {
         if(_num[i] > 9) _num[i] = 9;
         _numSpriteScl[i] = 2;
         _effect->play("get.efk",playerPos[i]);
+
+//        _freezeTimePlayer[i] = 40;
+        _playerMoveVec[i].y = 10;
+//        _playerMoveVec[i] = Vec3(0.0f, 10.0f, 0.0f);
       }
       else if(_field[_playerID[i][0]][_playerID[i][1]] != FIELD_ID::ITEM && _field[_playerID[i][0]][_playerID[i][1]] != FIELD_ID(int(FIELD_ID::PLAYER_1) + i) && _num[i] > 0) {
         _field[_playerID[i][0]][_playerID[i][1]] = FIELD_ID(int(FIELD_ID::PLAYER_1) + i);
@@ -248,10 +272,10 @@ void Game::update() {
         _fieldMap[x][y]->setColor(D3DXCOLOR(0,0,1,1));
         break;
       case FIELD_ID::PLAYER_2:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(0,0.5f,0,1));
+        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255, 183, 76, 255));
         break;
       case FIELD_ID::ITEM:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,183,76,255));
+        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,846,255));
         break;
       case FIELD_ID::NONE:
         _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));

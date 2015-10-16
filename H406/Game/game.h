@@ -35,6 +35,7 @@ public:
 
 private:
   int _freezeTime;
+  int _freezeTimePlayer[2];
   int _bultime;
 
   Sprite3D * _player[2];
