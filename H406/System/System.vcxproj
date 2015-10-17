@@ -17,6 +17,7 @@
     <ClCompile Include="meshCylinder.cpp" />
     <ClCompile Include="meshDome.cpp" />
     <ClCompile Include="MeshField.cpp" />
+    <ClCompile Include="numberSprite.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Sprite2D.cpp" />
     <ClCompile Include="app.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="meshDome.h" />
     <ClInclude Include="MeshField.h" />
     <ClInclude Include="nodeType.h" />
+    <ClInclude Include="numberSprite.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Sprite3D.h" />
     <ClInclude Include="Sprite2D.h" />

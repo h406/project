@@ -76,6 +76,9 @@
     <Filter Include="object\drawObject\MeshDome">
       <UniqueIdentifier>{d75fc395-545f-4fca-8c2b-3a4cf918ee71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\drawObject\NumberSprite">
+      <UniqueIdentifier>{8f442084-3938-4a72-a317-964c06cdff24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -143,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="meshDome.cpp">
       <Filter>object\drawObject\MeshDome</Filter>
+    </ClCompile>
+    <ClCompile Include="numberSprite.cpp">
+      <Filter>object\drawObject\NumberSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +248,9 @@
     </ClInclude>
     <ClInclude Include="meshDome.h">
       <Filter>object\drawObject\MeshDome</Filter>
+    </ClInclude>
+    <ClInclude Include="numberSprite.h">
+      <Filter>object\drawObject\NumberSprite</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

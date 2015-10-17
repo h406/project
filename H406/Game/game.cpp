@@ -9,6 +9,9 @@
 // include
 //******************************************************************************
 #include "game.h"
+#include "../System/numberSprite.h"
+
+NumberSprite* _number = nullptr;
 
 //------------------------------------------------------------------------------
 // 
@@ -157,6 +160,13 @@ bool Game::init() {
   _freezeTimePlayer[0] = 0;
   _freezeTimePlayer[1] = 0;
 
+  _number = NumberSprite::create();
+  _number->init(7);
+  _number->setSize(64, 64);
+  _number->setPos(App::instance().getWindowSize().cx * 0.5f, 150, 0);
+  _number->setNumU(11);
+  this->addChild(_number);
+
   return true;
 }
 
@@ -250,7 +260,6 @@ void Game::update() {
 
 //        _freezeTimePlayer[i] = 40;
         _playerMoveVec[i].y = 10;
-//        _playerMoveVec[i] = Vec3(0.0f, 10.0f, 0.0f);
       }
       else if(_field[_playerID[i][0]][_playerID[i][1]] != FIELD_ID::ITEM && _field[_playerID[i][0]][_playerID[i][1]] != FIELD_ID(int(FIELD_ID::PLAYER_1) + i) && _num[i] > 0) {
         _field[_playerID[i][0]][_playerID[i][1]] = FIELD_ID(int(FIELD_ID::PLAYER_1) + i);
@@ -288,12 +297,26 @@ void Game::update() {
     if(_num[i] > 0) {
       _numSprite[i]->setAnimID(_num[i]);
       _numSprite[i]->setVisible(true);
+
+      if (i == 0){
+        _number->setNumber(_num[0]);
+        _number->setVisible(true);
+      }
+
     }
     else {
       _numSprite[i]->setVisible(false);
+
+      if (i == 0){
+        _number->setVisible(false);
+      }
     }
     _numSpriteScl[i] += (1 - _numSpriteScl[i]) * 0.1f;
     _numSprite[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
+
+    if (i == 0){
+      _number->setSize(128 * _numSpriteScl[0], 128 * _numSpriteScl[0]);
+    }
 
     _plusNum[i]->setColor(D3DXCOLOR(1,1,1,min((_numSpriteScl[i] - 1) * 2, 1)));
     _plus[i]->setColor(D3DXCOLOR(1,1,1,min((_numSpriteScl[i] - 1) * 2,1)));
