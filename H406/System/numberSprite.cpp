@@ -25,7 +25,6 @@ bool NumberSprite::init(int digit) {
   _numberSprite = new Sprite2D*[digit];
   for (int i = 0; i < _digit; i++){
     _numberSprite[i] = Sprite2D::create("./data/texture/num.png");
-    _numberSprite[i]->init();
     _numberSprite[i]->setAnimID(0);
     this->addChild(_numberSprite[i]);
   }
@@ -130,31 +129,6 @@ void NumberSprite::setVisible(bool visible)
   for (int i = 0; i < _digit; i++){
     _numberSprite[i]->setVisible(visible);
   }
-
-/*
-  bool prev_check = true;
-  if (visible == true){
-    for (int i = 0; i < _digit; i++){
-
-      int cur_num = ((int)_num) % (int)pow(10.0f, _digit - i) / (int)pow(10.0f, _digit - i - 1);
-      if (cur_num == 0){
-        if (prev_check == true){
-          _numberSprite[i]->setVisible(false);
-          prev_check = true;
-        }
-      }
-      else{
-        prev_check = false;
-        _numberSprite[i]->setVisible(true);
-      }
-    }
-  }
-  else{
-    for (int i = 0; i < _digit; i++){
-      _numberSprite[i]->setVisible(false);
-    }
-  }
-*/
 }
 
 //EOF
