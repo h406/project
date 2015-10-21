@@ -45,6 +45,9 @@
     <ClInclude Include="staticStage.h">
       <Filter>game\gameObject\staticStage</Filter>
     </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>game\gameObject\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="staticStage.cpp">
       <Filter>game\gameObject\staticStage</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>game\gameObject\player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

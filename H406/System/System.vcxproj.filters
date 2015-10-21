@@ -84,9 +84,6 @@
     <ClCompile Include="window.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="node.cpp">
-      <Filter>node</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>common\stdafx</Filter>
     </ClCompile>
@@ -149,6 +146,9 @@
     </ClCompile>
     <ClCompile Include="numberSprite.cpp">
       <Filter>object\drawObject\NumberSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="node.cpp">
+      <Filter>object\drawObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
