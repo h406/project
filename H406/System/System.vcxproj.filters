@@ -148,7 +148,7 @@
       <Filter>object\drawObject\NumberSprite</Filter>
     </ClCompile>
     <ClCompile Include="node.cpp">
-      <Filter>object\drawObject</Filter>
+      <Filter>node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

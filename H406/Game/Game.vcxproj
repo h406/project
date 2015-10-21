@@ -91,18 +91,20 @@
   <ItemGroup>
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="colStage.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="staticStage.h" />
-    <ClInclude Include="stageBlock.h" />
+    <ClInclude Include="stage.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="title.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="colStage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="staticStage.cpp" />
-    <ClCompile Include="stageBlock.cpp" />
+    <ClCompile Include="stage.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

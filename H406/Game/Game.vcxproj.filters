@@ -13,9 +13,6 @@
     <Filter Include="game\gameObject">
       <UniqueIdentifier>{6be780de-8a4d-474d-8e35-d6a0bff7c37f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="game\gameObject\stageBlock">
-      <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="game\gameObject\gui">
       <UniqueIdentifier>{7727f078-40ad-4dc5-813d-5077ebcb4ae0}</UniqueIdentifier>
     </Filter>
@@ -24,6 +21,15 @@
     </Filter>
     <Filter Include="game\gameObject\staticStage">
       <UniqueIdentifier>{be349677-35a9-46dc-a2c7-a393d55478f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\system">
+      <UniqueIdentifier>{12137d76-a86f-450f-a28f-82e3261300c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\gameObject\stage">
+      <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\system\collision detection">
+      <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -39,14 +45,17 @@
     <ClInclude Include="game.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="stageBlock.h">
-      <Filter>game\gameObject\stageBlock</Filter>
-    </ClInclude>
     <ClInclude Include="staticStage.h">
       <Filter>game\gameObject\staticStage</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
       <Filter>game\gameObject\player</Filter>
+    </ClInclude>
+    <ClInclude Include="colStage.h">
+      <Filter>game\system\collision detection</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>game\gameObject\stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -60,14 +69,17 @@
     <ClCompile Include="game.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="stageBlock.cpp">
-      <Filter>game\gameObject\stageBlock</Filter>
-    </ClCompile>
     <ClCompile Include="staticStage.cpp">
       <Filter>game\gameObject\staticStage</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>game\gameObject\player</Filter>
+    </ClCompile>
+    <ClCompile Include="colStage.cpp">
+      <Filter>game\system\collision detection</Filter>
+    </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>game\gameObject\stage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

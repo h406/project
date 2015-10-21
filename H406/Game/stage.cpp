@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// stageBlock[stageBlock.cpp]
+// Stage[stage.cpp]
 // Author : Yasuaki Yamashita : 2015/10/19
 //
 //==============================================================================
@@ -8,19 +8,20 @@
 //******************************************************************************
 // include
 //******************************************************************************
-#include "stageBlock.h"
+#include "stage.h"
 
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool StageBlock::init() {
-  const Vec2 bordSize = Vec2(1000 / (float)kNUM_X,1000 / (float)kNUM_Y);
+bool Stage::init(float stageSizeX,float stageSizeZ) {
+  const Vec2 bordSize = Vec2(stageSizeX / (float)kNUM_X,stageSizeZ / (float)kNUM_Y);
+  _stageSize = Vec2(stageSizeX,stageSizeZ);
 
   for(int x = 0; x < kNUM_X; x++) {
     for(int y = 0; y < kNUM_Y; y++) {
       _fieldMap[x][y] = Sprite3D::create();
       _fieldMap[x][y]->setSize(bordSize.x - 5,bordSize.y - 5);
-      _fieldMap[x][y]->setPos(Vec3(x * bordSize.x - 1000.f * 0.5f + bordSize.x * 0.5f,00.1f,y * bordSize.y - 1000.f * 0.5f + bordSize.y * 0.5f));
+      _fieldMap[x][y]->setPos(Vec3(x * bordSize.x - stageSizeX * 0.5f + bordSize.x * 0.5f,00.1f,y * bordSize.y - stageSizeZ * 0.5f + bordSize.y * 0.5f));
       _fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);
       this->addChild(_fieldMap[x][y]);
     }
@@ -34,7 +35,7 @@ bool StageBlock::init() {
 //==============================================================================
 // update
 //------------------------------------------------------------------------------
-void StageBlock::update() {
+void Stage::update() {
 
   for(int x = 0; x < kNUM_X; ++x) {
     for(int y = 0; y < kNUM_X; ++y) {
@@ -59,7 +60,7 @@ void StageBlock::update() {
 //==============================================================================
 // set
 //------------------------------------------------------------------------------
-void StageBlock::setFieldID(int x,int y,StageBlock::FIELD_ID fieldid) {
+void Stage::setFieldID(int x,int y,Stage::FIELD_ID fieldid) {
   if(x >= 0 && x < kNUM_X && y >= 0 && y < kNUM_Y)
     _field[x][y] = fieldid;
 }
@@ -67,7 +68,7 @@ void StageBlock::setFieldID(int x,int y,StageBlock::FIELD_ID fieldid) {
 //==============================================================================
 // get
 //------------------------------------------------------------------------------
-StageBlock::FIELD_ID StageBlock::getFieldID(int x,int y) const {
+Stage::FIELD_ID Stage::getFieldID(int x,int y) const {
   if(x >= 0 && x < kNUM_X && y >= 0 && y < kNUM_Y)
     return _field[x][y];
 
@@ -78,7 +79,7 @@ StageBlock::FIELD_ID StageBlock::getFieldID(int x,int y) const {
 //==============================================================================
 // uninit
 //------------------------------------------------------------------------------
-void StageBlock::uninit() {
+void Stage::uninit() {
 
 }
 

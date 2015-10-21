@@ -19,14 +19,9 @@ class Player : public iLayer, public CreateFunc<Player> {
 public:
   using CreateFunc::create;
 
-  bool init();
+  bool init(int playerID);
   void update();
   void uninit();
-
-  void Player::setPos(const Vec3& pos){ _player->setPos(pos);}
-  const Vec3& Player::getPos(void) const{return _player->getPos();}
-  void Player::setRot(const Vec3& rot){_player->setPos(rot);}
-  const Vec3& Player::getRot(void) const{ return _player->getRot(); }
 
   void moveUp(float movement);
   void moveDown(float movement);
@@ -35,6 +30,16 @@ public:
   void moveTop(float movement);
   void moveBottom(float movement);
 
+  void jump(float movement);
+
+  void flipMvementX();
+  void flipMvementZ();
+
+  void addDripNum(int num) { _dripNum += num; }
+
+  int getPlayerID() const { return _playerID; }
+  int getDripNum() const { return _dripNum; }
+
 private:
 
   // プレイヤー
@@ -42,6 +47,12 @@ private:
 
   Vec3 _playerMoveVec;
   Vec3 _playerMoveDest;
+
+  // 塗れる数
+  int _dripNum;
+
+  // プレイヤーID
+  int _playerID;
 };
 
 #endif

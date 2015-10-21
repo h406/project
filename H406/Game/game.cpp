@@ -9,16 +9,17 @@
 // include
 //******************************************************************************
 #include "game.h"
-#include "stageBlock.h"
+#include "stage.h"
 #include "staticStage.h"
 #include "player.h"
+#include "colStage.h"
 
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
 bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
-  const Vec2 bordSize = Vec2(1000 / (float)StageBlock::kNUM_X,1000 / (float)StageBlock::kNUM_Y);
+  const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
 
   auto e = Sprite2D::create("./data/texture/e.png");
   e->setColor(D3DXCOLOR(1,1,1,1));
@@ -30,11 +31,11 @@ bool Game::init() {
   auto staticStage = StaticStage::create();
   this->addChild(staticStage);
 
-  _player[0] = Player::create();
+  _player[0] = Player::create(0);
   _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f,0,0));
   this->addChild(_player[0]);
 
-  _player[1] = Player::create();
+  _player[1] = Player::create(1);
   _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
   this->addChild(_player[1]);
 
@@ -50,12 +51,6 @@ bool Game::init() {
   _playerCam[1] = camera->createCamera();
   _playerCam[1]->setPosP({0,0,0});
   _playerCam[1]->setPosR({0,0,0});
-
-  _backField = Sprite3D::create();
-  _backField->setSize(1000,1000);
-  _backField->setColor(D3DXCOLOR(0,0,0,1));
-  _backField->setRotX(D3DX_PI * 0.5f);
-  this->addChild(_backField);
 
   _effect = Effect::create();
   _effect->setScl(Vec3(1,1,1));
@@ -117,10 +112,15 @@ bool Game::init() {
   _numSpriteScl[0] = _numSpriteScl[1] = 1;
 
   // ステージブロック
-  _stageBlock = StageBlock::create();
-  this->addChild(_stageBlock);
+  _stage = Stage::create(1000.f,1000.f);
+  this->addChild(_stage);
 
-  memset(_playerMoveVec,0,sizeof(_playerMoveVec));
+  // ステージとの当たり判定
+  auto hitcheck = ColStage::create(_stage);
+  hitcheck->addPlayer(_player[0]);
+  hitcheck->addPlayer(_player[1]);
+  // 最後に処理をさせる
+  this->addChild(hitcheck,INT_MAX);
 
   _freezeTime = 0;
   _bultime = 0;
@@ -138,6 +138,7 @@ void Game::update() {
     _player[0]->getPos(),
     _player[1]->getPos(),
   };
+
   if (_freezeTime == 0) {
     for (int i = 0; i < 2; i++) {
       if (input->isPress(i, VK_INPUT::UP)) {
@@ -152,62 +153,12 @@ void Game::update() {
       if (input->isPress(i, VK_INPUT::RIGHT)) {
         _player[i]->moveRight(5.0f);
       }
-//      _player[i]->moveBottom(5.0f);
-
-    if (playerPos[i].x < -500) {
-      playerPos[i].x = -500 + abs(playerPos[i].x + 500);
-      _playerMoveVec[i].x *= -1;
-    }
-    if (playerPos[i].z < -500) {
-      playerPos[i].z = -500 + abs(playerPos[i].z + 500);
-      _playerMoveVec[i].z *= -1;
-    }
-    if (playerPos[i].x > 500) {
-      playerPos[i].x = 500 - (playerPos[i].x - 500);
-      _playerMoveVec[i].x *= -1;
-    }
-    if (playerPos[i].z > 500) {
-      playerPos[i].z = 500 - (playerPos[i].z - 500);
-      _playerMoveVec[i].z *= -1;
-    }
-    if (playerPos[i].y < 0.0f){
-      playerPos[i].y = 0.0f;
-    }
-    _player[i]->setPos(playerPos[i]);
     }
   }
   
-  const int _playerID[2][2] = {
-    {int((playerPos[0].x + 500) / (1000 / (float)StageBlock::kNUM_X)),int((playerPos[0].z + 500) / (1000 / (float)StageBlock::kNUM_Y))},
-    {int((playerPos[1].x + 500) / (1000 / (float)StageBlock::kNUM_X)),int((playerPos[1].z + 500) / (1000 / (float)StageBlock::kNUM_Y))}
-  };
-  
-  for(int i = 0; i < 2; i++) {
-    const StageBlock::FIELD_ID fieldID = _stageBlock->getFieldID(_playerID[i][0],_playerID[i][1]);
-
-    if(_playerID[i][0] >= 0 && _playerID[i][0] < StageBlock::kNUM_X && _playerID[i][1] >= 0 && _playerID[i][1] < StageBlock::kNUM_Y) {
-      if(fieldID == StageBlock::FIELD_ID::ITEM) {
-        const int plus = rand() % 4 + 1;
-        _stageBlock->setFieldID(_playerID[i][0] , _playerID[i][1], StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i));
-        _plusNum[i]->setAnimID(plus);
-        _num[i] += plus;
-        if(_num[i] > 9) _num[i] = 9;
-        _numSpriteScl[i] = 2;
-        _effect->play("get.efk",playerPos[i]);
-
-        _playerMoveVec[i].y = 10;
-      }
-      else if(fieldID != StageBlock::FIELD_ID::ITEM && fieldID != StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i) && _num[i] > 0) {
-        _stageBlock->setFieldID(_playerID[i][0],_playerID[i][1],StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i));
-        _numSpriteScl[i] = 0.7f;
-        _num[i] --;
-        _effect->play("shot.efk",playerPos[i]);
-      }
-    }
-  }
 
   if((rand() % (60 * 1)) == 0) {
-    _stageBlock->setFieldID(rand() % StageBlock::kNUM_X,rand() % StageBlock::kNUM_Y,StageBlock::FIELD_ID::ITEM);
+    _stage->setFieldID(rand() % Stage::kNUM_X,rand() % Stage::kNUM_Y,Stage::FIELD_ID::ITEM);
   }
 
   for(int i = 0;i < 2;i++) {
@@ -261,12 +212,8 @@ void Game::update() {
   const float rot = atan2f(300,-900);
 
   if(length < 300) length = 300;
-
-  /*
-  1201.85042515f = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)StageBlock::kNUM_X);
-  */
-
-  if(length > (1201.85042515f)) length = (1201.85042515f);
+  if(length >(1201.85042515f/* = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)Stage::kNUM_X)*/))
+    length = (1201.85042515f);
 
   _mainCamera->setPosP(Vec3(0,sinf(rot) * length,cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec);
@@ -277,8 +224,6 @@ void Game::update() {
     _mainCamera->setPosR(camvec + ram);
     _bultime--;
   }
-
-
 }
 
 //------------------------------------------------------------------------------

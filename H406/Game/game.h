@@ -15,13 +15,14 @@
 //------------------------------------------------------------------------------
 #include "CreateFunc.h"
 
-class StageBlock;
+class Stage;
 class Player;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
-
   using CreateFunc::create;
+
+  static const int kPlayerNum = 2;
 
   bool init();
   void update();
@@ -31,11 +32,11 @@ private:
   int _freezeTime;
   int _bultime;
 
-  StageBlock* _stageBlock;
+  Stage* _stage;
 
-  Player* _player[2];
+  Player* _player[kPlayerNum];
 
-  CameraBace* _playerCam[2];
+  CameraBace* _playerCam[kPlayerNum];
   Sprite3D* _backField;
 
   CameraBace* _mainCamera;
@@ -48,7 +49,6 @@ private:
   Sprite2D* _plusNum[2];
 
   Effect* _effect;
-  Vec3 _playerMoveVec[2];
 };
 
 #endif

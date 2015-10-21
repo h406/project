@@ -42,6 +42,12 @@ bool StaticStage::init() {
   fence->setPos(Vec3(500,50,0));
   this->addChild(fence);
 
+  Sprite3D* backField = Sprite3D::create();
+  backField->setSize(1000,1000);
+  backField->setColor(D3DXCOLOR(0,0,0,1));
+  backField->setRotX(D3DX_PI * 0.5f);
+  this->addChild(backField);
+
   return true;
 }
 

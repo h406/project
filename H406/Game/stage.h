@@ -1,21 +1,21 @@
 //==============================================================================
 //
-// StageBlock[stageBlock.h]
+// Stage[Stage.h]
 // Author : Yasuaki Yamashita : 2015/10/19
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _STAGEBLOCK_H_
-#define _STAGEBLOCK_H_
+#ifndef _STAGE_H_
+#define _STAGE_H_
 
 #include "CreateFunc.h"
 
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-class StageBlock : public iLayer,public CreateFunc < StageBlock > {
+class Stage : public iLayer,public CreateFunc < Stage > {
 public:
   using CreateFunc::create;
 
@@ -29,17 +29,20 @@ public:
     ITEM,
   };
 
-  bool init();
+  bool init(float stageSizeX,float stageSizeZ);
   void update();
   void uninit();
 
   FIELD_ID getFieldID(int x,int y) const;
   void setFieldID(int x,int y,FIELD_ID id);
 
+  const Vec2& getStageSize() const { return _stageSize; }
+
 private:
   Sprite3D* _fieldMap[kNUM_X][kNUM_Y];
   FIELD_ID _field[kNUM_X][kNUM_Y];
 
+  Vec2 _stageSize;
 };
 
 
