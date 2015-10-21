@@ -17,6 +17,7 @@
 
 class StageBlock;
 class Player;
+class Gauge;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -49,6 +50,8 @@ private:
 
   Effect* _effect;
   Vec3 _playerMoveVec[2];
+
+  Gauge* _gauge[2];
 };
 
 #endif
