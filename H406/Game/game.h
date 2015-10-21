@@ -15,17 +15,10 @@
 //------------------------------------------------------------------------------
 #include "CreateFunc.h"
 
+class StageBlock;
+
 class Game : public iScene,public CreateFunc<Game> {
 public:
-  static const int kNUM_X = 12;
-  static const int kNUM_Y = 12;
-
-  enum class FIELD_ID {
-    NONE = 0,
-    PLAYER_1,
-    PLAYER_2,
-    ITEM,
-  };
 
   using CreateFunc::create;
 
@@ -38,12 +31,11 @@ private:
   int _freezeTimePlayer[2];
   int _bultime;
 
+  StageBlock* _stageBlock;
+
   Sprite3D * _player[2];
   CameraBace* _playerCam[2];
   Sprite3D* _backField;
-  Sprite3D* _fieldMap[kNUM_X][kNUM_Y];
-
-  FIELD_ID _field[kNUM_X][kNUM_Y];
 
   CameraBace* _mainCamera;
 

@@ -10,6 +10,21 @@
     <Filter Include="game">
       <UniqueIdentifier>{d232d028-e9c3-4a99-aee2-8a2010099a42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\gameObject">
+      <UniqueIdentifier>{6be780de-8a4d-474d-8e35-d6a0bff7c37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\gameObject\stageBlock">
+      <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\gameObject\gui">
+      <UniqueIdentifier>{7727f078-40ad-4dc5-813d-5077ebcb4ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\gameObject\player">
+      <UniqueIdentifier>{accd9dfe-c150-473b-a2ff-16c465ac8cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\gameObject\staticStage">
+      <UniqueIdentifier>{be349677-35a9-46dc-a2c7-a393d55478f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -24,6 +39,12 @@
     <ClInclude Include="game.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="stageBlock.h">
+      <Filter>game\gameObject\stageBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="staticStage.h">
+      <Filter>game\gameObject\staticStage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -35,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="game.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="stageBlock.cpp">
+      <Filter>game\gameObject\stageBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="staticStage.cpp">
+      <Filter>game\gameObject\staticStage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,50 +9,25 @@
 // include
 //******************************************************************************
 #include "game.h"
-#include "../System/numberSprite.h"
-
-NumberSprite* _number = nullptr;
+#include "stageBlock.h"
+#include "staticStage.h"
 
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
 bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
-  const Vec2 bordSize = Vec2(1000 / (float)kNUM_X,1000 / (float)kNUM_Y);
-
-  auto backBG = MeshCylinder::create(60,10,1000.f,30.f);
-  backBG->setColor(D3DXCOLOR(1,1,1,1));
-  backBG->setTexture("./data/texture/akira001.png");
-  this->addChild(backBG);
+  const Vec2 bordSize = Vec2(1000 / (float)StageBlock::kNUM_X,1000 / (float)StageBlock::kNUM_Y);
 
   auto e = Sprite2D::create("./data/texture/e.png");
   e->setColor(D3DXCOLOR(1,1,1,1));
-  e->setSize(App::instance().getWindowSize().cx,App::instance().getWindowSize().cy);
+  e->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
   e->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f,0);
   this->addChild(e);
 
-  auto ground = MeshField::create(100,100,5000.f,5000.f);
-  ground->setTexture("./data/texture/pave006.bmp");
-  ground->setPos(Vec3(0,-1,0));
-  this->addChild(ground);
-
-  MeshField* fence = MeshField::create(10,10,1000.f,100.f);
-  fence->setTexture("./data/texture/face_fence01.png");
-  fence->setRot(Vec3(D3DX_PI * -0.5f,0,0));
-  fence->setPos(Vec3(0,50,500));
-  this->addChild(fence);
-
-  fence = MeshField::create(10,10,1000.f,100.f);
-  fence->setTexture("./data/texture/face_fence01.png");
-  fence->setRot(Vec3(D3DX_PI * -0.5f,D3DX_PI * -0.5f,0));
-  fence->setPos(Vec3(-500,50,0));
-  this->addChild(fence);
-
-  fence = MeshField::create(10,10,1000.f,100.f);
-  fence->setTexture("./data/texture/face_fence01.png");
-  fence->setRot(Vec3(D3DX_PI * -0.5f,D3DX_PI * 0.5f,0));
-  fence->setPos(Vec3(500,50,0));
-  this->addChild(fence);
+  // 動かないステージオブジェクト群
+  auto staticStage = StaticStage::create();
+  this->addChild(staticStage);
 
   _player[0] = Sprite3D::create("./data/texture/akira000.png");
   _player[0]->setSize(36 * 2,72 * 2);
@@ -142,30 +117,16 @@ bool Game::init() {
   _num[0] = _num[1] = 0;
   _numSpriteScl[0] = _numSpriteScl[1] = 1;
 
-  for(int x = 0; x < kNUM_X; x++) {
-    for(int y = 0; y < kNUM_Y; y++) {
-      _fieldMap[x][y] = Sprite3D::create();
-      _fieldMap[x][y]->setSize(bordSize.x - 5,bordSize.y - 5);
-      _fieldMap[x][y]->setPos(Vec3(x * bordSize.x - 1000.f * 0.5f + bordSize.x * 0.5f,00.1f,y * bordSize.y - 1000.f * 0.5f + bordSize.y * 0.5f));
-      _fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);
-      this->addChild(_fieldMap[x][y]);
-    }
-  }
+  // ステージブロック
+  _stageBlock = StageBlock::create();
+  this->addChild(_stageBlock);
 
   memset(_playerMoveVec,0,sizeof(_playerMoveVec));
-  memset(_field,0,sizeof(_field));
 
   _freezeTime = 0;
   _bultime = 0;
   _freezeTimePlayer[0] = 0;
   _freezeTimePlayer[1] = 0;
-
-  _number = NumberSprite::create();
-  _number->init(7);
-  _number->setSize(64, 64);
-  _number->setPos(App::instance().getWindowSize().cx * 0.5f, 150, 0);
-  _number->setNumU(11);
-  this->addChild(_number);
 
   return true;
 }
@@ -243,15 +204,17 @@ void Game::update() {
   }
   
   const int _playerID[2][2] = {
-    {int((playerPos[0].x + 500) / (1000 / (float)kNUM_X)),int((playerPos[0].z + 500) / (1000 / (float)kNUM_Y))},
-    {int((playerPos[1].x + 500) / (1000 / (float)kNUM_X)),int((playerPos[1].z + 500) / (1000 / (float)kNUM_Y))}
+    {int((playerPos[0].x + 500) / (1000 / (float)StageBlock::kNUM_X)),int((playerPos[0].z + 500) / (1000 / (float)StageBlock::kNUM_Y))},
+    {int((playerPos[1].x + 500) / (1000 / (float)StageBlock::kNUM_X)),int((playerPos[1].z + 500) / (1000 / (float)StageBlock::kNUM_Y))}
   };
   
   for(int i = 0; i < 2; i++) {
-    if(_playerID[i][0] >= 0 && _playerID[i][0] < kNUM_X && _playerID[i][1] >= 0 && _playerID[i][1] < kNUM_Y) {
-      if(_field[_playerID[i][0]][_playerID[i][1]] == FIELD_ID::ITEM && input->isPress(i,VK_INPUT::_1)) {
+    const StageBlock::FIELD_ID fieldID = _stageBlock->getFieldID(_playerID[i][0],_playerID[i][1]);
+
+    if(_playerID[i][0] >= 0 && _playerID[i][0] < StageBlock::kNUM_X && _playerID[i][1] >= 0 && _playerID[i][1] < StageBlock::kNUM_Y) {
+      if(fieldID == StageBlock::FIELD_ID::ITEM) {
         const int plus = rand() % 4 + 1;
-        _field[_playerID[i][0]][_playerID[i][1]] = FIELD_ID(int(FIELD_ID::PLAYER_1) + i);
+        _stageBlock->setFieldID(_playerID[i][0] , _playerID[i][1], StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i));
         _plusNum[i]->setAnimID(plus);
         _num[i] += plus;
         if(_num[i] > 9) _num[i] = 9;
@@ -261,8 +224,8 @@ void Game::update() {
 //        _freezeTimePlayer[i] = 40;
         _playerMoveVec[i].y = 10;
       }
-      else if(_field[_playerID[i][0]][_playerID[i][1]] != FIELD_ID::ITEM && _field[_playerID[i][0]][_playerID[i][1]] != FIELD_ID(int(FIELD_ID::PLAYER_1) + i) && _num[i] > 0) {
-        _field[_playerID[i][0]][_playerID[i][1]] = FIELD_ID(int(FIELD_ID::PLAYER_1) + i);
+      else if(fieldID != StageBlock::FIELD_ID::ITEM && fieldID != StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i) && _num[i] > 0) {
+        _stageBlock->setFieldID(_playerID[i][0],_playerID[i][1],StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i));
         _numSpriteScl[i] = 0.7f;
         _num[i] --;
         _effect->play("shot.efk",playerPos[i]);
@@ -271,52 +234,19 @@ void Game::update() {
   }
 
   if((rand() % (60 * 1)) == 0) {
-    _field[rand() % kNUM_X][rand() % kNUM_Y] = FIELD_ID::ITEM;
-  }
-
-  for(int x = 0; x < kNUM_X; ++x) {
-    for(int y = 0; y < kNUM_X; ++y) {
-      switch(_field[x][y]) {
-      case FIELD_ID::PLAYER_1:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(0,0,1,1));
-        break;
-      case FIELD_ID::PLAYER_2:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255, 183, 76, 255));
-        break;
-      case FIELD_ID::ITEM:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,846,255));
-        break;
-      case FIELD_ID::NONE:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));
-        break;
-      }
-    }
+    _stageBlock->setFieldID(rand() % StageBlock::kNUM_X,rand() % StageBlock::kNUM_Y,StageBlock::FIELD_ID::ITEM);
   }
 
   for(int i = 0;i < 2;i++) {
     if(_num[i] > 0) {
       _numSprite[i]->setAnimID(_num[i]);
       _numSprite[i]->setVisible(true);
-
-      if (i == 0){
-        _number->setNumber(_num[0]);
-        _number->setVisible(true);
-      }
-
     }
     else {
       _numSprite[i]->setVisible(false);
-
-      if (i == 0){
-        _number->setVisible(false);
-      }
     }
     _numSpriteScl[i] += (1 - _numSpriteScl[i]) * 0.1f;
     _numSprite[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
-
-    if (i == 0){
-      _number->setSize(128 * _numSpriteScl[0], 128 * _numSpriteScl[0]);
-    }
 
     _plusNum[i]->setColor(D3DXCOLOR(1,1,1,min((_numSpriteScl[i] - 1) * 2, 1)));
     _plus[i]->setColor(D3DXCOLOR(1,1,1,min((_numSpriteScl[i] - 1) * 2,1)));
@@ -353,16 +283,23 @@ void Game::update() {
   }
 
   const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
-  float length = D3DXVec3Length(&(playerPos[0] - playerPos[1]));
-  const float rot = atan2(300,-900);
+  const Vec3 playerDir(playerPos[0] - playerPos[1]);
+  float length = D3DXVec3Length(&playerDir);
+  const float rot = atan2f(300,-900);
 
   if(length < 300) length = 300;
+
+  /*
+  1201.85042515f = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)StageBlock::kNUM_X);
+  */
+
+  if(length > (1201.85042515f)) length = (1201.85042515f);
 
   _mainCamera->setPosP(Vec3(0,sinf(rot) * length,cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec);
 
   if(_bultime) {
-    Vec3 ram(rand() % 10,rand() % 10,0);
+    Vec3 ram(float(rand() % 10),float(rand() % 10),0);
     _mainCamera->setPosP(_mainCamera->getPosP() + ram);
     _mainCamera->setPosR(camvec + ram);
     _bultime--;
