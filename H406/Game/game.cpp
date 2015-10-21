@@ -11,6 +11,7 @@
 #include "game.h"
 #include "stageBlock.h"
 #include "staticStage.h"
+#include "player.h"
 
 //------------------------------------------------------------------------------
 // 
@@ -29,14 +30,12 @@ bool Game::init() {
   auto staticStage = StaticStage::create();
   this->addChild(staticStage);
 
-  _player[0] = Sprite3D::create("./data/texture/akira000.png");
-  _player[0]->setSize(36 * 2,72 * 2);
-  _player[0]->setPos(-500 + bordSize.x * 0.5f,0,0);
+  _player[0] = Player::create();
+  _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f,0,0));
   this->addChild(_player[0]);
 
-  _player[1] = Sprite3D::create("./data/texture/akira000.png");
-  _player[1]->setSize(36 * 2,72 * 2);
-  _player[1]->setPos(500 - bordSize.x * 0.5f,0,0);
+  _player[1] = Player::create();
+  _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
   this->addChild(_player[1]);
 
   _mainCamera = camera->createCamera();
@@ -125,8 +124,6 @@ bool Game::init() {
 
   _freezeTime = 0;
   _bultime = 0;
-  _freezeTimePlayer[0] = 0;
-  _freezeTimePlayer[1] = 0;
 
   return true;
 }
@@ -136,11 +133,6 @@ bool Game::init() {
 //------------------------------------------------------------------------------
 void Game::update() {
   auto input = App::instance().getInput();
-  
-  Vec3 moveDest[2] = {
-    Vec3(0,0,0),
-    Vec3(0,0,0),
-  };
 
   Vec3 playerPos[2] = {
     _player[0]->getPos(),
@@ -148,58 +140,40 @@ void Game::update() {
   };
   if (_freezeTime == 0) {
     for (int i = 0; i < 2; i++) {
-      if (_freezeTimePlayer[i] == 0)
-      {
-        if (input->isPress(i, VK_INPUT::UP)) {
-          moveDest[i].z += 5;
-        }
-        if (input->isPress(i, VK_INPUT::DOWN)) {
-          moveDest[i].z -= 5;
-        }
-        if (input->isPress(i, VK_INPUT::LEFT)) {
-          moveDest[i].x -= 5;
-        }
-        if (input->isPress(i, VK_INPUT::RIGHT)) {
-          moveDest[i].x += 5;
-        }
-        moveDest[i].y -= 5.0;
-
-        _playerMoveVec[i] += (moveDest[i] - _playerMoveVec[i]) * 0.1f;
-        playerPos[i] += _playerMoveVec[i];
-
-        if (playerPos[i].x < -500) {
-          playerPos[i].x = -500 + abs(playerPos[i].x + 500);
-          _playerMoveVec[i].x *= -1;
-        }
-        if (playerPos[i].z < -500) {
-          playerPos[i].z = -500 + abs(playerPos[i].z + 500);
-          _playerMoveVec[i].z *= -1;
-        }
-        if (playerPos[i].x > 500) {
-          playerPos[i].x = 500 - (playerPos[i].x - 500);
-          _playerMoveVec[i].x *= -1;
-        }
-        if (playerPos[i].z > 500) {
-          playerPos[i].z = 500 - (playerPos[i].z - 500);
-          _playerMoveVec[i].z *= -1;
-        }
-        if (playerPos[i].y < 0.0f){
-          playerPos[i].y = 0.0f;
-        }
-        _player[i]->setPos(playerPos[i]);
+      if (input->isPress(i, VK_INPUT::UP)) {
+        _player[i]->moveUp(5.0f);
       }
-      else{
-        _freezeTimePlayer[i]--;
-
-        moveDest[i].y -= 5.0;
-
-        _playerMoveVec[i] += (moveDest[i] - _playerMoveVec[i]) * 0.1f;
-        playerPos[i] += _playerMoveVec[i];
-        if (playerPos[i].y < 0.0f){
-          playerPos[i].y = 0.0f;
-        }
-        _player[i]->setPos(playerPos[i]);
+      if (input->isPress(i, VK_INPUT::DOWN)) {
+        _player[i]->moveDown(5.0f);
       }
+      if (input->isPress(i, VK_INPUT::LEFT)) {
+        _player[i]->moveLeft(5.0f);
+      }
+      if (input->isPress(i, VK_INPUT::RIGHT)) {
+        _player[i]->moveRight(5.0f);
+      }
+//      _player[i]->moveBottom(5.0f);
+
+    if (playerPos[i].x < -500) {
+      playerPos[i].x = -500 + abs(playerPos[i].x + 500);
+      _playerMoveVec[i].x *= -1;
+    }
+    if (playerPos[i].z < -500) {
+      playerPos[i].z = -500 + abs(playerPos[i].z + 500);
+      _playerMoveVec[i].z *= -1;
+    }
+    if (playerPos[i].x > 500) {
+      playerPos[i].x = 500 - (playerPos[i].x - 500);
+      _playerMoveVec[i].x *= -1;
+    }
+    if (playerPos[i].z > 500) {
+      playerPos[i].z = 500 - (playerPos[i].z - 500);
+      _playerMoveVec[i].z *= -1;
+    }
+    if (playerPos[i].y < 0.0f){
+      playerPos[i].y = 0.0f;
+    }
+    _player[i]->setPos(playerPos[i]);
     }
   }
   
@@ -221,7 +195,6 @@ void Game::update() {
         _numSpriteScl[i] = 2;
         _effect->play("get.efk",playerPos[i]);
 
-//        _freezeTimePlayer[i] = 40;
         _playerMoveVec[i].y = 10;
       }
       else if(fieldID != StageBlock::FIELD_ID::ITEM && fieldID != StageBlock::FIELD_ID(int(StageBlock::FIELD_ID::PLAYER_1) + i) && _num[i] > 0) {
