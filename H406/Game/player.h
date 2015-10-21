@@ -42,8 +42,6 @@ private:
 
   Vec3 _playerMoveVec;
   Vec3 _playerMoveDest;
-
-  int _freezeTime;
 };
 
 #endif

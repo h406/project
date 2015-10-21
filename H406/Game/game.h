@@ -16,6 +16,7 @@
 #include "CreateFunc.h"
 
 class StageBlock;
+class Player;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -28,12 +29,12 @@ public:
 
 private:
   int _freezeTime;
-  int _freezeTimePlayer[2];
   int _bultime;
 
   StageBlock* _stageBlock;
 
-  Sprite3D * _player[2];
+  Player* _player[2];
+
   CameraBace* _playerCam[2];
   Sprite3D* _backField;
 
