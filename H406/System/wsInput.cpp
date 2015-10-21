@@ -55,8 +55,8 @@ void WsInput::update() {
     it = false;
   }
 
-  if(abs(_jairo.x) > 10) {
-    if(_jairo.x > 0) {
+  if(abs(_jairo.z) > 10) {
+    if(_jairo.z > 0) {
       _press[(int)VK_INPUT::RIGHT] = true;
     }
     else {
@@ -173,21 +173,6 @@ int WsInput::wsCallBackData(
       _instance->_jairo.x = dat;
 
     _instance->_mutex.unlock();
-
-    //_instance->_mutex.lock();
-    //if(key == 0) {
-    //  _instance->_press[(int)VK_INPUT::LEFT] = d;
-    //}
-    //if(key == 1) {
-    //  _instance->_press[(int)VK_INPUT::UP] = d;
-    //}
-    //if(key == 2) {
-    //  _instance->_press[(int)VK_INPUT::RIGHT] = d;
-    //}
-    //if(key == 3) {
-    //  _instance->_press[(int)VK_INPUT::DOWN] = d;
-    //}
-    //_instance->_mutex.unlock();
   }
   break;
 
