@@ -12,6 +12,8 @@
 #include "stageBlock.h"
 #include "staticStage.h"
 #include "player.h"
+#include "gauge.h"
+
 
 //------------------------------------------------------------------------------
 // 
@@ -120,6 +122,19 @@ bool Game::init() {
   _stageBlock = StageBlock::create();
   this->addChild(_stageBlock);
 
+  _gauge[0] = Gauge::create();
+  _gauge[0]->setScl(500.0f, 50.0f, 0.0f);
+  _gauge[0]->setPos(250.0f, 25.0f, 0.0f);
+  _gauge[0]->setColor(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f));;
+  this->addChild(_gauge[0]);
+
+  _gauge[1] = Gauge::create();
+  _gauge[1]->setScl(500.0f, 50.0f, 0.0f);
+  _gauge[1]->setPos(App::instance().getWindowSize().cx - 250.0f, 25.0f, 0.0f);
+  _gauge[1]->setColor(D3DXCOLOR(1.0f,1.0f,0.0f,1.0f));;
+  _gauge[1]->setFlip(true);
+  this->addChild(_gauge[1]);
+
   memset(_playerMoveVec,0,sizeof(_playerMoveVec));
 
   _freezeTime = 0;
@@ -226,6 +241,10 @@ void Game::update() {
     _plusNum[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
     _plus[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
   }
+
+  float gaugeRate[2] = { _num[0] / (float)9, _num[1] / (float)9 };
+  _gauge[0]->setRate(gaugeRate[0]);
+  _gauge[1]->setRate(gaugeRate[1]);
 
   if(input->isTrigger(0,VK_INPUT::_2)) {
     _freezeTime = 75;

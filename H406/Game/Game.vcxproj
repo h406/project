@@ -91,6 +91,7 @@
   <ItemGroup>
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gauge.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="staticStage.h" />
     <ClInclude Include="stageBlock.h" />
@@ -99,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gauge.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="staticStage.cpp" />
