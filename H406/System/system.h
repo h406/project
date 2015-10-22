@@ -13,6 +13,7 @@
 #include "common.h"
 #include "math.h"
 #include "node.h"
+#include "node2d.h"
 #include "window.h"
 #include "app.h"
 #include "input.h"
@@ -33,6 +34,7 @@
 
 #include "iScene.h"
 #include "iLayer.h"
+#include "iLayer2D.h"
 
 #include "sound.h"
 

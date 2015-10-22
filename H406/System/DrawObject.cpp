@@ -18,17 +18,15 @@
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
-
-
-void DrawObject::setTexture(unsigned int id) {
+void DrawObjectBace::setTexture(unsigned int id) {
   _textureID = id;
 }
 
-void DrawObject::setTexture(const char* file) {
+void DrawObjectBace::setTexture(const char* file) {
   _textureID = App::instance().getRenderer()->getTexture()->createTexture(file);
 }
 
-DrawObject::DrawObject()
+DrawObjectBace::DrawObjectBace()
   :_textureID(0) {
 
 }

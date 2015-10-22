@@ -15,11 +15,11 @@
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Gauge : public iLayer, public CreateFunc<Gauge> {
+class Gauge : public iLayer2D, public CreateFunc<Gauge> {
 public:
   using CreateFunc::create;
 
-  bool init();
+  bool init(float width, float height);
   void update();
   void uninit();
 

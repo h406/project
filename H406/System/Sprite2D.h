@@ -16,7 +16,7 @@
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Sprite2D : public DrawObject,public CreateFunc<Sprite2D> {
+class Sprite2D : public DrawObject2D,public CreateFunc<Sprite2D> {
 public:
   using CreateFunc::create;
 
@@ -26,9 +26,6 @@ public:
   void draw(const Renderer* renderer);
   void uninit();
 
-  void setSizeW(float w) { _worldChenged = true; _scl.x = w; }
-  void setSizeH(float h) { _worldChenged = true; _scl.y = h; }
-  void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
   void setColor(const D3DXCOLOR& color) { _color = color; }
 
   void setNumU(int u) { _numU = u; }
@@ -39,8 +36,6 @@ protected:
   virtual NodeType getNodeType() const { return NodeType::normal2D; }
 
 private:
-
-  void updateWorldMtx();
 
   unsigned int _numU;
   unsigned int _numV;

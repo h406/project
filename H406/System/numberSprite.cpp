@@ -95,7 +95,7 @@ void NumberSprite::setPos(const Vec3& pos)
 
   for (int i = 0; i < _digit; i++){
     float pos_x = pos.x + (_scl.x  * i) - (_scl.x * (_digit/2));
-    _numberSprite[i]->setPos(pos_x, pos.y, pos.z);
+    _numberSprite[i]->setPos(pos_x, pos.y);
   }
 }
 

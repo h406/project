@@ -18,7 +18,7 @@ bool Title::init() {
   auto size = App::instance().getWindowSize();
   _BGSprite = Sprite2D::create("./data/texture/tx_grass1.tga");
   _BGSprite->setSize((float)size.cx,(float)size.cy);
-  _BGSprite->setPos(size.cx * 0.5f, size.cy * 0.5f, 0);
+  _BGSprite->setPos(size.cx * 0.5f, size.cy * 0.5f);
   this->addChild(_BGSprite);
 
   return true;

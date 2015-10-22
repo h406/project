@@ -76,6 +76,8 @@ public :
   void setVisible(bool visible) { _visible = visible; }
   bool isVisible() const { return _visible; }
 
+  virtual NodeType getNodeType() const { return NodeType::default; }
+
 protected:
   // node
   node();
@@ -91,8 +93,6 @@ protected:
   Matrix _mtxWorld;
 
   bool _worldChenged;
-
-  virtual NodeType getNodeType() const { return NodeType::default; }
 
   node* getParent() const { return _parent; }
 

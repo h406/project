@@ -28,7 +28,7 @@ bool Game::init() {
   auto e = Sprite2D::create("./data/texture/e.png");
   e->setColor(D3DXCOLOR(1,1,1,1));
   e->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
-  e->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f,0);
+  e->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f);
   this->addChild(e);
 
   // 動かないステージオブジェクト群
@@ -38,11 +38,12 @@ bool Game::init() {
   // イベントマネージャー
   _eventManager = new EventManager();
 
-  // プレイヤー
+  // プレイヤー1
   _player[0] = Player::create(0);
   _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f,0,0));
   this->addChild(_player[0]);
 
+  // プレイヤー2
   _player[1] = Player::create(1);
   _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
   this->addChild(_player[1]);
@@ -66,7 +67,7 @@ bool Game::init() {
 
   _numSprite[0] = Sprite2D::create("./data/texture/num.png");
   _numSprite[0]->setSize(128,128);
-  _numSprite[0]->setPos(128,200,0);
+  _numSprite[0]->setPos(128,200);
   _numSprite[0]->setNumU(11);
   _numSprite[0]->setAnimID(10);
   _numSprite[0]->setVisible(false);
@@ -74,7 +75,7 @@ bool Game::init() {
 
   _numSprite[1] = Sprite2D::create("./data/texture/num.png");
   _numSprite[1]->setSize(128,128);
-  _numSprite[1]->setPos(1280 - 128,200,0);
+  _numSprite[1]->setPos(1280 - 128,200);
   _numSprite[1]->setNumU(11);
   _numSprite[1]->setAnimID(10);
   _numSprite[1]->setVisible(false);
@@ -82,7 +83,7 @@ bool Game::init() {
 
   _plus[0] = Sprite2D::create("./data/texture/num.png");
   _plus[0]->setSize(128,128);
-  _plus[0]->setPos(128,328,0);
+  _plus[0]->setPos(128,328);
   _plus[0]->setNumU(11);
   _plus[0]->setAnimID(10);
   _plus[0]->setVisible(true);
@@ -91,7 +92,7 @@ bool Game::init() {
 
   _plus[1] = Sprite2D::create("./data/texture/num.png");
   _plus[1]->setSize(128,128);
-  _plus[1]->setPos(1280 - 255 ,328,0);
+  _plus[1]->setPos(1280 - 255 ,328);
   _plus[1]->setNumU(11);
   _plus[1]->setAnimID(10);
   _plus[1]->setVisible(true);
@@ -100,7 +101,7 @@ bool Game::init() {
 
   _plusNum[0] = Sprite2D::create("./data/texture/num.png");
   _plusNum[0]->setSize(128,128);
-  _plusNum[0]->setPos(256,328,0);
+  _plusNum[0]->setPos(256,328);
   _plusNum[0]->setNumU(11);
   _plusNum[0]->setAnimID(10);
   _plusNum[0]->setVisible(true);
@@ -109,7 +110,7 @@ bool Game::init() {
 
   _plusNum[1] = Sprite2D::create("./data/texture/num.png");
   _plusNum[1]->setSize(128,128);
-  _plusNum[1]->setPos(1280 - 128, 328,0);
+  _plusNum[1]->setPos(1280 - 128, 328);
   _plusNum[1]->setNumU(11);
   _plusNum[1]->setAnimID(10);
   _plusNum[1]->setVisible(true);
@@ -135,16 +136,14 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
 
-  _gauge[0] = Gauge::create();
-  _gauge[0]->setScl(500.0f, 50.0f, 0.0f);
-  _gauge[0]->setPos(250.0f, 25.0f, 0.0f);
-  _gauge[0]->setColor(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f));;
+  _gauge[0] = Gauge::create(500.f, 50.f);
+  _gauge[0]->setPos(250.0f, 25.0f);
+  _gauge[0]->setColor(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f));
   this->addChild(_gauge[0]);
 
-  _gauge[1] = Gauge::create();
-  _gauge[1]->setScl(500.0f, 50.0f, 0.0f);
-  _gauge[1]->setPos(App::instance().getWindowSize().cx - 250.0f, 25.0f, 0.0f);
-  _gauge[1]->setColor(D3DXCOLOR(1.0f,1.0f,0.0f,1.0f));;
+  _gauge[1] = Gauge::create(500.f,50.f);
+  _gauge[1]->setPos(App::instance().getWindowSize().cx - 250.0f, 25.0f);
+  _gauge[1]->setColor(D3DXCOLOR(1.0f,1.0f,0.0f,1.0f));
   _gauge[1]->setFlip(true);
   this->addChild(_gauge[1]);
 

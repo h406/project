@@ -18,20 +18,21 @@ class Renderer;
 //==============================================================================
 // 
 //==============================================================================
-class DrawObject : public node {
+class DrawObjectBace{
 public:
-  virtual void update() = 0;
-  virtual void draw(const Renderer* renderer) { UnusedParam(renderer); }
-  virtual void uninit() = 0;
-
   void setTexture(unsigned int id);
   void setTexture(const char* file);
 
-  DrawObject();
+  DrawObjectBace();
 protected:
   unsigned int _vtxShaderID;
   unsigned int _textureID;
 };
+
+class DrawObject : public DrawObjectBace,public node {};
+class DrawObject2D : public DrawObjectBace,public node2d {};
+
+
 
 #endif
 //EOF

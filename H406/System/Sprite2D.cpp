@@ -140,38 +140,6 @@ void Sprite2D::draw(const  Renderer* renderer) {
 //==============================================================================
 //
 //------------------------------------------------------------------------------
-void Sprite2D::updateWorldMtx() {
-  D3DXMATRIX mtxTmp;
-  const float sinb = sinf(getRot().y);
-  const float cosb = cosf(getRot().y);
-  D3DXMatrixIdentity(&_mtxWorld);
-  D3DXMatrixIdentity(&mtxTmp);
-
-  // à⁄ìÆçsóÒ
-  mtxTmp._41 = getPos().x;
-  mtxTmp._42 = getPos().y;
-  _mtxWorld = mtxTmp * _mtxWorld;
-
-  // âÒì]çsóÒ
-  mtxTmp._41 = 0;
-  mtxTmp._42 = 0;
-  mtxTmp._11 = cosb;
-  mtxTmp._12 = sinb;
-  mtxTmp._21 = -sinb;
-  mtxTmp._22 = cosb;
-  _mtxWorld = mtxTmp * _mtxWorld;
-
-  // ägëÂçsóÒÇ…î{ó¶Çê›íË
-  mtxTmp._11 = getScl().x; // Çwî{ó¶
-  mtxTmp._12 = 0;
-  mtxTmp._21 = 0;
-  mtxTmp._22 = getScl().y; // Çxî{ó¶
-  _mtxWorld = mtxTmp * _mtxWorld;
-}
-
-//==============================================================================
-//
-//------------------------------------------------------------------------------
 void Sprite2D::update() {
 
 }

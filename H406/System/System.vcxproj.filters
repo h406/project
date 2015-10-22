@@ -7,9 +7,6 @@
     <Filter Include="node">
       <UniqueIdentifier>{cc67170c-8c1d-495d-b31a-1d42101c14cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="common\stdafx">
-      <UniqueIdentifier>{5d8f145b-b2c9-41e8-993c-45151bcb6d7b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="app">
       <UniqueIdentifier>{07728cde-d483-4cbd-8c08-6a6715006846}</UniqueIdentifier>
     </Filter>
@@ -79,6 +76,15 @@
     <Filter Include="object\drawObject\NumberSprite">
       <UniqueIdentifier>{8f442084-3938-4a72-a317-964c06cdff24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="node\2d">
+      <UniqueIdentifier>{3e47b189-472e-4336-8794-04613ebebcf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="node\3d">
+      <UniqueIdentifier>{748ab430-e75e-451b-828a-65dd4e19c629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\stdafx">
+      <UniqueIdentifier>{5d8f145b-b2c9-41e8-993c-45151bcb6d7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -147,8 +153,11 @@
     <ClCompile Include="numberSprite.cpp">
       <Filter>object\drawObject\NumberSprite</Filter>
     </ClCompile>
+    <ClCompile Include="node2d.cpp">
+      <Filter>node\2d</Filter>
+    </ClCompile>
     <ClCompile Include="node.cpp">
-      <Filter>node</Filter>
+      <Filter>node\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,17 +165,11 @@
     <ClInclude Include="window.h">
       <Filter>window</Filter>
     </ClInclude>
-    <ClInclude Include="node.h">
-      <Filter>node</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>common\stdafx</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
       <Filter>common</Filter>
-    </ClInclude>
-    <ClInclude Include="app.h">
-      <Filter>app</Filter>
     </ClInclude>
     <ClInclude Include="renderer.h">
       <Filter>renderer</Filter>
@@ -251,6 +254,18 @@
     </ClInclude>
     <ClInclude Include="numberSprite.h">
       <Filter>object\drawObject\NumberSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="node2d.h">
+      <Filter>node\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="node.h">
+      <Filter>node\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="iLayer2D.h">
+      <Filter>object\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>app</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
