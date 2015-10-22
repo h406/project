@@ -11,12 +11,15 @@
 #include "colStage.h"
 #include "stage.h"
 #include "player.h"
+#include "EventList.h"
+#include "eventManager.h"
 
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool ColStage::init(Stage* stage) {
+bool ColStage::init(Stage* stage,EventManager* event) {
   _stage = stage;
+  _event = event;
   
   memset(_playerList,0,sizeof(_playerList));
   return true;
@@ -68,21 +71,18 @@ void ColStage::update() {
       if(fieldID == Stage::FIELD_ID::ITEM) {
         const int plus = rand() % 4 + 1;
         _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
-        //_plusNum[i]->setAnimID(plus);
-        //_num[i] += plus;
-        player->addDripNum(plus);
-        //if(_num[i] > 9) _num[i] = 9;
-        //_numSpriteScl[i] = 2;
-        //_effect->play("get.efk",playerPos[i]);
+        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_ITEM_GET) + player->getPlayerID()), (void*) plus);
 
+        // HACK どこでやるか？？
+        player->addDripNum(plus);
         player->jump(10.f);
       }
       else if(fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()) && player->getDripNum() > 0) {
         _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
-        //_numSpriteScl[i] = 0.7f;
-        //_num[i] --;
+        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_ITEM_USING) + player->getPlayerID()));
+
+        // HACK どこでやるか？？
         player->addDripNum(-1);
-        //_effect->play("shot.efk",playerPos[i]);
       }
     }
   }

@@ -77,7 +77,6 @@ void App::update() {
   auto fadeBG = _renderer->getFadeBG();
   fadeBG->setColor(D3DXCOLOR(1,1,1,_fadeTime));
 
-
   if(_baceScene != nullptr) {
     _baceScene->updateChild();
     _renderer->update();
@@ -90,6 +89,7 @@ void App::update() {
     setBaceScene(_nextScene->create());
     SafeDelete(_nextScene);
   }
+
 }
 
 //==============================================================================

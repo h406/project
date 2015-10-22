@@ -17,6 +17,8 @@
 
 class Stage;
 class Player;
+class EventManager;
+class EventData;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -27,6 +29,8 @@ public:
   bool init();
   void update();
   void uninit();
+
+  void EventListener(EventData* eventData);
 
 private:
   int _freezeTime;
@@ -42,13 +46,14 @@ private:
   CameraBace* _mainCamera;
 
   float _numSpriteScl[2];
-  int _num[2];
   Sprite2D* _numSprite[2];
 
   Sprite2D* _plus[2];
   Sprite2D* _plusNum[2];
 
   Effect* _effect;
+
+  EventManager* _eventManager;
 };
 
 #endif

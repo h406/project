@@ -41,6 +41,8 @@
 #include <time.h>
 #define DIRECTINPUT_VERSION (0x0800)	// dinput.hÇÃëOÇ…èëÇ≠Ç±Ç∆ÅI
 #include <dinput.h>
+#include <time.h>
+
 
 //==============================================================================
 // include stl
@@ -50,6 +52,7 @@
 #include <map>
 #include <utility>
 #include <algorithm>
+#include <functional>
 
 using namespace std;
 

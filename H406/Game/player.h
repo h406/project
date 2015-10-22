@@ -35,7 +35,7 @@ public:
   void flipMvementX();
   void flipMvementZ();
 
-  void addDripNum(int num) { _dripNum += num; }
+  void addDripNum(int num) { _dripNum = (_dripNum + num) > 9 ? 9 : _dripNum + num; }
 
   int getPlayerID() const { return _playerID; }
   int getDripNum() const { return _dripNum; }

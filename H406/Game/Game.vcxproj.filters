@@ -28,6 +28,9 @@
     <Filter Include="game\gameObject\stage">
       <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\system\event">
+      <UniqueIdentifier>{1e28347a-f646-42f1-a02f-4624078784ac}</UniqueIdentifier>
+    </Filter>
     <Filter Include="game\system\collision detection">
       <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
     </Filter>
@@ -57,6 +60,15 @@
     <ClInclude Include="stage.h">
       <Filter>game\gameObject\stage</Filter>
     </ClInclude>
+    <ClInclude Include="eventManager.h">
+      <Filter>game\system\event</Filter>
+    </ClInclude>
+    <ClInclude Include="EventList.h">
+      <Filter>game\system\event</Filter>
+    </ClInclude>
+    <ClInclude Include="EventData.h">
+      <Filter>game\system\event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -80,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="stage.cpp">
       <Filter>game\gameObject\stage</Filter>
+    </ClCompile>
+    <ClCompile Include="eventManager.cpp">
+      <Filter>game\system\event</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -13,9 +13,12 @@
 #include "staticStage.h"
 #include "player.h"
 #include "colStage.h"
+#include "eventManager.h"
+#include "EventList.h"
+#include "EventData.h"
 
 //------------------------------------------------------------------------------
-// 
+// init
 //------------------------------------------------------------------------------
 bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
@@ -31,6 +34,10 @@ bool Game::init() {
   auto staticStage = StaticStage::create();
   this->addChild(staticStage);
 
+  // イベントマネージャー
+  _eventManager = new EventManager();
+
+  // プレイヤー
   _player[0] = Player::create(0);
   _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f,0,0));
   this->addChild(_player[0]);
@@ -108,7 +115,6 @@ bool Game::init() {
   _plusNum[1]->setColor(D3DXCOLOR(0,0,0,0));
   this->addChild(_plusNum[1]);
 
-  _num[0] = _num[1] = 0;
   _numSpriteScl[0] = _numSpriteScl[1] = 1;
 
   // ステージブロック
@@ -116,17 +122,24 @@ bool Game::init() {
   this->addChild(_stage);
 
   // ステージとの当たり判定
-  auto hitcheck = ColStage::create(_stage);
+  auto hitcheck = ColStage::create(_stage,_eventManager);
   hitcheck->addPlayer(_player[0]);
   hitcheck->addPlayer(_player[1]);
   // 最後に処理をさせる
   this->addChild(hitcheck,INT_MAX);
+
+  // イベントセット
+  _eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&Game::EventListener,this,placeholders::_1));
+  _eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&Game::EventListener,this,placeholders::_1));
+  _eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
+  _eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
 
   _freezeTime = 0;
   _bultime = 0;
 
   return true;
 }
+
 
 //------------------------------------------------------------------------------
 // 
@@ -155,15 +168,14 @@ void Game::update() {
       }
     }
   }
-  
 
   if((rand() % (60 * 1)) == 0) {
     _stage->setFieldID(rand() % Stage::kNUM_X,rand() % Stage::kNUM_Y,Stage::FIELD_ID::ITEM);
   }
 
   for(int i = 0;i < 2;i++) {
-    if(_num[i] > 0) {
-      _numSprite[i]->setAnimID(_num[i]);
+    if(_player[i]->getDripNum() > 0) {
+      _numSprite[i]->setAnimID(_player[i]->getDripNum());
       _numSprite[i]->setVisible(true);
     }
     else {
@@ -226,11 +238,41 @@ void Game::update() {
   }
 }
 
+//==============================================================================
+// イベント
+//------------------------------------------------------------------------------
+void Game::EventListener(EventData* eventData) {
+  switch(eventData->getEvent()) {
+  // アイテム取得した
+  case EventList::PLAYER_1_ITEM_GET:
+    _effect->play("get.efk",_player[0]->getPos());
+    _numSpriteScl[0] = 2.f;
+    _plusNum[0]->setAnimID((int)(eventData->getUserData()));
+    break;
+
+  case EventList::PLAYER_2_ITEM_GET:
+    _effect->play("get.efk",_player[1]->getPos());
+    _numSpriteScl[1] = 2.f;
+    _plusNum[1]->setAnimID((int)(eventData->getUserData()));
+    break;
+
+  // アイテム使用
+  case EventList::PLAYER_1_ITEM_USING:
+    _numSpriteScl[0] = 0.7f;
+    break;
+
+  case EventList::PLAYER_2_ITEM_USING:
+    _numSpriteScl[1] = 0.7f;
+    break;
+
+  }
+}
+
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
 void Game::uninit() {
-
+  SafeDelete(_eventManager);
 }
 
 //EOF
