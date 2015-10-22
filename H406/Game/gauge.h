@@ -29,10 +29,10 @@ public:
   void setFlip(bool flip){ _flip = flip ? -1.0f : 1.0f; }
 
   void setColor(const D3DXCOLOR& color){ _gauge->setColor(color); }
+  void setTexture(const char* tex) { _gauge->setTexture(tex); }
 
 private:
-
-  Sprite2D* _gaugeBase;
+  Vec2 _size;
   Sprite2D* _gauge;
 
   float _rate;

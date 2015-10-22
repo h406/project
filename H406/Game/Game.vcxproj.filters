@@ -34,6 +34,9 @@
     <Filter Include="game\system\collision detection">
       <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\gameObject\gui\gauge">
+      <UniqueIdentifier>{01e18344-5fec-46a1-bfae-3ee2bf2d7cd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -70,7 +73,7 @@
       <Filter>game\system\event</Filter>
     </ClInclude>
     <ClInclude Include="gauge.h">
-      <Filter>game\gameObject\gui</Filter>
+      <Filter>game\gameObject\gui\gauge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +103,7 @@
       <Filter>game\system\event</Filter>
     </ClCompile>
     <ClCompile Include="gauge.cpp">
-      <Filter>game\gameObject\gui</Filter>
+      <Filter>game\gameObject\gui\gauge</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

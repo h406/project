@@ -15,11 +15,7 @@
 //------------------------------------------------------------------------------
 bool Gauge::init(float width,float height)
 {
-  _gaugeBase = Sprite2D::create();
-  _gaugeBase->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
-  _gaugeBase->setSize(width, height);
-  this->addChild(_gaugeBase);
-
+  _size = Vec2(width,height);
   _gauge = Sprite2D::create();
   _gauge->setSize(width,height);
   this->addChild(_gauge);
@@ -35,11 +31,13 @@ bool Gauge::init(float width,float height)
 //------------------------------------------------------------------------------
 void Gauge::update(void)
 {
-  const float width = _gaugeBase->getScl().x;
   _rate += (_rateDest - _rate) * 0.1f;
 
-  _gauge->setPosX(((_rate * width * 0.5f) * _flip) - ((width * 0.5f) * _flip));
-  _gauge->setSizeW(_rate * width);
+  _gauge->setPosX(((_rate * _size.x * 0.5f) * _flip) - ((_size.x * 0.5f) * _flip));
+  _gauge->setSizeW(_rate * _size.x);
+
+  _gauge->setTexScl(_rate, 1.f);
+  _gauge->setTexPosRaw(1 - _rate * ((_flip - 1) * -0.5f),0);
 }
 
 //==============================================================================

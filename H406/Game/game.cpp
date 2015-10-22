@@ -136,15 +136,17 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
 
-  _gauge[0] = Gauge::create(500.f, 50.f);
-  _gauge[0]->setPos(250.0f, 25.0f);
+  _gauge[0] = Gauge::create(520.f, 92.6667f);
+  _gauge[0]->setPos(Vec2(520.f,92.6667f) * 0.5f);
   _gauge[0]->setColor(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f));
+  _gauge[0]->setTexture("./data/texture/e1.png");
   this->addChild(_gauge[0]);
 
-  _gauge[1] = Gauge::create(500.f,50.f);
-  _gauge[1]->setPos(App::instance().getWindowSize().cx - 250.0f, 25.0f);
+  _gauge[1] = Gauge::create(554.f,100.f);
+  _gauge[1]->setPos(App::instance().getWindowSize().cx - 554.f * 0.5f, 100.f * 0.5f);
   _gauge[1]->setColor(D3DXCOLOR(1.0f,1.0f,0.0f,1.0f));
   _gauge[1]->setFlip(true);
+  _gauge[1]->setTexture("./data/texture/e2.png");
   this->addChild(_gauge[1]);
 
   _freezeTime = 0;

@@ -75,6 +75,7 @@ bool Sprite2D::init() {
   _numV = 1;
   _animID = 0;
   _texPos = {0,0};
+  _texScl = {1.f,1.f};
 
   return true;
 }
@@ -93,10 +94,10 @@ void Sprite2D::draw(const  Renderer* renderer) {
   auto shader = renderer->getShader();
 
   // uvアニメーション計算
-  uvAnims[0] = 1.f / _numU;
-  uvAnims[1] = 1.f / _numV;
-  uvAnims[2] = uvAnims[0] * (_animID % _numU) + (uvAnims[0] / getScl().x * _texPos.x);
-  uvAnims[3] = uvAnims[1] * (_animID / _numU) + (uvAnims[1] / getScl().y * _texPos.y);
+  uvAnims[0] = _texScl.x / _numU;
+  uvAnims[1] = _texScl.y / _numV;
+  uvAnims[2] = (1.f / _numU) * (_animID % _numU) + (_texPos.x);
+  uvAnims[3] = (1.f / _numV) * (_animID / _numU) + (_texPos.y);
 
   shader->setVtxShader(_vtxShaderID);
   auto vtxShader = shader->getNowVtxShader();
