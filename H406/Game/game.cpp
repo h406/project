@@ -16,6 +16,7 @@
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
+#include "gauge.h"
 
 //------------------------------------------------------------------------------
 // init
@@ -134,6 +135,19 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
 
+  _gauge[0] = Gauge::create();
+  _gauge[0]->setScl(500.0f, 50.0f, 0.0f);
+  _gauge[0]->setPos(250.0f, 25.0f, 0.0f);
+  _gauge[0]->setColor(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f));;
+  this->addChild(_gauge[0]);
+
+  _gauge[1] = Gauge::create();
+  _gauge[1]->setScl(500.0f, 50.0f, 0.0f);
+  _gauge[1]->setPos(App::instance().getWindowSize().cx - 250.0f, 25.0f, 0.0f);
+  _gauge[1]->setColor(D3DXCOLOR(1.0f,1.0f,0.0f,1.0f));;
+  _gauge[1]->setFlip(true);
+  this->addChild(_gauge[1]);
+
   _freezeTime = 0;
   _bultime = 0;
 
@@ -189,6 +203,10 @@ void Game::update() {
     _plusNum[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
     _plus[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
   }
+
+  float gaugeRate[2] = {_player[0]->getDripNum() / (float)9,_player[1]->getDripNum() / (float)9};
+  _gauge[0]->setRate(gaugeRate[0]);
+  _gauge[1]->setRate(gaugeRate[1]);
 
   if(input->isTrigger(0,VK_INPUT::_2)) {
     _freezeTime = 75;

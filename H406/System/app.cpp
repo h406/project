@@ -36,7 +36,7 @@ App::App(int width,int height)
 
 
   auto fadeBG = Sprite2D::create();
-  fadeBG->setSize(App::instance().getWindowSize().cx,App::instance().getWindowSize().cy);
+  fadeBG->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
   fadeBG->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f,0);
   fadeBG->setColor(D3DXCOLOR(1,1,1,1));
   _renderer->setFadeBG(fadeBG);

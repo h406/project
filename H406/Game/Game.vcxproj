@@ -95,6 +95,7 @@
     <ClInclude Include="eventManager.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="colStage.h" />
+    <ClInclude Include="gauge.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="staticStage.h" />
     <ClInclude Include="stage.h" />
@@ -105,6 +106,7 @@
     <ClCompile Include="eventManager.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="colStage.cpp" />
+    <ClCompile Include="gauge.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="staticStage.cpp" />

@@ -19,6 +19,7 @@ class Stage;
 class Player;
 class EventManager;
 class EventData;
+class Gauge;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -52,8 +53,9 @@ private:
   Sprite2D* _plusNum[2];
 
   Effect* _effect;
-
   EventManager* _eventManager;
+
+  Gauge* _gauge[2];
 };
 
 #endif
