@@ -75,6 +75,9 @@
     <ClInclude Include="gauge.h">
       <Filter>game\gameObject\gui\gauge</Filter>
     </ClInclude>
+    <ClInclude Include="guiManager.h">
+      <Filter>game\gameObject\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="gauge.cpp">
       <Filter>game\gameObject\gui\gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="guiManager.cpp">
+      <Filter>game\gameObject\gui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

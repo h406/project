@@ -16,7 +16,7 @@
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
-#include "gauge.h"
+#include "guiManager.h"
 
 //------------------------------------------------------------------------------
 // init
@@ -24,12 +24,6 @@
 bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
   const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
-
-  auto e = Sprite2D::create("./data/texture/e.png");
-  e->setColor(D3DXCOLOR(1,1,1,1));
-  e->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
-  e->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f);
-  this->addChild(e);
 
   // 動かないステージオブジェクト群
   auto staticStage = StaticStage::create();
@@ -65,60 +59,6 @@ bool Game::init() {
   _effect->setScl(Vec3(1,1,1));
   this->addChild(_effect);
 
-  _numSprite[0] = Sprite2D::create("./data/texture/num.png");
-  _numSprite[0]->setSize(128,128);
-  _numSprite[0]->setPos(128,200);
-  _numSprite[0]->setNumU(11);
-  _numSprite[0]->setAnimID(10);
-  _numSprite[0]->setVisible(false);
-  this->addChild(_numSprite[0]);
-
-  _numSprite[1] = Sprite2D::create("./data/texture/num.png");
-  _numSprite[1]->setSize(128,128);
-  _numSprite[1]->setPos(1280 - 128,200);
-  _numSprite[1]->setNumU(11);
-  _numSprite[1]->setAnimID(10);
-  _numSprite[1]->setVisible(false);
-  this->addChild(_numSprite[1]);
-
-  _plus[0] = Sprite2D::create("./data/texture/num.png");
-  _plus[0]->setSize(128,128);
-  _plus[0]->setPos(128,328);
-  _plus[0]->setNumU(11);
-  _plus[0]->setAnimID(10);
-  _plus[0]->setVisible(true);
-  _plus[0]->setColor(D3DXCOLOR(0,0,0,0));
-  this->addChild(_plus[0]);
-
-  _plus[1] = Sprite2D::create("./data/texture/num.png");
-  _plus[1]->setSize(128,128);
-  _plus[1]->setPos(1280 - 255 ,328);
-  _plus[1]->setNumU(11);
-  _plus[1]->setAnimID(10);
-  _plus[1]->setVisible(true);
-  _plus[1]->setColor(D3DXCOLOR(0,0,0,0));
-  this->addChild(_plus[1]);
-
-  _plusNum[0] = Sprite2D::create("./data/texture/num.png");
-  _plusNum[0]->setSize(128,128);
-  _plusNum[0]->setPos(256,328);
-  _plusNum[0]->setNumU(11);
-  _plusNum[0]->setAnimID(10);
-  _plusNum[0]->setVisible(true);
-  _plusNum[0]->setColor(D3DXCOLOR(0,0,0,0));
-  this->addChild(_plusNum[0]);
-
-  _plusNum[1] = Sprite2D::create("./data/texture/num.png");
-  _plusNum[1]->setSize(128,128);
-  _plusNum[1]->setPos(1280 - 128, 328);
-  _plusNum[1]->setNumU(11);
-  _plusNum[1]->setAnimID(10);
-  _plusNum[1]->setVisible(true);
-  _plusNum[1]->setColor(D3DXCOLOR(0,0,0,0));
-  this->addChild(_plusNum[1]);
-
-  _numSpriteScl[0] = _numSpriteScl[1] = 1;
-
   // ステージブロック
   _stage = Stage::create(1000.f,1000.f);
   this->addChild(_stage);
@@ -136,18 +76,9 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
 
-  _gauge[0] = Gauge::create(520.f, 92.6667f);
-  _gauge[0]->setPos(Vec2(520.f,92.6667f) * 0.5f);
-  _gauge[0]->setColor(D3DXCOLOR(0.0f,0.0f,1.0f,1.0f));
-  _gauge[0]->setTexture("./data/texture/e1.png");
-  this->addChild(_gauge[0]);
-
-  _gauge[1] = Gauge::create(554.f,100.f);
-  _gauge[1]->setPos(App::instance().getWindowSize().cx - 554.f * 0.5f, 100.f * 0.5f);
-  _gauge[1]->setColor(D3DXCOLOR(1.0f,1.0f,0.0f,1.0f));
-  _gauge[1]->setFlip(true);
-  _gauge[1]->setTexture("./data/texture/e2.png");
-  this->addChild(_gauge[1]);
+  // GUIマネージャー
+  _guiManger = GuiManager::create();
+  this->addChild(_guiManger);
 
   _freezeTime = 0;
   _bultime = 0;
@@ -187,27 +118,6 @@ void Game::update() {
   if((rand() % (60 * 1)) == 0) {
     _stage->setFieldID(rand() % Stage::kNUM_X,rand() % Stage::kNUM_Y,Stage::FIELD_ID::ITEM);
   }
-
-  for(int i = 0;i < 2;i++) {
-    if(_player[i]->getDripNum() > 0) {
-      _numSprite[i]->setAnimID(_player[i]->getDripNum());
-      _numSprite[i]->setVisible(true);
-    }
-    else {
-      _numSprite[i]->setVisible(false);
-    }
-    _numSpriteScl[i] += (1 - _numSpriteScl[i]) * 0.1f;
-    _numSprite[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
-
-    _plusNum[i]->setColor(D3DXCOLOR(1,1,1,min((_numSpriteScl[i] - 1) * 2, 1)));
-    _plus[i]->setColor(D3DXCOLOR(1,1,1,min((_numSpriteScl[i] - 1) * 2,1)));
-    _plusNum[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
-    _plus[i]->setSize(128 * _numSpriteScl[i],128 * _numSpriteScl[i]);
-  }
-
-  float gaugeRate[2] = {_player[0]->getDripNum() / (float)9,_player[1]->getDripNum() / (float)9};
-  _gauge[0]->setRate(gaugeRate[0]);
-  _gauge[1]->setRate(gaugeRate[1]);
 
   if(input->isTrigger(0,VK_INPUT::_2)) {
     _freezeTime = 75;
@@ -265,23 +175,23 @@ void Game::EventListener(EventData* eventData) {
   // アイテム取得した
   case EventList::PLAYER_1_ITEM_GET:
     _effect->play("get.efk",_player[0]->getPos());
-    _numSpriteScl[0] = 2.f;
-    _plusNum[0]->setAnimID((int)(eventData->getUserData()));
+    _guiManger->setNumSpriteScl(0, 2.f);
+    _guiManger->setPlusNumAnimID(0, (int)(eventData->getUserData()));
     break;
 
   case EventList::PLAYER_2_ITEM_GET:
     _effect->play("get.efk",_player[1]->getPos());
-    _numSpriteScl[1] = 2.f;
-    _plusNum[1]->setAnimID((int)(eventData->getUserData()));
+    _guiManger->setNumSpriteScl(1, 2.f);
+    _guiManger->setPlusNumAnimID(1, (int)(eventData->getUserData()));
     break;
 
   // アイテム使用
   case EventList::PLAYER_1_ITEM_USING:
-    _numSpriteScl[0] = 0.7f;
+    _guiManger->setNumSpriteScl(0, 0.7f);
     break;
 
   case EventList::PLAYER_2_ITEM_USING:
-    _numSpriteScl[1] = 0.7f;
+    _guiManger->setNumSpriteScl(1, 0.7f);
     break;
 
   }
@@ -292,6 +202,13 @@ void Game::EventListener(EventData* eventData) {
 //------------------------------------------------------------------------------
 void Game::uninit() {
   SafeDelete(_eventManager);
+}
+
+//------------------------------------------------------------------------------
+// GUIに送る用
+//------------------------------------------------------------------------------
+int Game::getPlayerDripNum(int playerId){
+  return _player[playerId]->getDripNum();
 }
 
 //EOF
