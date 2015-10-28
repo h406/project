@@ -10,11 +10,13 @@
 //******************************************************************************
 #include "guiManager.h"
 #include "gauge.h"
+#include "../System/numberSprite.h"
+
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
-
 #include "game.h"
+#include "dataManager.h"
 
 //==============================================================================
 // init
@@ -96,6 +98,14 @@ bool GuiManager::init(void)
 
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
 
+  // タイマー
+  _time = NumberSprite::create(2, "./data/texture/num.png");
+  _time->setSize(64, 64);
+  _time->setNumU(11);
+  _time->setNumber(60);
+  _time->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
+  this->addChild(_time);
+
 //  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&GuiManager::EventListener, this, placeholders::_1));
 
   return true;
@@ -135,6 +145,9 @@ void GuiManager::update(void)
   _gauge[0]->setRate(gaugeRate[0]);
   _gauge[1]->setRate(gaugeRate[1]);
 
+  // タイマー更新
+  int time = DataManager::instance().getData()->getTime();
+  _time->setNumber(time / 60);
 }
 
 //==============================================================================

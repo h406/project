@@ -11,8 +11,9 @@
 
 #include "CreateFunc.h"
 
-class Gauge;
 class EventManager;
+class Gauge;
+class NumberSprite;
 
 //==============================================================================
 // class
@@ -39,6 +40,8 @@ private:
 
   Sprite2D* _plus[2];
   Sprite2D* _plusNum[2];
+
+  NumberSprite* _time;
 };
 
 #endif

@@ -19,7 +19,6 @@ class Stage;
 class Player;
 class EventManager;
 class EventData;
-//class Gauge;
 class GuiManager;
 
 class Game : public iScene,public CreateFunc<Game> {

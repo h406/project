@@ -17,6 +17,7 @@
 #include "EventList.h"
 #include "EventData.h"
 #include "guiManager.h"
+#include "dataManager.h"
 
 //------------------------------------------------------------------------------
 // init
@@ -31,6 +32,9 @@ bool Game::init() {
 
   // イベントマネージャー
   _eventManager = new EventManager();
+
+  // データマネージャー
+  DataManager::instance().init(_eventManager);
 
   // プレイヤー1
   _player[0] = Player::create(0);
@@ -165,6 +169,8 @@ void Game::update() {
     _mainCamera->setPosR(camvec + ram);
     _bultime--;
   }
+
+  DataManager::instance().update();
 }
 
 //==============================================================================
@@ -202,6 +208,7 @@ void Game::EventListener(EventData* eventData) {
 //------------------------------------------------------------------------------
 void Game::uninit() {
   SafeDelete(_eventManager);
+  DataManager::instance().uninit();
 }
 
 //------------------------------------------------------------------------------

@@ -37,6 +37,9 @@
     <Filter Include="game\gameObject\gui\gauge">
       <UniqueIdentifier>{01e18344-5fec-46a1-bfae-3ee2bf2d7cd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\system\data">
+      <UniqueIdentifier>{a66417c1-43e5-4869-bff2-1b317070bd5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -78,6 +81,12 @@
     <ClInclude Include="guiManager.h">
       <Filter>game\gameObject\gui</Filter>
     </ClInclude>
+    <ClInclude Include="dataManager.h">
+      <Filter>game\system\data</Filter>
+    </ClInclude>
+    <ClInclude Include="gameConfig.h">
+      <Filter>game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -110,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="guiManager.cpp">
       <Filter>game\gameObject\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="dataManager.cpp">
+      <Filter>game\system\data</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
