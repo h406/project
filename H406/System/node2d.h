@@ -19,9 +19,9 @@
 class node2d : public node {
 public:
 
-  const Vec2& getPos() const { return Vec2(_pos.x,_pos.y); }
-  const Vec2& getRot() const { return Vec2(_rot.x,_rot.y); }
-  const Vec2& getScl() const { return Vec2(_scl.x,_scl.y); }
+  const Vec2 getPos() const { return Vec2(_pos.x,_pos.y); }
+  const Vec2 getRot() const { return Vec2(_rot.x,_rot.y); }
+  const Vec2 getScl() const { return Vec2(_scl.x,_scl.y); }
 
 
   void setPos(float x,float y) { setPosX(x); setPosY(y); setPosZ(0.f); }

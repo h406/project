@@ -213,6 +213,11 @@ void MeshField::draw(const Renderer* renderer) {
   // F
   vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",_color,4);
 
+  Matrix norMtx;
+  D3DXMatrixInverse(&norMtx,nullptr,&getWorldMtx());
+  D3DXMatrixTranspose(&norMtx,&norMtx);
+  vtxShader->_constTable->SetMatrix(pDevice,"gNorWorld",&norMtx);
+
   Matrix wvp = getWorldMtx() * renderer->getCamera()->getViewMtx() * renderer->getProjMtx();
   vtxShader->_constTable->SetMatrix(pDevice,"gWorld",&getWorldMtx());
   vtxShader->_constTable->SetMatrix(pDevice,"gWVP",&wvp);

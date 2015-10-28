@@ -176,8 +176,26 @@ bool Renderer::draw(node* baceNode) {
     
     // ベースノード
     if(baceNode != nullptr) {
+      // ベースピクセルシェーダー
+      //_shader->setPixShader("ps_bace3d.cso");
+      //
+      //struct {
+      //  Vec3 dir;
+      //  float power;
+      //  Vec4 color;
+      //} lightDir;
+      //
+      //lightDir.color = Vec4(1,1,1,1);
+      //lightDir.power = 1;
+      //lightDir.dir = Vec3(1, -1, 1 );
+      //D3DXVec3Normalize(&lightDir.dir,&lightDir.dir);
+      //_shader->getNowPixShader()->_constTable->SetValue(_pD3DDevice,"gDLight",&lightDir,sizeof(lightDir));
+
       // 普通の3D
       baceNode->drawChild(this, NodeType::normal3D);
+
+      // ベースピクセルシェーダー
+      _shader->setPixShader("ps_bace.cso");
 
       // エフェクト
       baceNode->drawChild(this,NodeType::effect);

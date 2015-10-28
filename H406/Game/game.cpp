@@ -129,7 +129,7 @@ bool Game::init() {
   hitcheck->addPlayer(_player[1]);
   // 最後に処理をさせる
   this->addChild(hitcheck,INT_MAX);
-
+  
   // イベントセット
   _eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&Game::EventListener,this,placeholders::_1));

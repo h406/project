@@ -45,6 +45,15 @@
     <None Include="screenSize.hlsli">
       <Filter>uniform</Filter>
     </None>
+    <None Include="cameraPos.hlsli">
+      <Filter>uniform</Filter>
+    </None>
+    <None Include="dirLight.hlsli">
+      <Filter>struct</Filter>
+    </None>
+    <None Include="DLight.hlsli">
+      <Filter>uniform</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ps_bace.hlsl">
@@ -55,6 +64,9 @@
     </FxCompile>
     <FxCompile Include="vs_2d.hlsl">
       <Filter>vs</Filter>
+    </FxCompile>
+    <FxCompile Include="ps_bace3d.hlsl">
+      <Filter>ps</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

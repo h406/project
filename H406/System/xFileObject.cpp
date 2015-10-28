@@ -100,8 +100,12 @@ void XFileObject::draw(const Renderer* renderer) {
   pDevice->GetMaterial(&matDef);
   pD3DXMat = (D3DXMATERIAL*)_pD3DXBuffMat->GetBufferPointer();
 
-  Matrix wvp = getWorldMtx() * renderer->getCamera()->getViewMtx() * renderer->getProjMtx();
+  Matrix norMtx;
+  D3DXMatrixInverse(&norMtx,nullptr,&getWorldMtx());
+  D3DXMatrixTranspose(&norMtx,&norMtx);
+  vtxShader->_constTable->SetMatrix(pDevice,"gNorWorld",&norMtx);
 
+  Matrix wvp = getWorldMtx() * renderer->getCamera()->getViewMtx() * renderer->getProjMtx();
   vtxShader->_constTable->SetMatrix(pDevice,"gWorld", &getWorldMtx());
   vtxShader->_constTable->SetMatrix(pDevice,"gWVP",&wvp);
 

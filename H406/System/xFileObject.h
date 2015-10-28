@@ -29,8 +29,6 @@ protected:
   virtual NodeType getNodeType() const { return NodeType::normal3D; }
 
 private:
-  XFileObject() {};
-  virtual ~XFileObject() {};
 
   LPD3DXMESH _pD3DXMesh;         // メッシュ情報へのポインタ
   LPD3DXBUFFER _pD3DXBuffMat;    // マテリアル情報へのポインタ
