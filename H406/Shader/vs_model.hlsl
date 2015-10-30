@@ -20,6 +20,7 @@ uniform float4x4 gNorWorld;
 //=============================================================================
 OutputVS main(InputVS vs) {
   OutputVS ovs = (OutputVS)0;
+  ovs.pos = mul(float4(vs.pos,1.0f),gWVP);
   ovs.posH = mul(float4(vs.pos,1.0f),gWVP);
   ovs.posW = mul(float4(vs.pos,1.0f),gWorld).xyz;
   ovs.normal = mul(float4(vs.normal,0.0f),gNorWorld).xyz;

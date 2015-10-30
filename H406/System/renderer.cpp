@@ -122,8 +122,8 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   D3DXMatrixPerspectiveFovLH(&_mtxProj,		// プロジェクションマトリックスの初期化
     D3DX_PI / 4.0f,				// 視野角
     (float)windowSize.cx / (float)windowSize.cy,	// アスペクト比
-    1.0f,						// rear値
-    6000.0f);					// far値
+    10.0f,						// rear値
+    2500.0f);					// far値
 
   // ビューポート設定
   D3DVIEWPORT9 vp;
@@ -134,16 +134,32 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   vp.MaxZ = 1;
   vp.MinZ = 0;
   _pD3DDevice->SetViewport(&vp);
+
+
+  // hack
+  // バックバッファを覚えとく
+  //d3ddev->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&backbuffer);
+  // SSAOで使う。レイマップ/法線深度マップ/通常のカラーマップを作成します
+  // GetScreenWidth/GetScreenHeightはスクリーンサイズを取ってくるのを作ってください
+  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexNormalDepth,0);
+  _TexNormalDepth->GetSurfaceLevel(0,&_SurNormalDepth);
+  _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
+
 }
 
 //==============================================================================
 // Renderer
 //------------------------------------------------------------------------------
 Renderer::~Renderer() {
+
+  SafeRelease(_SurNormalDepth);
+  SafeRelease(_TexNormalDepth);
+
   SafeRelease(_pD3DDevice);
   SafeDelete(_texture);
   SafeDelete(_camera);
   SafeDelete(_shader);
+
 
   if(_fadeBG != nullptr) {
     _fadeBG->release();
@@ -166,33 +182,116 @@ void Renderer::update() {
 // draw
 //------------------------------------------------------------------------------
 bool Renderer::draw(node* baceNode) {
+
+  _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
+
     // シーンの描画開始
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
     // シーンのクリア
     _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(100,100,100),1.0f,0);
+
 
     // ベースピクセルシェーダー
     _shader->setPixShader("ps_bace.cso");
     
     // ベースノード
     if(baceNode != nullptr) {
+      // 普通の3D
+      baceNode->drawChild(this,NodeType::lightOff3D);
+
       // ベースピクセルシェーダー
-      //_shader->setPixShader("ps_bace3d.cso");
-      //
-      //struct {
-      //  Vec3 dir;
-      //  float power;
-      //  Vec4 color;
-      //} lightDir;
-      //
-      //lightDir.color = Vec4(1,1,1,1);
-      //lightDir.power = 1;
-      //lightDir.dir = Vec3(1, -1, 1 );
-      //D3DXVec3Normalize(&lightDir.dir,&lightDir.dir);
-      //_shader->getNowPixShader()->_constTable->SetValue(_pD3DDevice,"gDLight",&lightDir,sizeof(lightDir));
+      _shader->setPixShader("ps_bace3d.cso");
+
+      // far値
+      _shader->getNowPixShader()->_constTable->SetFloat(_pD3DDevice,"gFar",2000.0f);
+
+      Vec4 color[3];
+      float power[3];
+      Vec3 dir[3];
+
+      color[0] = Vec4(1,1,1,1);
+      power[0] = 1.0f;
+      dir[0] = Vec3(0.5f,-1,2);
+
+      color[1] = Vec4(1,1,1,1);
+      power[1] = 0.3f;
+      dir[1] = Vec3(-0.5f,-1,-2);
+
+      color[2] = Vec4(1,1,1,1);
+      power[2] = 0.6f;
+      dir[2] = Vec3(0.5f,-3.f,0);
+
+      for(int i = 0; i < 3; i++) {
+        D3DXVec3Normalize(&dir[i],&dir[i]);
+      }
+
+      _shader->getNowPixShader()->_constTable->SetFloatArray(_pD3DDevice,"gLightDir",(float*)dir,sizeof(float) * 3 * 3);
+      _shader->getNowPixShader()->_constTable->SetFloatArray(_pD3DDevice,"gLightPower",power,sizeof(float) * 3);
+      _shader->getNowPixShader()->_constTable->SetFloatArray(_pD3DDevice,"gLightCol",(float*)color,sizeof(float) * 4 * 3);
 
       // 普通の3D
-      baceNode->drawChild(this, NodeType::normal3D);
+      baceNode->drawChild(this,NodeType::normal3D);
+
+
+      // hack posteffect
+      /*
+      {
+        const SIZE size = App::instance().getWindowSize();
+        _shader->setPixShader("ps_edge.cso");
+
+
+        _pD3DDevice->SetRenderTarget(1, NULL);
+        //_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
+        //_pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_ZERO);
+        //_pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_SRCALPHA);
+
+        for(int i = 0; i < 4; ++i) {
+          //---- サンプラーステートの設定 ----
+          _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_CLAMP);
+          _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_CLAMP);
+          _pD3DDevice->SetSamplerState(i,D3DSAMP_MINFILTER,D3DTEXF_POINT);
+          _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_POINT);
+        }
+
+        const float w = (float)size.cx;
+        const float h = (float)size.cy;
+        const float du = 1.0f / w;
+        const float dv = 1.0f / h;
+
+        struct T4VERTEX {
+         float p[4];
+         float t[4][2];
+        }  Vertex[4] = {
+          //   x    y   z    rhw     tu       tv
+          {0.0f,0,0.1f,1.0f,0.0f - du,0.0f - dv // 左上
+          ,0.0f + du,0.0f + dv // 右下
+          ,0.0f - du,0.0f + dv // 左下
+          ,0.0f + du,0.0f - dv},//右上
+          {w,0,0.1f,1.0f,1.0f - du,0.0f - dv
+          ,1.0f + du,0.0f + dv
+          ,1.0f - du,0.0f + dv
+          ,1.0f + du,0.0f - dv,},
+          {w,h,0.1f,1.0f,1.0f - du,1.0f - dv
+          ,1.0f + du,1.0f + dv
+          ,1.0f - du,1.0f + dv
+          ,1.0f + du,1.0f - dv,},
+          {0.0f,h,0.1f,1.0f,0.0f - du,1.0f - dv
+          ,0.0f + du,1.0f + dv
+          ,0.0f - du,1.0f + dv
+          ,0.0f + du,1.0f - dv,},
+        };
+
+        _pD3DDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX4);
+        _pD3DDevice->SetTexture(0,_TexNormalDepth);
+        _pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN,2,Vertex,sizeof(T4VERTEX));
+        _pD3DDevice->SetFVF(NULL);
+        _pD3DDevice->SetRenderState(D3DRS_ZENABLE,TRUE);
+        _pD3DDevice->SetRenderState(D3DRS_LIGHTING,TRUE);
+        _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+        _pD3DDevice->SetTexture(0,NULL);
+
+      }
+      **/
 
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace.cso");

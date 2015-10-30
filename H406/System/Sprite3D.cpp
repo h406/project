@@ -96,7 +96,9 @@ void Sprite3D::draw(const  Renderer* renderer) {
   auto vtxShader = shader->getNowVtxShader();
 
   UINT nSamplerIndex = shader->getNowPixShader()->_constTable->GetSamplerIndex("TexSamp0");
-  pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+  if(UINT_MAX != nSamplerIndex) {
+    pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+  }
 
   // F
   vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",_color,4);

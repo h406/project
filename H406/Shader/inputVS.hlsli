@@ -12,8 +12,8 @@
 // bace
 //==============================================================================
 struct InputVS {
-  float3 pos : POSITION0;
-  float3 normal : NORMAL;
+  float3 pos      : POSITION0;
+  float3 normal   : NORMAL;
   float2 texCoord : TEXCOORD0;
 };
 

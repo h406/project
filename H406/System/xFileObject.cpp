@@ -73,6 +73,15 @@ bool XFileObject::init(const char* file) {
 
   _vtxShaderID = renderer->getShader()->getVtxShader("vs_model.cso");
 
+
+  auto pD3DXMat = (D3DXMATERIAL*)_pD3DXBuffMat->GetBufferPointer();
+  for(int nCntMat = 0; nCntMat < (int)_nNumMat; nCntMat++) {
+    if(pD3DXMat[nCntMat].pTextureFilename != nullptr) {
+      string texPath = string("./data/texture/") + pD3DXMat[nCntMat].pTextureFilename;
+      renderer->getTexture()->createTexture(texPath.c_str());
+    }
+  }
+
   return true;
 }
 
@@ -110,10 +119,16 @@ void XFileObject::draw(const Renderer* renderer) {
   vtxShader->_constTable->SetMatrix(pDevice,"gWVP",&wvp);
 
   UINT nSamplerIndex = renderer->getShader()->getNowPixShader()->_constTable->GetSamplerIndex("TexSamp0");
-  pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+  if(UINT_MAX != nSamplerIndex) {
+    pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+  }
 
   // モデルの描画
   for(int nCntMat = 0; nCntMat < (int)_nNumMat; nCntMat++) {
+    if(pD3DXMat[nCntMat].pTextureFilename != nullptr && UINT_MAX != nSamplerIndex) {
+      string texPath = string("./data/texture/") + pD3DXMat[nCntMat].pTextureFilename;
+      pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(texPath.c_str()));
+    }
     vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",(float*)&pD3DXMat[nCntMat].MatD3D.Diffuse,4);
     // モデルのパーツを描画
     _pD3DXMesh->DrawSubset(nCntMat);

@@ -18,6 +18,8 @@
 #include "EventData.h"
 #include "guiManager.h"
 
+XFileObject* test = nullptr;
+
 //------------------------------------------------------------------------------
 // init
 //------------------------------------------------------------------------------
@@ -41,6 +43,10 @@ bool Game::init() {
   _player[1] = Player::create(1);
   _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
   this->addChild(_player[1]);
+
+  test = XFileObject::create("./data/model/Building.x");
+  test->setScl(5,5,5);
+  this->addChild(test);
 
   _mainCamera = camera->createCamera();
   _mainCamera->setPosP({0,600,-900});
@@ -116,7 +122,14 @@ void Game::update() {
   }
 
   if((rand() % (60 * 1)) == 0) {
-    _stage->setFieldID(rand() % Stage::kNUM_X,rand() % Stage::kNUM_Y,Stage::FIELD_ID::ITEM);
+    int randx = rand() % Stage::kNUM_X;
+    int randy = rand() % Stage::kNUM_Y;
+    _stage->setFieldID(randx,randy,Stage::FIELD_ID::ITEM);
+
+    Vec2 fieldSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
+
+    int id = _effect->play("stage_lightup.efk",Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f,0,randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
+    _effect->setEffectScl(id,Vec3(50,50,50));
   }
 
   if(input->isTrigger(0,VK_INPUT::_2)) {
@@ -165,6 +178,8 @@ void Game::update() {
     _mainCamera->setPosR(camvec + ram);
     _bultime--;
   }
+
+  test->setRotY(test->getRot().y + 0.05f);
 }
 
 //==============================================================================

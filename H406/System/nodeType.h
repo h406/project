@@ -15,6 +15,7 @@
 //------------------------------------------------------------------------------
 enum class NodeType {
   normal3D = 0,
+  lightOff3D,
   normal2D,
   effect,
   default = (int)NodeType::normal3D,

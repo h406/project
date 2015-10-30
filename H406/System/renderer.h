@@ -61,6 +61,12 @@ private:
 
   // フェード
   Sprite2D* _fadeBG;
+
+
+  // hack
+  LPDIRECT3DTEXTURE9 _TexNormalDepth;
+  LPDIRECT3DSURFACE9 _SurNormalDepth;
+  LPDIRECT3DTEXTURE9 _RayMap;
 };
 
 #endif

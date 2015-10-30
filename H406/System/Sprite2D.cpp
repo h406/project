@@ -105,7 +105,9 @@ void Sprite2D::draw(const  Renderer* renderer) {
   vtxShader->_constTable->SetMatrix(pDevice, "gWorld",&_mtxWorld);
 
   UINT nSamplerIndex = shader->getNowPixShader()->_constTable->GetSamplerIndex("TexSamp0");
-  pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+  if(UINT_MAX != nSamplerIndex) {
+    pDevice->SetTexture(nSamplerIndex,renderer->getTexture()->getTexture(_textureID));
+  }
 
   // F
   vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",_color,4);

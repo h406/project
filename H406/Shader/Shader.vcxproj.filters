@@ -13,6 +13,9 @@
     <Filter Include="vs">
       <UniqueIdentifier>{19e79d94-e0c0-42c6-b8da-df1df24667fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="posteffect">
+      <UniqueIdentifier>{d8cd1842-c9c2-4e80-95fe-6203b2a8d231}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="inputPS.hlsli">
@@ -54,6 +57,9 @@
     <None Include="DLight.hlsli">
       <Filter>uniform</Filter>
     </None>
+    <None Include="far.hlsli">
+      <Filter>uniform</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ps_bace.hlsl">
@@ -67,6 +73,12 @@
     </FxCompile>
     <FxCompile Include="ps_bace3d.hlsl">
       <Filter>ps</Filter>
+    </FxCompile>
+    <FxCompile Include="ps_ssao.hlsl">
+      <Filter>posteffect</Filter>
+    </FxCompile>
+    <FxCompile Include="ps_edge.hlsl">
+      <Filter>posteffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

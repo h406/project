@@ -28,7 +28,7 @@ public:
   void setColor(const D3DXCOLOR& color) { _color = color; }
 
 protected:
-  virtual NodeType getNodeType() const { return NodeType::normal3D; }
+  virtual NodeType getNodeType() const { return NodeType::lightOff3D; }
 
 private:
   void initVtx();

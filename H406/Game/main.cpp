@@ -5,6 +5,7 @@
 //
 //==============================================================================
 #include "title.h"
+#include "game.h"
 
 //------------------------------------------------------------------------------
 // WinMain
@@ -16,11 +17,9 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   app.setTitle("H406");
 
   // ç≈èâÇÃÉVÅ[Éì
-  app.setBaceScene(Title::create());
+  app.setBaceScene(Game::create());
 
   return app.run();
 }
-
-
 
 //EOF
