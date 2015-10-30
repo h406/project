@@ -31,14 +31,17 @@
     <Filter Include="game\system\event">
       <UniqueIdentifier>{1e28347a-f646-42f1-a02f-4624078784ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="game\system\collision detection">
-      <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="game\gameObject\gui\gauge">
       <UniqueIdentifier>{01e18344-5fec-46a1-bfae-3ee2bf2d7cd0}</UniqueIdentifier>
     </Filter>
     <Filter Include="game\system\data">
       <UniqueIdentifier>{a66417c1-43e5-4869-bff2-1b317070bd5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\system\collision">
+      <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="effect">
+      <UniqueIdentifier>{b4b6c159-2ba5-45a4-bdb0-a4ece0f6c8a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +64,7 @@
       <Filter>game\gameObject\player</Filter>
     </ClInclude>
     <ClInclude Include="colStage.h">
-      <Filter>game\system\collision detection</Filter>
+      <Filter>game\system\collision</Filter>
     </ClInclude>
     <ClInclude Include="stage.h">
       <Filter>game\gameObject\stage</Filter>
@@ -87,6 +90,9 @@
     <ClInclude Include="gameConfig.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="edgeEffect.h">
+      <Filter>effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -106,7 +112,7 @@
       <Filter>game\gameObject\player</Filter>
     </ClCompile>
     <ClCompile Include="colStage.cpp">
-      <Filter>game\system\collision detection</Filter>
+      <Filter>game\system\collision</Filter>
     </ClCompile>
     <ClCompile Include="stage.cpp">
       <Filter>game\gameObject\stage</Filter>
@@ -122,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="dataManager.cpp">
       <Filter>game\system\data</Filter>
+    </ClCompile>
+    <ClCompile Include="edgeEffect.cpp">
+      <Filter>effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

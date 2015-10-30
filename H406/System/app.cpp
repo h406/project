@@ -32,8 +32,8 @@ App::App(int width,int height)
   ,_sound(new Sound())
   ,_input(new Input())
   ,_fadeTime(0){
-  _renderer = new Renderer(this);
-
+  _renderer = new Renderer();
+  _renderer->init(this);
 
   auto fadeBG = Sprite2D::create();
   fadeBG->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);

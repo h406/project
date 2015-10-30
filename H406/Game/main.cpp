@@ -6,6 +6,7 @@
 //==============================================================================
 #include "title.h"
 #include "game.h"
+#include "edgeEffect.h"
 
 //------------------------------------------------------------------------------
 // WinMain
@@ -15,6 +16,9 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
 
   // タイトル
   app.setTitle("H406");
+
+  // シェーダ適用
+  app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
 
   // 最初のシーン
   app.setBaceScene(Game::create());

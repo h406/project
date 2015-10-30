@@ -18,7 +18,7 @@ sampler normalMap;
 
 // bace pixcel shader
 float4 main(float2 uv : TEXCOORD0) : COLOR {
-  float totStrength = 2.38;
+  float totStrength = 3.38;
   float strength = 0.005;
   float offset = 18.0;
   float falloff = 0.000002;
@@ -47,7 +47,7 @@ float4 main(float2 uv : TEXCOORD0) : COLOR {
   }
   //float ao = ;
 
-  float4 color = totStrength * bl * invSamples;
-  color.a = 1;
+  float4 color =  totStrength * bl * invSamples;
+  //color.a = 1;
   return color;
 }

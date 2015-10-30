@@ -16,7 +16,7 @@ class Texture;
 class Camera;
 class Shader;
 class Sprite2D;
-
+class PostEffect;
 class Effect;
 
 //==============================================================================
@@ -24,9 +24,10 @@ class Effect;
 //------------------------------------------------------------------------------
 class Renderer {
 public:
-  Renderer(const App* app);
+  Renderer() {};
   ~Renderer();
 
+  bool init(const App* app);
   bool draw(node* baceNode);
   void update();
 
@@ -36,9 +37,14 @@ public:
   Texture* getTexture() const { return _texture; }
   Camera* getCamera() const { return _camera; }
   Shader* getShader() const { return _shader; }
+  PostEffect* getPostEffect() const { return _postEffect; }
 
   void setFadeBG(Sprite2D* sprite) { _fadeBG = sprite; }
   Sprite2D* getFadeBG() const { return _fadeBG; }
+
+  LPDIRECT3DTEXTURE9 getNormalTex() { return _TexNormal; }
+  LPDIRECT3DTEXTURE9 getDepthTex() { return _TexDepth; }
+  LPDIRECT3DTEXTURE9 getColorTex() { return _TexColor; }
 
 private:
   void createDevice(const SIZE& windowSize, HWND hWnd);
@@ -62,11 +68,20 @@ private:
   // フェード
   Sprite2D* _fadeBG;
 
+  // ポストエフェクト
+  PostEffect* _postEffect;
 
-  // hack
-  LPDIRECT3DTEXTURE9 _TexNormalDepth;
-  LPDIRECT3DSURFACE9 _SurNormalDepth;
-  LPDIRECT3DTEXTURE9 _RayMap;
+  // 法線
+  LPDIRECT3DTEXTURE9 _TexNormal;
+  LPDIRECT3DSURFACE9 _SurNormal;
+
+  // 深度
+  LPDIRECT3DTEXTURE9 _TexDepth;
+  LPDIRECT3DSURFACE9 _SurDepth;
+
+  // カラーテクスチャ
+  LPDIRECT3DTEXTURE9 _TexColor;
+  LPDIRECT3DSURFACE9 _SurColor;
 };
 
 #endif

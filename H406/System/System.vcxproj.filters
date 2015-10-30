@@ -85,6 +85,9 @@
     <Filter Include="common\stdafx">
       <UniqueIdentifier>{5d8f145b-b2c9-41e8-993c-45151bcb6d7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="renderer\posteffect">
+      <UniqueIdentifier>{dbd9efa1-b2b5-46e6-a9c6-5acf27387941}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -158,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="node.cpp">
       <Filter>node\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="postEffect.cpp">
+      <Filter>renderer\posteffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="app.h">
       <Filter>app</Filter>
+    </ClInclude>
+    <ClInclude Include="postEffect.h">
+      <Filter>renderer\posteffect</Filter>
+    </ClInclude>
+    <ClInclude Include="iPostEffect.h">
+      <Filter>renderer\posteffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

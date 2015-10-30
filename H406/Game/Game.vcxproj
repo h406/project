@@ -91,6 +91,7 @@
   <ItemGroup>
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="dataManager.h" />
+    <ClInclude Include="edgeEffect.h" />
     <ClInclude Include="EventData.h" />
     <ClInclude Include="EventList.h" />
     <ClInclude Include="eventManager.h" />
@@ -107,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dataManager.cpp" />
+    <ClCompile Include="edgeEffect.cpp" />
     <ClCompile Include="eventManager.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="colStage.cpp" />

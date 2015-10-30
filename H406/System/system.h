@@ -23,6 +23,8 @@
 #include "shader.h"
 #include "camera.h"
 #include "effect.h"
+#include "postEffect.h"
+#include "iPostEffect.h"
 
 #include "DrawObject.h"
 #include "XFileObject.h"
