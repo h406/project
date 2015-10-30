@@ -10,16 +10,18 @@
 //******************************************************************************
 #include "guiManager.h"
 #include "gauge.h"
+#include "../System/numberSprite.h"
+
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
-
 #include "game.h"
+#include "dataManager.h"
 
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool GuiManager::init(void)
+bool GuiManager::init(EventManager* eventManager)
 {
   // ゲージ
   _gaugeBase = Sprite2D::create("./data/texture/e.png");
@@ -96,7 +98,19 @@ bool GuiManager::init(void)
 
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
 
-//  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&GuiManager::EventListener, this, placeholders::_1));
+  // タイマー
+  _time = NumberSprite::create(2, "./data/texture/num.png");
+  _time->setSize(64, 64);
+  _time->setNumU(11);
+  _time->setNumber(60);
+  _time->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
+  this->addChild(_time);
+
+  // イベントセット
+  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
 
   return true;
 }
@@ -106,10 +120,9 @@ bool GuiManager::init(void)
 //------------------------------------------------------------------------------
 void GuiManager::update(void)
 {
-  Game* game = (Game*)iScene::getParent();
-
-  int playerDripNum[2] = {
-    game->getPlayerDripNum(0), game->getPlayerDripNum(1)
+  const auto deta = DataManager::instance().getData();
+  const int playerDripNum[2] = {
+    deta->getPlayerDripNum(0),deta->getPlayerDripNum(1)
   };
 
   // 数字
@@ -135,6 +148,9 @@ void GuiManager::update(void)
   _gauge[0]->setRate(gaugeRate[0]);
   _gauge[1]->setRate(gaugeRate[1]);
 
+  // タイマー更新
+  int time = DataManager::instance().getData()->getTime();
+  _time->setNumber(time / 60);
 }
 
 //==============================================================================
@@ -144,16 +160,32 @@ void GuiManager::uninit(void)
 {
 }
 
-//==============================================================================
-// setPlusNumAnimID
-//------------------------------------------------------------------------------
-void GuiManager::setPlusNumAnimID(int playerId, int animId){
-  _plusNum[playerId]->setAnimID(animId);
-}
 
-//void GuiManager::EventListener(EventData* eventData)
-//{
-//}
+//==============================================================================
+// イベント
+//------------------------------------------------------------------------------
+void GuiManager::EventListener(EventData* eventData) {
+  switch(eventData->getEvent()) {
+    // アイテム取得した
+  case EventList::PLAYER_1_ITEM_GET:
+    _numSpriteScl[0] = 2.0f;
+    _plusNum[0]->setAnimID((int)eventData->getUserData());
+    break;
+  case EventList::PLAYER_2_ITEM_GET:
+    _numSpriteScl[1] = 2.0f;
+    _plusNum[1]->setAnimID((int)eventData->getUserData());
+    break;
+
+    // アイテム使用
+  case EventList::PLAYER_1_ITEM_USING:
+    _numSpriteScl[0] = 0.7f;
+    break;
+
+  case EventList::PLAYER_2_ITEM_USING:
+    _numSpriteScl[1] = 0.7f;
+    break;
+  }
+}
 
 
 //EOF

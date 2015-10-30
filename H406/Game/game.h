@@ -19,7 +19,6 @@ class Stage;
 class Player;
 class EventManager;
 class EventData;
-//class Gauge;
 class GuiManager;
 
 class Game : public iScene,public CreateFunc<Game> {
@@ -33,9 +32,6 @@ public:
   void uninit();
 
   void EventListener(EventData* eventData);
-
-  // GUIマネージャーで使います
-  int getPlayerDripNum(int playerId);
 
 private:
   int _freezeTime;

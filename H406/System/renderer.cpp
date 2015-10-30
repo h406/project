@@ -255,8 +255,8 @@ bool Renderer::draw(node* baceNode) {
 
         const float w = (float)size.cx;
         const float h = (float)size.cy;
-        const float du = 1.0f / w;
-        const float dv = 1.0f / h;
+        const float du = 2.5f / w;
+        const float dv = 2.5f / h;
 
         struct T4VERTEX {
          float p[4];
@@ -291,7 +291,7 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetTexture(0,NULL);
 
       }
-      **/
+      //**/
 
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace.cso");

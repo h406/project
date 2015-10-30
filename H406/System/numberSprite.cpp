@@ -11,20 +11,16 @@
 #include "numberSprite.h"
 #include "Sprite2D.h"
 
-namespace {
-}
-
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool NumberSprite::init(int digit) {
-
+bool NumberSprite::init(int digit, const char* file)
+{
   _digit = digit;
-  _num = 0;
 
   _numberSprite = new Sprite2D*[digit];
   for (int i = 0; i < _digit; i++){
-    _numberSprite[i] = Sprite2D::create("./data/texture/num.png");
+    _numberSprite[i] = Sprite2D::create(file);
     _numberSprite[i]->setAnimID(0);
     this->addChild(_numberSprite[i]);
   }
@@ -32,21 +28,18 @@ bool NumberSprite::init(int digit) {
   return true;
 }
 
-bool NumberSprite::init(int digit, const char* file) {
-  _textureID = App::instance().getRenderer()->getTexture()->createTexture(file);
-  return init(digit);
-}
-
 //==============================================================================
 // update
 //------------------------------------------------------------------------------
-void NumberSprite::update() {
+void NumberSprite::update(void)
+{
 }
 
 //==============================================================================
 // uninit
 //------------------------------------------------------------------------------
-void NumberSprite::uninit() {
+void NumberSprite::uninit(void)
+{
   SafeDeleteArray(_numberSprite);
 }
 
@@ -55,8 +48,6 @@ void NumberSprite::uninit() {
 //------------------------------------------------------------------------------
 void NumberSprite::setNumber(int num)
 {
-  _num = num;
-
   for (int i = 0; i < _digit; i++){
     int cur_num = ((int)num) % (int)pow(10.0f, _digit - i) / (int)pow(10.0f, _digit - i - 1);
     _numberSprite[i]->setAnimID(cur_num);
@@ -68,12 +59,11 @@ void NumberSprite::setNumber(int num)
 //------------------------------------------------------------------------------
 void NumberSprite::setSize(float w, float h)
 {
-  _scl.x = w; _scl.y = h;
-
   for (int i = 0; i < _digit; i++){
+    const float posX = ((w * _digit) * 0.5f) - (w * 0.5f);
     _numberSprite[i]->setSize(w, h);
+    _numberSprite[i]->setPosX((i * w) - posX);
   }
-  setPos(_pos);
 }
 
 //==============================================================================
@@ -83,19 +73,6 @@ void NumberSprite::setColor(const D3DXCOLOR& color)
 {
   for (int i = 0; i < _digit; i++){
     _numberSprite[i]->setColor(color);
-  }
-}
-
-//==============================================================================
-// setPos
-//------------------------------------------------------------------------------
-void NumberSprite::setPos(const Vec3& pos)
-{
-  _pos = pos;
-
-  for (int i = 0; i < _digit; i++){
-    float pos_x = pos.x + (_scl.x  * i) - (_scl.x * (_digit/2));
-    _numberSprite[i]->setPos(pos_x, pos.y);
   }
 }
 

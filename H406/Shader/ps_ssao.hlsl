@@ -24,7 +24,6 @@ float4 main(float2 uv : TEXCOORD0) : COLOR {
   float falloff = 0.000002;
   float rad = 0.03;
 
-
   float4 currentPixelSample = tex2D(normalMap,uv);
   float currentPixelDepth = currentPixelSample.a;
   float3 norm = currentPixelSample.xyz * 2.0f - 1.0f;

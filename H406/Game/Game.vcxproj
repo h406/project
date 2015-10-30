@@ -90,11 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CreateFunc.h" />
+    <ClInclude Include="dataManager.h" />
     <ClInclude Include="EventData.h" />
     <ClInclude Include="EventList.h" />
     <ClInclude Include="eventManager.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="colStage.h" />
+    <ClInclude Include="gameConfig.h" />
     <ClInclude Include="gauge.h" />
     <ClInclude Include="guiManager.h" />
     <ClInclude Include="player.h" />
@@ -104,6 +106,7 @@
     <ClInclude Include="title.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dataManager.cpp" />
     <ClCompile Include="eventManager.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="colStage.cpp" />

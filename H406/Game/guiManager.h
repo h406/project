@@ -11,8 +11,10 @@
 
 #include "CreateFunc.h"
 
-class Gauge;
 class EventManager;
+class EventData;
+class Gauge;
+class NumberSprite;
 
 //==============================================================================
 // class
@@ -20,15 +22,11 @@ class EventManager;
 class GuiManager : public iLayer2D, public CreateFunc<GuiManager>{
 public:
 
-  bool init(void);
+  bool init(EventManager* eventManager);
   void update();
   void uninit();
 
-  void setNumSpriteScl(int playerId, float scl){ _numSpriteScl[playerId] = scl; }
-  void setPlusNumAnimID(int playerId, int animId);
-
-//  void EventListener(EventData* eventData);
-
+  void EventListener(EventData* eventData);
 private:
 
   Gauge* _gauge[2];
@@ -39,6 +37,8 @@ private:
 
   Sprite2D* _plus[2];
   Sprite2D* _plusNum[2];
+
+  NumberSprite* _time;
 };
 
 #endif

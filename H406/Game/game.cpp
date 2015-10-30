@@ -17,8 +17,9 @@
 #include "EventList.h"
 #include "EventData.h"
 #include "guiManager.h"
+#include "dataManager.h"
 
-XFileObject* test = nullptr;
+XFileObject* test;
 
 //------------------------------------------------------------------------------
 // init
@@ -34,6 +35,13 @@ bool Game::init() {
   // イベントマネージャー
   _eventManager = new EventManager();
 
+  // データマネージャー
+  DataManager::instance().init(_eventManager);
+
+  test = XFileObject::create("./data/model/Building.x");
+  test->setScl(5,5,5);
+  this->addChild(test);
+
   // プレイヤー1
   _player[0] = Player::create(0);
   _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f,0,0));
@@ -43,10 +51,6 @@ bool Game::init() {
   _player[1] = Player::create(1);
   _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
   this->addChild(_player[1]);
-
-  test = XFileObject::create("./data/model/Building.x");
-  test->setScl(5,5,5);
-  this->addChild(test);
 
   _mainCamera = camera->createCamera();
   _mainCamera->setPosP({0,600,-900});
@@ -83,7 +87,7 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING, bind(&Game::EventListener,this,placeholders::_1));
 
   // GUIマネージャー
-  _guiManger = GuiManager::create();
+  _guiManger = GuiManager::create(_eventManager);
   this->addChild(_guiManger);
 
   _freezeTime = 0;
@@ -179,7 +183,9 @@ void Game::update() {
     _bultime--;
   }
 
-  test->setRotY(test->getRot().y + 0.05f);
+  test->setRotY(test->getRot().y + 0.01f);
+
+  DataManager::instance().update();
 }
 
 //==============================================================================
@@ -190,25 +196,11 @@ void Game::EventListener(EventData* eventData) {
   // アイテム取得した
   case EventList::PLAYER_1_ITEM_GET:
     _effect->play("get.efk",_player[0]->getPos());
-    _guiManger->setNumSpriteScl(0, 2.f);
-    _guiManger->setPlusNumAnimID(0, (int)(eventData->getUserData()));
     break;
 
   case EventList::PLAYER_2_ITEM_GET:
     _effect->play("get.efk",_player[1]->getPos());
-    _guiManger->setNumSpriteScl(1, 2.f);
-    _guiManger->setPlusNumAnimID(1, (int)(eventData->getUserData()));
     break;
-
-  // アイテム使用
-  case EventList::PLAYER_1_ITEM_USING:
-    _guiManger->setNumSpriteScl(0, 0.7f);
-    break;
-
-  case EventList::PLAYER_2_ITEM_USING:
-    _guiManger->setNumSpriteScl(1, 0.7f);
-    break;
-
   }
 }
 
@@ -217,13 +209,7 @@ void Game::EventListener(EventData* eventData) {
 //------------------------------------------------------------------------------
 void Game::uninit() {
   SafeDelete(_eventManager);
-}
-
-//------------------------------------------------------------------------------
-// GUIに送る用
-//------------------------------------------------------------------------------
-int Game::getPlayerDripNum(int playerId){
-  return _player[playerId]->getDripNum();
+  DataManager::instance().uninit();
 }
 
 //EOF
