@@ -20,6 +20,7 @@
 #include "dataManager.h"
 
 XFileObject* test;
+CameraBace* testcam;
 
 //------------------------------------------------------------------------------
 // init
@@ -64,6 +65,10 @@ bool Game::init() {
   _playerCam[1] = camera->createCamera();
   _playerCam[1]->setPosP({0,0,0});
   _playerCam[1]->setPosR({0,0,0});
+
+  testcam = camera->createCamera();
+  testcam->setPosP({0,0,0});
+  testcam->setPosR({0,0,0});
 
   _effect = Effect::create();
   _effect->setScl(Vec3(1,1,1));
@@ -132,8 +137,8 @@ void Game::update() {
 
     Vec2 fieldSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
 
-    //int id = _effect->play("stage_lightup.efk",Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f,0,randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
-    //_effect->setEffectScl(id,Vec3(50,50,50));
+    int id = _effect->play("stage_lightup.efk",Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f,0,randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
+    _effect->setEffectScl(id,Vec3(50,50,50));
   }
 
   if(input->isTrigger(0,VK_INPUT::_2)) {
@@ -175,6 +180,18 @@ void Game::update() {
 
   _mainCamera->setPosP(Vec3(0,sinf(rot) * length,cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec);
+
+  // hack
+  static float f = 0;
+  f -= 0.01f;
+  testcam->setPosR(Vec3(cosf(f) * 600,150 * (sinf(f)+1),sinf(f) * 600));
+  testcam->setPosP(Vec3(0,100,0));
+  if(input->isTrigger(0,VK_INPUT::_3)) {
+    App::instance().getRenderer()->getCamera()->setCamera(testcam);
+  }
+  else if(input->isRelease(0,VK_INPUT::_3)) {
+    App::instance().getRenderer()->getCamera()->setCamera(_mainCamera);
+  }
 
   if(_bultime) {
     Vec3 ram(float(rand() % 10),float(rand() % 10),0);

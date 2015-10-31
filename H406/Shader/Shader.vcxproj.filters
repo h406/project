@@ -83,5 +83,8 @@
     <FxCompile Include="ps_dirlight.hlsl">
       <Filter>posteffect</Filter>
     </FxCompile>
+    <FxCompile Include="ps_parpix.hlsl">
+      <Filter>posteffect</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

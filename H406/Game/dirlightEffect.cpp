@@ -33,14 +33,14 @@ void DirlightEffect::draw(Renderer *renderer,Sprite2D* sprite) {
 
   shader->setPixShader("ps_dirlight.cso");
 
-  pDevice->SetTexture(0,renderer->getNormalTex());
+  pDevice->SetTexture(0,renderer->getNormalDepthTex());
 
   Vec4 color[3];
   float power[3];
   Vec3 dir[3];
 
   color[0] = Vec4(1.f,1.f,1.f,1);
-  power[0] = 1.0f;
+  power[0] = 0.1f;
   dir[0] = Vec3(0.5f,-1,2);
 
   color[1] = Vec4(1.f,1.f,1.f,1);
@@ -48,8 +48,8 @@ void DirlightEffect::draw(Renderer *renderer,Sprite2D* sprite) {
   dir[1] = Vec3(-0.5f,-1,-2);
 
   color[2] = Vec4(1.f,1.f,1.f,1);
-  power[2] = 0.6f;
-  dir[2] = Vec3(0.5f,-3.f,0);
+  power[2] = 0.3f;
+  dir[2] = Vec3(0.5f,3.f,0);
 
   for(int i = 0; i < 3; i++) {
     D3DXVec3Normalize(&dir[i],&dir[i]);
@@ -72,7 +72,7 @@ void DirlightEffect::draw(Renderer *renderer,Sprite2D* sprite) {
     {w,h,0.1f,1.0f,1.0f,1.0f},
     {0.0f,h,0.1f,1.0f,0.0f,1.0f},
   };
-
+  pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
   pDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCCOLOR);
   pDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_ZERO);
 
@@ -82,6 +82,7 @@ void DirlightEffect::draw(Renderer *renderer,Sprite2D* sprite) {
 
   pDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   pDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
+  pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
 }
 
 //==============================================================================

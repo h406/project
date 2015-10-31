@@ -42,8 +42,8 @@ public:
   void setFadeBG(Sprite2D* sprite) { _fadeBG = sprite; }
   Sprite2D* getFadeBG() const { return _fadeBG; }
 
-  LPDIRECT3DTEXTURE9 getNormalTex() { return _TexNormal; }
-  LPDIRECT3DTEXTURE9 getDepthTex() { return _TexDepth; }
+  LPDIRECT3DTEXTURE9 getNormalDepthTex() { return _TexNormalDepth; }
+  LPDIRECT3DTEXTURE9 getPosTex() { return _TexPos; }
   LPDIRECT3DTEXTURE9 getColorTex() { return _TexColor; }
 
 private:
@@ -71,13 +71,13 @@ private:
   // ポストエフェクト
   PostEffect* _postEffect;
 
-  // 法線
-  LPDIRECT3DTEXTURE9 _TexNormal;
-  LPDIRECT3DSURFACE9 _SurNormal;
+  // 法線 + 深度
+  LPDIRECT3DTEXTURE9 _TexNormalDepth;
+  LPDIRECT3DSURFACE9 _SurNormalDepth;
 
-  // 深度
-  LPDIRECT3DTEXTURE9 _TexDepth;
-  LPDIRECT3DSURFACE9 _SurDepth;
+  // ポジション
+  LPDIRECT3DTEXTURE9 _TexPos;
+  LPDIRECT3DSURFACE9 _SurPos;
 
   // カラーテクスチャ
   LPDIRECT3DTEXTURE9 _TexColor;

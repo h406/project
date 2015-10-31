@@ -92,7 +92,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   //---- レンダーステートの設定 ----
   _pD3DDevice->SetRenderState(D3DRS_CULLMODE,D3DCULL_CCW);	// カリングの設定
 
-  _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);			// アルファブレンドの有効化
+  _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);			// アルファブレンドの有効化
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
   _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
@@ -102,7 +102,6 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
   _pD3DDevice->SetRenderState(D3DRS_SHADEMODE,D3DSHADE_GOURAUD);
   _pD3DDevice->SetRenderState(D3DRS_LIGHTING,FALSE);
-  _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
 
 
   for(int i = 0; i < 4; ++i) {
@@ -144,10 +143,10 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetViewport(&vp);
 
   // マルチレンダー
-  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexNormal,0);
-  _TexNormal->GetSurfaceLevel(0,&_SurNormal);
-  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_R32F,D3DPOOL_DEFAULT,&_TexDepth,0);
-  _TexDepth->GetSurfaceLevel(0,&_SurDepth);
+  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexNormalDepth,0);
+  _TexNormalDepth->GetSurfaceLevel(0,&_SurNormalDepth);
+  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexPos,0);
+  _TexPos->GetSurfaceLevel(0,&_SurPos);
   _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&_TexColor,0);
   _TexColor->GetSurfaceLevel(0,&_SurColor);
 }
@@ -162,10 +161,10 @@ Renderer::~Renderer() {
   SafeDelete(_shader);
   SafeDelete(_postEffect);
 
-  SafeRelease(_SurNormal);
-  SafeRelease(_TexNormal);
-  SafeRelease(_SurDepth);
-  SafeRelease(_TexDepth);
+  SafeRelease(_SurNormalDepth);
+  SafeRelease(_TexNormalDepth);
+  SafeRelease(_SurPos);
+  SafeRelease(_TexPos);
   SafeRelease(_TexColor);
   SafeRelease(_SurColor);
   SafeRelease(_pD3DDevice);
@@ -198,8 +197,8 @@ bool Renderer::draw(node* baceNode) {
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
 
     // レンダーターゲット設定
-    _pD3DDevice->SetRenderTarget(1,_SurNormal);
-    _pD3DDevice->SetRenderTarget(2,_SurDepth);
+    _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
+    _pD3DDevice->SetRenderTarget(2,_SurPos);
     _pD3DDevice->SetRenderTarget(3,_SurColor);
 
     DWORD test;
@@ -221,8 +220,8 @@ bool Renderer::draw(node* baceNode) {
         baceNode->drawChild(this,NodeType::lightOff3D);
       }
 
-      _pD3DDevice->SetRenderTarget(1,_SurNormal);
-      _pD3DDevice->SetRenderTarget(2,_SurDepth);
+      _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
+      _pD3DDevice->SetRenderTarget(2,_SurPos);
       _pD3DDevice->SetRenderTarget(3,_SurColor);
 
       // ベースピクセルシェーダー
@@ -235,12 +234,7 @@ bool Renderer::draw(node* baceNode) {
       baceNode->drawChild(this,NodeType::normal3D);
 
 
-      // ベースピクセルシェーダー
-      _shader->setPixShader("ps_bace.cso");
-
-      // エフェクト
-      baceNode->drawChild(this,NodeType::effect);
-
+      _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);
       // ポストエフェクト
       for(int i = 0; i < 4; ++i) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_CLAMP);
@@ -258,8 +252,13 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetTexture(i,nullptr);
       }
 
+      _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
+
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace.cso");
+
+      // エフェクト
+      baceNode->drawChild(this,NodeType::effect);
 
       //---- サンプラーステートの設定 ----
       for(int i = 0; i < 4; ++i) {

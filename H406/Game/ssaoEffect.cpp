@@ -18,6 +18,8 @@ bool SsaoEffect::init() {
   pDevice->CreateTexture(16,16,1,0,D3DFMT_A32B32G32R32F,D3DPOOL_MANAGED,&_rayMap,0);
   D3DXFillTexture(_rayMap,makeRayMap,0);
 
+  App::instance().getRenderer()->getTexture()->createTexture("./data/texture/rand.dds");
+
   return true;
 }
 
@@ -41,15 +43,12 @@ void SsaoEffect::draw(Renderer *renderer,Sprite2D* sprite) {
 
   shader->setPixShader("ps_ssao.cso");
 
-  pDevice->SetRenderTarget(1,nullptr);
-  pDevice->SetTexture(0,_rayMap);
-  pDevice->SetTexture(1,renderer->getNormalTex());
-  pDevice->SetTexture(2,renderer->getDepthTex());
+  pDevice->SetTexture(0,renderer->getNormalDepthTex());
+  pDevice->SetTexture(1,renderer->getTexture()->getTexture("./data/texture/rand.dds"));
 
   pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
   pDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_ZERO);
   pDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_SRCALPHA);
-
 
   struct T4VERTEX {
     float p[4];
