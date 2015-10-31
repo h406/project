@@ -91,6 +91,7 @@
   <ItemGroup>
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="dataManager.h" />
+    <ClInclude Include="dirlightEffect.h" />
     <ClInclude Include="edgeEffect.h" />
     <ClInclude Include="EventData.h" />
     <ClInclude Include="EventList.h" />
@@ -101,6 +102,7 @@
     <ClInclude Include="gauge.h" />
     <ClInclude Include="guiManager.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="ssaoEffect.h" />
     <ClInclude Include="staticStage.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="stdafx.h" />
@@ -108,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dataManager.cpp" />
+    <ClCompile Include="dirlightEffect.cpp" />
     <ClCompile Include="edgeEffect.cpp" />
     <ClCompile Include="eventManager.cpp" />
     <ClCompile Include="game.cpp" />
@@ -116,6 +119,7 @@
     <ClCompile Include="guiManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="ssaoEffect.cpp" />
     <ClCompile Include="staticStage.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="stdafx.cpp">

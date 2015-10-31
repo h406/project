@@ -29,6 +29,7 @@ PostEffect::PostEffect() {
 PostEffect::~PostEffect() {
   // 
   for(iPostEffect* effect : _postEffect) {
+    effect->uninit();
     SafeDelete(effect);
   }
 
@@ -60,6 +61,7 @@ void PostEffect::draw(Renderer* renderer) {
 // addPostEffect
 //------------------------------------------------------------------------------
 void PostEffect::addPostEffect(iPostEffect* effect) {
+  effect->init();
   _postEffect.push_back(effect);
 }
 

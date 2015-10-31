@@ -93,6 +93,12 @@
     <ClInclude Include="edgeEffect.h">
       <Filter>effect</Filter>
     </ClInclude>
+    <ClInclude Include="ssaoEffect.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="dirlightEffect.h">
+      <Filter>effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -130,6 +136,12 @@
       <Filter>game\system\data</Filter>
     </ClCompile>
     <ClCompile Include="edgeEffect.cpp">
+      <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ssaoEffect.cpp">
+      <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="dirlightEffect.cpp">
       <Filter>effect</Filter>
     </ClCompile>
   </ItemGroup>

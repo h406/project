@@ -1,27 +1,29 @@
 //==============================================================================
 //
-// iPostEffect[iPostEffect.h]
+// ssaoEffect[ssaoEffect.h]
 // Author : Yasuaki Yamashita : 2015/10/30
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _IPOSTEFFECT_H_
-#define _IPOSTEFFECT_H_
-
-class Renderer;
-class Sprite2D;
+#ifndef _SSAO_EFFECT_H_
+#define _SSAO_EFFECT_H_
 
 //==============================================================================
-// iPostEffect
+// class
 //------------------------------------------------------------------------------
-class iPostEffect {
+class SsaoEffect : public iPostEffect {
 public:
-  virtual bool init() = 0;
-  virtual void update() = 0;
-  virtual void draw(Renderer *renderer,Sprite2D* sprite) = 0;
-  virtual void uninit() = 0;
+  bool init();
+  void update();
+  void draw(Renderer *renderer,Sprite2D* sprite);
+  void uninit();
+
+  static void WINAPI makeRayMap(D3DXVECTOR4* pOut,const D3DXVECTOR2*,const D3DXVECTOR2*,void*);
+
+private:
+  LPDIRECT3DTEXTURE9       _rayMap;
 };
 
 #endif

@@ -17,7 +17,7 @@ float4 main(float2 uv : TEXCOORD0) : COLOR{
 
   float2 pixel = float2(1.0f / 1280.f,1.0f / 720.f);
 
-  float z = (1 - sin(tex2D(TexSamp1,uv).r * (3.14159265f * 0.5f))) * 2.f;
+  float z = (1 - sin(tex2D(TexSamp1,uv).r * (3.14159265f * 0.5f))) * 2.5f;
   z = max(0.5f,z);
 
   // ”»’è‚Ì’l

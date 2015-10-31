@@ -10,22 +10,23 @@
 //******************************************************************************
 
 
-#define SAMPLES 16
+#define SAMPLES 10
 #define invSamples  (1.0 / SAMPLES);
 
 sampler rayMap;
 sampler normalMap;
+sampler depthMap;
 
 // bace pixcel shader
 float4 main(float2 uv : TEXCOORD0) : COLOR {
-  float totStrength = 3.38;
-  float strength = 0.005;
+  float totStrength = 1.58;
+  float strength = 0.05;
   float offset = 18.0;
-  float falloff = 0.000002;
-  float rad = 0.03;
+  float falloff = 0.002;
+  float rad = 0.003;
 
   float4 currentPixelSample = tex2D(normalMap,uv);
-  float currentPixelDepth = currentPixelSample.a;
+  float currentPixelDepth = tex2D(depthMap,uv).r;
   float3 norm = currentPixelSample.xyz * 2.0f - 1.0f;
 
   float bl = 0.0;
@@ -41,7 +42,7 @@ float4 main(float2 uv : TEXCOORD0) : COLOR {
     se = uv + sign(dot(ray,norm)) * ray.xy * float2(1.0f,-1.0f);
     float4 occluderFragment = tex2D(normalMap,se.xy);
     occNorm = occluderFragment.xyz * 2.0f - 1.0f;
-    depthDifference = currentPixelDepth - occluderFragment.a;
+    depthDifference = currentPixelDepth - tex2D(depthMap,se.xy).r;
     normDiff = (1.0 - dot(normalize(occNorm),normalize(norm)));
     bl += step(falloff,depthDifference) * normDiff * (1.0 - smoothstep(falloff,strength,depthDifference));
   }

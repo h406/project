@@ -132,8 +132,8 @@ void Game::update() {
 
     Vec2 fieldSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
 
-    int id = _effect->play("stage_lightup.efk",Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f,0,randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
-    _effect->setEffectScl(id,Vec3(50,50,50));
+    //int id = _effect->play("stage_lightup.efk",Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f,0,randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
+    //_effect->setEffectScl(id,Vec3(50,50,50));
   }
 
   if(input->isTrigger(0,VK_INPUT::_2)) {

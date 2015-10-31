@@ -18,6 +18,7 @@ public:
   bool init();
   void update();
   void draw(Renderer *renderer,Sprite2D* sprite);
+  void uninit();
 };
 
 #endif

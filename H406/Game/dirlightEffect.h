@@ -1,27 +1,24 @@
 //==============================================================================
 //
-// iPostEffect[iPostEffect.h]
+// dirlightEffect[dirlightEffect.h]
 // Author : Yasuaki Yamashita : 2015/10/30
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _IPOSTEFFECT_H_
-#define _IPOSTEFFECT_H_
-
-class Renderer;
-class Sprite2D;
+#ifndef _DIRLIGHT_EFFECT_H_
+#define _DIRLIGHT_EFFECT_H_
 
 //==============================================================================
-// iPostEffect
+// class
 //------------------------------------------------------------------------------
-class iPostEffect {
+class DirlightEffect : public iPostEffect {
 public:
-  virtual bool init() = 0;
-  virtual void update() = 0;
-  virtual void draw(Renderer *renderer,Sprite2D* sprite) = 0;
-  virtual void uninit() = 0;
+  bool init();
+  void update();
+  void draw(Renderer *renderer,Sprite2D* sprite);
+  void uninit();
 };
 
 #endif

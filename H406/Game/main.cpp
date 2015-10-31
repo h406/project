@@ -7,6 +7,8 @@
 #include "title.h"
 #include "game.h"
 #include "edgeEffect.h"
+#include "ssaoEffect.h"
+#include "dirlightEffect.h"
 
 //------------------------------------------------------------------------------
 // WinMain
@@ -18,6 +20,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   app.setTitle("H406");
 
   // シェーダ適用
+  app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
   app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
 
   // 最初のシーン
