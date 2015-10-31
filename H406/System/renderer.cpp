@@ -234,6 +234,13 @@ bool Renderer::draw(node* baceNode) {
       // 普通の3D
       baceNode->drawChild(this,NodeType::normal3D);
 
+
+      // ベースピクセルシェーダー
+      _shader->setPixShader("ps_bace.cso");
+
+      // エフェクト
+      baceNode->drawChild(this,NodeType::effect);
+
       // ポストエフェクト
       for(int i = 0; i < 4; ++i) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_CLAMP);
@@ -246,16 +253,13 @@ bool Renderer::draw(node* baceNode) {
       _pD3DDevice->SetRenderTarget(2,nullptr);
       _pD3DDevice->SetRenderTarget(3,nullptr);
       _postEffect->draw(this);
-      
+
       for(int i = 0; i < 4; ++i) {
         _pD3DDevice->SetTexture(i,nullptr);
       }
 
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace.cso");
-
-      // エフェクト
-      baceNode->drawChild(this,NodeType::effect);
 
       //---- サンプラーステートの設定 ----
       for(int i = 0; i < 4; ++i) {
