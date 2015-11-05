@@ -12,24 +12,62 @@
 sampler norDepthMap : register(s0);
 sampler RandomMap : register(s1);
 
+//*
+float4 main(float2 uv : TEXCOORD0) : COLOR{
 
+  float Occlusion = 0.07f;
 
+  float2 rand2[16] =
+  {
+    float2(0.53812504,0.18565957),
+    float2(0.13790712,0.24864247),
+    float2(0.33715037,0.56794053),
+    float2(-0.6999805,-0.04511441),
+    float2(0.06896307,-0.15983082),
+    float2(0.056099437,0.006954967),
+    float2(-0.014653638,0.14027752),
+    float2(0.010019933,-0.1924225),
+    float2(-0.35775623,-0.5301969),
+    float2(-0.3169221,0.106360726),
+    float2(0.010350345,-0.58698344),
+    float2(-0.08972908,-0.49408212),
+    float2(0.7119986,-0.0154690035),
+    float2(-0.053382345,0.059675813),
+    float2(0.035267662,-0.063188605),
+    float2(-0.47761092,0.2847911)
+  };
+
+  float depth = tex2D(norDepthMap,uv).a;
+
+  float color = 1.0f;
+
+  for(int i = 0; i < 16; i++) {
+    float2 d = rand2[i] * 0.015f;
+
+      float depth1 = tex2D(norDepthMap,uv + d).a;
+    float depth2 = tex2D(norDepthMap,uv - d).a;
+
+    if(depth >(depth1 + depth2) * 0.5f + 0.005f
+      && depth < (depth1 + depth2) * 0.5f + 0.02f) {
+      color -= Occlusion;
+    }
+  }
+
+  float4 outDiffuse = color;
+    outDiffuse.a = 1.0f;
+
+  return outDiffuse;
+}
+
+/*/
 #define SAMPLES 10
 
 float4 main(float2 uv : TEXCOORD0) : COLOR{
 
-  //float2 centerOrigin = uv * 2.0 - 1.0;
-  //float cornerShade = 1.0 - pow(length(centerOrigin * 0.75),10.0);
-  //// sinを使ってノイズを表現
-  //float3 noiseLine = (3.0 + sin(uv.y * 200.0 )) / 4.0;
-  //return float4(noiseLine * 0.5f, 1);
-
-
-
-  float density = 5.0;
-  float strength = 0.05;
-  float falloff = 0.0001;
-  float rad = 0.005;
+  float density = 7.0;
+  float strength = 0.005;
+  float falloff = 0.000001;
+  float rad = 0.004;
   float blur = 1.0;
   float dotRange = 0.5;
   float optimize = 1.0;
@@ -97,3 +135,4 @@ float4 main(float2 uv : TEXCOORD0) : COLOR{
 
   return  float4(ao,ao,ao,1);
 }
+//*/

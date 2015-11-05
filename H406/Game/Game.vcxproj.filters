@@ -102,6 +102,9 @@
     <ClInclude Include="parpix.h">
       <Filter>effect</Filter>
     </ClInclude>
+    <ClInclude Include="test.h">
+      <Filter>effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -148,6 +151,9 @@
       <Filter>effect</Filter>
     </ClCompile>
     <ClCompile Include="parpix.cpp">
+      <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp">
       <Filter>effect</Filter>
     </ClCompile>
   </ItemGroup>

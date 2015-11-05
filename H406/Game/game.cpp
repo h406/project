@@ -39,8 +39,9 @@ bool Game::init() {
   // データマネージャー
   DataManager::instance().init(_eventManager);
 
-  test = XFileObject::create("./data/model/Building.x");
+  test = XFileObject::create("./data/model/bill.x");
   test->setScl(5,5,5);
+  test->setPosY(-5);
   this->addChild(test);
 
   // プレイヤー1
@@ -187,10 +188,10 @@ void Game::update() {
   testcam->setPosR(Vec3(cosf(f) * 600,150 * (sinf(f)+1),sinf(f) * 600));
   testcam->setPosP(Vec3(0,100,0));
   if(input->isTrigger(0,VK_INPUT::_3)) {
-    App::instance().getRenderer()->getCamera()->setCamera(testcam);
+    App::instance().getRenderer()->getCamera()->setCamera(testcam, 10);
   }
   else if(input->isRelease(0,VK_INPUT::_3)) {
-    App::instance().getRenderer()->getCamera()->setCamera(_mainCamera);
+    App::instance().getRenderer()->getCamera()->setCamera(_mainCamera, 10);
   }
 
   if(_bultime) {
@@ -201,6 +202,11 @@ void Game::update() {
   }
 
   test->setRotY(test->getRot().y + 0.01f);
+
+  char fps[3];
+  sprintf_s(fps,"%d", App::instance().getFps());
+
+  App::instance().setTitle(fps);
 
   DataManager::instance().update();
 }

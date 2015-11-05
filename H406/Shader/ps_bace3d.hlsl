@@ -25,7 +25,7 @@ OUTPUT_PS main(InputPS inPS)
   OUTPUT_PS output;
   output.col = inPS.material * tex2D(TexSamp0,inPS.texCoord);
   output.norDepth = float4((normalize(inPS.normal) + 1) * 0.5f,inPS.posH.z / gFar);
-  output.pos = float4((inPS.posW / gFar + 1.f) * 0.5f,1);
+  output.pos = float4(inPS.posW,1);
   output.col2 = output.col;
   return output;
 }

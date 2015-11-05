@@ -12,6 +12,7 @@
 
 sampler normap : register(s0);
 sampler posmap : register(s1);
+sampler colmap : register(s2);
 
 uniform float  gFar;
 uniform float3 gDLight[4];
@@ -21,7 +22,7 @@ uniform float3 gCameraPos;
 // bace pixcel shader
 float4 main(float2 uv : TEXCOORD0) : COLOR{
   float3 normal = tex2D(normap,uv).xyz * 2 - 1;
-  float3 pos = (tex2D(posmap,uv).xyz * 2 - 1) * gFar;
+  float3 pos = tex2D(posmap,uv).xyz;//(tex2D(posmap,uv).xyz * 2 - 1) * gFar;
   float3 color = 0;
 
   for(int i = 0; i < 4; i++) {
@@ -40,7 +41,7 @@ float4 main(float2 uv : TEXCOORD0) : COLOR{
 
     // ライティング計算
     float3 lighting = light * gDLightCol[i] + s * gDLightCol[i] * float3(1.0f,1.0f,1.0f);
-    color += lighting.rgb / a;
+      color += tex2D(colmap,uv).xyz * (lighting.rgb / a);
   }
 
   return float4(color,1);

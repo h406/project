@@ -143,9 +143,9 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetViewport(&vp);
 
   // マルチレンダー
-  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexNormalDepth,0);
+  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A16B16G16R16F,D3DPOOL_DEFAULT,&_TexNormalDepth,0);
   _TexNormalDepth->GetSurfaceLevel(0,&_SurNormalDepth);
-  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexPos,0);
+  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A16B16G16R16F,D3DPOOL_DEFAULT,&_TexPos,0);
   _TexPos->GetSurfaceLevel(0,&_SurPos);
   _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&_TexColor,0);
   _TexColor->GetSurfaceLevel(0,&_SurColor);
@@ -193,37 +193,48 @@ void Renderer::update() {
 //------------------------------------------------------------------------------
 bool Renderer::draw(node* baceNode) {
 
-    // シーンの描画開始
+  // レンダーターゲット設定
+  _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
+  _pD3DDevice->SetRenderTarget(2,_SurPos);
+  _pD3DDevice->SetRenderTarget(3,_SurColor);
+
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
-
-    // レンダーターゲット設定
-    _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
-    _pD3DDevice->SetRenderTarget(2,_SurPos);
-    _pD3DDevice->SetRenderTarget(3,_SurColor);
-
-    DWORD test;
-    _pD3DDevice->GetSamplerState(0,D3DSAMP_MIPFILTER,&test);
-
     // シーンのクリア
-    _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(255,255,255),1.0f,0);
+    _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(0,0,0),1.0f,0);
+    // シーンの描画終了
+    _pD3DDevice->EndScene();
+  }
+
+  _pD3DDevice->SetRenderTarget(1,nullptr);
+  _pD3DDevice->SetRenderTarget(2,nullptr);
+  _pD3DDevice->SetRenderTarget(3,nullptr);
+
+  // シーンの描画開始
+  if(SUCCEEDED(_pD3DDevice->BeginScene())) {
+    
+    // シーンのクリア
+    _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(0,0,0),1.0f,0);
     
     // ベースノード
     if(baceNode != nullptr) {
       {
         // ベースピクセルシェーダー
         _shader->setPixShader("ps_bace.cso");
-        _pD3DDevice->SetRenderTarget(1,nullptr);
-        _pD3DDevice->SetRenderTarget(2,nullptr);
-        _pD3DDevice->SetRenderTarget(3,nullptr);
 
         // 普通の3D
         baceNode->drawChild(this,NodeType::lightOff3D);
       }
 
-      _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
-      _pD3DDevice->SetRenderTarget(2,_SurPos);
-      _pD3DDevice->SetRenderTarget(3,_SurColor);
+      // シーンの描画終了
+      _pD3DDevice->EndScene();
+    }
 
+    _pD3DDevice->SetRenderTarget(1,_SurNormalDepth);
+    _pD3DDevice->SetRenderTarget(2,_SurPos);
+    _pD3DDevice->SetRenderTarget(3,_SurColor);
+
+    // シーンの描画開始
+    if(SUCCEEDED(_pD3DDevice->BeginScene())) {
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace3d.cso");
 
@@ -233,6 +244,16 @@ bool Renderer::draw(node* baceNode) {
       // 普通の3D
       baceNode->drawChild(this,NodeType::normal3D);
 
+      // シーンの描画終了
+      _pD3DDevice->EndScene();
+    }
+
+    _pD3DDevice->SetRenderTarget(1,nullptr);
+    _pD3DDevice->SetRenderTarget(2,nullptr);
+    _pD3DDevice->SetRenderTarget(3,nullptr);
+
+    // シーンの描画開始
+    if(SUCCEEDED(_pD3DDevice->BeginScene())) {
 
       _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);
       // ポストエフェクト
@@ -243,9 +264,6 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_POINT);
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MIPFILTER,D3DTEXF_POINT);
       }
-      _pD3DDevice->SetRenderTarget(1,nullptr);
-      _pD3DDevice->SetRenderTarget(2,nullptr);
-      _pD3DDevice->SetRenderTarget(3,nullptr);
       _postEffect->draw(this);
 
       for(int i = 0; i < 4; ++i) {

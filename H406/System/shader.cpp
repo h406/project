@@ -27,7 +27,7 @@ namespace {
  inline DWORD* fileread(const char* filename) {
     FILE *fp = nullptr;
     long size;
-    fopen_s(&fp,filename,"r");
+    fopen_s(&fp,filename,"rb");
     fseek(fp,0,SEEK_END);
     size = ftell(fp);
     fseek(fp,0,SEEK_SET);

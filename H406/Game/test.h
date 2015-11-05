@@ -1,19 +1,19 @@
 //==============================================================================
 //
-// ssaoEffect[ssaoEffect.h]
-// Author : Yasuaki Yamashita : 2015/10/30
+// testEffect[test.h]
+// Author : Yasuaki Yamashita : 2015/10/31
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _SSAO_EFFECT_H_
-#define _SSAO_EFFECT_H_
+#ifndef _TEST_EFFECT_H_
+#define _TEST_EFFECT_H_
 
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class SsaoEffect : public iPostEffect {
+class TestEffect : public iPostEffect {
 public:
   bool init();
   void update();

@@ -107,6 +107,7 @@
     <ClInclude Include="staticStage.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="test.h" />
     <ClInclude Include="title.h" />
   </ItemGroup>
   <ItemGroup>
@@ -132,6 +133,7 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="title.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
