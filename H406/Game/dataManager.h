@@ -22,12 +22,14 @@ public:
   int getRandSeed()const { return _randSeed; }
   int getTime()const { return _time; }
   int getRound()const { return _round; }
+  int getPlayerRoundWin(int playerId)const { return _playerRoundWin[playerId]; }
   int getPlayerDripNum(int playerId)const { return _playerDripNum[playerId]; }
 
 protected:
   int _randSeed;
   int _time;
   int _round;
+  int _playerRoundWin[GameConfig::kPLAYER_MAX];
   int _playerDripNum[GameConfig::kPLAYER_MAX];
 };
 
@@ -42,6 +44,7 @@ private:
     void setRandSeed(int seed){ this->_randSeed = seed; }
     void setTime(int time){ this->_time = time; }
     void setRound(int round){ this->_round = round; }
+    void setPlayerRoundWin(int playerId, int roundWin){ this->_playerRoundWin[playerId] = roundWin; }
     void setPlayerDripNum(int playerId, int dripNum){ this->_playerDripNum[playerId] = dripNum; }
   };
 
@@ -55,6 +58,8 @@ public:
   Data* getData() { return _data; }
 
   void event(EventData* eventData);
+
+  bool isInstance(void){ return _data != nullptr ? true : false; }
 
 private:
   DataManager(void);

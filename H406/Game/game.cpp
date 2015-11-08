@@ -22,6 +22,8 @@
 XFileObject* test;
 CameraBace* testcam;
 
+#include "../System/numberSprite.h"
+
 //------------------------------------------------------------------------------
 // init
 //------------------------------------------------------------------------------
@@ -201,6 +203,36 @@ void Game::update() {
   }
 
   test->setRotY(test->getRot().y + 0.01f);
+
+  if (DataManager::instance().getData()->getTime() == 0){
+    int player_map_num[2] = { 0, 0 };
+    for (int x = 0; x < Stage::kNUM_X; x++){
+      for (int y = 0; y < Stage::kNUM_Y; y++){
+        Stage::FIELD_ID id = _stage->getFieldID(x, y);
+        if (id == Stage::FIELD_ID::PLAYER_1) player_map_num[0]++;
+        if (id == Stage::FIELD_ID::PLAYER_2) player_map_num[1]++;
+      }
+    }
+    // Ÿ”s”»’è
+    if (player_map_num[0] == player_map_num[1]){
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_ROUND_WIN)), nullptr);
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_ROUND_WIN)), nullptr);
+    }
+    else if (player_map_num[0] > player_map_num[1]){
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_ROUND_WIN)), nullptr);
+    }
+    else {
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_ROUND_WIN)), nullptr);
+    }
+    // ƒŠƒZƒbƒg
+    const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
+    _stage->reset();
+    _player[0]->setPos(Vec3(-500 +  bordSize.x * 0.5f, 0, 0));
+    _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
+    _player[0]->setDripNum(0);
+    _player[1]->setDripNum(0);
+    _eventManager->dispatchEvent(EventList(int(EventList::NEXT_ROUND)), nullptr);
+  }
 
   DataManager::instance().update();
 }

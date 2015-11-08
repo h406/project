@@ -43,6 +43,9 @@
     <Filter Include="effect">
       <UniqueIdentifier>{b4b6c159-2ba5-45a4-bdb0-a4ece0f6c8a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game\gameObject\gui\roundIcon">
+      <UniqueIdentifier>{b1d57e2b-547d-48dd-bd31-d95bac96e7df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -102,6 +105,9 @@
     <ClInclude Include="parpix.h">
       <Filter>effect</Filter>
     </ClInclude>
+    <ClInclude Include="roundIcon.h">
+      <Filter>game\gameObject\gui\roundIcon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="parpix.cpp">
       <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="roundIcon.cpp">
+      <Filter>game\gameObject\gui\roundIcon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

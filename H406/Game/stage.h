@@ -35,6 +35,7 @@ public:
 
   FIELD_ID getFieldID(int x,int y) const;
   void setFieldID(int x,int y,FIELD_ID id);
+  void reset(void);
 
   const Vec2& getStageSize() const { return _stageSize; }
 

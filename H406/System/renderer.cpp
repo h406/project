@@ -143,9 +143,9 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetViewport(&vp);
 
   // マルチレンダー
-  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexNormalDepth,0);
+  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A16B16G16R16F,D3DPOOL_DEFAULT,&_TexNormalDepth,0);
   _TexNormalDepth->GetSurfaceLevel(0,&_SurNormalDepth);
-  _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A32B32G32R32F,D3DPOOL_DEFAULT,&_TexPos,0);
+  _pD3DDevice->CreateTexture(windowSize.cx, windowSize.cy, 1, D3DUSAGE_RENDERTARGET, D3DFMT_A16B16G16R16F, D3DPOOL_DEFAULT, &_TexPos, 0);
   _TexPos->GetSurfaceLevel(0,&_SurPos);
   _pD3DDevice->CreateTexture(windowSize.cx,windowSize.cy,1,D3DUSAGE_RENDERTARGET,D3DFMT_A8R8G8B8,D3DPOOL_DEFAULT,&_TexColor,0);
   _TexColor->GetSurfaceLevel(0,&_SurColor);

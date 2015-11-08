@@ -103,6 +103,7 @@
     <ClInclude Include="guiManager.h" />
     <ClInclude Include="parpix.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="roundIcon.h" />
     <ClInclude Include="ssaoEffect.h" />
     <ClInclude Include="staticStage.h" />
     <ClInclude Include="stage.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parpix.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="roundIcon.cpp" />
     <ClCompile Include="ssaoEffect.cpp" />
     <ClCompile Include="staticStage.cpp" />
     <ClCompile Include="stage.cpp" />
