@@ -26,6 +26,7 @@ public:
     NONE = 0,
     PLAYER_1,
     PLAYER_2,
+    DRIP,
     ITEM,
   };
 

@@ -137,10 +137,12 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_roundIcon);
 
   // イベントセット
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_1_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::NEXT_ROUND, bind(&GuiManager::EventListener, this, placeholders::_1));
@@ -203,6 +205,25 @@ void GuiManager::uninit(void)
 //------------------------------------------------------------------------------
 void GuiManager::EventListener(EventData* eventData) {
   switch (eventData->getEvent()) {
+
+    // 塗るの取得した
+  case EventList::PLAYER_1_DRIP_GET:
+    _numSpriteScl[0] = 2.0f;
+    _plusNum[0]->setNumber((int)eventData->getUserData());
+    break;
+  case EventList::PLAYER_2_DRIP_GET:
+    _numSpriteScl[1] = 2.0f;
+    _plusNum[1]->setNumber((int)eventData->getUserData());
+    break;
+
+    // 塗るの使用
+  case EventList::PLAYER_1_DRIP_USING:
+    _numSpriteScl[0] = 0.7f;
+    break;
+  case EventList::PLAYER_2_DRIP_USING:
+    _numSpriteScl[1] = 0.7f;
+    break;
+
     // アイテム取得した
   case EventList::PLAYER_1_ITEM_GET:
     _numSpriteScl[0] = 2.0f;
@@ -213,20 +234,10 @@ void GuiManager::EventListener(EventData* eventData) {
     _plusNum[1]->setNumber((int)eventData->getUserData());
     break;
 
-    // アイテム使用
-  case EventList::PLAYER_1_ITEM_USING:
-    _numSpriteScl[0] = 0.7f;
-    break;
-
-  case EventList::PLAYER_2_ITEM_USING:
-    _numSpriteScl[1] = 0.7f;
-    break;
-
     // ラウンド勝ち
   case EventList::PLAYER_1_ROUND_WIN:
     _roundIcon->setRoundWinNum(0, DataManager::instance().getData()->getPlayerRoundWin(0));
     break;
-
   case EventList::PLAYER_2_ROUND_WIN:
     _roundIcon->setRoundWinNum(1, DataManager::instance().getData()->getPlayerRoundWin(1));
     break;

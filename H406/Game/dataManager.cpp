@@ -44,10 +44,12 @@ void DataManager::init(EventManager* eventManager)
   }
 
   // イベント登録
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET,bind(&DataManager::event,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET,bind(&DataManager::event,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING,bind(&DataManager::event,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_GET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_USING,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_USING,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&DataManager::event, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&DataManager::event, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_1_ROUND_WIN, bind(&DataManager::event, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN, bind(&DataManager::event, this, placeholders::_1));
   eventManager->addEventListener(EventList::NEXT_ROUND, bind(&DataManager::event, this, placeholders::_1));
@@ -80,21 +82,33 @@ void DataManager::update(void)
 void DataManager::event(EventData* eventData)
 {
   switch (eventData->getEvent()){
-  case EventList::PLAYER_1_ITEM_GET:
+  case EventList::PLAYER_1_DRIP_GET:
     _data->setPlayerDripNum(0,_data->getPlayerDripNum(0) + (int)eventData->getUserData());
     if(_data->getPlayerDripNum(0) > 9)
       _data->setPlayerDripNum(0,9);
     break;
-  case EventList::PLAYER_2_ITEM_GET:
+  case EventList::PLAYER_2_DRIP_GET:
     _data->setPlayerDripNum(1,_data->getPlayerDripNum(1) + (int)eventData->getUserData());
     if(_data->getPlayerDripNum(1) > 9)
       _data->setPlayerDripNum(1,9);
     break;
-  case EventList::PLAYER_1_ITEM_USING:
+  case EventList::PLAYER_1_DRIP_USING:
     _data->setPlayerDripNum(0,_data->getPlayerDripNum(0) - 1);
     break;
-  case EventList::PLAYER_2_ITEM_USING:
+  case EventList::PLAYER_2_DRIP_USING:
     _data->setPlayerDripNum(1,_data->getPlayerDripNum(1) - 1);
+    break;
+
+  // item
+  case EventList::PLAYER_1_ITEM_GET:
+    _data->setPlayerDripNum(0, _data->getPlayerDripNum(0) + (int)eventData->getUserData());
+    if (_data->getPlayerDripNum(0) > 9)
+      _data->setPlayerDripNum(0, 9);
+    break;
+  case EventList::PLAYER_2_ITEM_GET:
+    _data->setPlayerDripNum(1, _data->getPlayerDripNum(1) + (int)eventData->getUserData());
+    if (_data->getPlayerDripNum(1) > 9)
+      _data->setPlayerDripNum(1, 9);
     break;
 
     // ラウンド
