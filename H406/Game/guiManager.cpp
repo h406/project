@@ -21,6 +21,7 @@
 
 namespace{
   const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
+  const D3DXVECTOR2 kTIME_SIZE = D3DXVECTOR2(128.0f, 128.0f);
 }
 
 //==============================================================================
@@ -117,11 +118,12 @@ bool GuiManager::init(EventManager* eventManager)
 
   // タイマー
   _time = NumberSprite::create(2, "./data/texture/num.png");
-  _time->setSize(128, 128);
+  _time->setSize(kTIME_SIZE.x, kTIME_SIZE.y);
   _time->setColor(D3DXCOLOR(1.0f, 0.0f, 0.7f, 1.0f));
   _time->setNumber(60);
   _time->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
   this->addChild(_time);
+  _timeScl = 1.0f;
 
   // ラウンド
   _roundNum = NumberSprite::create(1, "./data/texture/num.png");
@@ -135,6 +137,13 @@ bool GuiManager::init(EventManager* eventManager)
   _roundIcon->setTexture(0, "./data/texture/neko000.png");
   _roundIcon->setTexture(1, "./data/texture/neko000.png");
   this->addChild(_roundIcon);
+
+  // [フィニッシュ！]
+  _stringFinish = Sprite2D::create("./data/texture/finish.png");
+  _stringFinish->setSize(580 * 1.5f, 150 * 1.5f);
+  _stringFinish->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  _stringFinish->setVisible(false);
+  this->addChild(_stringFinish);
 
   // イベントセット
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
@@ -189,7 +198,23 @@ void GuiManager::update(void)
 
   // タイマー更新
   int time = DataManager::instance().getData()->getTime();
-  _time->setNumber(time / 60);
+  if (time < 0){
+    _time->setNumber(0);
+    _stringFinish->setVisible(true);
+  }
+  else {
+    _time->setNumber(time / 60);
+    _stringFinish->setVisible(false);
+  }
+
+  if (time == 60 * 4 || time == 60 * 3 || time == 60 * 2){
+    _timeScl = 2.5f;
+  }
+  _timeScl += (1 - _timeScl) * 0.05f;
+  _time->setSize(kTIME_SIZE.x * _timeScl, kTIME_SIZE.y * _timeScl);
+  if (time > 0){
+  } else{
+  }
 }
 
 //==============================================================================

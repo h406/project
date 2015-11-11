@@ -42,6 +42,8 @@ private:
 
   NumberSprite* _time;
   NumberSprite* _roundNum;
+  Sprite2D* _stringFinish;
+  float _timeScl;
 
   RoundIcon* _roundIcon;
 };

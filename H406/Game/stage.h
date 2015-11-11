@@ -40,6 +40,9 @@ public:
 
   const Vec2& getStageSize() const { return _stageSize; }
 
+  // ‚ ‚Ü‚èŽg‚í‚È‚¢‚Å‚Ë
+  int getFieldMapNum(FIELD_ID id) const;
+
 private:
   Sprite3D* _fieldMap[kNUM_X][kNUM_Y];
   FIELD_ID _field[kNUM_X][kNUM_Y];

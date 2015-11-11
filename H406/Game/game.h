@@ -36,6 +36,7 @@ public:
 private:
   int _freezeTime;
   int _bultime;
+  int _finishTime;
 
 
   Player* _player[kPlayerNum];
