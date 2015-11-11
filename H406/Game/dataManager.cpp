@@ -70,9 +70,6 @@ void DataManager::update(void)
 {
   int time = _data->getTime();
   time--;
-  if (time < 0){
-    time = 0;
-  }
   _data->setTime(time);
 }
 

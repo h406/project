@@ -99,5 +99,21 @@ void Stage::reset(void){
   }
 }
 
+//==============================================================================
+// getFieldMapNum
+//------------------------------------------------------------------------------
+int Stage::getFieldMapNum(FIELD_ID id) const{
+  int num = 0;
+
+  for (int x = 0; x < kNUM_X; x++) {
+    for (int y = 0; y < kNUM_Y; y++) {
+      if (_field[x][y] == id){
+        num++;
+      }
+    }
+  }
+  return num;
+}
+
 
 //EOF
