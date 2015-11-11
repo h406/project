@@ -22,6 +22,7 @@
 namespace{
   const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
   const D3DXVECTOR2 kTIME_SIZE = D3DXVECTOR2(128.0f, 128.0f);
+  const D3DXVECTOR2 kSTART_TIME_SIZE = D3DXVECTOR2(256.0f, 256.0f);
 }
 
 //==============================================================================
@@ -145,6 +146,16 @@ bool GuiManager::init(EventManager* eventManager)
   _stringFinish->setVisible(false);
   this->addChild(_stringFinish);
 
+  // 開始時のタイムと文字
+  _startNum = NumberSprite::create(1, "./data/texture/num.png");
+  _startNum->setSize(kSTART_TIME_SIZE.x, kSTART_TIME_SIZE.y);
+  _startNum->setColor(D3DXCOLOR(1.0f, 0.0f, 0.2f, 1.0f));
+  _startNum->setNumber(3);
+  _startNum->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  _startNum->setVisible(false);
+  this->addChild(_startNum);
+  _startNumScl = 1.0f;
+
   // イベントセット
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
@@ -198,8 +209,8 @@ void GuiManager::update(void)
 
   // タイマー更新
   int time = DataManager::instance().getData()->getTime();
-  if (time < 0){
-    _time->setNumber(0);
+  if (time < 60){
+    _time->setVisible(false);
     _stringFinish->setVisible(true);
   }
   else {
@@ -212,9 +223,6 @@ void GuiManager::update(void)
   }
   _timeScl += (1 - _timeScl) * 0.05f;
   _time->setSize(kTIME_SIZE.x * _timeScl, kTIME_SIZE.y * _timeScl);
-  if (time > 0){
-  } else{
-  }
 }
 
 //==============================================================================
@@ -270,9 +278,10 @@ void GuiManager::EventListener(EventData* eventData) {
   case EventList::NEXT_ROUND:
     int round = DataManager::instance().getData()->getRound();
     _roundNum->setNumber(round++);
+    _time->setVisible(true);
     break;
-
   }
+
 }
 
 

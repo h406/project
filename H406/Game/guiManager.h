@@ -43,7 +43,11 @@ private:
   NumberSprite* _time;
   NumberSprite* _roundNum;
   Sprite2D* _stringFinish;
+  NumberSprite* _startNum;
+  Sprite2D* _stringStart;
+
   float _timeScl;
+  float _startNumScl;
 
   RoundIcon* _roundIcon;
 };
