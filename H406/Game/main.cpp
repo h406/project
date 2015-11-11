@@ -12,6 +12,8 @@
 #include "parpix.h"
 #include "test.h"
 
+#include "BaceScene.h"
+
 //------------------------------------------------------------------------------
 // WinMain
 //------------------------------------------------------------------------------
@@ -24,12 +26,15 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   // シェーダ適用
   //app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
-  //app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
-  //app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
+  app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
+  app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());
+
+  auto scene = BaceScene::create();
+  scene->setCurScene(Title::create());
   
   // 最初のシーン
-  app.setBaceScene(Game::create());
+  app.setBaceScene(scene);
 
   return app.run();
 }

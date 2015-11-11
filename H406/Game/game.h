@@ -37,7 +37,6 @@ private:
   int _freezeTime;
   int _bultime;
 
-  Stage* _stage;
 
   Player* _player[kPlayerNum];
 

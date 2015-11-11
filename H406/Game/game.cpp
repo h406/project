@@ -10,7 +10,6 @@
 //******************************************************************************
 #include "game.h"
 #include "stage.h"
-#include "staticStage.h"
 #include "player.h"
 #include "colStage.h"
 #include "eventManager.h"
@@ -18,10 +17,9 @@
 #include "EventData.h"
 #include "guiManager.h"
 #include "dataManager.h"
+#include "title.h"
 
-XFileObject* test;
-CameraBace* testcam;
-
+#include "BaceScene.h"
 
 //------------------------------------------------------------------------------
 // init
@@ -30,20 +28,11 @@ bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
   const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
 
-  // 動かないステージオブジェクト群
-  auto staticStage = StaticStage::create();
-  this->addChild(staticStage);
-
   // イベントマネージャー
   _eventManager = new EventManager();
 
   // データマネージャー
   DataManager::instance().init(_eventManager);
-
-  test = XFileObject::create("./data/model/bill.x");
-  test->setScl(5,5,5);
-  test->setPosY(-5);
-  this->addChild(test);
 
   // プレイヤー1
   _player[0] = Player::create(0);
@@ -58,7 +47,7 @@ bool Game::init() {
   _mainCamera = camera->createCamera();
   _mainCamera->setPosP({0,600,-900});
   _mainCamera->setPosR({0,0,-70});
-  camera->setCamera(_mainCamera);
+  camera->setCamera(_mainCamera, 100);
 
   _playerCam[0] = camera->createCamera();
   _playerCam[0]->setPosP({0,0,0});
@@ -68,20 +57,13 @@ bool Game::init() {
   _playerCam[1]->setPosP({0,0,0});
   _playerCam[1]->setPosR({0,0,0});
 
-  testcam = camera->createCamera();
-  testcam->setPosP({0,0,0});
-  testcam->setPosR({0,0,0});
-
   _effect = Effect::create();
   _effect->setScl(Vec3(1,1,1));
   this->addChild(_effect);
 
-  // ステージブロック
-  _stage = Stage::create(1000.f,1000.f);
-  this->addChild(_stage);
 
   // ステージとの当たり判定
-  auto hitcheck = ColStage::create(_stage,_eventManager);
+  auto hitcheck = ColStage::create(BaceScene::instance()->getStage(),_eventManager);
   hitcheck->addPlayer(_player[0]);
   hitcheck->addPlayer(_player[1]);
   // 最後に処理をさせる
@@ -111,6 +93,7 @@ bool Game::init() {
 //------------------------------------------------------------------------------
 void Game::update() {
   auto input = App::instance().getInput();
+  auto _stage = BaceScene::instance()->getStage();
 
   Vec3 playerPos[2] = {
     _player[0]->getPos(),
@@ -195,26 +178,12 @@ void Game::update() {
   _mainCamera->setPosP(Vec3(0,sinf(rot) * length,cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec);
 
-  // hack
-  static float f = 0;
-  f -= 0.01f;
-  testcam->setPosR(Vec3(cosf(f) * 600,150 * (sinf(f)+1),sinf(f) * 600));
-  testcam->setPosP(Vec3(0,100,0));
-  if(input->isTrigger(0,VK_INPUT::_3)) {
-    App::instance().getRenderer()->getCamera()->setCamera(testcam, 10);
-  }
-  else if(input->isRelease(0,VK_INPUT::_3)) {
-    App::instance().getRenderer()->getCamera()->setCamera(_mainCamera, 10);
-  }
-
   if(_bultime) {
     Vec3 ram(float(rand() % 10),float(rand() % 10),0);
     _mainCamera->setPosP(_mainCamera->getPosP() + ram);
     _mainCamera->setPosR(camvec + ram);
     _bultime--;
   }
-
-  test->setRotY(test->getRot().y + 0.01f);
 
   char fps[3];
   sprintf_s(fps,"%d", App::instance().getFps());
@@ -251,6 +220,11 @@ void Game::update() {
     _eventManager->dispatchEvent(EventList(int(EventList::NEXT_ROUND)), nullptr);
   }
 
+
+  if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
+    BaceScene::instance()->setCurScene(Title::create());
+  }
+
   DataManager::instance().update();
 }
 
@@ -270,7 +244,7 @@ void Game::EventListener(EventData* eventData) {
 
   case EventList::PLAYER_1_ITEM_GET:
     
-    _effect->play("get.efk", _player[1]->getPos());
+    _effect->play("get.efk", _player[0]->getPos());
     break;
 
   case EventList::PLAYER_2_ITEM_GET:

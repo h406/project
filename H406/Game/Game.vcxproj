@@ -89,6 +89,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaceScene.h" />
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="dataManager.h" />
     <ClInclude Include="dirlightEffect.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="title.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaceScene.cpp" />
     <ClCompile Include="dataManager.cpp" />
     <ClCompile Include="dirlightEffect.cpp" />
     <ClCompile Include="edgeEffect.cpp" />

@@ -13,6 +13,7 @@
 //==============================================================================
 #include "DrawObject.h"
 #include "CreateFunc.h"
+#include "iLayer2D.h"
 
 class Sprite2D;
 

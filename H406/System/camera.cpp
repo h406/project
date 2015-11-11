@@ -35,6 +35,8 @@ Camera::Camera()
   _defaultCam->setPosP(Vec3(0,50,-200));
   _defaultCam->setPosR(Vec3(0,0,0));
   _defaultCam->setVecU(Vec3(0,1,0));
+
+  _destCamera = createCamera();
   setCamera(_defaultCam);
 }
 
@@ -42,7 +44,7 @@ Camera::Camera()
 //
 //------------------------------------------------------------------------------
 Camera::~Camera() {
-  allClearCamera();
+  cameraAllRelease();
 }
 
 //==============================================================================
@@ -77,15 +79,29 @@ void Camera::setCamera(CameraBace* moveToCamera,int frame) {
   _maxFrame = frame;
   _nowFrame = 0;
 
-  _destCamera = _currentCam;
+  memcpy(_destCamera,_currentCam,sizeof(CameraBace));
   memcpy(_defaultCam,_currentCam,sizeof(CameraBace));
   setCamera(_defaultCam);
 }
 
 //==============================================================================
+// createCamer
+//-------------------------------------------------------------------------------
+void Camera::createCameraAllRelease() {
+  memcpy(_defaultCam,_currentCam,sizeof(CameraBace));
+  setCamera(_defaultCam);
+
+  for(auto& cam : _cameraList) {
+    if(_defaultCam != cam) {
+      releaseCamera(cam);
+    }
+  }
+}
+
+//==============================================================================
 ///
 //------------------------------------------------------------------------------
-void Camera::allClearCamera() {
+void Camera::cameraAllRelease() {
   for(auto& cam : _cameraList) {
     SafeDelete(cam);
   }
