@@ -25,8 +25,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   //app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
   //app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
-  app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
-
+  //app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());
   
   // Å‰‚ÌƒV[ƒ“
