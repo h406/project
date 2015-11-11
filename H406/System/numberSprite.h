@@ -27,6 +27,7 @@ public:
 
   void setSize(float w, float h);
   void setColor(const D3DXCOLOR& color);
+  void setColorHighLight(const D3DXCOLOR& color);
   void setVisible(bool visible);
 
   // 桁
@@ -37,11 +38,13 @@ public:
   void setNumV(int v);
 
 private:
-
   // 桁数
   int _digit;
+  int _texNumU;
+  int _texNumV;
 
-  Sprite2D** _numberSprite;
+  Sprite2D** _numberSprite; // 普通のところ
+  Sprite2D** _numberSpriteHightLight; // テカテカのところ
 };
 
 #endif

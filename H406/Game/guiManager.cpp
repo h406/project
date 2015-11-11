@@ -11,12 +11,17 @@
 #include "guiManager.h"
 #include "gauge.h"
 #include "../System/numberSprite.h"
+#include "roundIcon.h"
 
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
 #include "game.h"
 #include "dataManager.h"
+
+namespace{
+  const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
+}
 
 //==============================================================================
 // init
@@ -43,20 +48,18 @@ bool GuiManager::init(EventManager* eventManager)
   _gauge[1]->setTexture("./data/texture/e2.png");
   this->addChild(_gauge[1]);
 
-  _numSprite[0] = Sprite2D::create("./data/texture/num.png");
+  // 数字
+  _numSprite[0] = NumberSprite::create(1, "./data/texture/num.png");
   _numSprite[0]->setSize(128, 128);
   _numSprite[0]->setPos(128, 200);
-  _numSprite[0]->setNumU(11);
-  _numSprite[0]->setAnimID(10);
+  _numSprite[0]->setColor(kPLAYER_COLOR[0]);
   _numSprite[0]->setVisible(false);
   this->addChild(_numSprite[0]);
 
-  // 数字
-  _numSprite[1] = Sprite2D::create("./data/texture/num.png");
+  _numSprite[1] = NumberSprite::create(1, "./data/texture/num.png");
   _numSprite[1]->setSize(128, 128);
   _numSprite[1]->setPos(1280 - 128, 200);
-  _numSprite[1]->setNumU(11);
-  _numSprite[1]->setAnimID(10);
+  _numSprite[1]->setColor(kPLAYER_COLOR[1]);
   _numSprite[1]->setVisible(false);
   this->addChild(_numSprite[1]);
 
@@ -64,53 +67,85 @@ bool GuiManager::init(EventManager* eventManager)
   _plus[0]->setSize(128, 128);
   _plus[0]->setPos(128, 328);
   _plus[0]->setNumU(11);
+  _plus[0]->setNumV(2);
   _plus[0]->setAnimID(10);
+  _plus[0]->setColor(kPLAYER_COLOR[0]);
   _plus[0]->setVisible(true);
-  _plus[0]->setColor(D3DXCOLOR(0, 0, 0, 0));
   this->addChild(_plus[0]);
+
+  _plusHighLight[0] = Sprite2D::create("./data/texture/num.png");
+  _plusHighLight[0]->setSize(128, 128);
+  _plusHighLight[0]->setPos(128, 328);
+  _plusHighLight[0]->setNumU(11);
+  _plusHighLight[0]->setNumV(2);
+  _plusHighLight[0]->setAnimID(20);
+  _plusHighLight[0]->setVisible(true);
+  this->addChild(_plusHighLight[0]);
 
   _plus[1] = Sprite2D::create("./data/texture/num.png");
   _plus[1]->setSize(128, 128);
   _plus[1]->setPos(1280 - 255, 328);
   _plus[1]->setNumU(11);
+  _plus[1]->setNumV(2);
   _plus[1]->setAnimID(10);
+  _plus[1]->setColor(kPLAYER_COLOR[1]);
   _plus[1]->setVisible(true);
-  _plus[1]->setColor(D3DXCOLOR(0, 0, 0, 0));
   this->addChild(_plus[1]);
 
-  _plusNum[0] = Sprite2D::create("./data/texture/num.png");
+  _plusHighLight[1] = Sprite2D::create("./data/texture/num.png");
+  _plusHighLight[1]->setSize(128, 128);
+  _plusHighLight[1]->setPos(1280 - 255, 328);
+  _plusHighLight[1]->setNumU(11);
+  _plusHighLight[1]->setNumV(2);
+  _plusHighLight[1]->setAnimID(20);
+  _plusHighLight[1]->setVisible(true);
+  this->addChild(_plusHighLight[1]);
+
+  _plusNum[0] = NumberSprite::create(1, "./data/texture/num.png");
   _plusNum[0]->setSize(128, 128);
   _plusNum[0]->setPos(256, 328);
-  _plusNum[0]->setNumU(11);
-  _plusNum[0]->setAnimID(10);
   _plusNum[0]->setVisible(true);
-  _plusNum[0]->setColor(D3DXCOLOR(0, 0, 0, 0));
   this->addChild(_plusNum[0]);
 
-  _plusNum[1] = Sprite2D::create("./data/texture/num.png");
+  _plusNum[1] = NumberSprite::create(1, "./data/texture/num.png");
   _plusNum[1]->setSize(128, 128);
   _plusNum[1]->setPos(1280 - 128, 328);
-  _plusNum[1]->setNumU(11);
-  _plusNum[1]->setAnimID(10);
   _plusNum[1]->setVisible(true);
-  _plusNum[1]->setColor(D3DXCOLOR(0, 0, 0, 0));
   this->addChild(_plusNum[1]);
 
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
 
   // タイマー
   _time = NumberSprite::create(2, "./data/texture/num.png");
-  _time->setSize(64, 64);
-  _time->setNumU(11);
+  _time->setSize(128, 128);
+  _time->setColor(D3DXCOLOR(1.0f, 0.0f, 0.7f, 1.0f));
   _time->setNumber(60);
   _time->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
   this->addChild(_time);
 
+  // ラウンド
+  _roundNum = NumberSprite::create(1, "./data/texture/num.png");
+  _roundNum->setSize(64, 64);
+  _roundNum->setColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+  _roundNum->setNumber(1);
+  _roundNum->setPos(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f);
+  this->addChild(_roundNum);
+
+  _roundIcon = RoundIcon::create(50.0f, 50.0f);
+  _roundIcon->setTexture(0, "./data/texture/neko000.png");
+  _roundIcon->setTexture(1, "./data/texture/neko000.png");
+  this->addChild(_roundIcon);
+
   // イベントセット
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_USING,bind(&GuiManager::EventListener,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::NEXT_ROUND, bind(&GuiManager::EventListener, this, placeholders::_1));
 
   return true;
 }
@@ -128,7 +163,7 @@ void GuiManager::update(void)
   // 数字
   for (int i = 0; i < 2; i++) {
     if (playerDripNum[i] > 0) {
-      _numSprite[i]->setAnimID(playerDripNum[i]);
+      _numSprite[i]->setNumber(playerDripNum[i]);
       _numSprite[i]->setVisible(true);
     }
     else {
@@ -137,10 +172,14 @@ void GuiManager::update(void)
     _numSpriteScl[i] += (1 - _numSpriteScl[i]) * 0.1f;
     _numSprite[i]->setSize(128 * _numSpriteScl[i], 128 * _numSpriteScl[i]);
 
-    _plusNum[i]->setColor(D3DXCOLOR(1, 1, 1, min((_numSpriteScl[i] - 1) * 2, 1)));
-    _plus[i]->setColor(D3DXCOLOR(1, 1, 1, min((_numSpriteScl[i] - 1) * 2, 1)));
+    _plusNum[i]->setColor(D3DXCOLOR(kPLAYER_COLOR[i].r, kPLAYER_COLOR[i].g, kPLAYER_COLOR[i].b, min((_numSpriteScl[i] - 1) * 2, 1)));
+    _plusNum[i]->setColorHighLight(D3DXCOLOR(1, 1, 1, min((_numSpriteScl[i] - 1) * 2, 1)));
+    _plus[i]->setColor(D3DXCOLOR(kPLAYER_COLOR[i].r, kPLAYER_COLOR[i].g, kPLAYER_COLOR[i].b, min((_numSpriteScl[i] - 1) * 2, 1)));
+    _plusHighLight[i]->setColor(D3DXCOLOR(1, 1, 1, min((_numSpriteScl[i] - 1) * 2, 1)));
+
     _plusNum[i]->setSize(128 * _numSpriteScl[i], 128 * _numSpriteScl[i]);
     _plus[i]->setSize(128 * _numSpriteScl[i], 128 * _numSpriteScl[i]);
+    _plusHighLight[i]->setSize(128 * _numSpriteScl[i], 128 * _numSpriteScl[i]);
   }
 
   // ゲージ更新
@@ -165,25 +204,49 @@ void GuiManager::uninit(void)
 // イベント
 //------------------------------------------------------------------------------
 void GuiManager::EventListener(EventData* eventData) {
-  switch(eventData->getEvent()) {
+  switch (eventData->getEvent()) {
+
+    // 塗るの取得した
+  case EventList::PLAYER_1_DRIP_GET:
+    _numSpriteScl[0] = 2.0f;
+    _plusNum[0]->setNumber((int)eventData->getUserData());
+    break;
+  case EventList::PLAYER_2_DRIP_GET:
+    _numSpriteScl[1] = 2.0f;
+    _plusNum[1]->setNumber((int)eventData->getUserData());
+    break;
+
+    // 塗るの使用
+  case EventList::PLAYER_1_DRIP_USING:
+    _numSpriteScl[0] = 0.7f;
+    break;
+  case EventList::PLAYER_2_DRIP_USING:
+    _numSpriteScl[1] = 0.7f;
+    break;
+
     // アイテム取得した
   case EventList::PLAYER_1_ITEM_GET:
     _numSpriteScl[0] = 2.0f;
-    _plusNum[0]->setAnimID((int)eventData->getUserData());
+    _plusNum[0]->setNumber((int)eventData->getUserData());
     break;
   case EventList::PLAYER_2_ITEM_GET:
     _numSpriteScl[1] = 2.0f;
-    _plusNum[1]->setAnimID((int)eventData->getUserData());
+    _plusNum[1]->setNumber((int)eventData->getUserData());
     break;
 
-    // アイテム使用
-  case EventList::PLAYER_1_ITEM_USING:
-    _numSpriteScl[0] = 0.7f;
+    // ラウンド勝ち
+  case EventList::PLAYER_1_ROUND_WIN:
+    _roundIcon->setRoundWinNum(0, DataManager::instance().getData()->getPlayerRoundWin(0));
+    break;
+  case EventList::PLAYER_2_ROUND_WIN:
+    _roundIcon->setRoundWinNum(1, DataManager::instance().getData()->getPlayerRoundWin(1));
     break;
 
-  case EventList::PLAYER_2_ITEM_USING:
-    _numSpriteScl[1] = 0.7f;
+  case EventList::NEXT_ROUND:
+    int round = DataManager::instance().getData()->getRound();
+    _roundNum->setNumber(round++);
     break;
+
   }
 }
 

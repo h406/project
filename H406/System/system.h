@@ -33,6 +33,7 @@
 #include "MeshField.h"
 #include "meshCylinder.h"
 #include "meshDome.h"
+#include "numberSprite.h"
 
 #include "iScene.h"
 #include "iLayer.h"

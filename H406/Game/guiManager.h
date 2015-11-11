@@ -15,6 +15,7 @@ class EventManager;
 class EventData;
 class Gauge;
 class NumberSprite;
+class RoundIcon;
 
 //==============================================================================
 // class
@@ -33,12 +34,16 @@ private:
   Sprite2D* _gaugeBase;
 
   float _numSpriteScl[2];
-  Sprite2D* _numSprite[2];
+  NumberSprite* _numSprite[2];
 
   Sprite2D* _plus[2];
-  Sprite2D* _plusNum[2];
+  Sprite2D* _plusHighLight[2];
+  NumberSprite* _plusNum[2];
 
   NumberSprite* _time;
+  NumberSprite* _roundNum;
+
+  RoundIcon* _roundIcon;
 };
 
 #endif

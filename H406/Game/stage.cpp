@@ -46,8 +46,11 @@ void Stage::update() {
       case FIELD_ID::PLAYER_2:
         _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,183,76,255));
         break;
+      case FIELD_ID::DRIP:
+        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,0,255));
+        break;
       case FIELD_ID::ITEM:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,846,255));
+        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(32, 255, 64, 255));
         break;
       case FIELD_ID::NONE:
         _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));
@@ -82,5 +85,19 @@ Stage::FIELD_ID Stage::getFieldID(int x,int y) const {
 void Stage::uninit() {
 
 }
+
+//==============================================================================
+// reset
+//------------------------------------------------------------------------------
+void Stage::reset(void){
+  memset(_field, 0, sizeof(_field));
+
+  for (int x = 0; x < kNUM_X; x++) {
+    for (int y = 0; y < kNUM_Y; y++) {
+      _fieldMap[x][y]->setColor(D3DXCOLOR(1, 1, 1, 1));
+    }
+  }
+}
+
 
 //EOF

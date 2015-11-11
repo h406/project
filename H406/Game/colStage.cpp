@@ -67,11 +67,24 @@ void ColStage::update() {
 
     const Stage::FIELD_ID fieldID = _stage->getFieldID(idX,idY);
 
+    // DRIP
     if(idX >= 0 && idX < Stage::kNUM_X && idY >= 0 && idY < Stage::kNUM_Y) {
-      if(fieldID == Stage::FIELD_ID::ITEM) {
+      if(fieldID == Stage::FIELD_ID::DRIP) {
         const int plus = rand() % 4 + 1;
         _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
-        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_ITEM_GET) + player->getPlayerID()), (void*) plus);
+        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + player->getPlayerID()), (void*) plus);
+
+        // HACK どこでやるか？？
+        player->addDripNum(plus);
+        player->jump(10.f);
+      }
+      // ITEM
+      else if (fieldID == Stage::FIELD_ID::ITEM) {
+        const int is_plus = rand() % 2;
+        int plus = 0;
+        if (is_plus == 0) plus = 9;
+        _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
+        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_ITEM_GET) + player->getPlayerID()), (void*)plus);
 
         // HACK どこでやるか？？
         player->addDripNum(plus);
@@ -79,7 +92,7 @@ void ColStage::update() {
       }
       else if(fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()) && player->getDripNum() > 0) {
         _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
-        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_ITEM_USING) + player->getPlayerID()));
+        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_USING) + player->getPlayerID()));
 
         // HACK どこでやるか？？
         player->addDripNum(-1);
