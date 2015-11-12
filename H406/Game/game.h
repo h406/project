@@ -33,14 +33,20 @@ public:
 
   void EventListener(EventData* eventData);
 
+  enum GAME_MODE{
+    MODE_NONE = -1,
+    MODE_PLAY,
+    MODE_ROUND_CHANGE,
+    MODE_NEXT_ROUND_SETUP
+  };
+
 private:
   int _freezeTime;
   int _bultime;
-  int _finishTime;
+  int _nextModeTime;
 
 
   Player* _player[kPlayerNum];
-
   CameraBace* _playerCam[kPlayerNum];
   Sprite3D* _backField;
 
@@ -48,8 +54,11 @@ private:
 
   Effect* _effect;
   EventManager* _eventManager;
-
   GuiManager* _guiManger;
+
+  GAME_MODE _gameMode;
+  CameraBace* _roundChangeCam; // 俯瞰のやつ
+//  CameraBace* _interpolationCam; // プレイヤーの中心補間
 };
 
 #endif
