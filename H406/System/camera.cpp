@@ -69,7 +69,7 @@ void Camera::releaseCamera(CameraBace* camera) {
 //
 //------------------------------------------------------------------------------
 void Camera::setCamera(CameraBace* moveToCamera,int frame) {
-  if(_moveToCamera != nullptr) return;
+  //if(_moveToCamera != nullptr) return;
   if(frame == 0) {
     setCamera(moveToCamera);
     return;

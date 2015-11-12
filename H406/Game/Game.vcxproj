@@ -97,6 +97,7 @@
     <ClInclude Include="EventData.h" />
     <ClInclude Include="EventList.h" />
     <ClInclude Include="eventManager.h" />
+    <ClInclude Include="fxaa.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="colStage.h" />
     <ClInclude Include="gameConfig.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="dirlightEffect.cpp" />
     <ClCompile Include="edgeEffect.cpp" />
     <ClCompile Include="eventManager.cpp" />
+    <ClCompile Include="fxaa.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="colStage.cpp" />
     <ClCompile Include="gauge.cpp" />

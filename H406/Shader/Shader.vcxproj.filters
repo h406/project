@@ -89,5 +89,8 @@
     <FxCompile Include="ps_test.hlsl">
       <Filter>posteffect</Filter>
     </FxCompile>
+    <FxCompile Include="ps_fxaa.hlsl">
+      <Filter>posteffect</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
