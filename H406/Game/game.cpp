@@ -12,6 +12,7 @@
 #include "stage.h"
 #include "player.h"
 #include "colStage.h"
+#include "colPlayer.h"
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
@@ -41,11 +42,13 @@ bool Game::init() {
   // プレイヤー1
   _player[0] = Player::create(0);
   _player[0]->setPos(kPLAYER_1_INIT_POS);
+  _player[0]->setWeight(1.0f);
   this->addChild(_player[0]);
 
   // プレイヤー2
   _player[1] = Player::create(1);
   _player[1]->setPos(kPLAYER_2_INIT_POS);
+  _player[1]->setWeight(0.0f);
   this->addChild(_player[1]);
 
   _mainCamera = camera->createCamera();
@@ -76,6 +79,12 @@ bool Game::init() {
   hitcheck->addPlayer(_player[1]);
   // 最後に処理をさせる
   this->addChild(hitcheck,INT_MAX);
+
+  // プレイヤー同士の当たり判定
+  auto hitCheckPlayer =  ColPlayer::create(_eventManager);
+  hitCheckPlayer->addPlayer(_player[0]);
+  hitCheckPlayer->addPlayer(_player[1]);
+  this->addChild(hitCheckPlayer, INT_MAX - 1);
 
   // GUIマネージャー
   _guiManger = GuiManager::create(_eventManager);

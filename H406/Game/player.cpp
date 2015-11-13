@@ -34,8 +34,9 @@ bool Player::init(int playerID)
   _playerMoveDest = Vec3(0.0f, 0.0, 0.0f);
 
   _playerID = playerID;
-
   _dripNum = 0;
+  _radius = 50.0f;
+  _weight = 0.5f;
 
   return true;
 }
@@ -116,5 +117,6 @@ void Player::flipMvementX() {
 void Player::flipMvementZ() {
   _playerMoveVec.z *= -1;
 }
+
 
 //EOF

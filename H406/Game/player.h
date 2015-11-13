@@ -29,17 +29,24 @@ public:
   void moveRight(float movement);
   void moveTop(float movement);
   void moveBottom(float movement);
-
   void jump(float movement);
 
   void flipMvementX();
   void flipMvementZ();
+  Vec3 getMoveVec(){ return _playerMoveVec; }
+  void setMoveVec(const Vec3 vec){ _playerMoveVec = vec; }
 
   void addDripNum(int num) { _dripNum = (_dripNum + num) > 9 ? 9 : _dripNum + num; }
   void setDripNum(int num) { _dripNum = num; }
 
   int getPlayerID() const { return _playerID; }
   int getDripNum() const { return _dripNum; }
+
+  void setRadius(float rad) { _radius = rad; }
+  float getRadius() const { return _radius; }
+
+  void setWeight(float val){ _weight = val; }
+  float getWeight() const { return _weight; }
 
 private:
 
@@ -54,6 +61,12 @@ private:
 
   // プレイヤーID
   int _playerID;
+
+  // 半径
+  float _radius;
+
+  // 重さ(0.0 ~ 1.0)
+  float _weight;
 };
 
 #endif

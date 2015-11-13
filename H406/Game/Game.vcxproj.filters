@@ -126,6 +126,9 @@
     <ClInclude Include="SelectScene.h">
       <Filter>select</Filter>
     </ClInclude>
+    <ClInclude Include="colPlayer.h">
+      <Filter>system\collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -188,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="SelectScene.cpp">
       <Filter>select</Filter>
+    </ClCompile>
+    <ClCompile Include="colPlayer.cpp">
+      <Filter>system\collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
