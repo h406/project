@@ -48,7 +48,7 @@ bool Game::init() {
   // ƒvƒŒƒCƒ„[2
   _player[1] = Player::create(1);
   _player[1]->setPos(kPLAYER_2_INIT_POS);
-  _player[1]->setWeight(0.0f);
+  _player[1]->setWeight(0.1f);
   this->addChild(_player[1]);
 
   _mainCamera = camera->createCamera();
