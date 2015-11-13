@@ -23,6 +23,11 @@ class RoundIcon;
 class GuiManager : public iLayer2D, public CreateFunc<GuiManager>{
 public:
 
+  struct GUI_SPRITE_2D{
+    Sprite2D* _sprite;
+    float _scl;
+  };
+
   bool init(EventManager* eventManager);
   void update();
   void uninit();
@@ -42,14 +47,16 @@ private:
 
   NumberSprite* _time;
   NumberSprite* _roundNum;
-  Sprite2D* _stringFinish;
   NumberSprite* _startNum;
-  Sprite2D* _stringStart;
+
+  GUI_SPRITE_2D _finish;
+  GUI_SPRITE_2D _start;
 
   float _timeScl;
   float _startNumScl;
 
   RoundIcon* _roundIcon;
+  float _roundScl;
 };
 
 #endif

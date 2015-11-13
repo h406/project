@@ -10,28 +10,36 @@
 //******************************************************************************
 #include "title.h"
 #include "game.h"
+#include "BaceScene.h"
+
+CameraBace* _camera;
 
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
 bool Title::init() {
-  auto size = App::instance().getWindowSize();
-  _BGSprite = Sprite2D::create("./data/texture/tx_grass1.tga");
-  _BGSprite->setSize((float)size.cx,(float)size.cy);
-  _BGSprite->setPos(size.cx * 0.5f, size.cy * 0.5f);
-  this->addChild(_BGSprite);
+  auto camera = App::instance().getRenderer()->getCamera();
+  _camera = camera->createCamera();
+  _camera->setPosP({0,10,0});
+  _camera->setPosR({0,0,0});
+  camera->setCamera(_camera, 100);
 
   return true;
 }
 
 void Title::update() {
+  static float f = 0;
+  f += 0.01f;
+  _camera->setPosP({sinf(f) * 500,100,cosf(f) * 500});
+
   if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1)) {
-    App::instance().createNextScene<Game>();
+    BaceScene::instance()->setCurScene(Game::create());
   }
 }
 
 void Title::uninit() {
-
+  // ¶¬‚µ‚½ƒJƒƒ‰‚ð‘S‚Äíœ
+  App::instance().getRenderer()->getCamera()->releaseCamera(_camera);
 }
 
 //EOF

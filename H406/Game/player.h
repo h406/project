@@ -44,7 +44,7 @@ public:
 private:
 
   // ƒvƒŒƒCƒ„[
-  Sprite3D* _player;
+  XFileObject* _player[2];
 
   Vec3 _playerMoveVec;
   Vec3 _playerMoveDest;

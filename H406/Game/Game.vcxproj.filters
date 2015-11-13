@@ -10,41 +10,44 @@
     <Filter Include="game">
       <UniqueIdentifier>{d232d028-e9c3-4a99-aee2-8a2010099a42}</UniqueIdentifier>
     </Filter>
-    <Filter Include="game\gameObject">
-      <UniqueIdentifier>{6be780de-8a4d-474d-8e35-d6a0bff7c37f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\gameObject\gui">
-      <UniqueIdentifier>{7727f078-40ad-4dc5-813d-5077ebcb4ae0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\gameObject\player">
-      <UniqueIdentifier>{accd9dfe-c150-473b-a2ff-16c465ac8cc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\gameObject\staticStage">
-      <UniqueIdentifier>{be349677-35a9-46dc-a2c7-a393d55478f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\system">
-      <UniqueIdentifier>{12137d76-a86f-450f-a28f-82e3261300c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\gameObject\stage">
-      <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\system\event">
-      <UniqueIdentifier>{1e28347a-f646-42f1-a02f-4624078784ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\gameObject\gui\gauge">
-      <UniqueIdentifier>{01e18344-5fec-46a1-bfae-3ee2bf2d7cd0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\system\data">
-      <UniqueIdentifier>{a66417c1-43e5-4869-bff2-1b317070bd5d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="game\system\collision">
-      <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="effect">
       <UniqueIdentifier>{b4b6c159-2ba5-45a4-bdb0-a4ece0f6c8a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="game\gameObject\gui\roundIcon">
+    <Filter Include="object">
+      <UniqueIdentifier>{6be780de-8a4d-474d-8e35-d6a0bff7c37f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\gui">
+      <UniqueIdentifier>{7727f078-40ad-4dc5-813d-5077ebcb4ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\gui\gauge">
+      <UniqueIdentifier>{01e18344-5fec-46a1-bfae-3ee2bf2d7cd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\gui\roundIcon">
       <UniqueIdentifier>{b1d57e2b-547d-48dd-bd31-d95bac96e7df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\player">
+      <UniqueIdentifier>{accd9dfe-c150-473b-a2ff-16c465ac8cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\staticStage">
+      <UniqueIdentifier>{be349677-35a9-46dc-a2c7-a393d55478f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\stage">
+      <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{12137d76-a86f-450f-a28f-82e3261300c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\event">
+      <UniqueIdentifier>{1e28347a-f646-42f1-a02f-4624078784ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\data">
+      <UniqueIdentifier>{a66417c1-43e5-4869-bff2-1b317070bd5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\collision">
+      <UniqueIdentifier>{18adf48a-d254-47e3-bfc6-c5ad641461e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bace">
+      <UniqueIdentifier>{5737a367-265e-4ef9-98cc-13bfef19110e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,34 +64,34 @@
       <Filter>game</Filter>
     </ClInclude>
     <ClInclude Include="staticStage.h">
-      <Filter>game\gameObject\staticStage</Filter>
+      <Filter>object\staticStage</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>game\gameObject\player</Filter>
+      <Filter>object\player</Filter>
     </ClInclude>
     <ClInclude Include="colStage.h">
-      <Filter>game\system\collision</Filter>
+      <Filter>system\collision</Filter>
     </ClInclude>
     <ClInclude Include="stage.h">
-      <Filter>game\gameObject\stage</Filter>
+      <Filter>object\stage</Filter>
     </ClInclude>
     <ClInclude Include="eventManager.h">
-      <Filter>game\system\event</Filter>
+      <Filter>system\event</Filter>
     </ClInclude>
     <ClInclude Include="EventList.h">
-      <Filter>game\system\event</Filter>
+      <Filter>system\event</Filter>
     </ClInclude>
     <ClInclude Include="EventData.h">
-      <Filter>game\system\event</Filter>
+      <Filter>system\event</Filter>
     </ClInclude>
     <ClInclude Include="gauge.h">
-      <Filter>game\gameObject\gui\gauge</Filter>
+      <Filter>object\gui\gauge</Filter>
     </ClInclude>
     <ClInclude Include="guiManager.h">
-      <Filter>game\gameObject\gui</Filter>
+      <Filter>object\gui</Filter>
     </ClInclude>
     <ClInclude Include="dataManager.h">
-      <Filter>game\system\data</Filter>
+      <Filter>system\data</Filter>
     </ClInclude>
     <ClInclude Include="gameConfig.h">
       <Filter>game</Filter>
@@ -109,7 +112,10 @@
       <Filter>effect</Filter>
     </ClInclude>
     <ClInclude Include="roundIcon.h">
-      <Filter>game\gameObject\gui\roundIcon</Filter>
+      <Filter>object\gui\roundIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="BaceScene.h">
+      <Filter>bace</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,28 +130,28 @@
       <Filter>game</Filter>
     </ClCompile>
     <ClCompile Include="staticStage.cpp">
-      <Filter>game\gameObject\staticStage</Filter>
+      <Filter>object\staticStage</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
-      <Filter>game\gameObject\player</Filter>
+      <Filter>object\player</Filter>
     </ClCompile>
     <ClCompile Include="colStage.cpp">
-      <Filter>game\system\collision</Filter>
+      <Filter>system\collision</Filter>
     </ClCompile>
     <ClCompile Include="stage.cpp">
-      <Filter>game\gameObject\stage</Filter>
+      <Filter>object\stage</Filter>
     </ClCompile>
     <ClCompile Include="eventManager.cpp">
-      <Filter>game\system\event</Filter>
+      <Filter>system\event</Filter>
     </ClCompile>
     <ClCompile Include="gauge.cpp">
-      <Filter>game\gameObject\gui\gauge</Filter>
+      <Filter>object\gui\gauge</Filter>
     </ClCompile>
     <ClCompile Include="guiManager.cpp">
-      <Filter>game\gameObject\gui</Filter>
+      <Filter>object\gui</Filter>
     </ClCompile>
     <ClCompile Include="dataManager.cpp">
-      <Filter>game\system\data</Filter>
+      <Filter>system\data</Filter>
     </ClCompile>
     <ClCompile Include="edgeEffect.cpp">
       <Filter>effect</Filter>
@@ -163,7 +169,10 @@
       <Filter>effect</Filter>
     </ClCompile>
     <ClCompile Include="roundIcon.cpp">
-      <Filter>game\gameObject\gui\roundIcon</Filter>
+      <Filter>object\gui\roundIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="BaceScene.cpp">
+      <Filter>bace</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

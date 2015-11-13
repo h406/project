@@ -132,6 +132,7 @@ bool GuiManager::init(EventManager* eventManager)
   _roundNum->setColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
   _roundNum->setNumber(1);
   _roundNum->setPos(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f);
+  _roundScl = 1.0f;
   this->addChild(_roundNum);
 
   _roundIcon = RoundIcon::create(50.0f, 50.0f);
@@ -140,21 +141,21 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_roundIcon);
 
   // [フィニッシュ！]
-  _stringFinish = Sprite2D::create("./data/texture/finish.png");
-  _stringFinish->setSize(580 * 1.5f, 150 * 1.5f);
-  _stringFinish->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
-  _stringFinish->setVisible(false);
-  this->addChild(_stringFinish);
+  _finish._sprite = Sprite2D::create("./data/texture/finish.png");
+  _finish._sprite->setSize(512 * 1.5f, 128 * 1.5f);
+  _finish._sprite->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  _finish._sprite->setVisible(false);
+  _finish._scl = 0.0f;
+  this->addChild(_finish._sprite);
 
-  // 開始時のタイムと文字
-  _startNum = NumberSprite::create(1, "./data/texture/num.png");
-  _startNum->setSize(kSTART_TIME_SIZE.x, kSTART_TIME_SIZE.y);
-  _startNum->setColor(D3DXCOLOR(1.0f, 0.0f, 0.2f, 1.0f));
-  _startNum->setNumber(3);
-  _startNum->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
-  _startNum->setVisible(false);
-  this->addChild(_startNum);
-  _startNumScl = 1.0f;
+  // [スタート！]
+  _start._sprite = Sprite2D::create("./data/texture/start.png");
+  _start._sprite->setSize(512 * 1.5f, 128 * 1.5f);
+  _start._sprite->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  _start._sprite->setVisible(false);
+  _start._scl = 0.0f;
+  this->addChild(_start._sprite);
+
 
   // イベントセット
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
@@ -166,6 +167,7 @@ bool GuiManager::init(EventManager* eventManager)
   eventManager->addEventListener(EventList::PLAYER_1_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::NEXT_ROUND, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::ROUND_START, bind(&GuiManager::EventListener, this, placeholders::_1));
 
   return true;
 }
@@ -211,11 +213,13 @@ void GuiManager::update(void)
   int time = DataManager::instance().getData()->getTime();
   if (time < 60){
     _time->setVisible(false);
-    _stringFinish->setVisible(true);
-  }
-  else {
+    _finish._sprite->setVisible(true);
+    _finish._scl += (1.5f - _finish._scl) * 0.15f;
+    _finish._sprite->setSize((512 * 1.5f) *_finish._scl, (128 * 1.5f) * _finish._scl);
+  } else {
     _time->setNumber(time / 60);
-    _stringFinish->setVisible(false);
+    _finish._sprite->setVisible(false);
+    _finish._scl = 0.0f;
   }
 
   if (time == 60 * 4 || time == 60 * 3 || time == 60 * 2){
@@ -223,6 +227,14 @@ void GuiManager::update(void)
   }
   _timeScl += (1 - _timeScl) * 0.05f;
   _time->setSize(kTIME_SIZE.x * _timeScl, kTIME_SIZE.y * _timeScl);
+
+  // スタート文字
+  if (time > (GameConfig::kONE_ROUND_TIME * 60) - (1 * 60)){
+    _start._scl += (1.5f - _start._scl) * 0.15f;
+    _start._sprite->setSize((512 * 1.5f) *_start._scl, (128 * 1.5f) * _start._scl);
+  } else {
+    _start._sprite->setVisible(false);
+  }
 }
 
 //==============================================================================
@@ -276,9 +288,13 @@ void GuiManager::EventListener(EventData* eventData) {
     break;
 
   case EventList::NEXT_ROUND:
-    int round = DataManager::instance().getData()->getRound();
-    _roundNum->setNumber(round++);
+    _roundNum->setNumber(DataManager::instance().getData()->getRound() + 1);
     _time->setVisible(true);
+    break;
+
+  case EventList::ROUND_START:
+    _start._sprite->setVisible(true);
+    _start._scl = 0.0f;
     break;
   }
 

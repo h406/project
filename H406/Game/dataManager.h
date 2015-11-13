@@ -24,7 +24,6 @@ public:
   int getRound()const { return _round; }
   int getPlayerRoundWin(int playerId)const { return _playerRoundWin[playerId]; }
   int getPlayerDripNum(int playerId)const { return _playerDripNum[playerId]; }
-
 protected:
   int _randSeed;
   int _time;

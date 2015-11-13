@@ -12,6 +12,8 @@
 #include "parpix.h"
 #include "test.h"
 
+#include "BaceScene.h"
+
 //------------------------------------------------------------------------------
 // WinMain
 //------------------------------------------------------------------------------
@@ -27,11 +29,15 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   //app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());
+
+  auto scene = BaceScene::create();
+  scene->setCurScene(Title::create());
   
   // Å‰‚ÌƒV[ƒ“
-  app.setBaceScene(Game::create());
+  app.setBaceScene(scene);
 
   return app.run();
 }
+
 
 //EOF

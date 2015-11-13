@@ -21,9 +21,14 @@ namespace{
 //------------------------------------------------------------------------------
 bool Player::init(int playerID)
 {
-  _player = Sprite3D::create("./data/texture/akira000.png");
-  _player->setSize(kPLAYER_SIZE.x, kPLAYER_SIZE.y);
-  this->addChild(_player);
+  _player[0] = XFileObject::create("./data/model/bar.x");
+  this->addChild(_player[0]);
+
+  _player[1] = XFileObject::create("./data/model/hand.x");
+  this->addChild(_player[1]);
+
+  _player[0]->setScl(Vec3(0.7f,0.7f,0.7f));
+  _player[1]->setScl(Vec3(0.7f,0.7f,0.7f));
 
   _playerMoveVec = Vec3(0.0f, 0.0, 0.0f);
   _playerMoveDest = Vec3(0.0f, 0.0, 0.0f);
@@ -54,8 +59,14 @@ void Player::update(void)
   _playerMoveDest.z = sinf(rot) * length * kPlayerMovement;
   _playerMoveDest.y -= 5.0;
 
+
   _playerMoveVec+= (_playerMoveDest - _playerMoveVec) * 0.1f;
   _pos += _playerMoveVec;
+
+  rot = D3DX_PI - atan2(_playerMoveVec.z,_playerMoveVec.x);
+  _player[0]->setRotY(rot);
+  _player[1]->setRotY(rot);
+
 
   _playerMoveDest = Vec3(0.0f, 0.0, 0.0f);
 }

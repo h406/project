@@ -130,7 +130,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
     D3DX_PI / 4.0f,				// 視野角
     (float)windowSize.cx / (float)windowSize.cy,	// アスペクト比
     10.0f,						// rear値
-    2500.0f);					// far値
+    5000.0f);					// far値
 
   // ビューポート設定
   D3DVIEWPORT9 vp;

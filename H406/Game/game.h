@@ -35,6 +35,7 @@ public:
 
   enum GAME_MODE{
     MODE_NONE = -1,
+    MODE_START,
     MODE_PLAY,
     MODE_ROUND_CHANGE,
     MODE_NEXT_ROUND_SETUP
@@ -45,7 +46,6 @@ private:
   int _bultime;
   int _nextModeTime;
 
-  Stage* _stage;
 
   Player* _player[kPlayerNum];
   CameraBace* _playerCam[kPlayerNum];
