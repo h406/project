@@ -32,6 +32,8 @@ private:
   Sprite2D* _roundIcon[2][kROUND_MAX];
 
   int _roundWinNum[2];
+  float _numScl;
+  int _prevPlayerId;
 };
 
 #endif

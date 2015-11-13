@@ -19,6 +19,8 @@ bool RoundIcon::init(float width, float height)
   const Vec2 pos[2] = { Vec2(App::instance().getWindowSize().cx * 0.5f - 220.0f, 70.0f),
                         Vec2(App::instance().getWindowSize().cx * 0.5f + 220.0f, 70.0f) };
   _size = Vec2(width,height);
+  _numScl = 1.0f;
+  _prevPlayerId = -1;
 
   for (int i = 0; i < 2; i++){
     for (int j = 0; j < RoundIcon::kROUND_MAX; j++){
@@ -53,6 +55,10 @@ void RoundIcon::update(void){
       }
     }
   }
+  if(_prevPlayerId != -1){
+    _numScl += (1 - _numScl) * 0.1f;
+    _roundIcon[_prevPlayerId][_roundWinNum[_prevPlayerId] - 1]->setSize(_size.x *_numScl, _size.y * _numScl);
+  }
 }
 
 //==============================================================================
@@ -80,6 +86,8 @@ void RoundIcon::setRoundWinNum(int playerId, int num){
   else{
     _roundWinNum[playerId] = num;
   }
+  _prevPlayerId = playerId;
+  _numScl = 10.0f;
 }
 
 

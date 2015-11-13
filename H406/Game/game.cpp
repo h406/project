@@ -20,12 +20,17 @@
 #include "title.h"
 #include "BaceScene.h"
 
+namespace{
+  const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
+  const Vec3 kPLAYER_1_INIT_POS = Vec3(-500 + bordSize.x * 0.5f, 0, 0);
+  const Vec3 kPLAYER_2_INIT_POS = Vec3(500 + bordSize.x * 0.5f, 0, 0);
+}
+
 //------------------------------------------------------------------------------
 // init
 //------------------------------------------------------------------------------
 bool Game::init() {
   auto camera = App::instance().getRenderer()->getCamera();
-  const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X,1000 / (float)Stage::kNUM_Y);
 
   // イベントマネージャー
   _eventManager = new EventManager();
@@ -35,12 +40,12 @@ bool Game::init() {
 
   // プレイヤー1
   _player[0] = Player::create(0);
-  _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f,0,0));
+  _player[0]->setPos(kPLAYER_1_INIT_POS);
   this->addChild(_player[0]);
 
   // プレイヤー2
   _player[1] = Player::create(1);
-  _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
+  _player[1]->setPos(kPLAYER_2_INIT_POS);
   this->addChild(_player[1]);
 
   _mainCamera = camera->createCamera();
@@ -86,8 +91,8 @@ bool Game::init() {
 
   _freezeTime = 0;
   _bultime = 0;
-  _nextModeTime = 0;
-  _gameMode = Game::MODE_PLAY;
+  _nextModeTime = 90;
+  _gameMode = Game::MODE_START;
 
   return true;
 }
@@ -100,16 +105,42 @@ void Game::update() {
   sprintf_s(fps, "%d", App::instance().getFps());
   App::instance().setTitle(fps);
 
+  auto input = App::instance().getInput();
   auto _stage = BaceScene::instance()->getStage();
 
+  Vec3 playerPos[2] = {
+    _player[0]->getPos(),
+    _player[1]->getPos(),
+  };
+
+  // camera
+  const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
+  const Vec3 playerDir(playerPos[0] - playerPos[1]);
+  float length = D3DXVec3Length(&playerDir);
+  const float rot = atan2f(300, -900);
+
+  if (length < 300) length = 300;
+  if (length >(1201.85042515f/* = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)Stage::kNUM_X)*/))
+    length = (1201.85042515f);
+
+  _mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
+  _mainCamera->setPosR(camvec);
+
   switch (_gameMode){
+  // スタート時
+  case Game::MODE_START:
+  {
+    _nextModeTime--;
+    if (_nextModeTime == 0){
+      _gameMode = Game::MODE_PLAY;
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_START)), nullptr);
+    }
+  }
+  break;
+
    // ゲーム中
   case Game::MODE_PLAY:
   {
-    auto input = App::instance().getInput();
-
-    Vec3 playerPos[2] = {_player[0]->getPos(), _player[1]->getPos()};
-
     if (_freezeTime == 0 && _nextModeTime == 0) {
       for (int i = 0; i < 2; i++) {
         if (input->isPress(i, VK_INPUT::UP)) {
@@ -178,17 +209,17 @@ void Game::update() {
       _playerCam[i]->setPosR(playerPos[i] + Vec3(0, 10, 0));
     }
 
-    const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
-    const Vec3 playerDir(playerPos[0] - playerPos[1]);
-    float length = D3DXVec3Length(&playerDir);
-    const float rot = atan2f(300, -900);
+    //const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
+    //const Vec3 playerDir(playerPos[0] - playerPos[1]);
+    //float length = D3DXVec3Length(&playerDir);
+    //const float rot = atan2f(300, -900);
 
-    if (length < 300) length = 300;
-    if (length >(1201.85042515f/* = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)Stage::kNUM_X)*/))
-      length = (1201.85042515f);
+    //if (length < 300) length = 300;
+    //if (length >(1201.85042515f/* = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)Stage::kNUM_X)*/))
+    //  length = (1201.85042515f);
 
-    _mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
-    _mainCamera->setPosR(camvec);
+    //_mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
+    //_mainCamera->setPosR(camvec);
 
     if (_bultime) {
       Vec3 ram(float(rand() % 10), float(rand() % 10), 0);
@@ -225,13 +256,12 @@ void Game::update() {
   // ラウンドの合間
   case Game::MODE_ROUND_CHANGE:
   {
-    // 通常カメラに移行
     _nextModeTime--;
     if (_nextModeTime == 0){
-      auto camera = App::instance().getRenderer()->getCamera();
-      camera->setCamera(_mainCamera, 90);
-
       _nextModeTime = 120;
+      _player[0]->setDripNum(0);
+      _player[1]->setDripNum(0);
+      _stage->reset();
       _gameMode = Game::MODE_NEXT_ROUND_SETUP;
     }
   }
@@ -240,18 +270,25 @@ void Game::update() {
   // リセットとか
   case Game::MODE_NEXT_ROUND_SETUP:
   {
+    // プレイヤー位置戻す
+    Vec3 playerPosMove[2] = { Vec3((kPLAYER_1_INIT_POS - playerPos[0]) * 0.05f),
+                              Vec3((kPLAYER_2_INIT_POS - playerPos[1]) * 0.05f) };
+    Vec3 playerPosDest[2] = { _player[0]->getPos() + playerPosMove[0],
+                              _player[1]->getPos() + playerPosMove[1]};
+    _player[0]->setPos(playerPosDest[0]);
+    _player[1]->setPos(playerPosDest[1]);
+
     _nextModeTime--;
-    // リセット
     if (_nextModeTime == 0){
-      const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
-      _stage->reset();
-      _player[0]->setPos(Vec3(-500 + bordSize.x * 0.5f, 0, 0));
-      _player[1]->setPos(Vec3(500 - bordSize.x * 0.5f, 0, 0));
-      _player[0]->setDripNum(0);
-      _player[1]->setDripNum(0);
+      _player[0]->setPos(kPLAYER_1_INIT_POS);
+      _player[1]->setPos(kPLAYER_2_INIT_POS);
       _eventManager->dispatchEvent(EventList(int(EventList::NEXT_ROUND)), nullptr);
 
-      _gameMode = Game::MODE_PLAY;
+      auto camera = App::instance().getRenderer()->getCamera();
+      camera->setCamera(_mainCamera, 90);
+
+      _gameMode = Game::MODE_START;
+      _nextModeTime = 90;
     }
   }
   break;
@@ -293,13 +330,6 @@ void Game::EventListener(EventData* eventData) {
 void Game::uninit() {
   SafeDelete(_eventManager);
   DataManager::instance().uninit();
-
-  // 生成したカメラを全て削除
-  for(int i = 0; i < GameConfig::kPLAYER_MAX; ++i) {
-    App::instance().getRenderer()->getCamera()->releaseCamera(_playerCam[i]);
-  }
-  App::instance().getRenderer()->getCamera()->releaseCamera(_mainCamera);
-  App::instance().getRenderer()->getCamera()->releaseCamera(_roundChangeCam);
 }
 
 //EOF

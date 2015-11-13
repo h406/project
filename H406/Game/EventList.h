@@ -23,6 +23,7 @@ enum class EventList {
   PLAYER_1_ROUND_WIN,
   PLAYER_2_ROUND_WIN,
   NEXT_ROUND,
+  ROUND_START,
   MAX,
 };
 
