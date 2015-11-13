@@ -49,6 +49,9 @@
     <Filter Include="bace">
       <UniqueIdentifier>{5737a367-265e-4ef9-98cc-13bfef19110e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="select">
+      <UniqueIdentifier>{23d2c94a-c5f6-493f-a158-5668fc1a2af1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -120,6 +123,9 @@
     <ClInclude Include="fxaa.h">
       <Filter>effect</Filter>
     </ClInclude>
+    <ClInclude Include="SelectScene.h">
+      <Filter>select</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -179,6 +185,9 @@
     </ClCompile>
     <ClCompile Include="fxaa.cpp">
       <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectScene.cpp">
+      <Filter>select</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

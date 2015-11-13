@@ -12,6 +12,7 @@
 #include "parpix.h"
 #include "test.h"
 #include "fxaa.h"
+#include "SelectScene.h"
 
 #include "BaceScene.h"
 

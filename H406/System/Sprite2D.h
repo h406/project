@@ -26,6 +26,7 @@ public:
   void draw(const Renderer* renderer);
   void uninit();
 
+  const D3DXCOLOR& getColor() const { return _color; }
   void setColor(const D3DXCOLOR& color) { _color = color; }
 
   void setNumU(int u) { _numU = u; }

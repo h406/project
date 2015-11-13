@@ -1,23 +1,21 @@
 //==============================================================================
 //
-// title[title.h]
-// Author : Yasuaki Yamashita : 2015/10/04
+// SelectScene[SelectScene.h]
+// Author : Yasuaki Yamashita : 2015/11/13
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _TITLE_H_
-#define _TITLE_H_
+#ifndef _SELECTSCENE_H_
+#define _SELECTSCENE_H_
 
 #include "CreateFunc.h"
 
-class CameraBace;
-
 //==============================================================================
-// 
-//==============================================================================
-class Title : public iScene ,public CreateFunc<Title> {
+// class
+//------------------------------------------------------------------------------
+class SelectScene : public iScene,public CreateFunc<SelectScene> {
 public:
   using CreateFunc::create;
 
@@ -27,8 +25,8 @@ public:
 
 private:
   CameraBace* _camera;
-  Sprite2D* _LogoSprite;
 };
+
 
 #endif
 //EOF

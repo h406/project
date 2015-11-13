@@ -287,8 +287,12 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MIPFILTER,D3DTEXF_NONE);
       }
 
+      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
+      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
       // 普通の2D
       baceNode->drawChild(this,NodeType::normal2D);
+      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,TRUE);
     }
 
     // フェード用
