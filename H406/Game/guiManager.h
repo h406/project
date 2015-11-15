@@ -28,6 +28,11 @@ public:
     float _scl;
   };
 
+  struct GUI_NUMBER_2D{
+    NumberSprite* _sprite;
+    float _scl;
+  };
+
   bool init(EventManager* eventManager);
   void update();
   void uninit();
@@ -45,18 +50,22 @@ private:
   Sprite2D* _plusHighLight[2];
   NumberSprite* _plusNum[2];
 
-  NumberSprite* _time;
-  NumberSprite* _roundNum;
-  NumberSprite* _startNum;
+  GUI_NUMBER_2D _time;
+  GUI_NUMBER_2D _roundNum;
+  GUI_NUMBER_2D _resultNum[2];
+  float _resultNumScl[2];
+  Vec2 _resultNumPosDest[2];
 
+  // •¶ŽšŒn
   GUI_SPRITE_2D _finish;
   GUI_SPRITE_2D _start;
 
-  float _timeScl;
-  float _startNumScl;
+  int _resultNumCount;
+  int _frameCount;
+  bool _is_result;
+  bool _is_start;
 
   RoundIcon* _roundIcon;
-  float _roundScl;
 };
 
 #endif

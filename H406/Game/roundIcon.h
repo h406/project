@@ -24,6 +24,8 @@ public:
 
   void setTexture(int playerID, const char* tex);
   void setRoundWinNum(int playerId, int num);
+  void setPlayerWin(int playerId, bool val){ _prevPlayerWin[playerId] = val; }
+  void setMove(bool move){ _is_move = move; }
 
   static const int kROUND_MAX = 3;
 
@@ -33,7 +35,8 @@ private:
 
   int _roundWinNum[2];
   float _numScl;
-  int _prevPlayerId;
+  bool _prevPlayerWin[2];
+  bool _is_move;
 };
 
 #endif

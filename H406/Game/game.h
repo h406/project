@@ -37,7 +37,7 @@ public:
     MODE_NONE = -1,
     MODE_START,
     MODE_PLAY,
-    MODE_ROUND_CHANGE,
+    MODE_ROUND_FINISH,
     MODE_NEXT_ROUND_SETUP
   };
 
@@ -45,7 +45,7 @@ private:
   int _freezeTime;
   int _bultime;
   int _nextModeTime;
-
+  int _mapToTime; // カウントアップに使う
 
   Player* _player[kPlayerNum];
   CameraBace* _playerCam[kPlayerNum];
@@ -59,7 +59,6 @@ private:
 
   GAME_MODE _gameMode;
   CameraBace* _roundChangeCam; // 俯瞰のやつ
-//  CameraBace* _interpolationCam; // プレイヤーの中心補間
 };
 
 #endif

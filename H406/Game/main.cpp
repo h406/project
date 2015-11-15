@@ -26,9 +26,9 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   app.setTitle("H406");
 
   // シェーダ適用
-  app.getRenderer()->getPostEffect()->addPostEffect(new FxaaEffect());
-  app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
-  app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
+  //app.getRenderer()->getPostEffect()->addPostEffect(new FxaaEffect());
+  //app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
+  //app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
   //app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());

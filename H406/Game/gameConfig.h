@@ -12,7 +12,7 @@
 namespace GameConfig {
   const int kRAND_SEED = 1;
   const int kPLAYER_MAX = 2;
-  const int kONE_ROUND_TIME = 60;
+  const int kONE_ROUND_TIME = 15;
   const int kTIME_MAX = kONE_ROUND_TIME * 60;
   const int kROUND_MAX = 3;
 };

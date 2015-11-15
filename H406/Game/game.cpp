@@ -100,7 +100,7 @@ bool Game::init() {
 
   _freezeTime = 0;
   _bultime = 0;
-  _nextModeTime = 90;
+  _nextModeTime = 120;
   _gameMode = Game::MODE_START;
 
   return true;
@@ -218,18 +218,6 @@ void Game::update() {
       _playerCam[i]->setPosR(playerPos[i] + Vec3(0, 10, 0));
     }
 
-    //const Vec3 camvec((playerPos[0] + playerPos[1]) * 0.5f);
-    //const Vec3 playerDir(playerPos[0] - playerPos[1]);
-    //float length = D3DXVec3Length(&playerDir);
-    //const float rot = atan2f(300, -900);
-
-    //if (length < 300) length = 300;
-    //if (length >(1201.85042515f/* = sqrtf((8 * 8) + (12 * 12)) * (1000 / (float)Stage::kNUM_X)*/))
-    //  length = (1201.85042515f);
-
-    //_mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
-    //_mainCamera->setPosR(camvec);
-
     if (_bultime) {
       Vec3 ram(float(rand() % 10), float(rand() % 10), 0);
       _mainCamera->setPosP(_mainCamera->getPosP() + ram);
@@ -240,7 +228,41 @@ void Game::update() {
     if(DataManager::instance().getData()->getTime() == 60){
       const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
                                       _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+      if (player_map_num[0] < player_map_num[1]){
+        _mapToTime = 3 * player_map_num[1];
+      }else{
+        _mapToTime = 3 * player_map_num[0];
+      }
+      _mapToTime += 350;
+      _nextModeTime = _mapToTime;
+      _gameMode = Game::MODE_ROUND_FINISH;
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_FINISH)), nullptr);
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_MAP_SET)), (void*)player_map_num[0]);
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_MAP_SET)), (void*)player_map_num[1]);
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
+      _player[0]->setDripNum(0);
+      _player[1]->setDripNum(0);
+    }
+
+  } // case MODE_PLAY
+  break;
+
+  case Game::MODE_ROUND_FINISH:
+  {
+    _nextModeTime--;
+    if(_nextModeTime == _mapToTime - 100){
+      auto camera = App::instance().getRenderer()->getCamera();
+      camera->setCamera(_roundChangeCam, 90);
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_START)), nullptr);
+    }
+    if (_nextModeTime == _mapToTime - 200){
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT)), nullptr);
+    }
+    if (_nextModeTime == 80){
       // 勝敗判定
+      const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
+                                      _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
       if (player_map_num[0] == player_map_num[1]){
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_ROUND_WIN)), nullptr);
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_ROUND_WIN)), nullptr);
@@ -249,31 +271,19 @@ void Game::update() {
       } else {
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_ROUND_WIN)), nullptr);
       }
-
-      auto camera = App::instance().getRenderer()->getCamera();
-      camera->setCamera(_roundChangeCam, 90);
-
-      _nextModeTime = 130;
-      _gameMode = Game::MODE_ROUND_CHANGE;
     }
-
-    DataManager::instance().update();
-
-  } // case MODE_PLAY
-  break;
-
-  // ラウンドの合間
-  case Game::MODE_ROUND_CHANGE:
-  {
-    _nextModeTime--;
-    if (_nextModeTime == 0){
-      _nextModeTime = 120;
+    if(_nextModeTime == 0){
+      // ステージと塗り数リセット
+      _stage->reset();
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
       _player[0]->setDripNum(0);
       _player[1]->setDripNum(0);
-      _stage->reset();
+      _nextModeTime = 120;
       _gameMode = Game::MODE_NEXT_ROUND_SETUP;
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_END)), nullptr);
     }
-  }
+  } // case MODE_ROUND_FINISH
   break;
 
   // リセットとか
@@ -297,7 +307,7 @@ void Game::update() {
       camera->setCamera(_mainCamera, 90);
 
       _gameMode = Game::MODE_START;
-      _nextModeTime = 90;
+      _nextModeTime = 120;
     }
   }
   break;
@@ -305,6 +315,10 @@ void Game::update() {
 
   if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
     BaceScene::instance()->setCurScene(Title::create());
+  }
+
+  if (_gameMode != MODE_START){
+    DataManager::instance().update();
   }
 }
 

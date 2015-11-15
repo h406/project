@@ -24,12 +24,14 @@ public:
   int getRound()const { return _round; }
   int getPlayerRoundWin(int playerId)const { return _playerRoundWin[playerId]; }
   int getPlayerDripNum(int playerId)const { return _playerDripNum[playerId]; }
+  int getPlayerMapNum(int playerId)const { return _playerMapNum[playerId]; }
 protected:
   int _randSeed;
   int _time;
   int _round;
   int _playerRoundWin[GameConfig::kPLAYER_MAX];
   int _playerDripNum[GameConfig::kPLAYER_MAX];
+  int _playerMapNum[GameConfig::kPLAYER_MAX];
 };
 
 //==============================================================================
@@ -45,6 +47,7 @@ private:
     void setRound(int round){ this->_round = round; }
     void setPlayerRoundWin(int playerId, int roundWin){ this->_playerRoundWin[playerId] = roundWin; }
     void setPlayerDripNum(int playerId, int dripNum){ this->_playerDripNum[playerId] = dripNum; }
+    void setPlayerMapNum(int playerId, int mapNum){ this->_playerMapNum[playerId] = mapNum; }
   };
 
 public:

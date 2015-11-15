@@ -23,6 +23,7 @@ namespace{
   const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
   const D3DXVECTOR2 kTIME_SIZE = D3DXVECTOR2(128.0f, 128.0f);
   const D3DXVECTOR2 kSTART_TIME_SIZE = D3DXVECTOR2(256.0f, 256.0f);
+  const D3DXVECTOR2 kRESULT_NUM_SIZE = D3DXVECTOR2(128.0f * 1.5f, 128.0f * 1.5f);
 }
 
 //==============================================================================
@@ -30,11 +31,14 @@ namespace{
 //------------------------------------------------------------------------------
 bool GuiManager::init(EventManager* eventManager)
 {
+  const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+
   // ゲージ
   _gaugeBase = Sprite2D::create("./data/texture/e.png");
   _gaugeBase->setColor(D3DXCOLOR(1, 1, 1, 1));
   _gaugeBase->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
-  _gaugeBase->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+//  _gaugeBase->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  _gaugeBase->setPos(App::instance().getWindowSize().cx * 0.5f, 0.0f);
   this->addChild(_gaugeBase);
 
   _gauge[0] = Gauge::create(520.f, 92.6667f);
@@ -118,27 +122,50 @@ bool GuiManager::init(EventManager* eventManager)
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
 
   // タイマー
-  _time = NumberSprite::create(2, "./data/texture/num.png");
-  _time->setSize(kTIME_SIZE.x, kTIME_SIZE.y);
-  _time->setColor(D3DXCOLOR(1.0f, 0.0f, 0.7f, 1.0f));
-  _time->setNumber(60);
-  _time->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
-  this->addChild(_time);
-  _timeScl = 1.0f;
+  _time._sprite = NumberSprite::create(2, "./data/texture/num.png");
+  _time._sprite->setSize(kTIME_SIZE.x, kTIME_SIZE.y);
+  _time._sprite->setColor(D3DXCOLOR(1.0f, 0.0f, 0.7f, 1.0f));
+  _time._sprite->setNumber(60);
+  _time._sprite->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
+  _time._sprite->setVisible(false);
+  _time._scl = 1.0f;
+  this->addChild(_time._sprite);
 
   // ラウンド
-  _roundNum = NumberSprite::create(1, "./data/texture/num.png");
-  _roundNum->setSize(64, 64);
-  _roundNum->setColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-  _roundNum->setNumber(1);
-  _roundNum->setPos(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f);
-  _roundScl = 1.0f;
-  this->addChild(_roundNum);
+  _roundNum._sprite = NumberSprite::create(1, "./data/texture/num.png");
+  _roundNum._sprite->setSize(64, 64);
+  _roundNum._sprite->setColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+  _roundNum._sprite->setNumber(1);
+  _roundNum._sprite->setPos(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f);
+  _roundNum._sprite->setVisible(false);
+  _roundNum._scl = 1.0f;
+  this->addChild(_roundNum._sprite);
 
   _roundIcon = RoundIcon::create(50.0f, 50.0f);
   _roundIcon->setTexture(0, "./data/texture/neko000.png");
   _roundIcon->setTexture(1, "./data/texture/neko000.png");
   this->addChild(_roundIcon);
+
+  // ラウンド結果数字
+  _resultNumCount = 0;
+  _is_result = false;
+  _resultNum[0]._sprite = NumberSprite::create(2, "./data/texture/num.png");
+  _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x, kRESULT_NUM_SIZE.y);
+  _resultNum[0]._sprite->setColor(kPLAYER_COLOR[0]);
+  _resultNum[0]._sprite->setNumber(0);
+  _resultNum[0]._sprite->setPos(windowCenter.x - 300.f, windowCenter.y);
+  _resultNum[0]._sprite->setVisible(false);
+  _resultNum[0]._scl = 1.0f;
+  this->addChild(_resultNum[0]._sprite);
+
+  _resultNum[1]._sprite = NumberSprite::create(2, "./data/texture/num.png");
+  _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x, kRESULT_NUM_SIZE.y);
+  _resultNum[1]._sprite->setColor(kPLAYER_COLOR[1]);
+  _resultNum[1]._sprite->setNumber(0);
+  _resultNum[1]._sprite->setPos(windowCenter.x + 300.f, windowCenter.y);
+  _resultNum[1]._sprite->setVisible(false);
+  _resultNum[1]._scl = 1.0f;
+  this->addChild(_resultNum[1]._sprite);
 
   // [フィニッシュ！]
   _finish._sprite = Sprite2D::create("./data/texture/finish.png");
@@ -155,7 +182,7 @@ bool GuiManager::init(EventManager* eventManager)
   _start._sprite->setVisible(false);
   _start._scl = 0.0f;
   this->addChild(_start._sprite);
-
+  _is_start = false;
 
   // イベントセット
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
@@ -168,6 +195,10 @@ bool GuiManager::init(EventManager* eventManager)
   eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::NEXT_ROUND, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::ROUND_START, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::ROUND_RESULT, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::ROUND_RESULT_START, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::ROUND_RESULT_END, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::ROUND_FINISH, bind(&GuiManager::EventListener, this, placeholders::_1));
 
   return true;
 }
@@ -177,6 +208,7 @@ bool GuiManager::init(EventManager* eventManager)
 //------------------------------------------------------------------------------
 void GuiManager::update(void)
 {
+  const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
   const auto deta = DataManager::instance().getData();
   const int playerDripNum[2] = {
     deta->getPlayerDripNum(0),deta->getPlayerDripNum(1)
@@ -208,33 +240,69 @@ void GuiManager::update(void)
   float gaugeRate[2] = { playerDripNum[0] / (float)9, playerDripNum[1] / (float)9 };
   _gauge[0]->setRate(gaugeRate[0]);
   _gauge[1]->setRate(gaugeRate[1]);
+  Vec2 gaugePos = _gaugeBase->getPos() + ((windowCenter - _gaugeBase->getPos()) * 0.07f);
+  _gaugeBase->setPos(gaugePos);
 
   // タイマー更新
   int time = DataManager::instance().getData()->getTime();
   if (time < 60){
-    _time->setVisible(false);
-    _finish._sprite->setVisible(true);
-    _finish._scl += (1.5f - _finish._scl) * 0.15f;
-    _finish._sprite->setSize((512 * 1.5f) *_finish._scl, (128 * 1.5f) * _finish._scl);
+    _time._sprite->setVisible(false);
   } else {
-    _time->setNumber(time / 60);
-    _finish._sprite->setVisible(false);
-    _finish._scl = 0.0f;
+    _time._sprite->setNumber(time / 60);
   }
+  //Vec2 timePos = _time._sprite->getPos() + ((Vec2(App::instance().getWindowSize().cx * 0.5f, 128.0f) - _time._sprite->getPos()) * 0.07f);
+  //_time._sprite->setPos(timePos);
 
   if (time == 60 * 4 || time == 60 * 3 || time == 60 * 2){
-    _timeScl = 2.5f;
+    _time._scl = 2.5f;
   }
-  _timeScl += (1 - _timeScl) * 0.05f;
-  _time->setSize(kTIME_SIZE.x * _timeScl, kTIME_SIZE.y * _timeScl);
+  _time._scl += (1 - _time._scl) * 0.07f;
+  _time._sprite->setSize(kTIME_SIZE.x * _time._scl, kTIME_SIZE.y * _time._scl);
 
   // スタート文字
-  if (time > (GameConfig::kONE_ROUND_TIME * 60) - (1 * 60)){
-    _start._scl += (1.5f - _start._scl) * 0.15f;
-    _start._sprite->setSize((512 * 1.5f) *_start._scl, (128 * 1.5f) * _start._scl);
-  } else {
-    _start._sprite->setVisible(false);
+  if (_is_start){
+    if (time > (GameConfig::kONE_ROUND_TIME * 60) - (1 * 60)){
+      _start._scl += (1.5f - _start._scl) * 0.15f;
+      _start._sprite->setSize((512 * 1.5f) *_start._scl, (128 * 1.5f) * _start._scl);
+    }
+    else {
+      _start._sprite->setVisible(false);
+      _is_start = false;
+    }
   }
+
+  // ラウンド
+  Vec2 roundPos = _roundNum._sprite->getPos() + ((Vec2(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f) - _roundNum._sprite->getPos()) * 0.05f);
+  _roundNum._sprite->setPos(roundPos);
+
+  if (_is_result){
+    //ラウンド結果のカウントアップ
+    _frameCount++;
+    if (_frameCount > 2){
+      _resultNumCount++;
+      _frameCount = 0;
+      if (DataManager::instance().getData()->getPlayerMapNum(0) >= _resultNumCount){
+        _resultNum[0]._sprite->setNumber(_resultNumCount);
+        _resultNum[0]._scl = 1.5f;
+      }
+      if (DataManager::instance().getData()->getPlayerMapNum(1) >= _resultNumCount){
+        _resultNum[1]._sprite->setNumber(_resultNumCount);
+        _resultNum[1]._scl = 1.5f;
+      }
+    }
+    _resultNum[0]._scl += (_resultNumScl[0] - _resultNum[0]._scl) * 0.2f;
+    _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x *_resultNum[0]._scl, kRESULT_NUM_SIZE.y * _resultNum[0]._scl);
+    _resultNum[1]._scl += (_resultNumScl[1] - _resultNum[1]._scl) * 0.2f;
+    _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x *_resultNum[1]._scl, kRESULT_NUM_SIZE.y * _resultNum[1]._scl);
+  }
+
+  Vec2 rNumPos[2] = { _resultNum[0]._sprite->getPos(), _resultNum[1]._sprite->getPos() };
+  Vec2 movePos[2] = { (_resultNumPosDest[0] - rNumPos[0]) * 0.05f, (_resultNumPosDest[1] - rNumPos[1]) * 0.05f };
+  _resultNum[0]._sprite->setPos(rNumPos[0] + movePos[0]);
+  _resultNum[1]._sprite->setPos(rNumPos[1] + movePos[1]);
+
+  _finish._scl += (1.5f - _finish._scl) * 0.15f;
+  _finish._sprite->setSize((512 * 1.5f) *_finish._scl, (128 * 1.5f) * _finish._scl);
 }
 
 //==============================================================================
@@ -244,11 +312,12 @@ void GuiManager::uninit(void)
 {
 }
 
-
 //==============================================================================
 // イベント
 //------------------------------------------------------------------------------
 void GuiManager::EventListener(EventData* eventData) {
+  const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+
   switch (eventData->getEvent()) {
 
     // 塗るの取得した
@@ -282,22 +351,67 @@ void GuiManager::EventListener(EventData* eventData) {
     // ラウンド勝ち
   case EventList::PLAYER_1_ROUND_WIN:
     _roundIcon->setRoundWinNum(0, DataManager::instance().getData()->getPlayerRoundWin(0));
+    _resultNumScl[0] = 1.5f;
     break;
   case EventList::PLAYER_2_ROUND_WIN:
     _roundIcon->setRoundWinNum(1, DataManager::instance().getData()->getPlayerRoundWin(1));
+    _resultNumScl[1] = 1.5f;
+    break;
+
+  case EventList::ROUND_RESULT_START:
+    _finish._sprite->setVisible(false);
+    _resultNum[0]._sprite->setVisible(true);
+    _resultNum[1]._sprite->setVisible(true);
+    _resultNum[0]._sprite->setNumber(0);
+    _resultNum[1]._sprite->setNumber(0);
+    _resultNumScl[0] = 1.0f;
+    _resultNumScl[1] = 1.0f;
+    _resultNum[0]._sprite->setPos(-200.0f, windowCenter.y);
+    _resultNum[1]._sprite->setPos(App::instance().getWindowSize().cx + 200.0f, windowCenter.y);
+    _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x * _resultNumScl[0], kRESULT_NUM_SIZE.y * _resultNumScl[0]);
+    _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x * _resultNumScl[1], kRESULT_NUM_SIZE.y * _resultNumScl[1]);
+    _resultNumPosDest[0] = Vec2(windowCenter.x - 300.f, windowCenter.y);
+    _resultNumPosDest[1] = Vec2(windowCenter.x + 300.f, windowCenter.y);
+      break;
+
+  case EventList::ROUND_RESULT_END:
+    _resultNumPosDest[0] = Vec2(-400.0f, _resultNum[0]._sprite->getPos().y);
+    _resultNumPosDest[1] = Vec2(App::instance().getWindowSize().cx + 400.0f, _resultNum[1]._sprite->getPos().y);
+    break;
+
+  case EventList::ROUND_RESULT:
+    _is_result = true;
+    _resultNumCount = 0;
+    _frameCount = 0;
+    _finish._sprite->setVisible(false);
     break;
 
   case EventList::NEXT_ROUND:
-    _roundNum->setNumber(DataManager::instance().getData()->getRound() + 1);
-    _time->setVisible(true);
+    _roundNum._sprite->setNumber(DataManager::instance().getData()->getRound());
+    _time._sprite->setVisible(true);
+    _is_result = false;
+    _resultNum[0]._sprite->setVisible(false);
+    _resultNum[1]._sprite->setVisible(false);
+    _numSprite[0]->setVisible(true);
+    _numSprite[1]->setVisible(true);
+    _roundIcon->setMove(false);
+    _roundIcon->setPlayerWin(0, false);
+    _roundIcon->setPlayerWin(1, false);
     break;
 
   case EventList::ROUND_START:
+    _is_start = true;
     _start._sprite->setVisible(true);
     _start._scl = 0.0f;
+    _roundNum._sprite->setVisible(true);
+    _time._sprite->setVisible(true);
+    break;
+
+  case EventList::ROUND_FINISH:
+    _finish._sprite->setVisible(true);
+    _finish._scl = 0.0f;
     break;
   }
-
 }
 
 
