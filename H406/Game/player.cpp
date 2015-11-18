@@ -21,10 +21,10 @@ namespace{
 //------------------------------------------------------------------------------
 bool Player::init(int playerID)
 {
-  _player[0] = XFileObject::create("./data/model/bar.x");
+  _player[0] = XFileObject::create("./data/model/elephant_bar.x");
   this->addChild(_player[0]);
 
-  _player[1] = XFileObject::create("./data/model/hand.x");
+  _player[1] = XFileObject::create("./data/model/elephant_hand.x");
   this->addChild(_player[1]);
 
   _player[0]->setScl(Vec3(0.7f,0.7f,0.7f));
@@ -35,7 +35,7 @@ bool Player::init(int playerID)
 
   _playerID = playerID;
   _dripNum = 0;
-  _radius = 50.0f;
+  _radius = 20.0f;
   _weight = 0.5f;
 
   return true;
@@ -64,7 +64,7 @@ void Player::update(void)
   _playerMoveVec+= (_playerMoveDest - _playerMoveVec) * 0.1f;
   _pos += _playerMoveVec;
 
-  rot = D3DX_PI - atan2(_playerMoveVec.z,_playerMoveVec.x);
+  rot = D3DX_PI - atan2(_playerMoveVec.z,_playerMoveVec.x) + D3DX_PI * 0.5f;
   _player[0]->setRotY(rot);
   _player[1]->setRotY(rot);
 

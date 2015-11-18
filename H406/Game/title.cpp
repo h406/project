@@ -12,6 +12,9 @@
 #include "SelectScene.h"
 #include "BaceScene.h"
 
+
+static float f =  D3DX_PI * 0.5f;
+
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
@@ -24,22 +27,30 @@ bool Title::init() {
   
   _LogoSprite = Sprite2D::create("./data/texture/title.png");
   _LogoSprite->setSize(1280 * 1.0f,720 *1.0f);
-  _LogoSprite->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f);
+  _LogoSprite->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.45f);
   _LogoSprite->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_LogoSprite);
+
+  _touch_start = Sprite2D::create("./data/texture/touch_start.png");
+  _touch_start->setSize(906,140);
+  _touch_start->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.85f);
+  this->addChild(_touch_start);
+
+  f = -D3DX_PI * 0.5f;
 
   return true;
 }
 
 void Title::update() {
-  static float f = 0;
   f += 0.01f;
   _camera->setPosP({sinf(f) * 500,100,cosf(f) * 500});
 
   auto color = _LogoSprite->getColor();
   _LogoSprite->setColor(color + (D3DXCOLOR(1,1,1,1) - color) * 0.01f);
 
-  if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1)) {
+  _touch_start->setColor(D3DXCOLOR(1,1,1,min(1.f,sinf(f*10) * 10.f)));
+
+  if(App::instance().getInput()->isRelease(0,VK_INPUT::_1)) {
     BaceScene::instance()->setCurScene(SelectScene::create());
   }
 }

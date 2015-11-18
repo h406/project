@@ -67,12 +67,7 @@ bool Game::init() {
   _roundChangeCam = camera->createCamera();
   _roundChangeCam->setPosP({0,1500,0});
   _roundChangeCam->setPosR({ 0, 0, 50 });
-
-  _effect = Effect::create();
-  _effect->setScl(Vec3(1,1,1));
-  this->addChild(_effect);
-
-
+  
   // ステージとの当たり判定
   auto hitcheck = ColStage::create(BaceScene::instance()->getStage(),_eventManager);
   hitcheck->addPlayer(_player[0]);
@@ -110,6 +105,7 @@ bool Game::init() {
 // 
 //------------------------------------------------------------------------------
 void Game::update() {
+  auto _effect = BaceScene::instance()->getEffect();
   char fps[3];
   sprintf_s(fps, "%d", App::instance().getFps());
   App::instance().setTitle(fps);
@@ -326,6 +322,8 @@ void Game::update() {
 // イベント
 //------------------------------------------------------------------------------
 void Game::EventListener(EventData* eventData) {
+  auto _effect = BaceScene::instance()->getEffect();
+
   switch(eventData->getEvent()) {
   // アイテム取得した
   case EventList::PLAYER_1_DRIP_GET:

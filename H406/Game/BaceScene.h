@@ -26,9 +26,10 @@ public:
   void uninit();
 
   void setCurScene(iScene* scene);
-  iScene* getCurScene() { return _curScene; }
-  Stage* getStage() { return _stage; }
-  
+  iScene* getCurScene() const { return _curScene; }
+  Stage* getStage() const { return _stage; }
+  Effect* getEffect() const { return _effect; }
+
   static BaceScene* instance() { return _instance; }
 
 private:
@@ -38,6 +39,8 @@ private:
   iScene* _releaseScene;
   
   static BaceScene* _instance;
+
+  Effect* _effect;
 
 };
 

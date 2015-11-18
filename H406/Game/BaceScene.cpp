@@ -35,6 +35,11 @@ bool BaceScene::init() {
   _stage = Stage::create(1000.f,1000.f);
   this->addChild(_stage);
 
+  // ‚¦‚Á‚Ó‚¥‚­‚Æ
+  _effect = Effect::create();
+  _effect->setScl(Vec3(1,1,1));
+  this->addChild(_effect);
+
   _curScene = nullptr;
   _releaseScene = nullptr;
   return true;

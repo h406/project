@@ -28,6 +28,8 @@ public:
 private:
   CameraBace* _camera;
   Sprite2D* _LogoSprite;
+
+  Sprite2D* _touch_start;
 };
 
 #endif

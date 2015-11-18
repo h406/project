@@ -10,15 +10,30 @@
 #ifndef _QRDECODE_H_
 #define _QRDECODE_H_
 
+#include <string>
 
-#include "decodeqr.h"
-#pragma comment(lib, "WS2_32.LIB")
+struct CvCapture;
+using QrDecoderHandle = void*;
 
-#ifdef _DEBUG
-#pragma comment(lib, "libdecodeqr_d.lib")
-#else
-#pragma comment(lib, "libdecodeqr.lib")
-#endif
+class QRreader {
+public:
+  QRreader();
+  ~QRreader();
+
+  void update();
+
+  const std::string& getString() { return _string; }
+
+private:
+  // カメラからのビデオキャプチャを初期化
+  CvCapture *_VideoCapture;
+
+  // デコーダ
+  QrDecoderHandle _decoder;
+
+  std::string _string;
+
+};
 
 
 #endif

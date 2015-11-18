@@ -38,20 +38,24 @@ void ColStage::update() {
     if(player == nullptr) continue;
     Vec3 playerPos = player->getPos();
     if(playerPos.x < -halfSizeX) {
-      playerPos.x = -halfSizeX + abs(playerPos.x + halfSizeX);
-      player->flipMvementX();
+      playerPos.x = -halfSizeX;//+abs(playerPos.x + halfSizeX);
+      //player->flipMvementX();
+      player->setMoveVec(Vec3(0,player->getMoveVec().y,0));
     }
     if(playerPos.z < -halfSizeZ) {
-      playerPos.z = -halfSizeZ + abs(playerPos.z + halfSizeZ);
+      playerPos.z = -halfSizeZ;// + abs(playerPos.z + halfSizeZ);
       player->flipMvementZ();
+      player->setMoveVec(Vec3(0,player->getMoveVec().y,0));
     }
     if(playerPos.x > halfSizeX) {
-      playerPos.x = halfSizeX - (playerPos.x - halfSizeX);
+      playerPos.x = halfSizeX;// - (playerPos.x - halfSizeX);
       player->flipMvementX();
+      player->setMoveVec(Vec3(0,player->getMoveVec().y,0));
     }
     if(playerPos.z > halfSizeZ) {
-      playerPos.z = halfSizeZ - (playerPos.z - halfSizeZ);
+      playerPos.z = halfSizeZ;//- (playerPos.z - halfSizeZ);
       player->flipMvementZ();
+      player->setMoveVec(Vec3(0,player->getMoveVec().y,0));
     }
     if(playerPos.y < 0.0f) {
       playerPos.y = 0.0f;

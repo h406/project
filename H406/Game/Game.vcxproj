@@ -21,6 +21,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -28,6 +29,7 @@
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -41,13 +43,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(SolutionDir)opencv/include/opencv/;$(SolutionDir)opencv/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(SolutionDir)opencv/lib/;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(SolutionDir)opencv/dll/;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(SolutionDir)opencv/include/opencv/;$(SolutionDir)opencv/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(SolutionDir)opencv/lib/;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(SolutionDir)opencv/dll/;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -84,6 +88,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QRDecode\QRDecode.vcxproj">
+      <Project>{8c3dd84e-8028-4ee2-9e79-afc18d3e1da7}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
     <ProjectReference Include="..\System\System.vcxproj">
       <Project>{3659dea9-6a89-4136-9a92-c445eae2f877}</Project>
     </ProjectReference>

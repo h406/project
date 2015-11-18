@@ -25,13 +25,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -50,12 +50,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)opencv\include\opencv\;$(SolutionDir)opencv\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)opencv\lib\;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)opencv\bin\;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(SolutionDir)opencv\dll\;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)opencv\include\opencv\;$(SolutionDir)opencv\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)opencv\lib\;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(SolutionDir)opencv\bin\;$(ExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(SolutionDir)opencv\dll\;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

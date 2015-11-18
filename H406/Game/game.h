@@ -53,7 +53,6 @@ private:
 
   CameraBace* _mainCamera;
 
-  Effect* _effect;
   EventManager* _eventManager;
   GuiManager* _guiManger;
 

@@ -12,6 +12,20 @@
 
 #include "CreateFunc.h"
 
+
+namespace {
+  enum class SELECT_MODE {
+    PLAYER1_SELECT,
+    PLAYER1_QR,
+    PLAYER2_SELECT,
+    PLAYER2_QR,
+    // ââèo
+    Production,
+    MAX,
+  };
+
+}
+
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
@@ -24,7 +38,19 @@ public:
   void uninit();
 
 private:
+  void SelectQR(int playerID);
+  void ReadQR(int playerID);
+
   CameraBace* _camera;
+
+  Sprite2D* _back;
+  Sprite2D* _waku;
+
+  SELECT_MODE _mode;
+
+  bool _select;
+
+  int _backTex[2];
 };
 
 

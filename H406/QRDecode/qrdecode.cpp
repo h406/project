@@ -8,110 +8,106 @@
 //******************************************************************************
 // include
 //******************************************************************************
+
 #define _CRT_SECURE_NO_WARNINGS
-#include <Windows.h>
+#include "QRDetector.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/opencv_lib.hpp>
-#include "QRDetector.h"
+#include "decodeqr.h"
+
+#pragma comment(lib, "WS2_32.LIB")
+
+
+#ifdef _DEBUG
+#pragma comment(lib, "libdecodeqr_d.lib")
+#else
+#pragma comment(lib, "libdecodeqr.lib")
+#endif
+
+
 #include "qrdecode.h"
 
+//==============================================================================
+// コンストラクタ
 //------------------------------------------------------------------------------
-// 
-//------------------------------------------------------------------------------
-int WINAPI WinMain(
-  HINSTANCE hInstance,
-  HINSTANCE hPrevInstance,
-  LPSTR lpCmdLine,
-  int nCmdShow) {
-
+QRreader::QRreader() {
   // カメラからのビデオキャプチャを初期化
-  CvCapture *videoCapture = NULL;
-
-  // Webカメラを取得す
-  for(int i = 0;videoCapture == NULL;i++) {
-    videoCapture = cvCreateCameraCapture(i);
-    if(5 < i) return -1;
-  }
-
-  // ウインドウを作成
-  char windowName[] = "camera";
-  cvNamedWindow(windowName,CV_WINDOW_AUTOSIZE);
-
-  // Decoderを用意(decodeqr.h)
-  QrDecoderHandle decoder = qr_decoder_open();
-
-  IplImage *qrimg;
-  int c;
-
-  while(1) {
-    // Escキーが押されたら終了
-    c = cvWaitKey(2);
-    if(c == '\x1b') break;
-
-    // カメラから1フレームを取得
-    IplImage *img = cvQueryFrame(videoCapture);
-
-    if(img != 0) {
-
-      try {
-        // QRコードのデコード処理
-        qr_decoder_set_image_buffer(decoder,img);
-
-        if(!qr_decoder_is_busy(decoder)) {
-          short sz = 25;
-          short stat = qr_decoder_decode(decoder,sz);
-
-          for(sz = 25,stat = 0; (sz >= 3) && ((stat & QR_IMAGEREADER_DECODED) == 0); sz -= 2)
-            stat = qr_decoder_decode(decoder,sz);
-        }
-
-        // QRコードからテキストを取得
-        int text_size = 0;
-        unsigned char* text = new unsigned char[text_size];
-
-        QrCodeHeader header;
-        if(qr_decoder_get_header(decoder,&header)) {
-          if(text_size < header.byte_size + 1) {
-            if(text) delete[] text;
-            text_size = header.byte_size + 1;
-            text = new unsigned char[text_size];
-          }
-          qr_decoder_get_body(decoder,text,text_size);
-
-          // 画像に取得テキストを描画
-          CvFont dfont;
-          float hscale = 1.0f;
-          float vscale = 1.0f;
-          cvInitFont(&dfont,CV_FONT_HERSHEY_COMPLEX,hscale,vscale);
-          cvPutText(img,(char*)text,cvPoint(65,60),&dfont,CV_RGB(0,255,0));
-        }
-        delete[] text;
-
-      }
-      catch(...) {
-
-        // 画像にErrorを描画
-        CvFont dfont;
-        float hscale = 1.0f;
-        float vscale = 1.0f;
-        cvInitFont(&dfont,CV_FONT_HERSHEY_COMPLEX,hscale,vscale);
-        cvPutText(img,"Error",cvPoint(65,60),&dfont,CV_RGB(255,0,0));
-      }
-
-      // ウィンドウに画像を表示
-      cvShowImage(windowName,img);
+  _VideoCapture = NULL;
+  
+  try {
+    // Webカメラを取得す
+    for(int i = 0;_VideoCapture == NULL;i++) {
+      _VideoCapture = cvCreateCameraCapture(i);
+      if(5 < i) break;
     }
   }
-  qr_decoder_close(decoder);
+  catch(...) {
+
+  }
+
+  // Decoderを用意(decodeqr.h)
+  _decoder = qr_decoder_open();
+}
+
+//==============================================================================
+// デストラクタ
+//------------------------------------------------------------------------------
+QRreader::~QRreader() {
+
+  qr_decoder_close(_decoder);
 
   // 解放
-  cvReleaseImage(&qrimg);
-  cvReleaseCapture(&videoCapture);
+  //cvReleaseImage(&qrimg);
+  cvReleaseCapture(&_VideoCapture);
+}
 
-  // ウィンドウを破棄
-  cvDestroyWindow(windowName);
+//==============================================================================
+// update
+//------------------------------------------------------------------------------
+void QRreader::update() {
 
-  return 0;
+  // カメラから1フレームを取得
+  IplImage *img = cvQueryFrame(_VideoCapture);
+
+  if(img != 0) {
+
+    try {
+      // QRコードのデコード処理
+      qr_decoder_set_image_buffer(_decoder,img);
+
+      if(!qr_decoder_is_busy(_decoder)) {
+        short sz = 25;
+        short stat = qr_decoder_decode(_decoder,sz);
+
+        for(sz = 25,stat = 0; (sz >= 3) && ((stat & QR_IMAGEREADER_DECODED) == 0); sz -= 2)
+          stat = qr_decoder_decode(_decoder,sz);
+      }
+
+      // QRコードからテキストを取得
+      int text_size = 0;
+      unsigned char* text = new unsigned char[text_size];
+
+      QrCodeHeader header;
+      if(qr_decoder_get_header(_decoder,&header)) {
+        if(text_size < header.byte_size + 1) {
+          if(text) delete[] text;
+          text_size = header.byte_size + 1;
+          text = new unsigned char[text_size];
+        }
+        qr_decoder_get_body(_decoder,text,text_size);
+
+        _string = (char*)text;
+        
+      }
+      delete[] text;
+
+    }
+    catch(...) {
+
+      //error
+    }
+  }
+
 }
 
 //EOF
