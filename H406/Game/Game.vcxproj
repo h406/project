@@ -104,6 +104,9 @@
     <ClInclude Include="gameConfig.h" />
     <ClInclude Include="gauge.h" />
     <ClInclude Include="guiManager.h" />
+    <ClInclude Include="iItem.h" />
+    <ClInclude Include="itemBomb.h" />
+    <ClInclude Include="itemManager.h" />
     <ClInclude Include="parpix.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="roundIcon.h" />
@@ -127,6 +130,8 @@
     <ClCompile Include="colStage.cpp" />
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="guiManager.cpp" />
+    <ClCompile Include="itemBomb.cpp" />
+    <ClCompile Include="itemManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parpix.cpp" />
     <ClCompile Include="player.cpp" />

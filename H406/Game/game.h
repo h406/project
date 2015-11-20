@@ -20,6 +20,7 @@ class Player;
 class EventManager;
 class EventData;
 class GuiManager;
+class ItemManager;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -56,6 +57,7 @@ private:
   Effect* _effect;
   EventManager* _eventManager;
   GuiManager* _guiManger;
+  ItemManager* _itemManager;
 
   GAME_MODE _gameMode;
   CameraBace* _roundChangeCam; // ˜ëáÕ‚Ì‚â‚Â

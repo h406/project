@@ -18,6 +18,7 @@
 #include "EventData.h"
 #include "guiManager.h"
 #include "dataManager.h"
+#include "itemManager.h"
 #include "title.h"
 #include "BaceScene.h"
 
@@ -63,6 +64,13 @@ bool Game::init() {
   _playerCam[1] = camera->createCamera();
   _playerCam[1]->setPosP({0,0,0});
   _playerCam[1]->setPosR({0,0,0});
+
+  // ƒAƒCƒeƒ€
+  _itemManager = ItemManager::create();
+  _itemManager->addPlayer(_player[0]);
+  _itemManager->addPlayer(_player[1]);
+  this->addChild(_itemManager);
+  _itemManager->createBomb(0, 1, 3);
 
   _roundChangeCam = camera->createCamera();
   _roundChangeCam->setPosP({0,1500,0});

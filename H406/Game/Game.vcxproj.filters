@@ -52,6 +52,12 @@
     <Filter Include="select">
       <UniqueIdentifier>{23d2c94a-c5f6-493f-a158-5668fc1a2af1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\item">
+      <UniqueIdentifier>{e5089bce-547a-4b21-8c0c-c692992e2c4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\item\bomb">
+      <UniqueIdentifier>{12398a5e-d1db-4311-89ad-83cefe5af363}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -129,6 +135,15 @@
     <ClInclude Include="colPlayer.h">
       <Filter>system\collision</Filter>
     </ClInclude>
+    <ClInclude Include="iItem.h">
+      <Filter>object\item</Filter>
+    </ClInclude>
+    <ClInclude Include="itemManager.h">
+      <Filter>object\item</Filter>
+    </ClInclude>
+    <ClInclude Include="itemBomb.h">
+      <Filter>object\item\bomb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -194,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="colPlayer.cpp">
       <Filter>system\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="itemManager.cpp">
+      <Filter>object\item</Filter>
+    </ClCompile>
+    <ClCompile Include="itemBomb.cpp">
+      <Filter>object\item\bomb</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
