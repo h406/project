@@ -44,13 +44,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(SolutionDir)opencv/include/opencv/;$(SolutionDir)opencv/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(SolutionDir)opencv/lib/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(SolutionDir)opencv/lib/;$(SolutionDir)QRDecode/;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(SolutionDir)opencv/dll/;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/include/;$(SolutionDir)opencv/include/opencv/;$(SolutionDir)opencv/include/;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(SolutionDir)opencv/lib/;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)libwebsocket/;$(SolutionDir)effekseer/lib/;$(SolutionDir)opencv/lib/;$(SolutionDir)QRDecode/;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(SolutionDir)opencv/dll/;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

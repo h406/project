@@ -58,56 +58,57 @@ QRreader::~QRreader() {
 
   // 解放
   //cvReleaseImage(&qrimg);
-  cvReleaseCapture(&_VideoCapture);
+  if(_VideoCapture != NULL) {
+    cvReleaseCapture(&_VideoCapture);
+  }
 }
 
 //==============================================================================
 // update
 //------------------------------------------------------------------------------
 void QRreader::update() {
-
   // カメラから1フレームを取得
-  IplImage *img = cvQueryFrame(_VideoCapture);
+  if(_VideoCapture != NULL) {
+    IplImage *img = cvQueryFrame(_VideoCapture);
 
-  if(img != 0) {
+    if(img != 0) {
+      try {
+        // QRコードのデコード処理
+        qr_decoder_set_image_buffer(_decoder,img);
 
-    try {
-      // QRコードのデコード処理
-      qr_decoder_set_image_buffer(_decoder,img);
+        if(!qr_decoder_is_busy(_decoder)) {
+          short sz = 25;
+          short stat = qr_decoder_decode(_decoder,sz);
 
-      if(!qr_decoder_is_busy(_decoder)) {
-        short sz = 25;
-        short stat = qr_decoder_decode(_decoder,sz);
-
-        for(sz = 25,stat = 0; (sz >= 3) && ((stat & QR_IMAGEREADER_DECODED) == 0); sz -= 2)
-          stat = qr_decoder_decode(_decoder,sz);
-      }
-
-      // QRコードからテキストを取得
-      int text_size = 0;
-      unsigned char* text = new unsigned char[text_size];
-
-      QrCodeHeader header;
-      if(qr_decoder_get_header(_decoder,&header)) {
-        if(text_size < header.byte_size + 1) {
-          if(text) delete[] text;
-          text_size = header.byte_size + 1;
-          text = new unsigned char[text_size];
+          for(sz = 25,stat = 0; (sz >= 3) && ((stat & QR_IMAGEREADER_DECODED) == 0); sz -= 2)
+            stat = qr_decoder_decode(_decoder,sz);
         }
-        qr_decoder_get_body(_decoder,text,text_size);
 
-        _string = (char*)text;
-        
+        // QRコードからテキストを取得
+        int text_size = 0;
+        unsigned char* text = new unsigned char[text_size];
+
+        QrCodeHeader header;
+        if(qr_decoder_get_header(_decoder,&header)) {
+          if(text_size < header.byte_size + 1) {
+            if(text) delete[] text;
+            text_size = header.byte_size + 1;
+            text = new unsigned char[text_size];
+          }
+          qr_decoder_get_body(_decoder,text,text_size);
+
+          _string = (char*)text;
+
+        }
+        delete[] text;
+
       }
-      delete[] text;
+      catch(...) {
 
-    }
-    catch(...) {
-
-      //error
+        //error
+      }
     }
   }
-
 }
 
 //EOF

@@ -11,6 +11,7 @@
 #include "SelectScene.h"
 #include "game.h"
 #include "BaceScene.h"
+#include <thread>
 
 #include "../QRDecode/qrdecode.h"
 
@@ -48,7 +49,16 @@ bool SelectScene::init() {
   _mode = SELECT_MODE::PLAYER1_SELECT;
   _select = true;
 
+  _isEnd = new bool;
+  *_isEnd = false;
   _test = new QRreader();
+  _QRthread = new thread([](bool* isEnd,QRreader* reader) {
+    for(;!(*isEnd);) {
+      reader->update();
+    }
+    SafeDelete(reader);
+    SafeDelete(isEnd);
+  },_isEnd,_test);
 
   return true;
 }
@@ -68,7 +78,6 @@ void SelectScene::update() {
     _waku->setColor(color + (D3DXCOLOR(1,1,1,0) - color) * 0.1f);
   }
 
-
   switch(_mode) {
   case SELECT_MODE::PLAYER1_SELECT:
     _back->setTexture(_backTex[0]);
@@ -77,7 +86,7 @@ void SelectScene::update() {
 
   case SELECT_MODE::PLAYER1_QR:
     ReadQR(0);
-    _test->update();
+    App::instance().setTitle(_test->getString().c_str());
     break;
 
   case SELECT_MODE::PLAYER2_SELECT:
@@ -87,7 +96,6 @@ void SelectScene::update() {
 
   case SELECT_MODE::PLAYER2_QR:
     ReadQR(1);
-    _test->update();
     break;
 
   case SELECT_MODE::Production:
@@ -144,8 +152,11 @@ void SelectScene::ReadQR(int playerID) {
 // 
 //------------------------------------------------------------------------------
 void SelectScene::uninit() {
-
-
+  (*_isEnd) = true;
+  if(_QRthread->joinable()) {
+    _QRthread->join();
+  }
+  SafeDelete(_QRthread);
 }
 
 //EOF

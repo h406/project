@@ -29,7 +29,7 @@ namespace {
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class SelectScene : public iScene,public CreateFunc<SelectScene> {
+class SelectScene : public iScene,public CreateFunc < SelectScene > {
 public:
   using CreateFunc::create;
 
@@ -47,6 +47,9 @@ private:
   Sprite2D* _waku;
 
   SELECT_MODE _mode;
+
+  bool* _isEnd;
+  thread* _QRthread;
 
   bool _select;
 
