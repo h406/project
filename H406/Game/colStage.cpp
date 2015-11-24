@@ -11,6 +11,8 @@
 #include "colStage.h"
 #include "stage.h"
 #include "player.h"
+#include "itemManager.h"
+#include "itemBomb.h"
 #include "EventList.h"
 #include "eventManager.h"
 

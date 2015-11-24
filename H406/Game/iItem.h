@@ -9,21 +9,30 @@
 #ifndef _I_ITEM_H_
 #define _I_ITEM_H_
 
+class Player;
+
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
 class iItem : public iLayer{
 public:
+
   virtual int getPlayerId() = 0;
   virtual void setPlayerId(int id) = 0;
 
   virtual bool getUse() = 0;
   virtual void setUse(bool use) = 0;
 
+  virtual bool getDeath() = 0;
+  virtual void setDeath(bool death) = 0;
+
+  virtual void use() = 0;
+
 protected:
 
   int _playerId;
   bool _is_use;
+  bool _is_death;
 };
 
 #endif

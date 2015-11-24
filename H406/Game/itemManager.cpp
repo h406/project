@@ -18,6 +18,7 @@
 //------------------------------------------------------------------------------
 bool ItemManager::init(){
   memset(_playerList, 0, sizeof(_playerList));
+  memset(_bombList, 0, sizeof(_bombList));
   return true;
 }
 
@@ -25,6 +26,24 @@ bool ItemManager::init(){
 // update
 //------------------------------------------------------------------------------
 void ItemManager::update(){
+
+  for (int i = 0; i < kBombMax; i++){
+    if (_bombList[i] != nullptr){
+      if (_bombList[i]->getDeath() == true){
+        _bombList[i]->release();
+        _bombList[i] = nullptr;
+      }
+    }
+  }
+
+  //for (auto obj : _itemList) {
+  //  if (obj->getDeath() == true){
+  //    auto remove = [obj](iItem* item){return obj == item; };
+  //    auto it = remove_if(_itemList.begin(), _itemList.end(), remove);
+  //    _itemList.erase(it);
+  //    obj->release();
+  //  }
+  //}
 }
 
 //==============================================================================
@@ -37,13 +56,25 @@ void ItemManager::uninit(){
 // createBomb
 //------------------------------------------------------------------------------
 void ItemManager::createBomb(int ownerId, int targetId, int dripNum){
-  auto bomb = ItemBomb::create();
-  this->addChild(bomb);
-  _itemList.push_back(bomb);
+  //iItem* bomb = ItemBomb::create();
+  //this->addChild(bomb);
+  //_bombList.push_back(bomb);
+  //bomb->setUse(true);
+  //bomb->setPos(_playerList[ownerId]->getPos());
+  //bomb->setTarget(_playerList[targetId]);
+  //bomb->setDripNum(dripNum * 60);
 
-  bomb->setUse(true);
-  bomb->setPos(_playerList[ownerId]->getPos());
-  bomb->setTarget(_playerList[targetId]);
+  for (ItemBomb*& _bomb : _bombList) {
+    if (_bomb == nullptr) {
+      _bomb = ItemBomb::create();
+      _bomb->setUse(true);
+      _bomb->setPos(_playerList[ownerId]->getPos());
+      _bomb->setTarget(_playerList[targetId]);
+      _bomb->setDripNum((dripNum + 1) * 60);
+      this->addChild(_bomb);
+      break;
+    }
+  }
 }
 
 //==============================================================================

@@ -70,7 +70,6 @@ bool Game::init() {
   _itemManager->addPlayer(_player[0]);
   _itemManager->addPlayer(_player[1]);
   this->addChild(_itemManager);
-  _itemManager->createBomb(0, 1, 3);
 
   _roundChangeCam = camera->createCamera();
   _roundChangeCam->setPosP({0,1500,0});
@@ -173,6 +172,13 @@ void Game::update() {
           _player[i]->moveRight(5.0f);
         }
       }
+    }
+
+    // ƒ{ƒ€‚¿‚á‚ñ”­ŽË
+    if (input->isTrigger(0, VK_INPUT::_3)) {
+      _itemManager->createBomb(0, 1, _player[0]->getDripNum());
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
+      _player[0]->setDripNum(0);
     }
 
     if (_nextModeTime == 0){
@@ -322,7 +328,7 @@ void Game::update() {
   } // switch
 
   if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
-    BaceScene::instance()->setCurScene(Title::create());
+//    BaceScene::instance()->setCurScene(Title::create());
   }
 
   if (_gameMode != MODE_START){

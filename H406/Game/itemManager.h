@@ -13,6 +13,7 @@
 
 class Player;
 class iItem;
+class ItemBomb;
 
 //==============================================================================
 // class
@@ -28,12 +29,18 @@ public:
   void createBomb(int ownerId, int targetId, int dripNum);
   void addPlayer(Player* obj);
 
+  ItemBomb** getBombList(){ return _bombList; }
+
   const static int kMaxPlayers = 2;
+  const static int kBombMax = 5;
 
 private:
 
+  ItemBomb* _bombList[kBombMax];
+
   vector<iItem*> _itemList;
   Player* _playerList[kMaxPlayers];
+
 };
 
 #endif

@@ -27,10 +27,18 @@ public:
 
   int getPlayerId(){ return _playerId; }
   void setPlayerId(int id){ _playerId = id; }
+
   bool getUse(){ return _is_use; }
   void setUse(bool use){ _is_use = use; }
+  bool getDeath(){ return _is_death; }
+  void setDeath(bool death){ _is_death = death; };
 
   void setTarget(Player *obj){ _player = obj; }
+  void setDripNum(int val){ _dripNum = val; };
+  int  getDripNum() const { return _dripNum; };
+  void addDripNum(int val) { _dripNum = (_dripNum + val) > 9 ? 9 : _dripNum + val; }
+
+  void use();
 
 private:
 
@@ -39,7 +47,6 @@ private:
 
   int _dripNum;
 
-  Vec3 _moveVec;
   Vec3 _moveDest;
 };
 
