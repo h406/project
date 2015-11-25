@@ -25,13 +25,19 @@ public:
   void update();
   void uninit();
 
-  int getPlayerId(){ return _playerId; }
-  void setPlayerId(int id){ _playerId = id; }
+  int getOwnerId(){ return _ownerId; }
+  void setOwnerId(int id){ _ownerId = id; }
+
+  int getTargetId(){ return _targetId; }
+  void setTargetId(int id){ _targetId = id; }
 
   bool getUse(){ return _is_use; }
   void setUse(bool use){ _is_use = use; }
   bool getDeath(){ return _is_death; }
   void setDeath(bool death){ _is_death = death; };
+
+  void setRadius(float rad) { _radius = rad; }
+  float getRadius() const { return _radius; }
 
   void setTarget(Player *obj){ _player = obj; }
   void setDripNum(int val){ _dripNum = val; };

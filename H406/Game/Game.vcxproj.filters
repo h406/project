@@ -144,6 +144,9 @@
     <ClInclude Include="itemBomb.h">
       <Filter>object\item\bomb</Filter>
     </ClInclude>
+    <ClInclude Include="colItem.h">
+      <Filter>system\collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -215,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="itemBomb.cpp">
       <Filter>object\item\bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="colItem.cpp">
+      <Filter>system\collision</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

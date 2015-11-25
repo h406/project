@@ -15,7 +15,6 @@ namespace{
   const float kMovement = 3.0f;
 }
 
-
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
@@ -27,10 +26,13 @@ bool ItemBomb::init(){
 
   _is_use = false;
   _is_death = false;
-  _playerId = 0;
+  _ownerId = -1;
+  _targetId = -1;
   _dripNum = 0;
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
-  _player = NULL;
+  _player = nullptr;
+
+  _radius = 20.0f;
 
   return true;
 }
@@ -41,8 +43,6 @@ bool ItemBomb::init(){
 void ItemBomb::update(){
   if (_is_death == false){
     if (_is_use && _player){
-      _dripNum--;
-
       // Ž€‚ñ‚¾
       if (_dripNum <= 0){
         _is_death = true;
@@ -67,6 +67,13 @@ void ItemBomb::update(){
       _item->setRotY(rot);
     }
   }
+
+  if (_is_use == false && _ownerId >= 0){
+    _item->setVisible(false);
+  }else{
+    _item->setVisible(true);
+  }
+
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -81,8 +88,6 @@ void ItemBomb::uninit(){
 //------------------------------------------------------------------------------
 void ItemBomb::use(){
 }
-
-
 
 
 //EOF

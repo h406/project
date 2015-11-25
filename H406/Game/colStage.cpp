@@ -11,8 +11,6 @@
 #include "colStage.h"
 #include "stage.h"
 #include "player.h"
-#include "itemManager.h"
-#include "itemBomb.h"
 #include "EventList.h"
 #include "eventManager.h"
 
@@ -22,7 +20,6 @@
 bool ColStage::init(Stage* stage,EventManager* event) {
   _stage = stage;
   _event = event;
-  
   memset(_playerList,0,sizeof(_playerList));
   return true;
 }
@@ -65,7 +62,7 @@ void ColStage::update() {
     player->setPos(playerPos);
   }
 
-  // ƒAƒCƒeƒ€Žæ“¾
+  // “h‚é‚â‚Â
   for(Player* player : _playerList) {
     if(player == nullptr) continue;
     const int idX = int((player->getPos().x + halfSizeX) / (stageSize.x / (float)Stage::kNUM_X));
