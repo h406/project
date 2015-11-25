@@ -11,6 +11,10 @@
 #include "texture.h"
 #include "renderer.h"
 
+namespace {
+  const string kBaceTextureFolder("./data/texture/");
+}
+
 //==============================================================================
 // 
 //------------------------------------------------------------------------------
@@ -26,6 +30,17 @@ Texture::Texture(const Renderer* renderer)
   LPDIRECT3DTEXTURE9 tex = nullptr;
   D3DXCreateTextureFromFileInMemory(renderer->getDevice(),WhiteTga1x1TextureFileImage,sizeof(WhiteTga1x1TextureFileImage),&tex);
   _TexList.push_back(tex);
+
+  /// テクスチャを全て読み込む
+  namespace sys = std::tr2::sys;
+  sys::path p(kBaceTextureFolder);
+  std::for_each(sys::directory_iterator(p),sys::directory_iterator(),
+    [this](const sys::path& p) {
+    if(sys::is_regular_file(p)) { // ファイルなら...
+      const string& file = kBaceTextureFolder + p.filename();
+      createTexture(file.c_str());
+    }
+  });
 }
 
 //==============================================================================

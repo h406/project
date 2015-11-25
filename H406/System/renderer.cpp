@@ -80,7 +80,6 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE; // 描画を即時に指定(リフレッシュレートとの不一致を考慮)
   d3dpp.hDeviceWindow = hWnd;
 
-
   if(App::instance().isWindow()) {// ウィンドウモード
     d3dpp.FullScreen_RefreshRateInHz = 0;								// リフレッシュレート
     d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// インターバル

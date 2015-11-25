@@ -14,8 +14,6 @@
 
 namespace{
   const Vec2 kPLAYER_SIZE = Vec2(36 * 2, 72 * 2);
-
-  const float kPlayerMovement = 5.f;
 }
 
 //==============================================================================
@@ -24,9 +22,8 @@ namespace{
 bool Player::init(int playerID)
 {
   const auto status = DataManager::instance().getData()->getPlayerStatus(playerID);
-  const auto barStatus = PlayerStatus::kStickBarStatus[(int)status._barID];
-  const auto handStatus = PlayerStatus::kStickHandleStatus[(int)status._handleID];
-
+  const auto& barStatus = PlayerStatus::kStickBarStatus[(int)status._barID];
+  const auto& handStatus = PlayerStatus::kStickHandleStatus[(int)status._handleID];
 
   _player[0] = XFileObject::create(barStatus.fileName);
   this->addChild(_player[0]);
@@ -43,7 +40,15 @@ bool Player::init(int playerID)
   _playerID = playerID;
   _dripNum = 0;
   _radius = 20.0f;
-  _weight = 0.5f;
+  
+  // 重さ
+  _weight = barStatus.weight * handStatus.weight;
+  // 慣性
+  _inertia = barStatus.inertia * barStatus.inertia;
+  // マックススピード
+  _maxSpeed = (barStatus.maxspeed + barStatus.maxspeed) * 0.5f;
+  // 塗れる最大数
+  _maxDripNum = barStatus.maxdripNum + handStatus.maxdripNum;
 
   return true;
 }
@@ -63,18 +68,21 @@ void Player::update(void)
   D3DXVec2Normalize(&moveDest, &moveDest);
 
   float rot = atan2(moveDest.y, moveDest.x);
-  _playerMoveDest.x = cosf(rot) * length * kPlayerMovement;
-  _playerMoveDest.z = sinf(rot) * length * kPlayerMovement;
+  _playerMoveDest.x = cosf(rot) * length * _maxSpeed;
+  _playerMoveDest.z = sinf(rot) * length * _maxSpeed;
   _playerMoveDest.y -= 5.0;
 
 
-  _playerMoveVec+= (_playerMoveDest - _playerMoveVec) * 0.1f;
+  _playerMoveVec.x += (_playerMoveDest.x - _playerMoveVec.x) * _inertia;
+  _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
+  _playerMoveVec.z += (_playerMoveDest.z - _playerMoveVec.z) * _inertia;
   _pos += _playerMoveVec;
 
-  rot = D3DX_PI - atan2(_playerMoveVec.z,_playerMoveVec.x) + D3DX_PI * 0.5f;
-  _player[0]->setRotY(rot);
-  _player[1]->setRotY(rot);
-
+  if(length >= 0.01f) {
+    rot = D3DX_PI - atan2(_playerMoveVec.z,_playerMoveVec.x) + D3DX_PI * 0.5f;
+    _player[0]->setRotY(rot);
+    _player[1]->setRotY(rot);
+  }
 
   _playerMoveDest = Vec3(0.0f, 0.0, 0.0f);
 }

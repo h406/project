@@ -68,6 +68,9 @@ Window::Window(int width,int height)
     windowStyle = WS_POPUPWINDOW;
   }
 
+
+  ShowCursor(FALSE);
+
   // ウィンドウサイズの計算(非クライアント領域考慮)
   RECT rcAdjustWindow = {0,0,(LONG)width,(LONG)height};	// クライアント領域サイズを指定
   AdjustWindowRect(&rcAdjustWindow,windowStyle,NULL);	// ウィンドウサイズを自動調整
@@ -172,7 +175,7 @@ LRESULT CALLBACK Window::winProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam
   case WM_KEYDOWN:
     switch(wParam) {
     case VK_ESCAPE:
-      if(MessageBox(hWnd,"アプリケーションを終了しますか","終了確認",MB_YESNO | MB_ICONQUESTION) == IDYES) {
+      if(!App::instance().isWindow()|| MessageBox(hWnd,"アプリケーションを終了しますか","終了確認",MB_YESNO | MB_ICONQUESTION) == IDYES) {
         DestroyWindow(hWnd);
       }
       break;
@@ -180,7 +183,7 @@ LRESULT CALLBACK Window::winProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam
     break;
 
   case WM_CLOSE:
-    if(MessageBox(hWnd,"アプリケーションを終了しますか","終了確認",MB_YESNO | MB_ICONQUESTION) == IDYES) {
+    if(!App::instance().isWindow() || MessageBox(hWnd,"アプリケーションを終了しますか","終了確認",MB_YESNO | MB_ICONQUESTION) == IDYES) {
       DestroyWindow(hWnd);
     }
     return 0;

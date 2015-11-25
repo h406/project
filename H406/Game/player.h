@@ -47,6 +47,8 @@ public:
   void setWeight(float val){ _weight = val; }
   float getWeight() const { return _weight; }
 
+  int getMaxDripNum() const { return _maxDripNum; }
+
 private:
 
   // プレイヤー
@@ -66,6 +68,15 @@ private:
 
   // 重さ(0.0 ~ 1.0)
   float _weight;
+
+  // 塗れる最大数
+  int _maxDripNum;
+
+  // 速さ最大数
+  float _maxSpeed;
+  
+  // 慣性
+  float _inertia;
 };
 
 #endif

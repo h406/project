@@ -46,13 +46,11 @@ bool Game::init() {
   // プレイヤー1
   _player[0] = Player::create(0);
   _player[0]->setPos(kPLAYER_1_INIT_POS);
-  _player[0]->setWeight(1.0f);
   this->addChild(_player[0]);
 
   // プレイヤー2
   _player[1] = Player::create(1);
   _player[1]->setPos(kPLAYER_2_INIT_POS);
-  _player[1]->setWeight(0.1f);
   this->addChild(_player[1]);
 
   _mainCamera = camera->createCamera();
@@ -170,16 +168,16 @@ void Game::update() {
     if (_freezeTime == 0 && _nextModeTime == 0) {
       for (int i = 0; i < 2; i++) {
         if (input->isPress(i, VK_INPUT::UP)) {
-          _player[i]->moveUp(5.0f);
+          _player[i]->moveUp(1.0f);
         }
         if (input->isPress(i, VK_INPUT::DOWN)) {
-          _player[i]->moveDown(5.0f);
+          _player[i]->moveDown(1.0f);
         }
         if (input->isPress(i, VK_INPUT::LEFT)) {
-          _player[i]->moveLeft(5.0f);
+          _player[i]->moveLeft(1.0f);
         }
         if (input->isPress(i, VK_INPUT::RIGHT)) {
-          _player[i]->moveRight(5.0f);
+          _player[i]->moveRight(1.0f);
         }
       }
     }
@@ -277,6 +275,12 @@ void Game::update() {
     _oji3->setPos(oji3vec * (1 - oji3num) + oba3vec * oji3num);
     _oba3->setPos(oba3vec * (1 - oba3num) + oji3vec * oba3num);
 
+    if(DataManager::instance().getData()->getTime() < 20 * 60) {
+      const float t = (DataManager::instance().getData()->getTime() / 60.f - 20) / 5.f;
+      const float y = (App::instance().getWindowSize().cy - (130 * 1.5f * 0.5f)) - (130 * 1.5f) * t;
+      _oji3->setPosY(y);
+      _oba3->setPosY(y);
+    }
   } // case MODE_PLAY
   break;
 
