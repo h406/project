@@ -12,13 +12,27 @@
 #include "iItem.h"
 #include "itemBomb.h"
 #include "player.h"
+#include "EventList.h"
+#include "eventManager.h"
+#include "EventData.h"
 
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool ItemManager::init(){
+bool ItemManager::init(EventManager* event){
+  _event = event;
+
   memset(_playerList, 0, sizeof(_playerList));
   memset(_bombList, 0, sizeof(_bombList));
+  memset(_playerGetItem, 0, sizeof(_playerGetItem));
+
+  // イベントセット
+  _event->addEventListener(EventList::PLAYER_1_GET_BOMB, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_2_GET_BOMB, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_1_USE_ITEM, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_2_USE_ITEM, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::ITEM_RESET, bind(&ItemManager::EventListener, this, placeholders::_1));
+
   return true;
 }
 
@@ -26,7 +40,6 @@ bool ItemManager::init(){
 // update
 //------------------------------------------------------------------------------
 void ItemManager::update(){
-
   for (int i = 0; i < kBombMax; i++){
     if (_bombList[i] != nullptr){
       if (_bombList[i]->getDeath() == true){
@@ -35,15 +48,6 @@ void ItemManager::update(){
       }
     }
   }
-
-  //for (auto obj : _itemList) {
-  //  if (obj->getDeath() == true){
-  //    auto remove = [obj](iItem* item){return obj == item; };
-  //    auto it = remove_if(_itemList.begin(), _itemList.end(), remove);
-  //    _itemList.erase(it);
-  //    obj->release();
-  //  }
-  //}
 }
 
 //==============================================================================
@@ -55,22 +59,11 @@ void ItemManager::uninit(){
 //==============================================================================
 // createBomb
 //------------------------------------------------------------------------------
-void ItemManager::createBomb(int ownerId, int targetId, int dripNum){
-  //iItem* bomb = ItemBomb::create();
-  //this->addChild(bomb);
-  //_bombList.push_back(bomb);
-  //bomb->setUse(true);
-  //bomb->setPos(_playerList[ownerId]->getPos());
-  //bomb->setTarget(_playerList[targetId]);
-  //bomb->setDripNum(dripNum * 60);
-
+void ItemManager::createBomb(const Vec3& pos){
   for (ItemBomb*& _bomb : _bombList) {
     if (_bomb == nullptr) {
       _bomb = ItemBomb::create();
-      _bomb->setUse(true);
-      _bomb->setPos(_playerList[ownerId]->getPos());
-      _bomb->setTarget(_playerList[targetId]);
-      _bomb->setDripNum((dripNum + 1) * 60);
+      _bomb->setPos(pos);
       this->addChild(_bomb);
       break;
     }
@@ -86,6 +79,72 @@ void ItemManager::addPlayer(Player* player) {
       _player = player;
       break;
     }
+  }
+}
+
+//==============================================================================
+// イベント
+//------------------------------------------------------------------------------
+void ItemManager::EventListener(EventData* eventData) {
+  const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+
+  switch (eventData->getEvent()) {
+
+  case EventList::PLAYER_1_GET_BOMB:
+    if (_playerGetItem[0] == nullptr){
+      _playerGetItem[0] = (ItemBomb*)eventData->getUserData();
+      _playerGetItem[0]->setOwnerId(0);
+      _playerGetItem[0]->setTargetId(1);
+    }
+    break;
+
+  case EventList::PLAYER_2_GET_BOMB:
+    if (_playerGetItem[1] == nullptr){
+      _playerGetItem[1] = (ItemBomb*)eventData->getUserData();
+      _playerGetItem[1]->setOwnerId(1);
+      _playerGetItem[1]->setTargetId(0);
+    }
+    break;
+
+  case EventList::PLAYER_1_USE_ITEM:
+    {
+    if (_playerGetItem[0] == nullptr) break;
+    ItemBomb* bomb = (ItemBomb*)_playerGetItem[0];
+    bomb->setPos(_playerList[bomb->getOwnerId()]->getPos());
+    bomb->setTarget(_playerList[bomb->getTargetId()]);
+    bomb->setDripNum(_playerList[bomb->getOwnerId()]->getDripNum() + 1);
+    bomb->setUse(true);
+    _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
+    _playerList[0]->setDripNum(0);
+    _playerGetItem[0] = nullptr;
+    }
+    break;
+
+  case EventList::PLAYER_2_USE_ITEM:
+    {
+    if (_playerGetItem[1] == nullptr) break;
+    ItemBomb* bomb = (ItemBomb*)_playerGetItem[1];
+    bomb->setPos(_playerList[bomb->getOwnerId()]->getPos());
+    bomb->setTarget(_playerList[bomb->getTargetId()]);
+    bomb->setDripNum(_playerList[bomb->getOwnerId()]->getDripNum() + 1);
+    bomb->setUse(true);
+    _event->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
+    _playerList[1]->setDripNum(0);
+    _playerGetItem[1] = nullptr;
+    }
+    break;
+
+  case EventList::ITEM_RESET:
+    {
+      for (int i = 0; i < kBombMax; i++){
+        if (_bombList[i] != nullptr){
+          _bombList[i]->release();
+          _bombList[i] = nullptr;
+        }
+      }
+      memset(_playerGetItem, 0, sizeof(_playerGetItem));
+    }
+    break;
   }
 }
 

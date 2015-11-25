@@ -14,6 +14,8 @@
 class Player;
 class iItem;
 class ItemBomb;
+class EventManager;
+class EventData;
 
 //==============================================================================
 // class
@@ -22,24 +24,29 @@ class ItemManager : public iLayer, public CreateFunc<ItemManager>{
 public:
   using CreateFunc::create;
 
-  bool init();
+  bool init(EventManager* event);
   void update();
   void uninit();
 
-  void createBomb(int ownerId, int targetId, int dripNum);
   void addPlayer(Player* obj);
 
+  void createBomb(const Vec3& pos);
+
   ItemBomb** getBombList(){ return _bombList; }
+
+  void EventListener(EventData* eventData);
 
   const static int kMaxPlayers = 2;
   const static int kBombMax = 5;
 
 private:
 
-  ItemBomb* _bombList[kBombMax];
+  EventManager* _event;
 
-  vector<iItem*> _itemList;
+  ItemBomb* _bombList[kBombMax];
+//  vector<iItem*> _itemList;
   Player* _playerList[kMaxPlayers];
+  iItem* _playerGetItem[kMaxPlayers];
 
 };
 

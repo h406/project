@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaceScene.h" />
+    <ClInclude Include="colItem.h" />
     <ClInclude Include="colPlayer.h" />
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="dataManager.h" />
@@ -133,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaceScene.cpp" />
+    <ClCompile Include="colItem.cpp" />
     <ClCompile Include="colPlayer.cpp" />
     <ClCompile Include="dataManager.cpp" />
     <ClCompile Include="dirlightEffect.cpp" />

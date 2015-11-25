@@ -13,6 +13,7 @@
 #include "player.h"
 #include "colStage.h"
 #include "colPlayer.h"
+#include "colItem.h"
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
@@ -67,7 +68,7 @@ bool Game::init() {
   _playerCam[1]->setPosR({0,0,0});
 
   // アイテム
-  _itemManager = ItemManager::create();
+  _itemManager = ItemManager::create(_eventManager);
   _itemManager->addPlayer(_player[0]);
   _itemManager->addPlayer(_player[1]);
   this->addChild(_itemManager);
@@ -88,6 +89,12 @@ bool Game::init() {
   hitCheckPlayer->addPlayer(_player[0]);
   hitCheckPlayer->addPlayer(_player[1]);
   this->addChild(hitCheckPlayer, INT_MAX - 1);
+
+  // プレイヤーとアイテム
+  auto hitCheckItem = ColItem::create(BaceScene::instance()->getStage(), _eventManager, _itemManager);
+  hitCheckItem->addPlayer(_player[0]);
+  hitCheckItem->addPlayer(_player[1]);
+  this->addChild(hitCheckItem, INT_MAX - 2);
 
   // GUIマネージャー
   _guiManger = GuiManager::create(_eventManager);
@@ -182,10 +189,21 @@ void Game::update() {
     }
 
     // ボムちゃん発射
-    if (input->isTrigger(0, VK_INPUT::_3)) {
-      _itemManager->createBomb(0, 1, _player[0]->getDripNum());
-      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
-      _player[0]->setDripNum(0);
+    if (input->isTrigger(0, VK_INPUT::_1)) {
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
+    }
+    if (input->isTrigger(1, VK_INPUT::_1)) {
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
+    }
+
+    if ((rand() % (60 * 1)) == 0){
+      const Vec2& stageSize = _stage->getStageSize();
+      const float halfSizeX = stageSize.x * 0.5f;
+      const float halfSizeZ = stageSize.y * 0.5f;
+      int randx = rand() % (int)stageSize.x;
+      int randy = rand() % (int)stageSize.y;
+      const Vec3 pos((float)(randx - halfSizeX), 0.0f, (float)(randy - halfSizeZ));
+      _itemManager->createBomb(pos);
     }
 
     if (_nextModeTime == 0){
@@ -312,6 +330,8 @@ void Game::update() {
       _stage->reset();
       _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
       _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
+      _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
+
       _player[0]->setDripNum(0);
       _player[1]->setDripNum(0);
       _nextModeTime = 120;
