@@ -38,7 +38,10 @@ bool Game::init() {
   _eventManager = new EventManager();
 
   // データマネージャー
-  DataManager::instance().init(_eventManager);
+  if(!DataManager::instance().isInstance()) {
+    DataManager::instance().init();
+  }
+  DataManager::instance().setEventManager(_eventManager);
 
   // プレイヤー1
   _player[0] = Player::create(0);

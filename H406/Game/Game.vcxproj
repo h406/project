@@ -121,6 +121,7 @@
     <ClInclude Include="itemManager.h" />
     <ClInclude Include="parpix.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="playerStatus.h" />
     <ClInclude Include="roundIcon.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="ssaoEffect.h" />

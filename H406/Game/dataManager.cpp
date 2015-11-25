@@ -12,6 +12,7 @@
 #include "eventManager.h"
 #include "EventList.h"
 #include "EventData.h"
+#include "playerStatus.h"
 
 //==============================================================================
 // instance
@@ -31,33 +32,42 @@ DataManager::DataManager(void)
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-void DataManager::init(EventManager* eventManager)
+void DataManager::init()
 {
   _data = new DataEx();
 
-  _data->setRandSeed(GameConfig::kRAND_SEED);
+  _data->setRandSeed((unsigned int)time(NULL));
   _data->setTime(GameConfig::kTIME_MAX);
   _data->setRound(1);
+
+  _data->setPlayerStatus(0,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
+  _data->setPlayerStatus(1,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
+
   for (int i = 0; i < GameConfig::kPLAYER_MAX; i++){
     _data->setPlayerDripNum(i, 0);
     _data->setPlayerRoundWin(i, 0);
     _data->setPlayerMapNum(i, 0);
   }
+}
 
+//==============================================================================
+// setEventManager
+//------------------------------------------------------------------------------
+void DataManager::setEventManager(EventManager* eventManager) {
   // ƒCƒxƒ“ƒg“o˜^
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&DataManager::event,this,placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_DRIP_GET,bind(&DataManager::event,this,placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_USING,bind(&DataManager::event,this,placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_DRIP_USING,bind(&DataManager::event,this,placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_DRIP_RESET, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_DRIP_RESET, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_ROUND_WIN, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_1_MAP_SET, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::PLAYER_2_MAP_SET, bind(&DataManager::event, this, placeholders::_1));
-  eventManager->addEventListener(EventList::NEXT_ROUND, bind(&DataManager::event, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_DRIP_RESET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_DRIP_RESET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_ROUND_WIN,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_ROUND_WIN,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_MAP_SET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_MAP_SET,bind(&DataManager::event,this,placeholders::_1));
+  eventManager->addEventListener(EventList::NEXT_ROUND,bind(&DataManager::event,this,placeholders::_1));
 }
 
 //==============================================================================

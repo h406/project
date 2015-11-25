@@ -16,6 +16,11 @@
 #include "node.h"
 #include "postEffect.h"
 
+namespace {
+  const bool kbWindow = false;
+}
+
+
 //==============================================================================
 // renderer
 //------------------------------------------------------------------------------
@@ -69,12 +74,23 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   d3dpp.BackBufferFormat = d3ddm.Format;	// カラーモードの指定
   d3dpp.BackBufferCount = 1;				// バッファーの数
   d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;	// バッファ切り替えをディスプレイドライバに委任
-  d3dpp.Windowed = TRUE;				// ウィンドウ/フルスクリーンを指定
   d3dpp.EnableAutoDepthStencil = TRUE;	// 深度ステンシルバッファを使用
   d3dpp.AutoDepthStencilFormat = D3DFMT_D16;	// 16bitに指定
   d3dpp.FullScreen_RefreshRateInHz = 0;  // 他のウィンドウもいるので、レートを指定しない
   d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE; // 描画を即時に指定(リフレッシュレートとの不一致を考慮)
   d3dpp.hDeviceWindow = hWnd;
+
+
+  if(App::instance().isWindow()) {// ウィンドウモード
+    d3dpp.FullScreen_RefreshRateInHz = 0;								// リフレッシュレート
+    d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	// インターバル
+    d3dpp.Windowed = TRUE;				// ウィンドウ/フルスクリーンを指定
+  }
+  else {// フルスクリーンモード
+    d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;			// リフレッシュレート
+    d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;		// インターバル
+    d3dpp.Windowed = FALSE;				// ウィンドウ/フルスクリーンを指定
+  }
 
   // デバイスオブジェクトの生成
   // [デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
@@ -86,12 +102,12 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
     // 取得失敗
     MessageBox(nullptr,TEXT("デバイスオブジェクトの生成に失敗しました\r\n動作環境が古い可能性があります"),TEXT("警告"),MB_OK);
     SafeRelease(pD3D);
+    App::instance().exit();
     return;
   }
 
   //---- レンダーステートの設定 ----
   _pD3DDevice->SetRenderState(D3DRS_CULLMODE,D3DCULL_CCW);	// カリングの設定
-
   _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);			// アルファブレンドの有効化
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト

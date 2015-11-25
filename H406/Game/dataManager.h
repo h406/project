@@ -10,6 +10,7 @@
 #define _DATA_MANAGER_H_
 
 #include "gameConfig.h"
+#include "playerStatus.h"
 
 class EventData;
 class EventManager;
@@ -25,6 +26,7 @@ public:
   int getPlayerRoundWin(int playerId)const { return _playerRoundWin[playerId]; }
   int getPlayerDripNum(int playerId)const { return _playerDripNum[playerId]; }
   int getPlayerMapNum(int playerId)const { return _playerMapNum[playerId]; }
+  const PlayerStatus::PlayerStatus& getPlayerStatus(int playerID) const { return _playerStatus[playerID]; }
 protected:
   int _randSeed;
   int _time;
@@ -32,6 +34,7 @@ protected:
   int _playerRoundWin[GameConfig::kPLAYER_MAX];
   int _playerDripNum[GameConfig::kPLAYER_MAX];
   int _playerMapNum[GameConfig::kPLAYER_MAX];
+  PlayerStatus::PlayerStatus _playerStatus[GameConfig::kPLAYER_MAX];
 };
 
 //==============================================================================
@@ -48,19 +51,20 @@ private:
     void setPlayerRoundWin(int playerId, int roundWin){ this->_playerRoundWin[playerId] = roundWin; }
     void setPlayerDripNum(int playerId, int dripNum){ this->_playerDripNum[playerId] = dripNum; }
     void setPlayerMapNum(int playerId, int mapNum){ this->_playerMapNum[playerId] = mapNum; }
+    void setPlayerStatus(int playerId, const PlayerStatus::PlayerStatus& status) { this->_playerStatus[playerId] = status; }
   };
 
 public:
   ~DataManager(void){}
   static DataManager& instance(void);
-  void init(EventManager* eventManager);
+  void init();
   void uninit(void);
   void update(void);
 
+  void setEventManager(EventManager* eventManager);
+
   Data* getData() { return _data; }
-
   void event(EventData* eventData);
-
   bool isInstance(void){ return _data != nullptr ? true : false; }
 
 private:

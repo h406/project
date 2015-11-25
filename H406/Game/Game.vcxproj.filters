@@ -144,6 +144,9 @@
     <ClInclude Include="itemBomb.h">
       <Filter>object\item\bomb</Filter>
     </ClInclude>
+    <ClInclude Include="playerStatus.h">
+      <Filter>object\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

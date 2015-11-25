@@ -48,10 +48,29 @@ Window::Window(int width,int height)
     NULL                          // スモールアイコンを指定
   };
 
+  // ウィンドウモード判定
+  int res = MessageBox(NULL,"フルスクリーンにしますか？","確認",MB_YESNO);
+  if(res == IDYES) {
+    _isWindow = FALSE;
+  }
+  else {
+    _isWindow = TRUE;
+  }
+
+  // 適正なウィンドウのサイズを求める
+  DWORD windowStyle;
+  if(_isWindow) {
+    // ウィンドウモード
+    windowStyle = WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX);
+  }
+  else {
+    // フルスクリーンモード
+    windowStyle = WS_POPUPWINDOW;
+  }
+
   // ウィンドウサイズの計算(非クライアント領域考慮)
   RECT rcAdjustWindow = {0,0,(LONG)width,(LONG)height};	// クライアント領域サイズを指定
-  DWORD dwStyle = WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX);			// ウィンドウのスタイル
-  AdjustWindowRect(&rcAdjustWindow,dwStyle,NULL);	// ウィンドウサイズを自動調整
+  AdjustWindowRect(&rcAdjustWindow,windowStyle,NULL);	// ウィンドウサイズを自動調整
 
   // ウィンドウクラスの登録
   RegisterClassEx(&wcex);
@@ -61,7 +80,7 @@ Window::Window(int width,int height)
     0,                                          // 拡張ウィンドウクラス
     kClassName,                                 // ウィンドウクラスの名前
     kDefaultTitle,                              // ウィンドウ枠に表示されるタイトル
-    dwStyle,                                    // ウィンドウのスタイル、全面に表示
+    windowStyle,                                    // ウィンドウのスタイル、全面に表示
     CW_USEDEFAULT,                              // ウィンドウの左角のX座標
     CW_USEDEFAULT,                              // ウィンドウの左角のY座標
     rcAdjustWindow.right - rcAdjustWindow.left, // ウィンドウの幅

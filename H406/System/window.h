@@ -32,6 +32,8 @@ public:
 
   int getFps() const { return _nCountFPS; }
 
+  bool isWindow() const { return _isWindow; }
+
 protected:
 
   Window(int width,int height);
@@ -43,6 +45,8 @@ protected:
 
   bool _bExitApplication;
   int _nCountFPS;
+
+  bool _isWindow;
 
 };
 

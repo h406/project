@@ -9,6 +9,8 @@
 // include
 //******************************************************************************
 #include "player.h"
+#include "dataManager.h"
+#include "playerStatus.h"
 
 namespace{
   const Vec2 kPLAYER_SIZE = Vec2(36 * 2, 72 * 2);
@@ -21,10 +23,15 @@ namespace{
 //------------------------------------------------------------------------------
 bool Player::init(int playerID)
 {
-  _player[0] = XFileObject::create("./data/model/elephant_bar.x");
+  const auto status = DataManager::instance().getData()->getPlayerStatus(playerID);
+  const auto barStatus = PlayerStatus::kStickBarStatus[(int)status._barID];
+  const auto handStatus = PlayerStatus::kStickHandleStatus[(int)status._handleID];
+
+
+  _player[0] = XFileObject::create(barStatus.fileName);
   this->addChild(_player[0]);
 
-  _player[1] = XFileObject::create("./data/model/elephant_hand.x");
+  _player[1] = XFileObject::create(handStatus.fileName);
   this->addChild(_player[1]);
 
   _player[0]->setScl(Vec3(0.7f,0.7f,0.7f));
