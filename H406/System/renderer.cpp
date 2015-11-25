@@ -135,7 +135,6 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
     _pD3DDevice->SetTextureStageState(i,D3DTSS_ALPHAARG2,D3DTA_CURRENT);	// 引数２：現在のポリゴンの不透明度を指定
   }
 
-
   // いらない
   pD3D->Release();
 

@@ -62,12 +62,10 @@ Window::Window(int width,int height)
   if(_isWindow) {
     // ウィンドウモード
     windowStyle = WS_OVERLAPPEDWINDOW & ~(WS_THICKFRAME | WS_MAXIMIZEBOX);
-  }
-  else {
+  } else {
     // フルスクリーンモード
     windowStyle = WS_POPUPWINDOW;
   }
-
 
   ShowCursor(FALSE);
 
@@ -83,7 +81,7 @@ Window::Window(int width,int height)
     0,                                          // 拡張ウィンドウクラス
     kClassName,                                 // ウィンドウクラスの名前
     kDefaultTitle,                              // ウィンドウ枠に表示されるタイトル
-    windowStyle,                                    // ウィンドウのスタイル、全面に表示
+    windowStyle,                                // ウィンドウのスタイル、全面に表示
     CW_USEDEFAULT,                              // ウィンドウの左角のX座標
     CW_USEDEFAULT,                              // ウィンドウの左角のY座標
     rcAdjustWindow.right - rcAdjustWindow.left, // ウィンドウの幅

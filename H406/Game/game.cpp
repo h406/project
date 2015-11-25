@@ -116,7 +116,6 @@ bool Game::init() {
   _oji3->setPos(180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
   this->addChild(_oji3);
 
-
   return true;
 }
 

@@ -72,7 +72,6 @@ void Player::update(void)
   _playerMoveDest.z = sinf(rot) * length * _maxSpeed;
   _playerMoveDest.y -= 5.0;
 
-
   _playerMoveVec.x += (_playerMoveDest.x - _playerMoveVec.x) * _inertia;
   _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
   _playerMoveVec.z += (_playerMoveDest.z - _playerMoveVec.z) * _inertia;
@@ -132,6 +131,5 @@ void Player::flipMvementX() {
 void Player::flipMvementZ() {
   _playerMoveVec.z *= -1;
 }
-
 
 //EOF
