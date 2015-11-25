@@ -58,6 +58,10 @@ private:
 
   GAME_MODE _gameMode;
   CameraBace* _roundChangeCam; // лбХ‚М‚в‚В
+
+  //
+  Sprite2D* _oba3;
+  Sprite2D* _oji3;
 };
 
 #endif

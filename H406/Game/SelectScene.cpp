@@ -15,7 +15,7 @@
 
 #include "../QRDecode/qrdecode.h"
 
-QRreader* _test;
+#define _QR_DISABLE__
 
 //==============================================================================
 // init
@@ -49,16 +49,39 @@ bool SelectScene::init() {
   _mode = SELECT_MODE::PLAYER1_SELECT;
   _select = true;
 
+  _nowReading = Sprite2D::create("./data/texture/now_reading.png");
+  _nowReading->setSize(670,101);
+  _nowReading->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
+  _nowReading->setColor(D3DXCOLOR(1,1,1,0));
+  this->addChild(_nowReading);
+
+#ifndef _QR_DISABLE__
   _isEnd = new bool;
   *_isEnd = false;
-  _test = new QRreader();
+  _QRreader = new QRreader();
   _QRthread = new thread([](bool* isEnd,QRreader* reader) {
     for(;!(*isEnd);) {
       reader->update();
     }
     SafeDelete(reader);
     SafeDelete(isEnd);
-  },_isEnd,_test);
+  },_isEnd,_QRreader);
+#endif
+
+  _oji = Sprite2D::create("./data/texture/oji.png");
+  _oji->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
+  _oji->setPos(App::instance().getWindowSize().cx*0.5f,-App::instance().getWindowSize().cy*0.5f);
+  this->addChild(_oji);
+
+  _oba = Sprite2D::create("./data/texture/oba.png");
+  _oba->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
+  _oba->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
+  this->addChild(_oba);
+
+  _vs = Sprite2D::create("./data/texture/vs.png");
+  _vs->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
+  _vs->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
+  this->addChild(_vs);
 
   return true;
 }
@@ -78,6 +101,16 @@ void SelectScene::update() {
     _waku->setColor(color + (D3DXCOLOR(1,1,1,0) - color) * 0.1f);
   }
 
+  if(_mode == SELECT_MODE::PLAYER1_QR || _mode == SELECT_MODE::PLAYER2_QR) {
+    static float f = 0;
+    f += 0.01f;
+    _nowReading->setColor(D3DXCOLOR(1,1,1,1));
+    _nowReading->setRotY(f);
+  }
+  else {
+    _nowReading->setColor(D3DXCOLOR(1,1,1,0));
+  }
+
   switch(_mode) {
   case SELECT_MODE::PLAYER1_SELECT:
     _back->setTexture(_backTex[0]);
@@ -86,7 +119,9 @@ void SelectScene::update() {
 
   case SELECT_MODE::PLAYER1_QR:
     ReadQR(0);
-    App::instance().setTitle(_test->getString().c_str());
+#ifndef _QR_DISABLE__
+    App::instance().setTitle(_QRreader->getString().c_str());
+#endif
     break;
 
   case SELECT_MODE::PLAYER2_SELECT:
@@ -99,8 +134,14 @@ void SelectScene::update() {
     break;
 
   case SELECT_MODE::Production:
-    if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1)) {
-      _mode = (SELECT_MODE)((int)_mode + 1);
+    {
+      if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1)) {
+        _mode = (SELECT_MODE)((int)_mode + 1);
+      }
+      const Vec2 pos = Vec2(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
+      _oji->setPos(_oji->getPos() + (pos - _oji->getPos()) * 0.2f);
+      _oba->setPos(_oba->getPos() + (pos - _oba->getPos()) * 0.2f);
+      _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.1f);
     }
     break;
 
@@ -152,11 +193,14 @@ void SelectScene::ReadQR(int playerID) {
 // 
 //------------------------------------------------------------------------------
 void SelectScene::uninit() {
+
+#ifndef _QR_DISABLE__
   (*_isEnd) = true;
   if(_QRthread->joinable()) {
     _QRthread->join();
   }
   SafeDelete(_QRthread);
+#endif
 }
 
 //EOF

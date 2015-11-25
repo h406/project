@@ -26,6 +26,8 @@ namespace {
 
 }
 
+class QRreader;
+
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
@@ -46,10 +48,17 @@ private:
   Sprite2D* _back;
   Sprite2D* _waku;
 
+  Sprite2D* _nowReading;
+
   SELECT_MODE _mode;
 
   bool* _isEnd;
   thread* _QRthread;
+  QRreader* _QRreader;
+
+  Sprite2D* _oji;
+  Sprite2D* _oba;
+  Sprite2D* _vs;
 
   bool _select;
 

@@ -98,6 +98,17 @@ bool Game::init() {
   _nextModeTime = 120;
   _gameMode = Game::MODE_START;
 
+  _oba3 = Sprite2D::create("./data/texture/oba3.png");
+  _oba3->setSize(180 * 1.5f,130 * 1.5f);
+  _oba3->setPos(App::instance().getWindowSize().cx - 180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
+  this->addChild(_oba3);
+
+  _oji3 = Sprite2D::create("./data/texture/oji3.png");
+  _oji3->setSize(180 * 1.5f,130 * 1.5f);
+  _oji3->setPos(180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
+  this->addChild(_oji3);
+
+
   return true;
 }
 
@@ -240,6 +251,14 @@ void Game::update() {
       _player[0]->setDripNum(0);
       _player[1]->setDripNum(0);
     }
+
+    // ‚¨‚¶‚³‚ñ‚¨‚Î‚³‚ñ
+    float oji3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1) / (12.f * 12.f);
+    float oba3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) / (12.f * 12.f);
+    Vec2 oji3vec = Vec2(180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
+    Vec2 oba3vec = Vec2(App::instance().getWindowSize().cx - 180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
+    _oji3->setPos(oji3vec * (1 - oji3num) + oba3vec * oji3num);
+    _oba3->setPos(oba3vec * (1 - oba3num) + oji3vec * oba3num);
 
   } // case MODE_PLAY
   break;
