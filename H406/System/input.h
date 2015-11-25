@@ -41,6 +41,7 @@ public:
   void setRepeatSleepTime(int time) { _nRepeatSleepTime = time; }
 
 private:
+
   vector<iInput*> _inputList;
 
   // インプット用デバイス

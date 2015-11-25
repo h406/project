@@ -18,6 +18,7 @@
 #include "EventData.h"
 #include "guiManager.h"
 #include "dataManager.h"
+#include "itemManager.h"
 #include "title.h"
 #include "BaceScene.h"
 
@@ -63,6 +64,12 @@ bool Game::init() {
   _playerCam[1] = camera->createCamera();
   _playerCam[1]->setPosP({0,0,0});
   _playerCam[1]->setPosR({0,0,0});
+
+  // アイテム
+  _itemManager = ItemManager::create();
+  _itemManager->addPlayer(_player[0]);
+  _itemManager->addPlayer(_player[1]);
+  this->addChild(_itemManager);
 
   _roundChangeCam = camera->createCamera();
   _roundChangeCam->setPosP({0,1500,0});
@@ -172,6 +179,13 @@ void Game::update() {
           _player[i]->moveRight(5.0f);
         }
       }
+    }
+
+    // ボムちゃん発射
+    if (input->isTrigger(0, VK_INPUT::_3)) {
+      _itemManager->createBomb(0, 1, _player[0]->getDripNum());
+      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
+      _player[0]->setDripNum(0);
     }
 
     if (_nextModeTime == 0){
@@ -329,7 +343,7 @@ void Game::update() {
   } // switch
 
   if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
-    BaceScene::instance()->setCurScene(Title::create());
+//    BaceScene::instance()->setCurScene(Title::create());
   }
 
   if (_gameMode != MODE_START){
