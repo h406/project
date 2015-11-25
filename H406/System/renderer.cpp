@@ -96,7 +96,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   // [デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
   if(FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT,
     D3DDEVTYPE_HAL,
-    nullptr,
+    hWnd,
     D3DCREATE_HARDWARE_VERTEXPROCESSING,
     &d3dpp,&_pD3DDevice))) {
     // 取得失敗
