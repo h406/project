@@ -19,7 +19,7 @@ namespace{
 // init
 //------------------------------------------------------------------------------
 bool ItemBomb::init(){
-  _item = XFileObject::create("./data/model/elephant_hand.x");
+  _item = XFileObject::create("./data/model/kuma.x");
   _item->setScl(1.0f, 1.0f, 1.0f);
   _item->setPos(0.0f, 0.0f, 0.0f);
   this->addChild(_item);

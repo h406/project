@@ -24,6 +24,7 @@ namespace{
   const D3DXVECTOR2 kTIME_SIZE = D3DXVECTOR2(128.0f, 128.0f) * 0.5f;
   const D3DXVECTOR2 kSTART_TIME_SIZE = D3DXVECTOR2(256.0f, 256.0f);
   const D3DXVECTOR2 kRESULT_NUM_SIZE = D3DXVECTOR2(128.0f * 1.5f, 128.0f * 1.5f);
+  const D3DXVECTOR2 kITEM_SIZE = D3DXVECTOR2(128.0f, 128.0f);
 }
 
 //==============================================================================
@@ -57,14 +58,14 @@ bool GuiManager::init(EventManager* eventManager)
   // 数字
   _numSprite[0] = NumberSprite::create(1, "./data/texture/num.png");
   _numSprite[0]->setSize(128, 128);
-  _numSprite[0]->setPos(128, 200);
+  _numSprite[0]->setPos(128 + 64, 200);
   _numSprite[0]->setColor(kPLAYER_COLOR[0]);
   _numSprite[0]->setVisible(false);
   this->addChild(_numSprite[0]);
 
   _numSprite[1] = NumberSprite::create(1, "./data/texture/num.png");
   _numSprite[1]->setSize(128, 128);
-  _numSprite[1]->setPos(1280 - 128, 200);
+  _numSprite[1]->setPos(1280 - 128 - 64, 200);
   _numSprite[1]->setColor(kPLAYER_COLOR[1]);
   _numSprite[1]->setVisible(false);
   this->addChild(_numSprite[1]);
@@ -120,6 +121,36 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_plusNum[1]);
 
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
+
+  // アイテム
+  const Vec2 kItemPos(64.0f, 200);
+  _itemBase[0]._sprite = Sprite2D::create();
+  _itemBase[0]._sprite->setSize(kITEM_SIZE.x, kITEM_SIZE.y);
+  _itemBase[0]._sprite->setPos(kItemPos);
+  _itemBase[0]._sprite->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
+  _itemBase[0]._scl = 1.0f;
+  this->addChild(_itemBase[0]._sprite);
+
+  _item[0]._sprite = Sprite2D::create("./data/texture/neko000.png");
+  _item[0]._sprite->setSize(kITEM_SIZE.x, kITEM_SIZE.y);
+  _item[0]._sprite->setPos(kItemPos);
+  _item[0]._sprite->setVisible(false);
+  _item[0]._scl = 1.0f;
+  this->addChild(_item[0]._sprite);
+
+  _itemBase[1]._sprite = Sprite2D::create();
+  _itemBase[1]._sprite->setSize(kITEM_SIZE.x, kITEM_SIZE.y);
+  _itemBase[1]._sprite->setPos(App::instance().getWindowSize().cx - kItemPos.x, kItemPos.y);
+  _itemBase[1]._sprite->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
+  _itemBase[1]._scl = 1.0f;
+  this->addChild(_itemBase[1]._sprite);
+
+  _item[1]._sprite = Sprite2D::create("./data/texture/neko000.png");
+  _item[1]._sprite->setSize(kITEM_SIZE.x, kITEM_SIZE.y);
+  _item[1]._sprite->setPos(App::instance().getWindowSize().cx - kItemPos.x, kItemPos.y);
+  _item[1]._sprite->setVisible(false);
+  _item[1]._scl = 1.0f;
+  this->addChild(_item[1]._sprite);
 
   // タイマー
   _time._sprite = NumberSprite::create(2, "./data/texture/num.png");
@@ -199,6 +230,12 @@ bool GuiManager::init(EventManager* eventManager)
   eventManager->addEventListener(EventList::ROUND_RESULT_START, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::ROUND_RESULT_END, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::ROUND_FINISH, bind(&GuiManager::EventListener, this, placeholders::_1));
+  // アイテム系
+  eventManager->addEventListener(EventList::PLAYER_1_GET_BOMB, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_GET_BOMB, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_USE_ITEM, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_USE_ITEM, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::ITEM_RESET, bind(&GuiManager::EventListener, this, placeholders::_1));
 
   return true;
 }
@@ -250,14 +287,22 @@ void GuiManager::update(void)
   } else {
     _time._sprite->setNumber(time / 60);
   }
-  //Vec2 timePos = _time._sprite->getPos() + ((Vec2(App::instance().getWindowSize().cx * 0.5f, 128.0f) - _time._sprite->getPos()) * 0.07f);
-  //_time._sprite->setPos(timePos);
-
+  // 終了3秒前カウント
   if (time == 60 * 4 || time == 60 * 3 || time == 60 * 2){
     _time._scl = 2.5f;
   }
   _time._scl += (1 - _time._scl) * 0.07f;
   _time._sprite->setSize(kTIME_SIZE.x * _time._scl, kTIME_SIZE.y * _time._scl);
+
+  // アイテム
+  if (_item[0]._sprite->isVisible()){
+    _item[0]._scl += (1 - _item[0]._scl) * 0.1f;
+    _item[0]._sprite->setSize(kITEM_SIZE.x * _item[0]._scl, kITEM_SIZE.y * _item[0]._scl);
+  }
+  if (_item[1]._sprite->isVisible()){
+    _item[1]._scl += (1 - _item[1]._scl) * 0.1f;
+    _item[1]._sprite->setSize(kITEM_SIZE.x * _item[1]._scl, kITEM_SIZE.y * _item[1]._scl);
+  }
 
   // スタート文字
   if (_is_start){
@@ -319,6 +364,32 @@ void GuiManager::EventListener(EventData* eventData) {
   const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
 
   switch (eventData->getEvent()) {
+
+  // アイテム系
+  case EventList::PLAYER_1_GET_BOMB:
+    if (_item[0]._sprite->isVisible()) break;
+    _item[0]._scl = 0.0f;
+    _item[0]._sprite->setVisible(true);
+    _item[0]._sprite->setTexture("./data/texture/neko000.png");
+    _item[0]._sprite->setSize(0.0f, 0.0f);
+    break;
+  case EventList::PLAYER_2_GET_BOMB:
+    if (_item[1]._sprite->isVisible()) break;
+    _item[1]._scl = 0.0f;
+    _item[1]._sprite->setVisible(true);
+    _item[1]._sprite->setTexture("./data/texture/neko000.png");
+    _item[1]._sprite->setSize(0.0f, 0.0f);
+    break;
+  case EventList::PLAYER_1_USE_ITEM:
+    _item[0]._sprite->setVisible(false);
+    break;
+  case EventList::PLAYER_2_USE_ITEM:
+    _item[1]._sprite->setVisible(false);
+    break;
+  case EventList::ITEM_RESET:
+    _item[0]._sprite->setVisible(false);
+    _item[1]._sprite->setVisible(false);
+    break;
 
     // 塗るの取得した
   case EventList::PLAYER_1_DRIP_GET:

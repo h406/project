@@ -186,23 +186,20 @@ void Game::update() {
           _player[i]->moveRight(1.0f);
         }
       }
+      // アイテム使用
+      if (input->isTrigger(0, VK_INPUT::_1)) {
+        _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
+      }
+      if (input->isTrigger(1, VK_INPUT::_1)) {
+        _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
+      }
     }
 
-    // ボムちゃん発射
-    if (input->isTrigger(0, VK_INPUT::_1)) {
-      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
-    }
-    if (input->isTrigger(1, VK_INPUT::_1)) {
-      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
-    }
-
+    // ボムちゃん生成
     if ((rand() % (60 * 1)) == 0){
-      const Vec2& stageSize = _stage->getStageSize();
-      const float halfSizeX = stageSize.x * 0.5f;
-      const float halfSizeZ = stageSize.y * 0.5f;
-      int randx = rand() % (int)stageSize.x;
-      int randy = rand() % (int)stageSize.y;
-      const Vec3 pos((float)(randx - halfSizeX), 0.0f, (float)(randy - halfSizeZ));
+      int randx = rand() % Stage::kNUM_X;
+      int randy = rand() % Stage::kNUM_Y;
+      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
       _itemManager->createBomb(pos);
     }
 

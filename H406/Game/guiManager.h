@@ -66,6 +66,10 @@ private:
   bool _is_start;
 
   RoundIcon* _roundIcon;
+
+  GUI_SPRITE_2D _item[2];
+  GUI_SPRITE_2D _itemBase[2];
+
 };
 
 #endif

@@ -50,11 +50,11 @@ void KeyBoard::init(Input* input) {
   memset(_InputVTKey,0,sizeof(_InputVTKey));
 
   // virtual—p”z—ñ
-  _InputVTKey[0][(int)VK_INPUT::LEFT] = DIK_LEFT;
-  _InputVTKey[0][(int)VK_INPUT::RIGHT] = DIK_RIGHT;
-  _InputVTKey[0][(int)VK_INPUT::UP] = DIK_UP;
-  _InputVTKey[0][(int)VK_INPUT::DOWN] = DIK_DOWN;
-  _InputVTKey[0][(int)VK_INPUT::_1] = DIK_RSHIFT;
+  _InputVTKey[0][(int)VK_INPUT::LEFT] = DIK_A;
+  _InputVTKey[0][(int)VK_INPUT::RIGHT] = DIK_D;
+  _InputVTKey[0][(int)VK_INPUT::UP] = DIK_W;
+  _InputVTKey[0][(int)VK_INPUT::DOWN] = DIK_S;
+  _InputVTKey[0][(int)VK_INPUT::_1] = DIK_LSHIFT;
   _InputVTKey[0][(int)VK_INPUT::_2] = DIK_SPACE;
   _InputVTKey[0][(int)VK_INPUT::_3] = DIK_RETURN;
   // _InputVTKey[0][(int)VK_INPUT::_4] = DIK_A;
@@ -64,11 +64,11 @@ void KeyBoard::init(Input* input) {
   // _InputVTKey[0][(int)VK_INPUT::_8] = DIK_W;
   // _InputVTKey[0][(int)VK_INPUT::_9] = DIK_E;
   // _InputVTKey[0][(int)VK_INPUT::_10] = DIK_C;
-  _InputVTKey[1][(int)VK_INPUT::LEFT] = DIK_A;
-  _InputVTKey[1][(int)VK_INPUT::RIGHT] = DIK_D;
-  _InputVTKey[1][(int)VK_INPUT::UP] = DIK_W;
-  _InputVTKey[1][(int)VK_INPUT::DOWN] = DIK_S;
-  _InputVTKey[1][(int)VK_INPUT::_1] = DIK_LSHIFT;
+  _InputVTKey[1][(int)VK_INPUT::LEFT] = DIK_LEFT;
+  _InputVTKey[1][(int)VK_INPUT::RIGHT] = DIK_RIGHT;
+  _InputVTKey[1][(int)VK_INPUT::UP] = DIK_UP;
+  _InputVTKey[1][(int)VK_INPUT::DOWN] = DIK_DOWN;
+  _InputVTKey[1][(int)VK_INPUT::_1] = DIK_RSHIFT;
 
   memset(_aKeyState,0,sizeof(_aKeyState));
   memset(_aKeyTrigger,0,sizeof(_aKeyTrigger));
