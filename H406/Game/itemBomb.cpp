@@ -26,11 +26,10 @@ bool ItemBomb::init(){
 
   _is_use = false;
   _is_death = false;
-  _ownerId = -1;
-  _targetId = -1;
+  _owner = nullptr;
+  _target = nullptr;
   _dripNum = 0;
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
-  _player = nullptr;
 
   _radius = 20.0f;
 
@@ -42,15 +41,15 @@ bool ItemBomb::init(){
 //------------------------------------------------------------------------------
 void ItemBomb::update(){
   if (_is_death == false){
-    if (_is_use && _player){
+    if (_is_use && _owner){
       // Ž€‚ñ‚¾
       if (_dripNum <= 0){
         _is_death = true;
         return;
       }
 
-      Vec3 playerPos = _player->getPos();
-      Vec2 vec = Vec2(_pos.x - playerPos.x, _pos.z - playerPos.z);
+      Vec3 targetPos = _target->getPos();
+      Vec2 vec = Vec2(_pos.x - targetPos.x, _pos.z - targetPos.z);
 
       D3DXVec2Normalize(&vec, &vec);
       float length = D3DXVec2Length(&vec);
@@ -68,7 +67,7 @@ void ItemBomb::update(){
     }
   }
 
-  if (_is_use == false && _ownerId >= 0){
+  if (_is_use == false && _owner != nullptr){
     _item->setVisible(false);
   }else{
     _item->setVisible(true);
@@ -84,9 +83,12 @@ void ItemBomb::uninit(){
 }
 
 //==============================================================================
-// uninit
+// use
 //------------------------------------------------------------------------------
 void ItemBomb::use(){
+  _is_use = true;
+  _dripNum = _owner->getDripNum();
+  _pos = _owner->getPos();
 }
 
 

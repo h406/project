@@ -93,16 +93,16 @@ void ItemManager::EventListener(EventData* eventData) {
   case EventList::PLAYER_1_GET_BOMB:
     if (_playerGetItem[0] == nullptr){
       _playerGetItem[0] = (ItemBomb*)eventData->getUserData();
-      _playerGetItem[0]->setOwnerId(0);
-      _playerGetItem[0]->setTargetId(1);
+      _playerGetItem[0]->setOwner(_playerList[0]);
+      _playerGetItem[0]->setTarget(_playerList[1]);
     }
     break;
 
   case EventList::PLAYER_2_GET_BOMB:
     if (_playerGetItem[1] == nullptr){
       _playerGetItem[1] = (ItemBomb*)eventData->getUserData();
-      _playerGetItem[1]->setOwnerId(1);
-      _playerGetItem[1]->setTargetId(0);
+      _playerGetItem[1]->setOwner(_playerList[1]);
+      _playerGetItem[1]->setTarget(_playerList[0]);
     }
     break;
 
@@ -110,10 +110,7 @@ void ItemManager::EventListener(EventData* eventData) {
     {
     if (_playerGetItem[0] == nullptr) break;
     ItemBomb* bomb = (ItemBomb*)_playerGetItem[0];
-    bomb->setPos(_playerList[bomb->getOwnerId()]->getPos());
-    bomb->setTarget(_playerList[bomb->getTargetId()]);
-    bomb->setDripNum(_playerList[bomb->getOwnerId()]->getDripNum() + 1);
-    bomb->setUse(true);
+    bomb->use();
     _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
     _playerList[0]->setDripNum(0);
     _playerGetItem[0] = nullptr;
@@ -124,10 +121,7 @@ void ItemManager::EventListener(EventData* eventData) {
     {
     if (_playerGetItem[1] == nullptr) break;
     ItemBomb* bomb = (ItemBomb*)_playerGetItem[1];
-    bomb->setPos(_playerList[bomb->getOwnerId()]->getPos());
-    bomb->setTarget(_playerList[bomb->getTargetId()]);
-    bomb->setDripNum(_playerList[bomb->getOwnerId()]->getDripNum() + 1);
-    bomb->setUse(true);
+    bomb->use();
     _event->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
     _playerList[1]->setDripNum(0);
     _playerGetItem[1] = nullptr;

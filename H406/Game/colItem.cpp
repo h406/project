@@ -42,7 +42,7 @@ void ColItem::update() {
     ItemBomb** bombList = _itemManager->getBombList();
     for (int i = 0; i < ItemManager::kBombMax; i++){
       if (bombList[i] == nullptr) continue;
-      if (bombList[i]->getOwnerId() < 0){
+      if (bombList[i]->getOwner() == nullptr){
 
         const bool isHit = hitCheckCircle(player->getPos(), bombList[i]->getPos(),
                                           player->getRadius(), bombList[i]->getRadius());
@@ -64,8 +64,8 @@ void ColItem::update() {
       const Stage::FIELD_ID fieldID = _stage->getFieldID(idX, idY);
 
       // “h‚é
-      if (fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwnerId()) && bombList[i]->getDripNum() > 0) {
-        _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwnerId()));
+      if (fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()) && bombList[i]->getDripNum() > 0) {
+        _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()));
         bombList[i]->addDripNum(-1);
       }
     }

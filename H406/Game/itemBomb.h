@@ -25,11 +25,18 @@ public:
   void update();
   void uninit();
 
-  int getOwnerId(){ return _ownerId; }
-  void setOwnerId(int id){ _ownerId = id; }
+  //int getOwnerId(){ return _ownerId; }
+  //void setOwnerId(int id){ _ownerId = id; }
 
-  int getTargetId(){ return _targetId; }
-  void setTargetId(int id){ _targetId = id; }
+  //int getTargetId(){ return _targetId; }
+  //void setTargetId(int id){ _targetId = id; }
+
+
+  Player* getOwner(){ return _owner; }
+  void setOwner(Player* obj){ _owner = obj; }
+
+  Player* getTarget(){ return _target; }
+  void setTarget(Player* obj){ _target = obj; }
 
   bool getUse(){ return _is_use; }
   void setUse(bool use){ _is_use = use; }
@@ -39,7 +46,6 @@ public:
   void setRadius(float rad) { _radius = rad; }
   float getRadius() const { return _radius; }
 
-  void setTarget(Player *obj){ _player = obj; }
   void setDripNum(int val){ _dripNum = val; };
   int  getDripNum() const { return _dripNum; };
   void addDripNum(int val) { _dripNum = (_dripNum + val) > 9 ? 9 : _dripNum + val; }
@@ -49,7 +55,7 @@ public:
 private:
 
   XFileObject* _item;
-  Player* _player;
+//  Player* _player;
 
   int _dripNum;
 
