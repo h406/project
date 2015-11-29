@@ -125,6 +125,7 @@
     <ClInclude Include="playerStatus.h" />
     <ClInclude Include="roundIcon.h" />
     <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="ShuchuSen.h" />
     <ClInclude Include="ssaoEffect.h" />
     <ClInclude Include="staticStage.h" />
     <ClInclude Include="stage.h" />
@@ -163,6 +164,7 @@
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </ForcedIncludeFiles>
     </ClCompile>
+    <ClCompile Include="ShuchuSen.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="title.cpp" />
   </ItemGroup>

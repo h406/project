@@ -58,6 +58,9 @@
     <Filter Include="object\item\bomb">
       <UniqueIdentifier>{12398a5e-d1db-4311-89ad-83cefe5af363}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\common">
+      <UniqueIdentifier>{debc7b49-2119-4d82-ad21-ea532906f6a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -150,6 +153,9 @@
     <ClInclude Include="colItem.h">
       <Filter>system\collision</Filter>
     </ClInclude>
+    <ClInclude Include="ShuchuSen.h">
+      <Filter>object\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -224,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="colItem.cpp">
       <Filter>system\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="ShuchuSen.cpp">
+      <Filter>object\common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
