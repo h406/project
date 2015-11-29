@@ -14,6 +14,9 @@
 class Player;
 class iItem;
 class ItemBomb;
+class ItemAccel;
+class ItemManhole;
+
 class EventManager;
 class EventData;
 
@@ -30,24 +33,36 @@ public:
 
   void addPlayer(Player* obj);
 
+  // アイテム生成
   void createBomb(const Vec3& pos);
+  void createAccel(const Vec3& pos);
+  void createManhole(const Vec3& pos);
 
+  // アイテムリスト取得
   ItemBomb** getBombList(){ return _bombList; }
+  ItemAccel** getAccelList(){ return _accelList; }
+  ItemManhole** getManholeList(){ return _manholeList; }
 
   void EventListener(EventData* eventData);
 
   const static int kMaxPlayers = 2;
-  const static int kBombMax = 5;
+  const static int kBombMax = 3;
+  const static int kAccelMax = 3;
+  const static int kManholeMax = 3;
 
 private:
 
   EventManager* _event;
 
+  // 各アイテムリスト
   ItemBomb* _bombList[kBombMax];
-//  vector<iItem*> _itemList;
-  Player* _playerList[kMaxPlayers];
-  iItem* _playerGetItem[kMaxPlayers];
+  ItemAccel* _accelList[kAccelMax];
+  ItemManhole* _manholeList[kManholeMax];
 
+  // プレイヤー
+  Player* _playerList[kMaxPlayers];
+  // プレイヤーの所持アイテム情報
+  iItem* _playerGetItem[kMaxPlayers];
 };
 
 #endif

@@ -17,11 +17,11 @@ class Player;
 class iItem : public iLayer{
 public:
 
-  virtual int getOwnerId() = 0;
-  virtual void setOwnerId(int id) = 0;
+  virtual Player* getOwner() = 0;
+  virtual void setOwner(Player* obj) = 0;
 
-  virtual int getTargetId() = 0;
-  virtual void setTargetId(int id) = 0;
+  virtual Player* getTarget() = 0;
+  virtual void setTarget(Player* obj) = 0;
 
   virtual bool getUse() = 0;
   virtual void setUse(bool use) = 0;
@@ -36,8 +36,8 @@ public:
 
 protected:
 
-  int _ownerId;
-  int _targetId;
+  Player* _owner;
+  Player* _target;
 
   bool _is_use;
   bool _is_death;

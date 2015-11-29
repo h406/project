@@ -38,6 +38,7 @@ public:
   void setFieldID(int x,int y,FIELD_ID id);
   void reset(void);
 
+  const Vec3& getFieldMapPos(int x, int y) const { return _fieldMap[x][y]->getPos(); }
   const Vec2& getStageSize() const { return _stageSize; }
 
   // ‚ ‚Ü‚èŽg‚í‚È‚¢‚Å‚Ë

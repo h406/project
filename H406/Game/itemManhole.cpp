@@ -1,27 +1,28 @@
 //==============================================================================
 //
-// itemBomb[itemBomb.cpp]
-// Author : masato masuda : 2015/11/18
+// itemManhole[itemManhole.cpp]
+// Author : masato masuda : 2015/11/27
 //
 //==============================================================================
 
 //******************************************************************************
 // include
 //******************************************************************************
-#include "itemBomb.h"
+#include "itemManhole.h"
 #include "player.h"
 #include "eventManager.h"
 #include "EventList.h"
 
 namespace{
-  const float kMovement = 3.0f;
+  const int kFreezTime = 60 * 2;
+  const float kJumpPower = 20.0f;
 }
 
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
-bool ItemBomb::init(){
-  _item = XFileObject::create("./data/model/pet.x");
+bool ItemManhole::init(){
+  _item = XFileObject::create("./data/model/manho-ru.x");
   _item->setScl(1.0f, 1.0f, 1.0f);
   _item->setPos(0.0f, 0.0f, 0.0f);
   this->addChild(_item);
@@ -30,9 +31,9 @@ bool ItemBomb::init(){
   _is_death = false;
   _owner = nullptr;
   _target = nullptr;
-  _dripNum = 0;
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
   _radius = 20.0f;
+  _frameCount = 0;
 
   return true;
 }
@@ -40,58 +41,55 @@ bool ItemBomb::init(){
 //==============================================================================
 // update
 //------------------------------------------------------------------------------
-void ItemBomb::update(){
+void ItemManhole::update(){
   if (_is_death == false){
     if (_is_use && _owner){
-      // Ž€‚ñ‚¾
-      if (_dripNum <= 0){
+
+      _frameCount--;
+      if (_frameCount < 0){
         _is_death = true;
         return;
       }
-
-      Vec3 targetPos = _target->getPos();
-      Vec2 vec = Vec2(_pos.x - targetPos.x, _pos.z - targetPos.z);
-
-      D3DXVec2Normalize(&vec, &vec);
-      float length = D3DXVec2Length(&vec);
-      if (length > 1.f) length = 1.f;
-
-      float rot = atan2(vec.y, vec.x);
-      _moveDest.x = cosf(rot) * length * kMovement;
-      _moveDest.z = sinf(rot) * length * kMovement;
-
-      _pos -= _moveDest;
-
-      rot = D3DX_PI - atan2(_moveDest.z, _moveDest.x);
-      rot -= D3DX_PI / 2;
-      _item->setRotY(rot);
+      // ˆ—
+      _owner->setFreeze(true);
     }
   }
 
-  if (_is_use == false && _owner != nullptr){
+  if (_owner != nullptr){
     _item->setVisible(false);
   }else{
     _item->setVisible(true);
   }
-
-  _moveDest = Vec3(0.0f, 0.0f, 0.0f);
 }
 
 //==============================================================================
 // uninit
 //------------------------------------------------------------------------------
-void ItemBomb::uninit(){
+void ItemManhole::uninit(){
 }
 
 //==============================================================================
 // use
 //------------------------------------------------------------------------------
-void ItemBomb::use(){
+void ItemManhole::use(){
   _is_use = true;
-  _dripNum = _owner->getDripNum();
-  _pos = _owner->getPos();
-  if (_event){
-    _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET) + _owner->getPlayerID()), nullptr);
+  _frameCount = 0;
+
+  const int is_plus = rand() % 2;
+  if (is_plus == 0){
+    int plus = _owner->getMaxDripNum();
+    if (plus > 9) plus = 9;
+    
+    if (_event){
+      _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + _owner->getPlayerID()), (void*)plus);
+      _owner->addDripNum(plus);
+      _owner->jump(kJumpPower);
+    }
+  }else{
+    const Vec3 pos(_owner->getPos().x, 0.0f, _owner->getPos().z);
+    _owner->setFreezPos(pos);
+    _owner->setMoveVec(Vec3(0.0f, 0.0f, 0.0f));
+    _frameCount = kFreezTime;
   }
 }
 
