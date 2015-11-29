@@ -11,6 +11,8 @@
 #include "itemManager.h"
 #include "iItem.h"
 #include "itemBomb.h"
+#include "itemAccel.h"
+#include "itemManhole.h"
 #include "player.h"
 #include "EventList.h"
 #include "eventManager.h"
@@ -24,11 +26,17 @@ bool ItemManager::init(EventManager* event){
 
   memset(_playerList, 0, sizeof(_playerList));
   memset(_bombList, 0, sizeof(_bombList));
+  memset(_accelList, 0, sizeof(_accelList));
+  memset(_manholeList, 0, sizeof(_manholeList));
   memset(_playerGetItem, 0, sizeof(_playerGetItem));
 
   // イベントセット
   _event->addEventListener(EventList::PLAYER_1_GET_BOMB, bind(&ItemManager::EventListener, this, placeholders::_1));
   _event->addEventListener(EventList::PLAYER_2_GET_BOMB, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_1_GET_ACCEL, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_2_GET_ACCEL, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_1_GET_MANHOLE, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::PLAYER_2_GET_MANHOLE, bind(&ItemManager::EventListener, this, placeholders::_1));
   _event->addEventListener(EventList::PLAYER_1_USE_ITEM, bind(&ItemManager::EventListener, this, placeholders::_1));
   _event->addEventListener(EventList::PLAYER_2_USE_ITEM, bind(&ItemManager::EventListener, this, placeholders::_1));
   _event->addEventListener(EventList::ITEM_RESET, bind(&ItemManager::EventListener, this, placeholders::_1));
@@ -40,11 +48,30 @@ bool ItemManager::init(EventManager* event){
 // update
 //------------------------------------------------------------------------------
 void ItemManager::update(){
-  for (int i = 0; i < kBombMax; i++){
+  // ボム
+  for (int i = 0; i < ItemManager::kBombMax; i++){
     if (_bombList[i] != nullptr){
       if (_bombList[i]->getDeath() == true){
         _bombList[i]->release();
         _bombList[i] = nullptr;
+      }
+    }
+  }
+  // アクセル
+  for (int i = 0; i < ItemManager::kAccelMax; i++){
+    if (_accelList[i] != nullptr){
+      if (_accelList[i]->getDeath() == true){
+        _accelList[i]->release();
+        _accelList[i] = nullptr;
+      }
+    }
+  }
+  // マンホール
+  for (int i = 0; i < ItemManager::kManholeMax; i++){
+    if (_manholeList[i] != nullptr){
+      if (_manholeList[i]->getDeath() == true){
+        _manholeList[i]->release();
+        _manholeList[i] = nullptr;
       }
     }
   }
@@ -60,11 +87,41 @@ void ItemManager::uninit(){
 // createBomb
 //------------------------------------------------------------------------------
 void ItemManager::createBomb(const Vec3& pos){
-  for (ItemBomb*& _bomb : _bombList) {
-    if (_bomb == nullptr) {
-      _bomb = ItemBomb::create();
-      _bomb->setPos(pos);
-      this->addChild(_bomb);
+  for (ItemBomb*& _item : _bombList) {
+    if (_item == nullptr) {
+      _item = ItemBomb::create();
+      _item->setPos(pos);
+      _item->addEventManager(_event);
+      this->addChild(_item);
+      break;
+    }
+  }
+}
+
+//==============================================================================
+// createAccel
+//------------------------------------------------------------------------------
+void ItemManager::createAccel(const Vec3& pos){
+  for (ItemAccel*& _item : _accelList) {
+    if (_item == nullptr) {
+      _item = ItemAccel::create();
+      _item->setPos(pos);
+      this->addChild(_item);
+      break;
+    }
+  }
+}
+
+//==============================================================================
+// createManhole
+//------------------------------------------------------------------------------
+void ItemManager::createManhole(const Vec3& pos){
+  for (ItemManhole*& _item : _manholeList) {
+    if (_item == nullptr) {
+      _item = ItemManhole::create();
+      _item->setPos(pos);
+      _item->addEventManager(_event);
+      this->addChild(_item);
       break;
     }
   }
@@ -90,6 +147,7 @@ void ItemManager::EventListener(EventData* eventData) {
 
   switch (eventData->getEvent()) {
 
+  // ボム取得
   case EventList::PLAYER_1_GET_BOMB:
     if (_playerGetItem[0] == nullptr){
       _playerGetItem[0] = (ItemBomb*)eventData->getUserData();
@@ -106,13 +164,47 @@ void ItemManager::EventListener(EventData* eventData) {
     }
     break;
 
+    // アクセル取得
+  case EventList::PLAYER_1_GET_ACCEL:
+    if (_playerGetItem[0] == nullptr){
+      _playerGetItem[0] = (ItemAccel*)eventData->getUserData();
+      _playerGetItem[0]->setOwner(_playerList[0]);
+      _playerGetItem[0]->setTarget(_playerList[1]);
+    }
+    break;
+
+  case EventList::PLAYER_2_GET_ACCEL:
+    if (_playerGetItem[1] == nullptr){
+      _playerGetItem[1] = (ItemAccel*)eventData->getUserData();
+      _playerGetItem[1]->setOwner(_playerList[1]);
+      _playerGetItem[1]->setTarget(_playerList[0]);
+    }
+    break;
+
+  // マンホール取得
+  case EventList::PLAYER_1_GET_MANHOLE:
+    if (_playerGetItem[0] == nullptr){
+      _playerGetItem[0] = (ItemManhole*)eventData->getUserData();
+      _playerGetItem[0]->setOwner(_playerList[0]);
+      _playerGetItem[0]->setTarget(_playerList[1]);
+      _event->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
+    }
+    break;
+
+  case EventList::PLAYER_2_GET_MANHOLE:
+    if (_playerGetItem[1] == nullptr){
+      _playerGetItem[1] = (ItemManhole*)eventData->getUserData();
+      _playerGetItem[1]->setOwner(_playerList[1]);
+      _playerGetItem[1]->setTarget(_playerList[0]);
+      _event->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
+    }
+    break;
+
+  // アイテム使用
   case EventList::PLAYER_1_USE_ITEM:
     {
     if (_playerGetItem[0] == nullptr) break;
-    ItemBomb* bomb = (ItemBomb*)_playerGetItem[0];
-    bomb->use();
-    _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
-    _playerList[0]->setDripNum(0);
+    _playerGetItem[0]->use();
     _playerGetItem[0] = nullptr;
     }
     break;
@@ -120,20 +212,29 @@ void ItemManager::EventListener(EventData* eventData) {
   case EventList::PLAYER_2_USE_ITEM:
     {
     if (_playerGetItem[1] == nullptr) break;
-    ItemBomb* bomb = (ItemBomb*)_playerGetItem[1];
-    bomb->use();
-    _event->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
-    _playerList[1]->setDripNum(0);
+    _playerGetItem[1]->use();
     _playerGetItem[1] = nullptr;
     }
     break;
 
   case EventList::ITEM_RESET:
     {
-      for (int i = 0; i < kBombMax; i++){
+      for (int i = 0; i < ItemManager::kBombMax; i++){
         if (_bombList[i] != nullptr){
           _bombList[i]->release();
           _bombList[i] = nullptr;
+        }
+      }
+      for (int i = 0; i < ItemManager::kAccelMax; i++){
+        if (_accelList[i] != nullptr){
+            _accelList[i]->release();
+            _accelList[i] = nullptr;
+        }
+      }
+      for (int i = 0; i < ItemManager::kManholeMax; i++){
+        if (_manholeList[i] != nullptr){
+          _manholeList[i]->release();
+          _manholeList[i] = nullptr;
         }
       }
       memset(_playerGetItem, 0, sizeof(_playerGetItem));

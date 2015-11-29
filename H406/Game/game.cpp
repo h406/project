@@ -107,6 +107,8 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_2_DRIP_USING, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_1_ITEM_GET, bind(&Game::EventListener, this, placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_ITEM_GET, bind(&Game::EventListener, this, placeholders::_1));
+  _eventManager->addEventListener(EventList::PLAYER_1_DRIP_RESET, bind(&Game::EventListener, this, placeholders::_1));
+  _eventManager->addEventListener(EventList::PLAYER_2_DRIP_RESET, bind(&Game::EventListener, this, placeholders::_1));
 
   _freezeTime = 0;
   _bultime = 0;
@@ -201,6 +203,20 @@ void Game::update() {
       int randy = rand() % Stage::kNUM_Y;
       const Vec3 pos = _stage->getFieldMapPos(randx, randy);
       _itemManager->createBomb(pos);
+    }
+    // スピードアップ生成
+    if ((rand() % (60 * 1)) == 0){
+      int randx = rand() % Stage::kNUM_X;
+      int randy = rand() % Stage::kNUM_Y;
+      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
+      _itemManager->createAccel(pos);
+    }
+    // マンホール生成
+    if ((rand() % (60 * 1)) == 0){
+      int randx = rand() % Stage::kNUM_X;
+      int randy = rand() % Stage::kNUM_Y;
+      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
+      _itemManager->createManhole(pos);
     }
 
     if (_nextModeTime == 0){
@@ -329,8 +345,6 @@ void Game::update() {
       _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
       _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
 
-      _player[0]->setDripNum(0);
-      _player[1]->setDripNum(0);
       _nextModeTime = 120;
       _gameMode = Game::MODE_NEXT_ROUND_SETUP;
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_END)), nullptr);
@@ -353,6 +367,8 @@ void Game::update() {
     if (_nextModeTime == 0){
       _player[0]->setPos(kPLAYER_1_INIT_POS);
       _player[1]->setPos(kPLAYER_2_INIT_POS);
+      _player[0]->moveRight(0.01f);
+      _player[1]->moveLeft(0.01f);
       _eventManager->dispatchEvent(EventList(int(EventList::NEXT_ROUND)), nullptr);
 
       auto camera = App::instance().getRenderer()->getCamera();
@@ -397,6 +413,14 @@ void Game::EventListener(EventData* eventData) {
 
   case EventList::PLAYER_2_ITEM_GET:
     _effect->play("get.efk", _player[1]->getPos());
+    break;
+
+  case EventList::PLAYER_1_DRIP_RESET:
+    _player[0]->setDripNum(0);
+    break;
+
+  case EventList::PLAYER_2_DRIP_RESET:
+    _player[1]->setDripNum(0);
     break;
   }
 }

@@ -58,6 +58,12 @@
     <Filter Include="object\item\bomb">
       <UniqueIdentifier>{12398a5e-d1db-4311-89ad-83cefe5af363}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\item\manhole">
+      <UniqueIdentifier>{c000dc8e-2187-4a03-98a7-1f12ca1150d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\item\accel">
+      <UniqueIdentifier>{0c74b1b7-8582-4e9d-bbe5-f6f0f9ed4603}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -150,6 +156,12 @@
     <ClInclude Include="colItem.h">
       <Filter>system\collision</Filter>
     </ClInclude>
+    <ClInclude Include="itemManhole.h">
+      <Filter>object\item\manhole</Filter>
+    </ClInclude>
+    <ClInclude Include="itemAccel.h">
+      <Filter>object\item\accel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -224,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="colItem.cpp">
       <Filter>system\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="itemManhole.cpp">
+      <Filter>object\item\manhole</Filter>
+    </ClCompile>
+    <ClCompile Include="itemAccel.cpp">
+      <Filter>object\item\accel</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

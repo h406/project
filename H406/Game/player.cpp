@@ -37,10 +37,12 @@ bool Player::init(int playerID)
   _playerMoveVec = Vec3(0.0f, 0.0, 0.0f);
   _playerMoveDest = Vec3(0.0f, 0.0, 0.0f);
 
+  // プレイヤーID
   _playerID = playerID;
-  _dripNum = 0;
+  // 所持塗れる数
+    _dripNum = 0;
+  // 半径
   _radius = 20.0f;
-  
   // 重さ
   _weight = barStatus.weight * handStatus.weight;
   // 慣性
@@ -49,6 +51,10 @@ bool Player::init(int playerID)
   _maxSpeed = (barStatus.maxspeed + barStatus.maxspeed) * 0.5f;
   // 塗れる最大数
   _maxDripNum = barStatus.maxdripNum + handStatus.maxdripNum;
+  // アイテムによる加速
+  _accel = 1.0f;
+  // フリーズ
+  _freeze = false;
 
   return true;
 }
@@ -58,32 +64,45 @@ bool Player::init(int playerID)
 //------------------------------------------------------------------------------
 void Player::update(void)
 {
-  Vec2 moveDest(_playerMoveDest.x, _playerMoveDest.z);
+  if (_freeze == false){
+    Vec2 moveDest(_playerMoveDest.x, _playerMoveDest.z);
 
-  float length = D3DXVec2Length(&moveDest);
-  if(length > 1.f) {
-    length = 1.f;
+    float length = D3DXVec2Length(&moveDest);
+    if (length > 1.f) {
+      length = 1.f;
+    }
+
+    D3DXVec2Normalize(&moveDest, &moveDest);
+
+    float rot = atan2(moveDest.y, moveDest.x);
+    _playerMoveDest.x = (cosf(rot) * length * _maxSpeed) * _accel;
+    _playerMoveDest.z = (sinf(rot) * length * _maxSpeed) * _accel;
+    _playerMoveDest.y -= 5.0;
+
+    _playerMoveVec.x += (_playerMoveDest.x - _playerMoveVec.x) * _inertia;
+    _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
+    _playerMoveVec.z += (_playerMoveDest.z - _playerMoveVec.z) * _inertia;
+    _pos += _playerMoveVec;
+
+    if (length >= 0.01f) {
+      rot = D3DX_PI - atan2(_playerMoveVec.z, _playerMoveVec.x) + D3DX_PI * 0.5f;
+      _player[0]->setRotY(rot);
+      _player[1]->setRotY(rot);
+    }
+  }
+  else{
+    _playerMoveDest.y -= 5.0;
+    _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
+    _pos.y = _playerMoveVec.y;
+
+    const int offset = 5;
+    Vec3 ram(float(rand() % offset) - offset, 0.0f, float(rand() % offset) - offset);
+    _pos = _freezePos + ram;
   }
 
-  D3DXVec2Normalize(&moveDest, &moveDest);
-
-  float rot = atan2(moveDest.y, moveDest.x);
-  _playerMoveDest.x = cosf(rot) * length * _maxSpeed;
-  _playerMoveDest.z = sinf(rot) * length * _maxSpeed;
-  _playerMoveDest.y -= 5.0;
-
-  _playerMoveVec.x += (_playerMoveDest.x - _playerMoveVec.x) * _inertia;
-  _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
-  _playerMoveVec.z += (_playerMoveDest.z - _playerMoveVec.z) * _inertia;
-  _pos += _playerMoveVec;
-
-  if(length >= 0.01f) {
-    rot = D3DX_PI - atan2(_playerMoveVec.z,_playerMoveVec.x) + D3DX_PI * 0.5f;
-    _player[0]->setRotY(rot);
-    _player[1]->setRotY(rot);
-  }
-
-  _playerMoveDest = Vec3(0.0f, 0.0, 0.0f);
+  _freeze = false;
+  _accel = 1.0f;
+  _playerMoveDest = Vec3(0.0f, 0.0f, 0.0f);
 }
 
 //==============================================================================

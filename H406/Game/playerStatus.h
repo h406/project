@@ -35,6 +35,7 @@ namespace PlayerStatus{
     Normal = 0,
     Elephant,
     Bird,
+    Dolphin,
     Max
   };
 
@@ -43,6 +44,7 @@ namespace PlayerStatus{
     Normal = 0,
     Elephant,
     Bird,
+    Dolphin,
     Max
   };
 
@@ -51,6 +53,7 @@ namespace PlayerStatus{
     {(int)StickBar::Normal,     0.5f,  0.2f,  5.f,  0,"./data/model/bar.x"},
     {(int)StickBar::Elephant,   1.f,  0.9f,  5.f,  0,"./data/model/elephant_bar.x"},
     {(int)StickBar::Bird,       0.2f,  0.1f,  20.f,  0,"./data/model/Bird_bar.x"},
+    {(int)StickBar::Dolphin,    0.2f,  0.5f,  10.f,  0,"./data/model/Dolphin_bar.x"},
   };
 
   // ステータスリスト
@@ -58,6 +61,7 @@ namespace PlayerStatus{
     {(int)StickHandle::Normal,  0.5f,  1.f,  5.f,  9,"./data/model/hand.x"},
     {(int)StickHandle::Elephant,1.f,  1.f,  3.f,  9,"./data/model/elephant_hand.x"},
     {(int)StickHandle::Bird,    0.2f,  0.2f,  20.f,  9,"./data/model/Bird_handle.x"},
+    {(int)StickHandle::Dolphin, 0.5f,  0.5f,  10.f,  9,"./data/model/Dolphin_handle.x"},
   };
 
   const unsigned int kStickBarNum = (int)StickBar::Max;

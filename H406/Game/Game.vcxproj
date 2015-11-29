@@ -118,8 +118,10 @@
     <ClInclude Include="gauge.h" />
     <ClInclude Include="guiManager.h" />
     <ClInclude Include="iItem.h" />
+    <ClInclude Include="itemAccel.h" />
     <ClInclude Include="itemBomb.h" />
     <ClInclude Include="itemManager.h" />
+    <ClInclude Include="itemManhole.h" />
     <ClInclude Include="parpix.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="playerStatus.h" />
@@ -145,8 +147,10 @@
     <ClCompile Include="colStage.cpp" />
     <ClCompile Include="gauge.cpp" />
     <ClCompile Include="guiManager.cpp" />
+    <ClCompile Include="itemAccel.cpp" />
     <ClCompile Include="itemBomb.cpp" />
     <ClCompile Include="itemManager.cpp" />
+    <ClCompile Include="itemManhole.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="parpix.cpp" />
     <ClCompile Include="player.cpp" />

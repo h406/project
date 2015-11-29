@@ -15,6 +15,8 @@
 #include "eventManager.h"
 #include "itemManager.h"
 #include "itemBomb.h"
+#include "itemAccel.h"
+#include "itemManhole.h"
 
 //==============================================================================
 // init
@@ -39,6 +41,7 @@ void ColItem::update() {
   for (Player* player : _playerList) {
     if (player == nullptr) continue;
 
+    // ボム
     ItemBomb** bombList = _itemManager->getBombList();
     for (int i = 0; i < ItemManager::kBombMax; i++){
       if (bombList[i] == nullptr) continue;
@@ -50,8 +53,36 @@ void ColItem::update() {
           _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_BOMB) + player->getPlayerID()), (void*)bombList[i]);
         }
       }
-    }
-  }
+    } // bomb
+
+    // アクセル
+    ItemAccel** accelList = _itemManager->getAccelList();
+    for (int i = 0; i < ItemManager::kBombMax; i++){
+      if (accelList[i] == nullptr) continue;
+      if (accelList[i]->getOwner() == nullptr){
+
+        const bool isHit = hitCheckCircle(player->getPos(), accelList[i]->getPos(),
+                                          player->getRadius(), accelList[i]->getRadius());
+        if (isHit){
+          _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_ACCEL) + player->getPlayerID()), (void*)accelList[i]);
+        }
+      }
+    } // accel
+
+    // マンホール
+    ItemManhole** manholeList = _itemManager->getManholeList();
+    for (int i = 0; i < ItemManager::kManholeMax; i++){
+      if (manholeList[i] == nullptr) continue;
+      if (manholeList[i]->getOwner() == nullptr){
+
+        const bool isHit = hitCheckCircle(player->getPos(), manholeList[i]->getPos(),
+          player->getRadius(), manholeList[i]->getRadius());
+        if (isHit){
+          _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_MANHOLE) + player->getPlayerID()), (void*)manholeList[i]);
+        }
+      }
+    } // accel
+  } // player
 
   // アイテムとフィールド
   ItemBomb** bombList = _itemManager->getBombList();

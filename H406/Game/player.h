@@ -49,6 +49,14 @@ public:
 
   int getMaxDripNum() const { return _maxDripNum; }
 
+  void setAccel(float val){ _accel = val; }
+  float getAccel(){ return _accel; }
+
+  bool getFreeze(){ return _freeze; }
+  void setFreeze(bool freeze){ _freeze = freeze; }
+  const Vec3& getFreezPos() const { return _freezePos; }
+  void setFreezPos(const Vec3& pos) { _freezePos = pos; }
+
 private:
 
   // プレイヤー
@@ -56,6 +64,7 @@ private:
 
   Vec3 _playerMoveVec;
   Vec3 _playerMoveDest;
+  Vec3 _freezePos;
 
   // 塗れる数
   int _dripNum;
@@ -77,6 +86,12 @@ private:
   
   // 慣性
   float _inertia;
+
+  // アイテムによる加速
+  float _accel;
+
+  // フリーズ
+  bool _freeze;
 };
 
 #endif

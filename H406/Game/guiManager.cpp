@@ -233,6 +233,8 @@ bool GuiManager::init(EventManager* eventManager)
   // アイテム系
   eventManager->addEventListener(EventList::PLAYER_1_GET_BOMB, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_GET_BOMB, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_1_GET_ACCEL, bind(&GuiManager::EventListener, this, placeholders::_1));
+  eventManager->addEventListener(EventList::PLAYER_2_GET_ACCEL, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_1_USE_ITEM, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::PLAYER_2_USE_ITEM, bind(&GuiManager::EventListener, this, placeholders::_1));
   eventManager->addEventListener(EventList::ITEM_RESET, bind(&GuiManager::EventListener, this, placeholders::_1));
@@ -365,27 +367,44 @@ void GuiManager::EventListener(EventData* eventData) {
 
   switch (eventData->getEvent()) {
 
-  // アイテム系
+  // ボム取得
   case EventList::PLAYER_1_GET_BOMB:
     if (_item[0]._sprite->isVisible()) break;
     _item[0]._scl = 0.0f;
     _item[0]._sprite->setVisible(true);
-    _item[0]._sprite->setTexture("./data/texture/neko000.png");
+    _item[0]._sprite->setTexture("./data/texture/item_bomb.png");
     _item[0]._sprite->setSize(0.0f, 0.0f);
     break;
   case EventList::PLAYER_2_GET_BOMB:
     if (_item[1]._sprite->isVisible()) break;
     _item[1]._scl = 0.0f;
     _item[1]._sprite->setVisible(true);
-    _item[1]._sprite->setTexture("./data/texture/neko000.png");
+    _item[1]._sprite->setTexture("./data/texture/item_bomb.png");
     _item[1]._sprite->setSize(0.0f, 0.0f);
     break;
+  // アクセル取得
+  case EventList::PLAYER_1_GET_ACCEL:
+    if (_item[0]._sprite->isVisible()) break;
+    _item[0]._scl = 0.0f;
+    _item[0]._sprite->setVisible(true);
+    _item[0]._sprite->setTexture("./data/texture/item_accel.png");
+    _item[0]._sprite->setSize(0.0f, 0.0f);
+    break;
+  case EventList::PLAYER_2_GET_ACCEL:
+    if (_item[1]._sprite->isVisible()) break;
+    _item[1]._scl = 0.0f;
+    _item[1]._sprite->setVisible(true);
+    _item[1]._sprite->setTexture("./data/texture/item_accel.png");
+    _item[1]._sprite->setSize(0.0f, 0.0f);
+    break;
+  // アイテム使用
   case EventList::PLAYER_1_USE_ITEM:
     _item[0]._sprite->setVisible(false);
     break;
   case EventList::PLAYER_2_USE_ITEM:
     _item[1]._sprite->setVisible(false);
     break;
+  // アイテム表示リセット
   case EventList::ITEM_RESET:
     _item[0]._sprite->setVisible(false);
     _item[1]._sprite->setVisible(false);

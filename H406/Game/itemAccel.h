@@ -1,24 +1,23 @@
 //==============================================================================
 //
-// itemBomb[itemBomb.h]
-// Author : masato masuda : 2015/11/18
+// itemAccel[itemAccel.h]
+// Author : masato masuda : 2015/11/28
 //
 //==============================================================================
 #pragma once
 
-#ifndef _ITEM_BOMB_H_
-#define _ITEM_BOMB_H_
+#ifndef _ITEM_ACCEL_H_
+#define _ITEM_ACCEL_H_
 
 #include "iItem.h"
 #include "CreateFunc.h"
 
 class Player;
-class EventManager;
 
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class ItemBomb : public iItem, public CreateFunc<ItemBomb>{
+class ItemAccel : public iItem, public CreateFunc<ItemAccel>{
 public:
   using CreateFunc::create;
 
@@ -40,20 +39,16 @@ public:
   void setRadius(float rad) { _radius = rad; }
   float getRadius() const { return _radius; }
 
-  void setDripNum(int val){ _dripNum = val; };
-  int  getDripNum() const { return _dripNum; };
-  void addDripNum(int val) { _dripNum = (_dripNum + val) > 9 ? 9 : _dripNum + val; }
-
-  void addEventManager(EventManager* eventM){ _event = eventM; }
+  void setAccelTime(int val){ _accelTime = val; };
+  int  getAccelTime() const { return _accelTime; };
 
   void use();
 
 private:
 
   XFileObject* _item;
-  EventManager* _event;
 
-  int _dripNum;
+  int _accelTime;
   Vec3 _moveDest;
 };
 
