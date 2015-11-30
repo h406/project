@@ -87,7 +87,7 @@ void ItemManhole::use(){
     }
   }else{
     const Vec3 pos(_owner->getPos().x, 0.0f, _owner->getPos().z);
-    _owner->setFreezPos(pos);
+    _owner->setFreezePos(pos);
     _owner->setMoveVec(Vec3(0.0f, 0.0f, 0.0f));
     _frameCount = kFreezTime;
   }

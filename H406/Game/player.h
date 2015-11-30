@@ -54,8 +54,8 @@ public:
 
   bool getFreeze(){ return _freeze; }
   void setFreeze(bool freeze){ _freeze = freeze; }
-  const Vec3& getFreezPos() const { return _freezePos; }
-  void setFreezPos(const Vec3& pos) { _freezePos = pos; }
+  const Vec3& getFreezePos() const { return _freezePos; }
+  void setFreezePos(const Vec3& pos) { _freezePos = pos; }
 
 private:
 
