@@ -58,11 +58,16 @@
     <Filter Include="object\item\bomb">
       <UniqueIdentifier>{12398a5e-d1db-4311-89ad-83cefe5af363}</UniqueIdentifier>
     </Filter>
+<<<<<<< HEAD
+    <Filter Include="object\common">
+      <UniqueIdentifier>{debc7b49-2119-4d82-ad21-ea532906f6a5}</UniqueIdentifier>
+=======
     <Filter Include="object\item\manhole">
       <UniqueIdentifier>{c000dc8e-2187-4a03-98a7-1f12ca1150d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="object\item\accel">
       <UniqueIdentifier>{0c74b1b7-8582-4e9d-bbe5-f6f0f9ed4603}</UniqueIdentifier>
+>>>>>>> github/dev/masato
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +161,9 @@
     <ClInclude Include="colItem.h">
       <Filter>system\collision</Filter>
     </ClInclude>
+    <ClInclude Include="ShuchuSen.h">
+      <Filter>object\common</Filter>
+    </ClInclude>
     <ClInclude Include="itemManhole.h">
       <Filter>object\item\manhole</Filter>
     </ClInclude>
@@ -236,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="colItem.cpp">
       <Filter>system\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="ShuchuSen.cpp">
+      <Filter>object\common</Filter>
     </ClCompile>
     <ClCompile Include="itemManhole.cpp">
       <Filter>object\item\manhole</Filter>

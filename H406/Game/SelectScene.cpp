@@ -11,13 +11,14 @@
 #include "SelectScene.h"
 #include "game.h"
 #include "BaceScene.h"
+#include "ShuchuSen.h"
 #include <thread>
 
 #include "../QRDecode/qrdecode.h"
 
 #define _QR_DISABLE__
 
-Sprite2D* _s;
+ShuchuSen* _s;
 
 //==============================================================================
 // init
@@ -85,8 +86,8 @@ bool SelectScene::init() {
   _vs->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
   this->addChild(_vs);
 
-  _s = Sprite2D::create("./data/texture/image.png");
-  _s->setSize(1800.f,1800.f);
+  _s = ShuchuSen::create("./data/texture/image.png");
+  _s->setSize(1500.f,1500.f);
   _s->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
   this->addChild(_s);
 
@@ -98,12 +99,6 @@ bool SelectScene::init() {
 //------------------------------------------------------------------------------
 void SelectScene::update() {
   const auto color = _back->getColor();
-  static int f = 0;
-  f++;
-
-  if(f % 5 == 0) {
-    _s->setRot(rand() % 1000 / 1000.f * D3DX_PI * 2);
-  }
 
   if(_mode == SELECT_MODE::PLAYER1_SELECT || _mode == SELECT_MODE::PLAYER2_SELECT) {
     _back->setColor(color + (D3DXCOLOR(1,1,1,1) - color) * 0.1f);
