@@ -15,7 +15,8 @@
 
 namespace{
   const int kFreezTime = 60 * 2;
-  const float kJumpPower = 20.0f;
+  const float kPlayerJumpPower = 20.0f;
+  const float kJumpPower = 40.0f;
 }
 
 //==============================================================================
@@ -23,7 +24,7 @@ namespace{
 //------------------------------------------------------------------------------
 bool ItemManhole::init(){
   _item = XFileObject::create("./data/model/manho-ru.x");
-  _item->setScl(1.0f, 1.0f, 1.0f);
+  _item->setScl(1.5f, 1.5f, 1.5f);
   _item->setPos(0.0f, 0.0f, 0.0f);
   this->addChild(_item);
 
@@ -32,7 +33,8 @@ bool ItemManhole::init(){
   _owner = nullptr;
   _target = nullptr;
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
-  _radius = 20.0f;
+  _moveVec = Vec3(0.0f, 0.0f, 0.0f);
+  _radius = 40.0f;
   _frameCount = 0;
 
   return true;
@@ -46,20 +48,23 @@ void ItemManhole::update(){
     if (_is_use && _owner){
 
       _frameCount--;
-      if (_frameCount < 0){
-        _is_death = true;
+      if (_frameCount < 0 && _pos.y <= -1.0f){
+          _is_death = true;
         return;
       }
-      // 処理
-      _owner->setFreeze(true);
+      // プレイヤーフリーズ処理
+      if (_frameCount > 0){
+        _owner->setFreeze(true);
+      }
+
+      _moveDest.y -= 5.0f;
+      _moveVec.y += (_moveDest.y - _moveVec.y) * 0.1f;
+      _pos.y += _moveVec.y;
+      _rot.x += 0.25f;
+      _rot.y += 0.1f;
     }
   }
-
-  if (_owner != nullptr){
-    _item->setVisible(false);
-  }else{
-    _item->setVisible(true);
-  }
+  _moveDest = Vec3(0.0f, 0.0f, 0.0f);
 }
 
 //==============================================================================
@@ -72,24 +77,26 @@ void ItemManhole::uninit(){
 // use
 //------------------------------------------------------------------------------
 void ItemManhole::use(){
+  if (_event == nullptr) return;
   _is_use = true;
   _frameCount = 0;
 
   const int is_plus = rand() % 2;
   if (is_plus == 0){
+    _is_death = true;
     int plus = _owner->getMaxDripNum();
-    if (plus > 9) plus = 9;
-    
-    if (_event){
-      _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + _owner->getPlayerID()), (void*)plus);
-      _owner->addDripNum(plus);
-      _owner->jump(kJumpPower);
-    }
-  }else{
+    _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + _owner->getPlayerID()), (void*)plus);
+    _owner->addDripNum(plus);
+    _owner->jump(kPlayerJumpPower);
+    App::instance().getSound()->play("./data/sound/se/manhole_ok.wav", false);
+  }
+  else{
     const Vec3 pos(_owner->getPos().x, 0.0f, _owner->getPos().z);
     _owner->setFreezePos(pos);
     _owner->setMoveVec(Vec3(0.0f, 0.0f, 0.0f));
     _frameCount = kFreezTime;
+    _moveVec.y += kJumpPower;
+    App::instance().getSound()->play("./data/sound/se/manhole_ng.wav", false);
   }
 }
 

@@ -51,6 +51,7 @@ void ColItem::update() {
                                           player->getRadius(), bombList[i]->getRadius());
         if (isHit){
           _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_BOMB) + player->getPlayerID()), (void*)bombList[i]);
+          App::instance().getSound()->play("./data/sound/se/get_item.wav", false);
         }
       }
     } // bomb
@@ -65,6 +66,7 @@ void ColItem::update() {
                                           player->getRadius(), accelList[i]->getRadius());
         if (isHit){
           _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_ACCEL) + player->getPlayerID()), (void*)accelList[i]);
+          App::instance().getSound()->play("./data/sound/se/get_item.wav", false);
         }
       }
     } // accel
@@ -79,6 +81,7 @@ void ColItem::update() {
           player->getRadius(), manholeList[i]->getRadius());
         if (isHit){
           _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_MANHOLE) + player->getPlayerID()), (void*)manholeList[i]);
+          App::instance().getSound()->play("./data/sound/se/get_item.wav", false);
         }
       }
     } // accel
@@ -98,6 +101,7 @@ void ColItem::update() {
       if (fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()) && bombList[i]->getDripNum() > 0) {
         _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()));
         bombList[i]->addDripNum(-1);
+        App::instance().getSound()->play("./data/sound/se/paint.wav", false);
       }
     }
   }

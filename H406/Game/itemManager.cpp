@@ -40,6 +40,7 @@ bool ItemManager::init(EventManager* event){
   _event->addEventListener(EventList::PLAYER_1_USE_ITEM, bind(&ItemManager::EventListener, this, placeholders::_1));
   _event->addEventListener(EventList::PLAYER_2_USE_ITEM, bind(&ItemManager::EventListener, this, placeholders::_1));
   _event->addEventListener(EventList::ITEM_RESET, bind(&ItemManager::EventListener, this, placeholders::_1));
+  _event->addEventListener(EventList::ROUND_FINISH, bind(&ItemManager::EventListener, this, placeholders::_1));
 
   return true;
 }
@@ -240,7 +241,19 @@ void ItemManager::EventListener(EventData* eventData) {
       memset(_playerGetItem, 0, sizeof(_playerGetItem));
     }
     break;
+
+
+  case EventList::ROUND_FINISH:
+    {
+      for (int i = 0; i < ItemManager::kBombMax; i++){
+        if (_bombList[i] != nullptr){
+          _bombList[i]->setHitEnable(false);
+        }
+      }
+    }
+    break;
   }
+
 }
 
 //EOF

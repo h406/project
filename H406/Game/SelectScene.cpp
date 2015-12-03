@@ -91,6 +91,15 @@ bool SelectScene::init() {
   _s->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
   this->addChild(_s);
 
+  // サウンドのロード
+  // SE
+  App::instance().getSound()->load("./data/sound/se/fanfare.wav");
+  App::instance().getSound()->load("./data/sound/se/rod_select.wav");
+  App::instance().getSound()->load("./data/sound/se/qr_ok.wav");
+  App::instance().getSound()->load("./data/sound/se/vs.wav");
+  // BGM
+  App::instance().getSound()->play("./data/sound/bgm/select_mode.wav", true);
+
   return true;
 }
 
@@ -150,10 +159,12 @@ void SelectScene::update() {
       _oji->setPos(_oji->getPos() + (pos - _oji->getPos()) * 0.2f);
       _oba->setPos(_oba->getPos() + (pos - _oba->getPos()) * 0.2f);
       _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.1f);
-    }
+  }
     break;
 
   case SELECT_MODE::MAX:
+    App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
+    App::instance().getSound()->stop("./data/sound/bgm/select_mode.wav");
     BaceScene::instance()->setCurScene(Game::create());
     break;
   }
@@ -174,6 +185,7 @@ void SelectScene::SelectQR(int playerID) {
     _waku->setTexture("./data/texture/nasi_waku.png");
     _select = false;
     f = D3DX_PI* 0.5f;
+
   }
 
   if(App::instance().getInput()->isTrigger(playerID,VK_INPUT::_1)) {
@@ -193,6 +205,7 @@ void SelectScene::SelectQR(int playerID) {
 void SelectScene::ReadQR(int playerID) {
   if(App::instance().getInput()->isTrigger(playerID,VK_INPUT::_1)) {
     _mode = (SELECT_MODE)((int)_mode + 1);
+    App::instance().getSound()->play("./data/sound/se/qr_ok.wav", false);
   }
 }
 

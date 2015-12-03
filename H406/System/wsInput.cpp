@@ -71,6 +71,7 @@ void WsInput::update() {
       _press[(int)VK_INPUT::DOWN] = true;
     }
   }
+  _jairo = Vec3(0, 0, 0);
 }
 
 //==============================================================================
@@ -161,6 +162,7 @@ int WsInput::wsCallBackData(
     // memcpy(_instance->_sendData,in,strlen((char*)in));
     // libwebsocket_callback_on_writable_all_protocol(libwebsockets_get_protocol(wsi));
 
+
     float dat = (float)atof(&data[1]);
     char d = data[0];
 
@@ -171,6 +173,24 @@ int WsInput::wsCallBackData(
       _instance->_jairo.z = dat;
     if(d == 'a')
       _instance->_jairo.x = dat;
+    if(d == 'd'){
+      int key = atoi(&data[1]);
+      if (key == 37){
+        _instance->_jairo.z = -11;
+      }
+      if (key == 38){
+        _instance->_jairo.y = -11;
+      }
+      if (key == 39){
+        _instance->_jairo.z = 11;
+      }
+      if (key == 40){
+        _instance->_jairo.y = 11;
+      }
+      if (key == 13){
+        _instance->_press[int(VK_INPUT::_1)] = true;
+      }
+    }
 
     _instance->_mutex.unlock();
   }
@@ -188,17 +208,17 @@ bool WsInput::isPress(int id, VK_INPUT vk) const {
 
 bool WsInput::isTrigger(int id, VK_INPUT vk) const {
   UnusedParam(vk);
-  return false;
+  return _press[(int)vk];
 }
 
 bool WsInput::isRelease(int id, VK_INPUT vk) const {
   UnusedParam(vk);
-  return false;
+  return _press[(int)vk];
 }
 
 bool WsInput::isRepeat(int id, VK_INPUT vk) const {
   UnusedParam(vk);
-  return false;
+  return _press[(int)vk];
 }
 
 //EOF

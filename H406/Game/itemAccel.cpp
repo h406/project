@@ -31,7 +31,7 @@ bool ItemAccel::init(){
   _target = nullptr;
   _accelTime = 0;
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
-  _radius = 20.0f;
+  _radius = 40.0f;
 
   return true;
 }

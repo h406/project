@@ -14,6 +14,7 @@
 
 namespace{
   const Vec2 kPLAYER_SIZE = Vec2(36 * 2, 72 * 2);
+  const float kGRAVITY = 6.0f;
 }
 
 //==============================================================================
@@ -55,6 +56,10 @@ bool Player::init(int playerID)
   _accel = 1.0f;
   // フリーズ
   _freeze = false;
+  // 当たり判定していい？
+  _hitEnable = true;
+  // 回転
+  _playerRotDest = Vec3(0.0f, 0.0f, 0.0f);
 
   return true;
 }
@@ -77,12 +82,18 @@ void Player::update(void)
     float rot = atan2(moveDest.y, moveDest.x);
     _playerMoveDest.x = (cosf(rot) * length * _maxSpeed) * _accel;
     _playerMoveDest.z = (sinf(rot) * length * _maxSpeed) * _accel;
-    _playerMoveDest.y -= 5.0;
+    _playerMoveDest.y -= kGRAVITY;
 
     _playerMoveVec.x += (_playerMoveDest.x - _playerMoveVec.x) * _inertia;
     _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
     _playerMoveVec.z += (_playerMoveDest.z - _playerMoveVec.z) * _inertia;
     _pos += _playerMoveVec;
+
+    // 起き上がるやつ
+    _playerRotDest.x = 0.0f;
+    _playerRotDest.z = 0.0f;
+    _rot.x += (_playerRotDest.x - _rot.x) * 0.2f;
+    _rot.z += (_playerRotDest.z - _rot.z) * 0.2f;
 
     if (length >= 0.01f) {
       rot = D3DX_PI - atan2(_playerMoveVec.z, _playerMoveVec.x) + D3DX_PI * 0.5f;
@@ -91,13 +102,17 @@ void Player::update(void)
     }
   }
   else{
+    // 転ぶ
+    float rot = D3DX_PI - atan2(_playerMoveVec.z, _playerMoveVec.x) + D3DX_PI * 0.5f;
+    _playerRotDest.x = -cosf(rot) * (D3DX_PI * 0.4f);
+    _playerRotDest.z = sinf(rot) * (D3DX_PI * 0.4f);
+    _playerRotDest.y = rot;
+    _rot.x += (_playerRotDest.x - _rot.x) * 0.5f;
+    _rot.z += (_playerRotDest.z - _rot.z) * 0.5f;
+    // 重力
     _playerMoveDest.y -= 5.0;
     _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;
-    _pos.y = _playerMoveVec.y;
-
-    const int offset = 5;
-    Vec3 ram(float(rand() % offset) - offset, 0.0f, float(rand() % offset) - offset);
-    _pos = _freezePos + ram;
+    _pos.y += _playerMoveVec.y;
   }
 
   _freeze = false;
@@ -150,5 +165,8 @@ void Player::flipMvementX() {
 void Player::flipMvementZ() {
   _playerMoveVec.z *= -1;
 }
+
+
+
 
 //EOF

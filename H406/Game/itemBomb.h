@@ -45,6 +45,8 @@ public:
   void addDripNum(int val) { _dripNum = (_dripNum + val) > 9 ? 9 : _dripNum + val; }
 
   void addEventManager(EventManager* eventM){ _event = eventM; }
+  void setHitEnable(bool hit){ _hitEnable = hit; }
+  bool getHitEnable(){ return _hitEnable; }
 
   void use();
 
@@ -55,6 +57,7 @@ private:
 
   int _dripNum;
   Vec3 _moveDest;
+  bool _hitEnable;
 };
 
 #endif

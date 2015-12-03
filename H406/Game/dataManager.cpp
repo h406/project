@@ -43,10 +43,17 @@ void DataManager::init()
   _data->setPlayerStatus(0,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
   _data->setPlayerStatus(1,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
 
+  _data->setPlayerStatus(0, PlayerStatus::PlayerStatus(1,1));
+  _data->setPlayerStatus(1, PlayerStatus::PlayerStatus(2,2));
+
   for (int i = 0; i < GameConfig::kPLAYER_MAX; i++){
     _data->setPlayerDripNum(i, 0);
     _data->setPlayerRoundWin(i, 0);
     _data->setPlayerMapNum(i, 0);
+
+    const auto& barStatus = PlayerStatus::kStickBarStatus[(int)_data->getPlayerStatus(i)._barID];
+    const auto& handStatus = PlayerStatus::kStickHandleStatus[(int)_data->getPlayerStatus(i)._handleID];
+    _data->setPlayerMaxDripNum(i, barStatus.maxdripNum + handStatus.maxdripNum);
   }
 }
 
@@ -96,13 +103,13 @@ void DataManager::event(EventData* eventData)
   switch (eventData->getEvent()){
   case EventList::PLAYER_1_DRIP_GET:
     _data->setPlayerDripNum(0,_data->getPlayerDripNum(0) + (int)eventData->getUserData());
-    if(_data->getPlayerDripNum(0) > 9)
-      _data->setPlayerDripNum(0,9);
+    if(_data->getPlayerDripNum(0) > _data->getPlayerMaxDripNum(0))
+      _data->setPlayerDripNum(0,_data->getPlayerMaxDripNum(0));
     break;
   case EventList::PLAYER_2_DRIP_GET:
     _data->setPlayerDripNum(1,_data->getPlayerDripNum(1) + (int)eventData->getUserData());
-    if(_data->getPlayerDripNum(1) > 9)
-      _data->setPlayerDripNum(1,9);
+    if(_data->getPlayerDripNum(1) > _data->getPlayerMaxDripNum(1))
+      _data->setPlayerDripNum(1, _data->getPlayerMaxDripNum(1));
     break;
   case EventList::PLAYER_1_DRIP_USING:
     _data->setPlayerDripNum(0,_data->getPlayerDripNum(0) - 1);
@@ -120,13 +127,13 @@ void DataManager::event(EventData* eventData)
   // item
   case EventList::PLAYER_1_ITEM_GET:
     _data->setPlayerDripNum(0, _data->getPlayerDripNum(0) + (int)eventData->getUserData());
-    if (_data->getPlayerDripNum(0) > 9)
-      _data->setPlayerDripNum(0, 9);
+    if (_data->getPlayerDripNum(0) > _data->getPlayerMaxDripNum(0))
+      _data->setPlayerDripNum(0, _data->getPlayerMaxDripNum(0));
     break;
   case EventList::PLAYER_2_ITEM_GET:
     _data->setPlayerDripNum(1, _data->getPlayerDripNum(1) + (int)eventData->getUserData());
-    if (_data->getPlayerDripNum(1) > 9)
-      _data->setPlayerDripNum(1, 9);
+    if (_data->getPlayerDripNum(1) > _data->getPlayerMaxDripNum(1))
+      _data->setPlayerDripNum(1, _data->getPlayerMaxDripNum(1));
     break;
 
   // ƒ‰ƒEƒ“ƒh

@@ -26,7 +26,7 @@
 namespace{
   const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
   const Vec3 kPLAYER_1_INIT_POS = Vec3(-500 + bordSize.x * 0.5f, 0, 0);
-  const Vec3 kPLAYER_2_INIT_POS = Vec3(500 + bordSize.x * 0.5f, 0, 0);
+  const Vec3 kPLAYER_2_INIT_POS = Vec3(500 - bordSize.x * 0.5f, 0, 0);
 }
 
 //------------------------------------------------------------------------------
@@ -47,11 +47,13 @@ bool Game::init() {
   // プレイヤー1
   _player[0] = Player::create(0);
   _player[0]->setPos(kPLAYER_1_INIT_POS);
+  _player[0]->moveRight(0.01f);
   this->addChild(_player[0]);
 
   // プレイヤー2
   _player[1] = Player::create(1);
   _player[1]->setPos(kPLAYER_2_INIT_POS);
+  _player[1]->moveLeft(0.01f);
   this->addChild(_player[1]);
 
   _mainCamera = camera->createCamera();
@@ -98,6 +100,8 @@ bool Game::init() {
 
   // GUIマネージャー
   _guiManger = GuiManager::create(_eventManager);
+  _guiManger->setMaxDripNum(0, _player[0]->getMaxDripNum());
+  _guiManger->setMaxDripNum(1, _player[1]->getMaxDripNum());
   this->addChild(_guiManger);
 
   // イベントセット
@@ -115,15 +119,22 @@ bool Game::init() {
   _nextModeTime = 120;
   _gameMode = Game::MODE_START;
 
-  _oba3 = Sprite2D::create("./data/texture/oba3.png");
-  _oba3->setSize(180 * 1.5f,130 * 1.5f);
-  _oba3->setPos(App::instance().getWindowSize().cx - 180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
-  this->addChild(_oba3);
-
-  _oji3 = Sprite2D::create("./data/texture/oji3.png");
-  _oji3->setSize(180 * 1.5f,130 * 1.5f);
-  _oji3->setPos(180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
-  this->addChild(_oji3);
+  // サウンドのロード
+  // BGM
+  App::instance().getSound()->load("./data/sound/bgm/game_main.wav");
+  // SE
+  App::instance().getSound()->load("./data/sound/se/get_item.wav");
+  App::instance().getSound()->load("./data/sound/se/paint.wav");
+  App::instance().getSound()->load("./data/sound/se/get_ink.wav");
+  App::instance().getSound()->load("./data/sound/se/supply_ink.wav");
+  App::instance().getSound()->load("./data/sound/se/hurry_up.wav");
+  App::instance().getSound()->load("./data/sound/se/round_finish.wav");
+  App::instance().getSound()->load("./data/sound/se/round_start.wav");
+  App::instance().getSound()->load("./data/sound/se/item_bomb.wav");
+  App::instance().getSound()->load("./data/sound/se/item_beam.wav");
+  App::instance().getSound()->load("./data/sound/se/manhole_ok.wav");
+  App::instance().getSound()->load("./data/sound/se/manhole_ng.wav");
+  App::instance().getSound()->load("./data/sound/se/round_count.wav");
 
   return true;
 }
@@ -166,11 +177,12 @@ void Game::update() {
     if (_nextModeTime == 0){
       _gameMode = Game::MODE_PLAY;
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_START)), nullptr);
+      App::instance().getSound()->play("./data/sound/se/round_start.wav", false);
     }
   }
   break;
 
-   // ゲーム中
+  // ゲーム中
   case Game::MODE_PLAY:
   {
     if (_freezeTime == 0 && _nextModeTime == 0) {
@@ -208,8 +220,8 @@ void Game::update() {
     if ((rand() % (60 * 1)) == 0){
       int randx = rand() % Stage::kNUM_X;
       int randy = rand() % Stage::kNUM_Y;
-      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
-      _itemManager->createAccel(pos);
+      //const Vec3 pos = _stage->getFieldMapPos(randx, randy);
+      //_itemManager->createAccel(pos);
     }
     // マンホール生成
     if ((rand() % (60 * 1)) == 0){
@@ -219,21 +231,12 @@ void Game::update() {
       _itemManager->createManhole(pos);
     }
 
+    // 塗るマス生成
     if (_nextModeTime == 0){
       if ((rand() % (60 * 1)) == 0) {
         int randx = rand() % Stage::kNUM_X;
         int randy = rand() % Stage::kNUM_Y;
         _stage->setFieldID(randx, randy, Stage::FIELD_ID::DRIP);
-
-        Vec2 fieldSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
-
-        int id = _effect->play("stage_lightup.efk", Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f, 0, randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
-        _effect->setEffectScl(id, Vec3(50, 50, 50));
-      }
-      if ((rand() % (120 * 1)) == 0) {
-        int randx = rand() % Stage::kNUM_X;
-        int randy = rand() % Stage::kNUM_Y;
-        _stage->setFieldID(randx, randy, Stage::FIELD_ID::ITEM);
 
         Vec2 fieldSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
 
@@ -295,22 +298,15 @@ void Game::update() {
       _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
       _player[0]->setDripNum(0);
       _player[1]->setDripNum(0);
+      _player[0]->setHitEnable(false);
+      _player[1]->setHitEnable(false);
+      App::instance().getSound()->play("./data/sound/se/round_finish.wav", false);
+    }
+    // 焦らすSE
+    if (DataManager::instance().getData()->getTime() == 14 * 60){
+      App::instance().getSound()->play("./data/sound/se/hurry_up.wav", false);
     }
 
-    // おじさんおばさん
-    float oji3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1) / (12.f * 12.f);
-    float oba3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) / (12.f * 12.f);
-    Vec2 oji3vec = Vec2(180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
-    Vec2 oba3vec = Vec2(App::instance().getWindowSize().cx - 180 * 1.5f * 0.5f,App::instance().getWindowSize().cy - 130 * 1.5f * 0.5f);
-    _oji3->setPos(oji3vec * (1 - oji3num) + oba3vec * oji3num);
-    _oba3->setPos(oba3vec * (1 - oba3num) + oji3vec * oba3num);
-
-    if(DataManager::instance().getData()->getTime() < 20 * 60) {
-      const float t = (DataManager::instance().getData()->getTime() / 60.f - 20) / 5.f;
-      const float y = (App::instance().getWindowSize().cy - (130 * 1.5f * 0.5f)) - (130 * 1.5f) * t;
-      _oji3->setPosY(y);
-      _oba3->setPosY(y);
-    }
   } // case MODE_PLAY
   break;
 
@@ -369,6 +365,8 @@ void Game::update() {
       _player[1]->setPos(kPLAYER_2_INIT_POS);
       _player[0]->moveRight(0.01f);
       _player[1]->moveLeft(0.01f);
+      _player[0]->setHitEnable(true);
+      _player[1]->setHitEnable(true);
       _eventManager->dispatchEvent(EventList(int(EventList::NEXT_ROUND)), nullptr);
 
       auto camera = App::instance().getRenderer()->getCamera();
@@ -407,7 +405,6 @@ void Game::EventListener(EventData* eventData) {
     break;
 
   case EventList::PLAYER_1_ITEM_GET:
-    
     _effect->play("get.efk", _player[0]->getPos());
     break;
 

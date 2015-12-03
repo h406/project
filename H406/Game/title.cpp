@@ -38,7 +38,8 @@ bool Title::init() {
 
   f = -D3DX_PI * 0.5f;
 
-  App::instance().getSound()->load("./data/sound/se/cursor.wav");
+  // サウンドロード
+  App::instance().getSound()->load("./data/sound/se/system_ok.wav");
 
   return true;
 }
@@ -54,7 +55,7 @@ void Title::update() {
 
   if(App::instance().getInput()->isRelease(0,VK_INPUT::_1)) {
     BaceScene::instance()->setCurScene(SelectScene::create());
-    App::instance().getSound()->stop("./data/sound/se/cursor.wav");
+    App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
   }
 }
 

@@ -35,7 +35,7 @@ public:
   Vec3 getMoveVec(){ return _playerMoveVec; }
   void setMoveVec(const Vec3 vec){ _playerMoveVec = vec; }
 
-  void addDripNum(int num) { _dripNum = (_dripNum + num) > 9 ? 9 : _dripNum + num; }
+  void addDripNum(int num) { _dripNum = (_dripNum + num) > _maxDripNum ? _maxDripNum : _dripNum + num; }
   void setDripNum(int num) { _dripNum = num; }
 
   int getPlayerID() const { return _playerID; }
@@ -57,6 +57,9 @@ public:
   const Vec3& getFreezePos() const { return _freezePos; }
   void setFreezePos(const Vec3& pos) { _freezePos = pos; }
 
+  void setHitEnable(bool hit){ _hitEnable = hit; }
+  bool getHitEnable(){ return _hitEnable; }
+
 private:
 
   // プレイヤー
@@ -64,6 +67,7 @@ private:
 
   Vec3 _playerMoveVec;
   Vec3 _playerMoveDest;
+  Vec3 _playerRotDest;
   Vec3 _freezePos;
 
   // 塗れる数
@@ -92,6 +96,9 @@ private:
 
   // フリーズ
   bool _freeze;
+
+  // 当たり判定取っていいかどうか
+  bool _hitEnable;
 };
 
 #endif

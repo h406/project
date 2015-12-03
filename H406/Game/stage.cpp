@@ -50,7 +50,7 @@ void Stage::update() {
         _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,0,255));
         break;
       case FIELD_ID::ITEM:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(32, 255, 64, 255));
+        _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));
         break;
       case FIELD_ID::NONE:
         _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));

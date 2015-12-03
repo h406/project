@@ -37,7 +37,9 @@ public:
   void update();
   void uninit();
 
+  void setMaxDripNum(int id, int val){ _maxDripNum[id] = val; }
   void EventListener(EventData* eventData);
+
 private:
 
   Gauge* _gauge[2];
@@ -60,16 +62,25 @@ private:
   GUI_SPRITE_2D _finish;
   GUI_SPRITE_2D _start;
 
+  // リザルト
   int _resultNumCount;
   int _frameCount;
-  bool _is_result;
-  bool _is_start;
+  bool _isResult;
+  bool _isStart;
+  bool _isPlay;
 
   RoundIcon* _roundIcon;
 
+  // アイテム
   GUI_SPRITE_2D _item[2];
   GUI_SPRITE_2D _itemBase[2];
 
+  int _maxDripNum[2];
+
+  // おじさんおばさん
+  GUI_SPRITE_2D _oba3;
+  GUI_SPRITE_2D _oji3;
+  Vec2 _ojiobaPosDest[2];
 };
 
 #endif

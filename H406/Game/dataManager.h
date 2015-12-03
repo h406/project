@@ -26,6 +26,7 @@ public:
   int getPlayerRoundWin(int playerId)const { return _playerRoundWin[playerId]; }
   int getPlayerDripNum(int playerId)const { return _playerDripNum[playerId]; }
   int getPlayerMapNum(int playerId)const { return _playerMapNum[playerId]; }
+  int getPlayerMaxDripNum(int playerId)const { return _playerMaxDripNum[playerId]; }
   const PlayerStatus::PlayerStatus& getPlayerStatus(int playerID) const { return _playerStatus[playerID]; }
 protected:
   int _randSeed;
@@ -34,6 +35,7 @@ protected:
   int _playerRoundWin[GameConfig::kPLAYER_MAX];
   int _playerDripNum[GameConfig::kPLAYER_MAX];
   int _playerMapNum[GameConfig::kPLAYER_MAX];
+  int _playerMaxDripNum[GameConfig::kPLAYER_MAX];
   PlayerStatus::PlayerStatus _playerStatus[GameConfig::kPLAYER_MAX];
 };
 
@@ -51,6 +53,7 @@ private:
     void setPlayerRoundWin(int playerId, int roundWin){ this->_playerRoundWin[playerId] = roundWin; }
     void setPlayerDripNum(int playerId, int dripNum){ this->_playerDripNum[playerId] = dripNum; }
     void setPlayerMapNum(int playerId, int mapNum){ this->_playerMapNum[playerId] = mapNum; }
+    void setPlayerMaxDripNum(int playerId, int maxNum){ this->_playerMaxDripNum[playerId] = maxNum; }
     void setPlayerStatus(int playerId, const PlayerStatus::PlayerStatus& status) { this->_playerStatus[playerId] = status; }
   };
 

@@ -214,7 +214,7 @@ bool Renderer::draw(node* baceNode) {
 
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
     // シーンのクリア
-    _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(0,0,0),1.0f,0);
+    _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DXCOLOR(0.2f,0.2f,1,1),1.0f,0);
     // シーンの描画終了
     _pD3DDevice->EndScene();
   }
@@ -227,7 +227,7 @@ bool Renderer::draw(node* baceNode) {
   if(SUCCEEDED(_pD3DDevice->BeginScene())) {
     
     // シーンのクリア
-    _pD3DDevice->Clear(0,NULL,(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_XRGB(0,0,0),1.0f,0);
+    _pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DXCOLOR(0.2f, 0.2f, 1, 1), 1.0f, 0);
     
     // ベースノード
     if(baceNode != nullptr) {

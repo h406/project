@@ -18,6 +18,8 @@
 #include "EventData.h"
 #include "game.h"
 #include "dataManager.h"
+#include "stage.h"
+#include "BaceScene.h"
 
 namespace{
   const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
@@ -25,6 +27,7 @@ namespace{
   const D3DXVECTOR2 kSTART_TIME_SIZE = D3DXVECTOR2(256.0f, 256.0f);
   const D3DXVECTOR2 kRESULT_NUM_SIZE = D3DXVECTOR2(128.0f * 1.5f, 128.0f * 1.5f);
   const D3DXVECTOR2 kITEM_SIZE = D3DXVECTOR2(128.0f, 128.0f);
+  const D3DXVECTOR2 kOJIOBA_SIZE = D3DXVECTOR2(180 * 1.5f, 130 * 1.5f);
 }
 
 //==============================================================================
@@ -33,6 +36,11 @@ namespace{
 bool GuiManager::init(EventManager* eventManager)
 {
   const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+
+  memset(_maxDripNum, 0, sizeof(_maxDripNum));
+  _isPlay = false;
+  _isResult = false;
+  _isStart = false;
 
   // ゲージ
   _gaugeBase = Sprite2D::create("./data/texture/e.png");
@@ -177,9 +185,27 @@ bool GuiManager::init(EventManager* eventManager)
   _roundIcon->setTexture(1, "./data/texture/neko000.png");
   this->addChild(_roundIcon);
 
+  // おじさんおばさん
+  _oji3._sprite = Sprite2D::create("./data/texture/oji3.png");
+  _oji3._sprite->setSize(kOJIOBA_SIZE.x, kOJIOBA_SIZE.y);
+  _oji3._sprite->setPos(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _oji3._scl = 1.0f;
+  this->addChild(_oji3._sprite);
+
+  _oba3._sprite = Sprite2D::create("./data/texture/oba3.png");
+  _oba3._sprite->setSize(kOJIOBA_SIZE.x, kOJIOBA_SIZE.y);
+  _oba3._sprite->setPos(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _oba3._scl = 1.0f;
+  this->addChild(_oba3._sprite);
+
+  _ojiobaPosDest[0] = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _ojiobaPosDest[1] = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _oji3._sprite->setPos(-kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _oba3._sprite->setPos(App::instance().getWindowSize().cx + kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+
   // ラウンド結果数字
   _resultNumCount = 0;
-  _is_result = false;
+  _isResult = false;
   _resultNum[0]._sprite = NumberSprite::create(2, "./data/texture/num.png");
   _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x, kRESULT_NUM_SIZE.y);
   _resultNum[0]._sprite->setColor(kPLAYER_COLOR[0]);
@@ -213,7 +239,7 @@ bool GuiManager::init(EventManager* eventManager)
   _start._sprite->setVisible(false);
   _start._scl = 0.0f;
   this->addChild(_start._sprite);
-  _is_start = false;
+  _isStart = false;
 
   // イベントセット
   eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET,bind(&GuiManager::EventListener,this,placeholders::_1));
@@ -249,9 +275,7 @@ void GuiManager::update(void)
 {
   const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
   const auto deta = DataManager::instance().getData();
-  const int playerDripNum[2] = {
-    deta->getPlayerDripNum(0),deta->getPlayerDripNum(1)
-  };
+  const int playerDripNum[2] = { deta->getPlayerDripNum(0),deta->getPlayerDripNum(1) };
 
   // 数字
   for (int i = 0; i < 2; i++) {
@@ -276,7 +300,7 @@ void GuiManager::update(void)
   }
 
   // ゲージ更新
-  float gaugeRate[2] = { playerDripNum[0] / (float)9, playerDripNum[1] / (float)9 };
+  float gaugeRate[2] = { playerDripNum[0] / (float)_maxDripNum[0], playerDripNum[1] / (float)_maxDripNum[1] };
   _gauge[0]->setRate(gaugeRate[0]);
   _gauge[1]->setRate(gaugeRate[1]);
   Vec2 gaugePos = _gaugeBase->getPos() + ((windowCenter - _gaugeBase->getPos()) * 0.07f);
@@ -307,14 +331,14 @@ void GuiManager::update(void)
   }
 
   // スタート文字
-  if (_is_start){
+  if (_isStart){
     if (time > (GameConfig::kONE_ROUND_TIME * 60) - (1 * 60)){
       _start._scl += (1.5f - _start._scl) * 0.15f;
       _start._sprite->setSize((512 * 1.5f) *_start._scl, (128 * 1.5f) * _start._scl);
     }
     else {
       _start._sprite->setVisible(false);
-      _is_start = false;
+      _isStart = false;
     }
   }
 
@@ -322,7 +346,7 @@ void GuiManager::update(void)
   Vec2 roundPos = _roundNum._sprite->getPos() + ((Vec2(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f) - _roundNum._sprite->getPos()) * 0.05f);
   _roundNum._sprite->setPos(roundPos);
 
-  if (_is_result){
+  if (_isResult){
     //ラウンド結果のカウントアップ
     _frameCount++;
     if (_frameCount > 2){
@@ -350,6 +374,29 @@ void GuiManager::update(void)
 
   _finish._scl += (1.5f - _finish._scl) * 0.15f;
   _finish._sprite->setSize((512 * 1.5f) *_finish._scl, (128 * 1.5f) * _finish._scl);
+
+  // おじさんおばさん
+  if (_isPlay){
+    auto _stage = BaceScene::instance()->getStage();
+    float oji3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1) / (12.f * 12.f);
+    float oba3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) / (12.f * 12.f);
+    Vec2 oji3vec = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    Vec2 oba3vec = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    _oji3._sprite->setPos(oji3vec * (1 - oji3num) + oba3vec * oji3num);
+    _oba3._sprite->setPos(oba3vec * (1 - oba3num) + oji3vec * oba3num);
+
+    if (DataManager::instance().getData()->getTime() < 20 * 60) {
+      const float t = (DataManager::instance().getData()->getTime() / 60.f - 20) / 5.f;
+      const float y = (App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * 0.5f)) - (kOJIOBA_SIZE.y)* t;
+      _oji3._sprite->setPosY(y);
+      _oba3._sprite->setPosY(y);
+    }
+  }else{
+    Vec2 ojiobaPos[2] = { _oji3._sprite->getPos(), _oba3._sprite->getPos() };
+    Vec2 ojiobaMovePos[2] = { (_ojiobaPosDest[0] - ojiobaPos[0]) * 0.05f, (_ojiobaPosDest[1] - ojiobaPos[1]) * 0.05f };
+    _oji3._sprite->setPos(ojiobaPos[0] + ojiobaMovePos[0]);
+    _oba3._sprite->setPos(ojiobaPos[1] + ojiobaMovePos[1]);
+  }
 }
 
 //==============================================================================
@@ -470,7 +517,7 @@ void GuiManager::EventListener(EventData* eventData) {
     break;
 
   case EventList::ROUND_RESULT:
-    _is_result = true;
+    _isResult = true;
     _resultNumCount = 0;
     _frameCount = 0;
     _finish._sprite->setVisible(false);
@@ -479,7 +526,8 @@ void GuiManager::EventListener(EventData* eventData) {
   case EventList::NEXT_ROUND:
     _roundNum._sprite->setNumber(DataManager::instance().getData()->getRound());
     _time._sprite->setVisible(true);
-    _is_result = false;
+    _isResult = false;
+    _isPlay = false;
     _resultNum[0]._sprite->setVisible(false);
     _resultNum[1]._sprite->setVisible(false);
     _numSprite[0]->setVisible(true);
@@ -487,10 +535,16 @@ void GuiManager::EventListener(EventData* eventData) {
     _roundIcon->setMove(false);
     _roundIcon->setPlayerWin(0, false);
     _roundIcon->setPlayerWin(1, false);
+
+    _ojiobaPosDest[0] = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    _ojiobaPosDest[1] = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    _oji3._sprite->setPos(-kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    _oba3._sprite->setPos(App::instance().getWindowSize().cx + kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
     break;
 
   case EventList::ROUND_START:
-    _is_start = true;
+    _isStart = true;
+    _isPlay = true;
     _start._sprite->setVisible(true);
     _start._scl = 0.0f;
     _roundNum._sprite->setVisible(true);

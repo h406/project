@@ -35,6 +35,7 @@ void ColStage::update() {
   // ステージ当たり判定
   for(Player* player : _playerList) {
     if(player == nullptr) continue;
+
     Vec3 playerPos = player->getPos();
     if(playerPos.x < -halfSizeX) {
       playerPos.x = -halfSizeX;//+abs(playerPos.x + halfSizeX);
@@ -65,6 +66,8 @@ void ColStage::update() {
   // 塗るやつ
   for(Player* player : _playerList) {
     if(player == nullptr) continue;
+    if(player->getHitEnable() == false) continue;
+
     const int idX = int((player->getPos().x + halfSizeX) / (stageSize.x / (float)Stage::kNUM_X));
     const int idY = int((player->getPos().z + halfSizeZ) / (stageSize.y / (float)Stage::kNUM_Y));
 
@@ -80,25 +83,21 @@ void ColStage::update() {
         // HACK どこでやるか？？
         player->addDripNum(plus);
         player->jump(10.f);
+        // se
+        App::instance().getSound()->play("./data/sound/se/get_ink.wav", false);
+        App::instance().getSound()->play("./data/sound/se/supply_ink.wav", false);
       }
       // ITEM
       else if (fieldID == Stage::FIELD_ID::ITEM) {
-        const int is_plus = rand() % 2;
-        int plus = 0;
-        if (is_plus == 0) plus = 9;
-        _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
-        _event->dispatchEvent(EventList(int(EventList::PLAYER_1_ITEM_GET) + player->getPlayerID()), (void*)plus);
-
-        // HACK どこでやるか？？
-        player->addDripNum(plus);
-        player->jump(10.f);
       }
-      else if(fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()) && player->getDripNum() > 0) {
-        _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
+      else if (fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()) && player->getDripNum() > 0) {
+        _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
         _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_USING) + player->getPlayerID()));
 
         // HACK どこでやるか？？
         player->addDripNum(-1);
+        // se
+        App::instance().getSound()->play("./data/sound/se/paint.wav", false);
       }
     }
   }

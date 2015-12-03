@@ -51,6 +51,7 @@ private:
 
   int _frameCount;
   Vec3 _moveDest;
+  Vec3 _moveVec;
 };
 
 #endif
