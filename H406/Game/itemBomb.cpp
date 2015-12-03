@@ -35,6 +35,8 @@ bool ItemBomb::init(){
   _dripNum = 0;
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);
   _radius = 40.0f;
+  _fieldID.x = -1;
+  _fieldID.y = -1;
 
   return true;
 }

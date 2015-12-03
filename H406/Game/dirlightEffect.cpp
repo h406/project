@@ -44,11 +44,11 @@ void DirlightEffect::draw(Renderer *renderer,Sprite2D* sprite) {
   dir[0] = Vec3(0.5f,-1,2);
 
   color[1] = Vec4(1.f,1.f,1.f,1);
-  power[1] = 0.6f;
+  power[1] = 0.4f;
   dir[1] = Vec3(-0.5f,-1,-2);
 
   color[2] = Vec4(1.f,1.f,1.f,1);
-  power[2] = 0.3f;
+  power[2] = 0.5f;
   dir[2] = Vec3(0.5f,3.f,0);
 
   for(int i = 0; i < 3; i++) {

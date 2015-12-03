@@ -44,6 +44,10 @@ bool Game::init() {
   }
   DataManager::instance().setEventManager(_eventManager);
 
+  // ステージのリセット
+  auto _stage = BaceScene::instance()->getStage();
+  _stage->reset();
+
   // プレイヤー1
   _player[0] = Player::create(0);
   _player[0]->setPos(kPLAYER_1_INIT_POS);
@@ -114,11 +118,6 @@ bool Game::init() {
   _eventManager->addEventListener(EventList::PLAYER_1_DRIP_RESET, bind(&Game::EventListener, this, placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_DRIP_RESET, bind(&Game::EventListener, this, placeholders::_1));
 
-  _freezeTime = 0;
-  _bultime = 0;
-  _nextModeTime = 120;
-  _gameMode = Game::MODE_START;
-
   // サウンドのロード
   // BGM
   App::instance().getSound()->load("./data/sound/bgm/game_main.wav");
@@ -135,6 +134,11 @@ bool Game::init() {
   App::instance().getSound()->load("./data/sound/se/manhole_ok.wav");
   App::instance().getSound()->load("./data/sound/se/manhole_ng.wav");
   App::instance().getSound()->load("./data/sound/se/round_count.wav");
+
+  _freezeTime = 0;
+  _bultime = 0;
+  _nextModeTime = 120;
+  _gameMode = Game::MODE_START;
 
   return true;
 }
@@ -211,24 +215,15 @@ void Game::update() {
 
     // ボムちゃん生成
     if ((rand() % (60 * 1)) == 0){
-      int randx = rand() % Stage::kNUM_X;
-      int randy = rand() % Stage::kNUM_Y;
-      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
-      _itemManager->createBomb(pos);
+      _itemManager->createBomb();
     }
     // スピードアップ生成
     if ((rand() % (60 * 1)) == 0){
-      int randx = rand() % Stage::kNUM_X;
-      int randy = rand() % Stage::kNUM_Y;
-      //const Vec3 pos = _stage->getFieldMapPos(randx, randy);
-      //_itemManager->createAccel(pos);
+      //_itemManager->createAccel();
     }
     // マンホール生成
     if ((rand() % (60 * 1)) == 0){
-      int randx = rand() % Stage::kNUM_X;
-      int randy = rand() % Stage::kNUM_Y;
-      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
-      _itemManager->createManhole(pos);
+      _itemManager->createManhole();
     }
 
     // 塗るマス生成
@@ -303,7 +298,7 @@ void Game::update() {
       App::instance().getSound()->play("./data/sound/se/round_finish.wav", false);
     }
     // 焦らすSE
-    if (DataManager::instance().getData()->getTime() == 14 * 60){
+    if (DataManager::instance().getData()->getTime() == 15 * 60){
       App::instance().getSound()->play("./data/sound/se/hurry_up.wav", false);
     }
 

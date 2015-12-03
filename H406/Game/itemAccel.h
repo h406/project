@@ -39,6 +39,9 @@ public:
   void setRadius(float rad) { _radius = rad; }
   float getRadius() const { return _radius; }
 
+  void setFieldID(int x, int y){ _fieldID.x = x; _fieldID.y = y; }
+  FIELD_ID getFieldID(void){ return _fieldID; }
+
   void setAccelTime(int val){ _accelTime = val; };
   int  getAccelTime() const { return _accelTime; };
 

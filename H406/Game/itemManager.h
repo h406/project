@@ -34,9 +34,9 @@ public:
   void addPlayer(Player* obj);
 
   // アイテム生成
-  void createBomb(const Vec3& pos);
-  void createAccel(const Vec3& pos);
-  void createManhole(const Vec3& pos);
+  void createBomb();
+  void createAccel();
+  void createManhole();
 
   // アイテムリスト取得
   ItemBomb** getBombList(){ return _bombList; }
@@ -46,9 +46,12 @@ public:
   void EventListener(EventData* eventData);
 
   const static int kMaxPlayers = 2;
-  const static int kBombMax = 3;
+  const static int kBombMax = 6;
   const static int kAccelMax = 3;
-  const static int kManholeMax = 3;
+  const static int kManholeMax = 6;
+  // stage
+  static const int kNUM_X = 12;
+  static const int kNUM_Y = 12;
 
 private:
 
@@ -63,6 +66,9 @@ private:
   Player* _playerList[kMaxPlayers];
   // プレイヤーの所持アイテム情報
   iItem* _playerGetItem[kMaxPlayers];
+
+  // フィールド
+  bool _field[kNUM_X][kNUM_Y];
 };
 
 #endif

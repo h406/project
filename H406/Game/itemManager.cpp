@@ -17,6 +17,8 @@
 #include "EventList.h"
 #include "eventManager.h"
 #include "EventData.h"
+#include "stage.h"
+#include "BaceScene.h"
 
 //==============================================================================
 // init
@@ -29,6 +31,7 @@ bool ItemManager::init(EventManager* event){
   memset(_accelList, 0, sizeof(_accelList));
   memset(_manholeList, 0, sizeof(_manholeList));
   memset(_playerGetItem, 0, sizeof(_playerGetItem));
+  memset(_field, 0, sizeof(_field));
 
   // イベントセット
   _event->addEventListener(EventList::PLAYER_1_GET_BOMB, bind(&ItemManager::EventListener, this, placeholders::_1));
@@ -53,6 +56,8 @@ void ItemManager::update(){
   for (int i = 0; i < ItemManager::kBombMax; i++){
     if (_bombList[i] != nullptr){
       if (_bombList[i]->getDeath() == true){
+        iItem::FIELD_ID id = _bombList[i]->getFieldID();
+        _field[id.x][id.y] = false;
         _bombList[i]->release();
         _bombList[i] = nullptr;
       }
@@ -62,6 +67,8 @@ void ItemManager::update(){
   for (int i = 0; i < ItemManager::kAccelMax; i++){
     if (_accelList[i] != nullptr){
       if (_accelList[i]->getDeath() == true){
+        iItem::FIELD_ID id = _accelList[i]->getFieldID();
+        _field[id.x][id.y] = false;
         _accelList[i]->release();
         _accelList[i] = nullptr;
       }
@@ -71,6 +78,8 @@ void ItemManager::update(){
   for (int i = 0; i < ItemManager::kManholeMax; i++){
     if (_manholeList[i] != nullptr){
       if (_manholeList[i]->getDeath() == true){
+        iItem::FIELD_ID id = _manholeList[i]->getFieldID();
+        _field[id.x][id.y] = false;
         _manholeList[i]->release();
         _manholeList[i] = nullptr;
       }
@@ -87,11 +96,20 @@ void ItemManager::uninit(){
 //==============================================================================
 // createBomb
 //------------------------------------------------------------------------------
-void ItemManager::createBomb(const Vec3& pos){
+void ItemManager::createBomb(){
   for (ItemBomb*& _item : _bombList) {
     if (_item == nullptr) {
+      int randx = rand() % ItemManager::kNUM_X;
+      int randy = rand() % ItemManager::kNUM_Y;
+
+      if (_field[randx][randy] == true) continue;
+      _field[randx][randy] = true;
+      auto _stage = BaceScene::instance()->getStage();
+      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
+
       _item = ItemBomb::create();
       _item->setPos(pos);
+      _item->setFieldID(randx, randy);
       _item->addEventManager(_event);
       this->addChild(_item);
       break;
@@ -102,11 +120,20 @@ void ItemManager::createBomb(const Vec3& pos){
 //==============================================================================
 // createAccel
 //------------------------------------------------------------------------------
-void ItemManager::createAccel(const Vec3& pos){
+void ItemManager::createAccel(){
   for (ItemAccel*& _item : _accelList) {
     if (_item == nullptr) {
+      int randx = rand() % ItemManager::kNUM_X;
+      int randy = rand() % ItemManager::kNUM_Y;
+
+      if (_field[randx][randy] == true) continue;
+      _field[randx][randy] = true;
+      auto _stage = BaceScene::instance()->getStage();
+      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
+
       _item = ItemAccel::create();
       _item->setPos(pos);
+      _item->setFieldID(randx, randy);
       this->addChild(_item);
       break;
     }
@@ -116,12 +143,21 @@ void ItemManager::createAccel(const Vec3& pos){
 //==============================================================================
 // createManhole
 //------------------------------------------------------------------------------
-void ItemManager::createManhole(const Vec3& pos){
+void ItemManager::createManhole(){
   for (ItemManhole*& _item : _manholeList) {
     if (_item == nullptr) {
+      int randx = rand() % ItemManager::kNUM_X;
+      int randy = rand() % ItemManager::kNUM_Y;
+
+      if (_field[randx][randy] == true) continue;
+      _field[randx][randy] = true;
+      auto _stage = BaceScene::instance()->getStage();
+      const Vec3 pos = _stage->getFieldMapPos(randx, randy);
+
       _item = ItemManhole::create();
       _item->setPos(pos);
       _item->addEventManager(_event);
+      _item->setFieldID(randx, randy);
       this->addChild(_item);
       break;
     }
@@ -205,16 +241,16 @@ void ItemManager::EventListener(EventData* eventData) {
   case EventList::PLAYER_1_USE_ITEM:
     {
     if (_playerGetItem[0] == nullptr) break;
-    _playerGetItem[0]->use();
-    _playerGetItem[0] = nullptr;
+      _playerGetItem[0]->use();
+      _playerGetItem[0] = nullptr;
     }
     break;
 
   case EventList::PLAYER_2_USE_ITEM:
     {
     if (_playerGetItem[1] == nullptr) break;
-    _playerGetItem[1]->use();
-    _playerGetItem[1] = nullptr;
+      _playerGetItem[1]->use();
+      _playerGetItem[1] = nullptr;
     }
     break;
 
@@ -239,9 +275,9 @@ void ItemManager::EventListener(EventData* eventData) {
         }
       }
       memset(_playerGetItem, 0, sizeof(_playerGetItem));
+      memset(_field, 0, sizeof(_field));
     }
     break;
-
 
   case EventList::ROUND_FINISH:
     {

@@ -58,7 +58,7 @@ void ColItem::update() {
 
     // ƒAƒNƒZƒ‹
     ItemAccel** accelList = _itemManager->getAccelList();
-    for (int i = 0; i < ItemManager::kBombMax; i++){
+    for (int i = 0; i < ItemManager::kAccelMax; i++){
       if (accelList[i] == nullptr) continue;
       if (accelList[i]->getOwner() == nullptr){
 

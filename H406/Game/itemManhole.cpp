@@ -36,6 +36,8 @@ bool ItemManhole::init(){
   _moveVec = Vec3(0.0f, 0.0f, 0.0f);
   _radius = 40.0f;
   _frameCount = 0;
+  _fieldID.x = -1;
+  _fieldID.y = -1;
 
   return true;
 }

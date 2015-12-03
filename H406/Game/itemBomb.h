@@ -40,6 +40,9 @@ public:
   void setRadius(float rad) { _radius = rad; }
   float getRadius() const { return _radius; }
 
+  void setFieldID(int x, int y){ _fieldID.x = x; _fieldID.y = y; }
+  FIELD_ID getFieldID(void){ return _fieldID; }
+
   void setDripNum(int val){ _dripNum = val; };
   int  getDripNum() const { return _dripNum; };
   void addDripNum(int val) { _dripNum = (_dripNum + val) > 9 ? 9 : _dripNum + val; }
