@@ -11,6 +11,7 @@
 #include "BaceScene.h"
 #include "staticStage.h"
 #include "stage.h"
+#include "ledConnect.h"
 
 namespace {
   Vec2 kStageSize(1000,1000);
@@ -40,6 +41,9 @@ bool BaceScene::init() {
   _effect->setScl(Vec3(1,1,1));
   this->addChild(_effect);
 
+  // LED
+  _ledConnect = new LedConnect();
+
   _curScene = nullptr;
   _releaseScene = nullptr;
   return true;
@@ -59,6 +63,8 @@ void BaceScene::update() {
 // uninit
 //------------------------------------------------------------------------------
 void BaceScene::uninit() {
+
+  delete _ledConnect;
 }
 
 //==============================================================================

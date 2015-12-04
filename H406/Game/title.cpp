@@ -11,7 +11,8 @@
 #include "title.h"
 #include "SelectScene.h"
 #include "BaceScene.h"
-
+#include "ledConnect.h"
+#include "BaceScene.h"
 
 static float f =  D3DX_PI * 0.5f;
 
@@ -40,6 +41,9 @@ bool Title::init() {
 
   // サウンドロード
   App::instance().getSound()->load("./data/sound/se/system_ok.wav");
+
+
+  BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveTitle);
 
   return true;
 }

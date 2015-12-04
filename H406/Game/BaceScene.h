@@ -13,6 +13,7 @@
 #include "CreateFunc.h"
 
 class Stage;
+class LedConnect;
 
 //==============================================================================
 // class
@@ -29,6 +30,7 @@ public:
   iScene* getCurScene() const { return _curScene; }
   Stage* getStage() const { return _stage; }
   Effect* getEffect() const { return _effect; }
+  LedConnect* getLedConnect() const { return _ledConnect; }
 
   static BaceScene* instance() { return _instance; }
 
@@ -41,6 +43,8 @@ private:
   static BaceScene* _instance;
 
   Effect* _effect;
+
+  LedConnect* _ledConnect;
 
 };
 

@@ -44,6 +44,7 @@ void WsInput::uninit() {
   _mutex.lock();
   _isend = true;
   _mutex.unlock();
+  while(_isend) Sleep(1);
   _thread.detach();
 }
 
@@ -118,6 +119,8 @@ void WsInput::wsConnect(WsInput* wsinput) {
   }
 
   libwebsocket_context_destroy(context);
+
+  wsinput->_isend = false;
 }
 
 //==============================================================================

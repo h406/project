@@ -67,6 +67,9 @@
     <Filter Include="object\item\accel">
       <UniqueIdentifier>{0c74b1b7-8582-4e9d-bbe5-f6f0f9ed4603}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system\LedConnect">
+      <UniqueIdentifier>{eeafa5a3-b96a-45b9-99e9-5d6e35e646df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -168,6 +171,9 @@
     <ClInclude Include="itemAccel.h">
       <Filter>object\item\accel</Filter>
     </ClInclude>
+    <ClInclude Include="ledConnect.h">
+      <Filter>system\LedConnect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -251,6 +257,9 @@
     </ClCompile>
     <ClCompile Include="itemAccel.cpp">
       <Filter>object\item\accel</Filter>
+    </ClCompile>
+    <ClCompile Include="ledConnect.cpp">
+      <Filter>system\LedConnect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

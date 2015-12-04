@@ -12,7 +12,9 @@
 #include "game.h"
 #include "BaceScene.h"
 #include "ShuchuSen.h"
-#include <thread>
+
+#include "ledConnect.h"
+#include "BaceScene.h"
 
 #include "../QRDecode/qrdecode.h"
 
@@ -99,6 +101,9 @@ bool SelectScene::init() {
   App::instance().getSound()->load("./data/sound/se/vs.wav");
   // BGM
   App::instance().getSound()->play("./data/sound/bgm/select_mode.wav", true);
+
+
+  BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveSelect);
 
   return true;
 }

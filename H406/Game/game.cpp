@@ -22,6 +22,7 @@
 #include "itemManager.h"
 #include "title.h"
 #include "BaceScene.h"
+#include "ledConnect.h"
 
 namespace{
   const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
@@ -139,6 +140,8 @@ bool Game::init() {
   _bultime = 0;
   _nextModeTime = 120;
   _gameMode = Game::MODE_START;
+
+  BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveGame);
 
   return true;
 }
