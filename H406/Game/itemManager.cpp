@@ -97,6 +97,7 @@ void ItemManager::uninit(){
 // createBomb
 //------------------------------------------------------------------------------
 void ItemManager::createBomb(){
+  auto _effect = BaceScene::instance()->getEffect();
   for (ItemBomb*& _item : _bombList) {
     if (_item == nullptr) {
       int randx = rand() % ItemManager::kNUM_X;
@@ -112,6 +113,8 @@ void ItemManager::createBomb(){
       _item->setFieldID(randx, randy);
       _item->addEventManager(_event);
       this->addChild(_item);
+
+      _effect->play("ItemPut.efk", pos);
       break;
     }
   }
@@ -121,6 +124,7 @@ void ItemManager::createBomb(){
 // createAccel
 //------------------------------------------------------------------------------
 void ItemManager::createAccel(){
+  auto _effect = BaceScene::instance()->getEffect();
   for (ItemAccel*& _item : _accelList) {
     if (_item == nullptr) {
       int randx = rand() % ItemManager::kNUM_X;
@@ -135,6 +139,8 @@ void ItemManager::createAccel(){
       _item->setPos(pos);
       _item->setFieldID(randx, randy);
       this->addChild(_item);
+
+      _effect->play("ItemPut.efk", pos);
       break;
     }
   }
@@ -144,6 +150,7 @@ void ItemManager::createAccel(){
 // createManhole
 //------------------------------------------------------------------------------
 void ItemManager::createManhole(){
+  auto _effect = BaceScene::instance()->getEffect();
   for (ItemManhole*& _item : _manholeList) {
     if (_item == nullptr) {
       int randx = rand() % ItemManager::kNUM_X;
@@ -159,6 +166,8 @@ void ItemManager::createManhole(){
       _item->addEventManager(_event);
       _item->setFieldID(randx, randy);
       this->addChild(_item);
+
+      _effect->play("ItemPut.efk", pos);
       break;
     }
   }
@@ -181,6 +190,7 @@ void ItemManager::addPlayer(Player* player) {
 //------------------------------------------------------------------------------
 void ItemManager::EventListener(EventData* eventData) {
   const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  auto _effect = BaceScene::instance()->getEffect();
 
   switch (eventData->getEvent()) {
 
@@ -190,6 +200,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0] = (ItemBomb*)eventData->getUserData();
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
+      _effect->play("GetItem.efk", _playerList[0]->getPos());
     }
     break;
 
@@ -198,6 +209,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1] = (ItemBomb*)eventData->getUserData();
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
+      _effect->play("GetItem.efk", _playerList[1]->getPos());
     }
     break;
 
@@ -207,6 +219,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0] = (ItemAccel*)eventData->getUserData();
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
+      _effect->play("GetItem.efk", _playerList[0]->getPos());
     }
     break;
 
@@ -215,6 +228,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1] = (ItemAccel*)eventData->getUserData();
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
+      _effect->play("GetItem.efk", _playerList[1]->getPos());
     }
     break;
 
@@ -225,6 +239,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
       _event->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
+      _effect->play("GetItem.efk", _playerList[0]->getPos());
     }
     break;
 
@@ -234,13 +249,14 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
       _event->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
+      _effect->play("GetItem.efk", _playerList[1]->getPos());
     }
     break;
 
   // アイテム使用
   case EventList::PLAYER_1_USE_ITEM:
     {
-    if (_playerGetItem[0] == nullptr) break;
+      if (_playerGetItem[0] == nullptr) break;
       _playerGetItem[0]->use();
       _playerGetItem[0] = nullptr;
     }
@@ -248,7 +264,7 @@ void ItemManager::EventListener(EventData* eventData) {
 
   case EventList::PLAYER_2_USE_ITEM:
     {
-    if (_playerGetItem[1] == nullptr) break;
+      if (_playerGetItem[1] == nullptr) break;
       _playerGetItem[1]->use();
       _playerGetItem[1] = nullptr;
     }

@@ -51,9 +51,13 @@ public:
   void setHitEnable(bool hit){ _hitEnable = hit; }
   bool getHitEnable(){ return _hitEnable; }
 
+  void effectStop();
+
   void use();
 
 private:
+
+  float accelerated(float start, float dest, int nowFrame, int allFrame);
 
   XFileObject* _item;
   EventManager* _event;
@@ -61,6 +65,14 @@ private:
   int _dripNum;
   Vec3 _moveDest;
   bool _hitEnable;
+
+  // ‰Á‘¬Œ¸‘¬—p
+  float _movementPos;
+  float _movementRot;
+  int _nowFrame;
+  int _allFrame;
+
+  int _effectID;
 };
 
 #endif
