@@ -12,6 +12,7 @@
 #include "player.h"
 #include "eventManager.h"
 #include "EventList.h"
+#include "BaceScene.h"
 
 namespace{
   const int kFreezTime = 60 * 2;
@@ -23,8 +24,8 @@ namespace{
 // init
 //------------------------------------------------------------------------------
 bool ItemManhole::init(){
-  _item = XFileObject::create("./data/model/manho-ru.x");
-  _item->setScl(1.5f, 1.5f, 1.5f);
+  _item = XFileObject::create("./data/model/manhole.x");
+  _item->setScl(1.3f, 1.0f, 1.3f);
   _item->setPos(0.0f, 0.0f, 0.0f);
   this->addChild(_item);
 
@@ -80,6 +81,7 @@ void ItemManhole::uninit(){
 //------------------------------------------------------------------------------
 void ItemManhole::use(){
   if (_event == nullptr) return;
+  auto _effect = BaceScene::instance()->getEffect();
   _is_use = true;
   _frameCount = 0;
 
@@ -99,6 +101,8 @@ void ItemManhole::use(){
     _frameCount = kFreezTime;
     _moveVec.y += kJumpPower;
     App::instance().getSound()->play("./data/sound/se/manhole_ng.wav", false);
+    int id = _effect->play("Manhole.efk", _pos);
+    _effect->setEffectScl(id, Vec3(1.5f, 3.0f, 1.5f));
   }
 }
 

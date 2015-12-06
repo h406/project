@@ -97,8 +97,8 @@ void Player::update(void)
 
       _playerRotDest.x = -cosf(rot) * (D3DX_PI * 0.06f);
       _playerRotDest.z =  sinf(rot) * (D3DX_PI * 0.06f);
-      _rot.x += (_playerRotDest.x - _rot.x) * 0.05f;
-      _rot.z += (_playerRotDest.z - _rot.z) * 0.05f;
+      _rot.x += (_playerRotDest.x - _rot.x) * 0.1f;
+      _rot.z += (_playerRotDest.z - _rot.z) * 0.1f;
     }
     else{
       // ê√é~íÜ

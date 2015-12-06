@@ -174,7 +174,7 @@ void Game::update() {
     length = (1201.85042515f);
 
   _mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
-  _mainCamera->setPosR(camvec);
+  _mainCamera->setPosR(camvec + Vec3(0, 50.0f, 0));
 
   switch (_gameMode){
   // スタート時
