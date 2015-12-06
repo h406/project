@@ -11,9 +11,9 @@
 #include "wsInput.h"
 
 #ifdef _DEBUG
-#pragma comment(lib, "websockets_d.lib")
+#pragma comment(lib, "D/websockets_static.lib")
 #else
-#pragma comment(lib, "websockets.lib")
+#pragma comment(lib, "R/websockets_static.lib")
 #endif
 
 WsInput* WsInput::_instance = nullptr;
@@ -91,7 +91,7 @@ void WsInput::wsConnect(WsInput* wsinput) {
 
   libwebsocket_protocols protocols[] = {
     {
-      "chat",
+      "default-protocol",
       WsInput::wsCallBackData,
       0,
       128

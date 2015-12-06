@@ -10,6 +10,19 @@
 //******************************************************************************
 #include "ledConnect.h"
 
+#ifdef _DEBUG
+#pragma comment(lib, "D/websockets_static.lib")
+#else
+#pragma comment(lib, "R/websockets_static.lib")
+#endif
+
+#ifdef _DEBUG
+#pragma comment(lib, "D/zlib_internal.lib")
+#else
+#pragma comment(lib, "R/zlib_internal.lib")
+#endif
+
+
 LedConnect* LedConnect::_insatnce;
 
 //==============================================================================

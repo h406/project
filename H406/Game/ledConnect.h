@@ -10,12 +10,6 @@
 #ifndef _LEDCONNECT_H_
 #define _LEDCONNECT_H_
 
-#ifdef _DEBUG
-#pragma comment(lib, "websockets_d.lib")
-#else
-#pragma comment(lib, "websockets.lib")
-#endif
-
 enum LedEvent {
   None = 0,
   Connect,
