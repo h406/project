@@ -65,9 +65,16 @@ public:
     _mutex.unlock();
   }
 
+  void sendText(const char* text) { 
+    _mutex.lock();
+    _sendText = text;
+    _mutex.unlock();
+  }
+
 private:
   
   SendData _SendData;
+  string _sendText;
 
   mutex _mutex;
   thread _thread;

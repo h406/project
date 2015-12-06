@@ -33,6 +33,30 @@ LedConnect::~LedConnect() {
   _thread.detach();
 }
 
+
+int ShiftJisToUTF8(const char* szShiftJis,char** bufUTF8) {
+  wchar_t* bufUnicode;
+
+  // まずUniocdeに変換する
+  // サイズを計算する
+  int iLenUnicode = MultiByteToWideChar(CP_ACP,0,szShiftJis,strlen(szShiftJis) + 1, NULL,0);
+
+  bufUnicode = new wchar_t[iLenUnicode];
+
+  MultiByteToWideChar(CP_ACP,0,szShiftJis,strlen(szShiftJis) + 1,bufUnicode,MAX_PATH);
+  // 次に、UniocdeからUTF8に変換する
+  // サイズを計算する
+  int iLenUtf8 = WideCharToMultiByte(CP_UTF8,0,bufUnicode,iLenUnicode,NULL,0, NULL,NULL);
+
+  (*bufUTF8) = new char[iLenUtf8];
+
+  WideCharToMultiByte(CP_UTF8,0,bufUnicode,iLenUnicode,*bufUTF8,iLenUtf8,NULL,NULL);
+
+  SafeDeleteArray(bufUnicode);
+  return iLenUtf8;
+}
+
+
 //==============================================================================
 // WsConnect
 //------------------------------------------------------------------------------
@@ -76,6 +100,15 @@ void LedConnect::wsConnect(LedConnect* instance) {
         libwebsocket_write(wsi,(unsigned char*)&instance->_SendData,sizeof(SendData),LWS_WRITE_BINARY);
       }
       instance->_SendData._event = LedEvent::None;
+    }
+    else if(!instance->_sendText.empty()) {
+      char* text = nullptr;
+      int length = ShiftJisToUTF8(instance->_sendText.c_str(),&text);
+       for(auto wsi : instance->_socketList) {
+         libwebsocket_write(wsi,(unsigned char*)text,length,LWS_WRITE_TEXT);
+      }
+      instance->_sendText = "";
+      SafeDeleteArray(text);
     }
     instance->_mutex.unlock();
 

@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WebSocket4Net;
@@ -46,6 +48,7 @@ namespace LEDs
 
     private BitmapImage[] BitmapImages = new BitmapImage[Enum.GetNames(typeof(LedEvent)).Length];
     private RecvData recvData;
+    private string recvText;
 
     public MainWindow()
     {
@@ -75,11 +78,25 @@ namespace LEDs
         BitmapImages[i] = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + imageFile[i], UriKind.Absolute));
       }
       image.Source = BitmapImages[0];
+
+      // textBox = new TextBlock();
+      // textBox.FontSize = 20;
+      // textBox.Text = "あああああ";
+      // textBox.VerticalAlignment = VerticalAlignment.Center;
+      // textBox.Padding = new Thickness(0, 0, 0, 0);
+      // this.LEDCanvas.Children.Add(textBox);
+      recvText = "あああああああ";
     }
 
     void Update(object sender, EventArgs e){
 
       image.Source = BitmapImages[(int)recvData.events];
+
+      if (recvText != "")
+      {
+        MakeText(recvText);
+        recvText = "";
+      }
       /*
       switch (recvData.events)
       {
@@ -93,6 +110,60 @@ namespace LEDs
       */
     }
 
+    public void MakeText(string text)
+    {
+      // フォントサイズの決定
+      double fontsize = 20;
+      // フォントカラーの決定
+      Brush fontcolor = Brushes.White;
+      // 移動速度
+      int moveCommentTime = 5000;
+
+      // 新しいテキストを生成
+      TextBlock textBlock = new TextBlock();
+      textBlock.FontSize = fontsize;
+      textBlock.Text = text;
+      textBlock.Foreground = fontcolor;
+      this.TextCanvas.Children.Add(textBlock);
+
+      // テキストに影をつける
+      DropShadowEffect effect = new DropShadowEffect();
+      effect.ShadowDepth = 4;
+      effect.Direction = 330;
+      effect.Color = (Color)ColorConverter.ConvertFromString("black");
+      textBlock.Effect = effect;
+
+      // テキストの位置を指定
+      // verticalPosition += (int)fontsize;
+      // if (verticalPosition + (int)fontsize >= this.Height) verticalPosition = 0;
+      float verticalPosition = 0;
+      TranslateTransform transform = new TranslateTransform(this.Width, verticalPosition);
+
+      // テキストのアニメーション
+      textBlock.RenderTransform = transform;
+      Duration duration = new Duration(TimeSpan.FromMilliseconds(moveCommentTime));
+      DoubleAnimation animationX = new DoubleAnimation(-1 * text.Length * fontsize, duration);
+      animationX.Completed += new EventHandler(animationX_Completed);
+      animationX.Name = textBlock.Name;
+      transform.BeginAnimation(TranslateTransform.XProperty, animationX);
+    }
+
+    private void animationX_Completed(object sender, EventArgs e)
+    {
+      AnimationClock clock = (AnimationClock)sender;
+      lock (this.TextCanvas.Children)
+      {
+        for (int i = 0; i < this.TextCanvas.Children.Count; i++)
+        {
+          if (((TextBlock)this.TextCanvas.Children[i]).Name.Equals(clock.Timeline.Name))
+          {
+            this.TextCanvas.Children.RemoveAt(i);
+            break;
+          }
+        }
+      }
+    }
+
     private void SockUpdate()
     {
       ws = new WebSocket(kURL);
@@ -101,7 +172,7 @@ namespace LEDs
       ws.MessageReceived += (s, e) =>
       {
         // Console.WriteLine("{0}:String Received:{1}", DateTime.Now.ToString(), e.Message);
-        string test = e.Message;
+        recvText = (e.Message);
       };
 
       /// バイナリ受信

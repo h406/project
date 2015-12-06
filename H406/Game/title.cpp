@@ -61,6 +61,11 @@ void Title::update() {
     BaceScene::instance()->setCurScene(SelectScene::create());
     App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
   }
+
+
+  if(App::instance().getInput()->isRelease(0,VK_INPUT::_2)) {
+    BaceScene::instance()->getLedConnect()->sendText("‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+  }
 }
 
 void Title::uninit() {
