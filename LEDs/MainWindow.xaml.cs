@@ -48,7 +48,7 @@ namespace LEDs
 
     private BitmapImage[] BitmapImages = new BitmapImage[Enum.GetNames(typeof(LedEvent)).Length];
     private RecvData recvData;
-    private string recvText;
+    private string recvText = "";
 
     public MainWindow()
     {
@@ -78,14 +78,6 @@ namespace LEDs
         BitmapImages[i] = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + imageFile[i], UriKind.Absolute));
       }
       image.Source = BitmapImages[0];
-
-      // textBox = new TextBlock();
-      // textBox.FontSize = 20;
-      // textBox.Text = "あああああ";
-      // textBox.VerticalAlignment = VerticalAlignment.Center;
-      // textBox.Padding = new Thickness(0, 0, 0, 0);
-      // this.LEDCanvas.Children.Add(textBox);
-      recvText = "あああああああ";
     }
 
     void Update(object sender, EventArgs e){
