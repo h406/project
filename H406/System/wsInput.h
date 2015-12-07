@@ -13,6 +13,13 @@
 #include "iInput.h"
 #include "vInput.h"
 
+
+struct RecvData {
+  Vec3 rot;
+  bool isPush;
+  int playerID;
+};
+
 //==============================================================================
 // 
 //==============================================================================
@@ -40,12 +47,12 @@ private:
   mutex _mutex;
   thread _thread;
 
-  Vec3 _jairo;
+  RecvData _recvData[4];
 
-  bool _press[(int)VK_INPUT::MAX];
-  bool _trigger[(int)VK_INPUT::MAX];
-  bool _release[(int)VK_INPUT::MAX];
-  bool _repeat[(int)VK_INPUT::MAX];
+  bool _press[4][(int)VK_INPUT::MAX];
+  bool _trigger[4][(int)VK_INPUT::MAX];
+  bool _release[4][(int)VK_INPUT::MAX];
+  bool _repeat[4][(int)VK_INPUT::MAX];
 };
 
 #endif

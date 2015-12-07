@@ -1,91 +1,66 @@
 #include "HelloWorldScene.h"
+#include "controller.h"
 
 USING_NS_CC;
+using namespace ui;
 
-Scene* HelloWorld::createScene()
-{
-    // 'scene' is an autorelease object
-    auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
+Scene* HelloWorld::createScene() {
+  // 'scene' is an autorelease object
+  auto scene = Scene::create();
 
-    // add layer as a child to scene
-    scene->addChild(layer);
+  // 'layer' is an autorelease object
+  auto layer = HelloWorld::create();
 
-    // return the scene
-    return scene;
+  // add layer as a child to scene
+  scene->addChild(layer);
+
+  // return the scene
+  return scene;
 }
 
-// on "init" you need to initialize your instance
-bool HelloWorld::init()
-{
-    //////////////////////////////
-    // 1. super init first
-    if ( !Layer::init() )
-    {
-        return false;
-    }
-    
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+bool HelloWorld::init() {
+  if(!Layer::init()) {
+    return false;
+  }
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+  Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+  auto editBox = EditBox::create(Size(visibleSize.width,visibleSize.height*0.5f),Scale9Sprite::create("HelloWorld.png"));
+  editBox->setFont("font/arial.ttf",46.0f);
+  editBox->setPlaceHolder("URL");
+  editBox->setPlaceholderFontColor(Color3B::BLACK);
+  editBox->setFontColor(Color3B::BLACK);
+  editBox->setMaxLength(100);
+  editBox->setText("ws://localhost:7681/input");
+  editBox->setReturnType(EditBox::KeyboardReturnType::DONE);
+  editBox->setInputMode(EditBox::InputMode::ANY);
+  editBox->setDelegate(this);
+  editBox->setPosition(Size(visibleSize.width*0.5f,visibleSize.height*0.25 * 3));
+  this->addChild(editBox);
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+  auto mItem1 = MenuItemImage::create("CloseNormal.png","CloseNormal.png",[=](Ref*sender) {
+    Controller::getURL(editBox->getText());
+    Controller::getPlayerID(0);
+    Director::getInstance()->replaceScene(Controller::createScene());
+  });
+  auto mItem2 = MenuItemImage::create("CloseSelected.png","CloseSelected.png",[=](Ref*sender) {
+    Controller::getURL(editBox->getText());
+    Controller::getPlayerID(1);
+    Director::getInstance()->replaceScene(Controller::createScene());
+  });
 
-    /////////////////////////////
-    // 3. add your codes below...
+  mItem1->setPosition(Point(visibleSize.width*0.25f*1,visibleSize.height*0.25 * 1));
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
+  Vec2 scl = visibleSize*0.5f;
+  mItem1->setScale(scl.x / mItem1->getContentSize().width,scl.y / mItem1->getContentSize().height);
+  mItem2->setScale(scl.x / mItem1->getContentSize().width,scl.y / mItem1->getContentSize().height);
+  mItem2->setPosition(Point(visibleSize.width*0.25f*3,visibleSize.height*0.25 * 1));
+  
+  //ƒƒjƒ…[‚ðì¬
+  auto menu = Menu::create(mItem1,mItem2,NULL);
+  menu->setPosition(Point::ZERO);
+  this->addChild(menu);
 
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-    
-    return true;
-}
-
-
-void HelloWorld::menuCloseCallback(Ref* pSender)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
-
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+  return true;
 }

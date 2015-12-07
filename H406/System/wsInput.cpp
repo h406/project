@@ -31,7 +31,7 @@ void WsInput::init(Input* input) {
   memset(_trigger,0,sizeof(_trigger));
   memset(_release,0,sizeof(_release));
   memset(_repeat,0,sizeof(_repeat));
-  _jairo = Vec3(0,0,0);
+  memset(_recvData,0,sizeof(_recvData));
 
   thread tmp = thread(WsInput::wsConnect,this);
   _thread.swap(tmp);
@@ -52,28 +52,27 @@ void WsInput::uninit() {
 // update
 //------------------------------------------------------------------------------
 void WsInput::update() {
-  for(auto& it : _press) {
-    it = false;
-  }
+  memset(_press,0,sizeof(_press));
+  bool press[14] = {false};
 
-  if(abs(_jairo.z) > 10) {
-    if(_jairo.z > 0) {
-      _press[(int)VK_INPUT::RIGHT] = true;
-    }
-    else {
-      _press[(int)VK_INPUT::LEFT] = true;
+  for(int i = 0; i < 4; i++) {
+    press[(int)VK_INPUT::LEFT]  = _recvData[i].rot.x > 0;
+    press[(int)VK_INPUT::RIGHT] = _recvData[i].rot.x < 0;
+    press[(int)VK_INPUT::UP]    = _recvData[i].rot.y > 0;
+    press[(int)VK_INPUT::DOWN]  = _recvData[i].rot.x < 0;
+    press[(int)VK_INPUT::_1]    = _recvData[i].isPush;
+
+    for(int nCntKey = 0; nCntKey < 14; nCntKey++) {
+      // トリガー作成
+      _trigger[i][nCntKey] = (press[nCntKey] ^ _press[i][nCntKey]) & press[nCntKey];
+      // リリース作成
+      _release[i][nCntKey] = (press[nCntKey] ^ _press[i][nCntKey]) & ~press[nCntKey];
+      // プレス作成
+      _press[i][nCntKey] = press[nCntKey];
     }
   }
-  if(abs(_jairo.y) > 10) {
-    if(_jairo.y < 0) {
-      _press[(int)VK_INPUT::UP] = true;
-    }
-    else {
-      _press[(int)VK_INPUT::DOWN] = true;
-    }
-  }
-  _jairo = Vec3(0, 0, 0);
 }
+
 
 //==============================================================================
 // WsInput
@@ -91,7 +90,7 @@ void WsInput::wsConnect(WsInput* wsinput) {
 
   libwebsocket_protocols protocols[] = {
     {
-      "default-protocol",
+      "input",
       WsInput::wsCallBackData,
       0,
       128
@@ -151,77 +150,37 @@ int WsInput::wsCallBackData(
   // 送信処理
   case LWS_CALLBACK_SERVER_WRITEABLE:
   {
-    _instance->_mutex.lock();
-    libwebsocket_write(wsi,(unsigned char*)_instance->_sendData,strlen(_instance->_sendData),LWS_WRITE_TEXT);
-    memset(_instance->_sendData,0,sizeof(_instance->_sendData));
-    _instance->_mutex.unlock();
   }
   break;
   // 受信処理
   case LWS_CALLBACK_RECEIVE:
   {
-    char* data = (char*)in;
-    lwsl_notice("ReceiveMessage=[%s]\n",(const char*)in);
-    // memcpy(_instance->_sendData,in,strlen((char*)in));
-    // libwebsocket_callback_on_writable_all_protocol(libwebsockets_get_protocol(wsi));
-
-
-    float dat = (float)atof(&data[1]);
-    char d = data[0];
-
+    RecvData* data = (RecvData*)in;
     _instance->_mutex.lock();
-    if(d == 'b')
-      _instance->_jairo.y = dat;
-    if(d == 'g')
-      _instance->_jairo.z = dat;
-    if(d == 'a')
-      _instance->_jairo.x = dat;
-    if(d == 'd'){
-      int key = atoi(&data[1]);
-      if (key == 37){
-        _instance->_jairo.z = -11;
-      }
-      if (key == 38){
-        _instance->_jairo.y = -11;
-      }
-      if (key == 39){
-        _instance->_jairo.z = 11;
-      }
-      if (key == 40){
-        _instance->_jairo.y = 11;
-      }
-      if (key == 13){
-        _instance->_press[int(VK_INPUT::_1)] = true;
-      }
-    }
-
+    memcpy(&_instance->_recvData[data->playerID],data,sizeof(RecvData));
     _instance->_mutex.unlock();
   }
   break;
-
   }
 
   return 0;
 }
 
-
 bool WsInput::isPress(int id, VK_INPUT vk) const {
-  return _press[(int)vk];
+  return _press[id][(int)vk];
 }
 
 bool WsInput::isTrigger(int id, VK_INPUT vk) const {
-  UnusedParam(vk);
-  return _press[(int)vk];
+  return _trigger[id][(int)vk];
 }
 
 bool WsInput::isRelease(int id, VK_INPUT vk) const {
-  UnusedParam(vk);
-  return _press[(int)vk];
+  return _release[id][(int)vk];
 }
 
 bool WsInput::isRepeat(int id, VK_INPUT vk) const {
-  UnusedParam(vk);
-  return _press[(int)vk];
+  _asm int 3
+  return _repeat[id][(int)vk];
 }
 
 //EOF
