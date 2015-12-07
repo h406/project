@@ -32,21 +32,25 @@ bool Controller::init() {
 
   _websocket = nullptr;
 
-  // ƒhƒƒCƒ“‚Æƒ|[ƒg‚ÍŽ©•ª‚ÌƒT[ƒo[‚É‡‚í‚¹‚é
+  // ï¿½hï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Æƒ|ï¿½[ï¿½gï¿½ÍŽï¿½ï¿½ï¿½ï¿½ÌƒTï¿½[ï¿½oï¿½[ï¿½Éï¿½ï¿½í‚¹ï¿½ï¿½
   createWebsocket();
 
   Size visibleSize = Director::getInstance()->getVisibleSize();
   Vec2 origin = Director::getInstance()->getVisibleOrigin();
-  _sprite = Sprite::create("HelloWorld.png");
+  _sprite = Sprite::create("push.png");
   _sprite->setPosition(visibleSize * 0.5f);
+  _sprite->setVisible(false);
+  float x = visibleSize.width / _sprite->getContentSize().width;
+  float y = visibleSize.height / _sprite->getContentSize().height;
+  _sprite->setScale(x < y? x : y);
   this->addChild(_sprite);
 
-  // ƒAƒNƒZƒ‰ƒŒ[ƒVƒ‡ƒ“
+  // ï¿½Aï¿½Nï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½
   Device::setAccelerometerEnabled(true);
   auto acclistener = EventListenerAcceleration::create(CC_CALLBACK_2(Controller::onAcceleration,this));
   Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(acclistener,this);
 
-  // update‚ðŒÄ‚Ô‚æ‚¤‚É‚·‚é
+  // updateï¿½ï¿½ï¿½Ä‚Ô‚æ‚¤ï¿½É‚ï¿½ï¿½ï¿½
   this->scheduleUpdate();
 
   _sendData.isPush = false;
@@ -94,10 +98,28 @@ bool Controller::init() {
 
   this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,this);
 
+
+  auto dispatcher = Director::getInstance()->getEventDispatcher();
+  auto eventListener = EventListenerTouchOneByOne::create();
+
+  eventListener->onTouchBegan = [this](cocos2d::Touch *touch,cocos2d::Event *event) {
+    _key[4] = true;
+    return true;
+  };
+  eventListener->onTouchEnded = [this](cocos2d::Touch *touch,cocos2d::Event *event) {
+    _key[4] = false;
+  };
+  eventListener->onTouchCancelled = [this](cocos2d::Touch *touch,cocos2d::Event *event) {
+    _key[4] = false;
+  };
+
+  dispatcher->addEventListenerWithSceneGraphPriority(eventListener,this);
+
   return true;
 }
 
 void Controller::update(float delta) {
+  Size visibleSize = Director::getInstance()->getVisibleSize();
   if(_key[0]) {
     _sendData.rot.x = -1;
   }
@@ -110,7 +132,12 @@ void Controller::update(float delta) {
   if(_key[3]) {
     _sendData.rot.y = 1;
   }
-  _sendData.isPush = _key[4];
+  if(_sendData.isPush = _key[4]) {
+    _sprite->setPosition(visibleSize * 0.5f + Size(5,-5));
+  }
+  else {
+    _sprite->setPosition(visibleSize * 0.5f);
+  }
 
   if(_websocket->getReadyState() == WebSocket::State::OPEN) {
     _websocket->send((unsigned char*)&_sendData,sizeof(SendData));
@@ -149,7 +176,7 @@ void Controller::onAcceleration(cocos2d::Acceleration* acc,cocos2d::Event* event
 }
 
 void Controller::onOpen(WebSocket* ws) {
-  _sprite->setVisible(false);
+  _sprite->setVisible(true);
   this->unschedule("restart");
 }
 
@@ -158,7 +185,7 @@ void Controller::onMessage(WebSocket* ws,const WebSocket::Data& data) {
 }
 
 void Controller::onClose(WebSocket* ws) {
-  _sprite->setVisible(true);
+  _sprite->setVisible(false);
   this->scheduleOnce([this](float delta) {
     createWebsocket();
   },1,"restart");

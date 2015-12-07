@@ -36,7 +36,7 @@ namespace LEDs
 
   public partial class MainWindow : Window
   {
-    public const string kURL = "ws://localhost:7682/led";
+    public const string kURL = "ws://172.29.10.4:7682/led";
 
     public Image image = null;
     public Vector Pos = new Vector(0, 0);

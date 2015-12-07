@@ -56,10 +56,10 @@ void WsInput::update() {
   bool press[14] = {false};
 
   for(int i = 0; i < 4; i++) {
-    press[(int)VK_INPUT::LEFT]  = _recvData[i].rot.x > 0;
-    press[(int)VK_INPUT::RIGHT] = _recvData[i].rot.x < 0;
-    press[(int)VK_INPUT::UP]    = _recvData[i].rot.y > 0;
-    press[(int)VK_INPUT::DOWN]  = _recvData[i].rot.x < 0;
+    press[(int)VK_INPUT::LEFT]  = _recvData[i].rot.x < 0;
+    press[(int)VK_INPUT::RIGHT] = _recvData[i].rot.x > 0;
+    press[(int)VK_INPUT::UP]    = _recvData[i].rot.y < 0;
+    press[(int)VK_INPUT::DOWN]  = _recvData[i].rot.y > 0;
     press[(int)VK_INPUT::_1]    = _recvData[i].isPush;
 
     for(int nCntKey = 0; nCntKey < 14; nCntKey++) {
@@ -73,6 +73,9 @@ void WsInput::update() {
   }
 }
 
+void da(int level,const char* text) {
+  OutputDebugString(text);
+}
 
 //==============================================================================
 // WsInput
@@ -80,12 +83,12 @@ void WsInput::update() {
 void WsInput::wsConnect(WsInput* wsinput) {
   libwebsocket_context *context;
   lws_context_creation_info info;
-  int debug_level = 0;
+  int debug_level = 7;
 
   memset(&info,0,sizeof info);
   info.port = 7681;
 
-  lws_set_log_level(debug_level,lwsl_emit_syslog);
+  lws_set_log_level(debug_level,da);
   lwsl_notice("libwebsockets chat server -\n");
 
   libwebsocket_protocols protocols[] = {
