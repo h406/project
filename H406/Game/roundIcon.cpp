@@ -11,13 +11,18 @@
 #include "roundIcon.h"
 #include "dataManager.h"
 
+namespace{
+  const Vec2 kTargetPos(220.0f, 120.0f);
+  const float kOffsetX = 10.0f;
+}
+
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
 bool RoundIcon::init(float width, float height)
 {
-  const Vec2 pos[2] = { Vec2(App::instance().getWindowSize().cx * 0.5f - 220.0f, 70.0f),
-                        Vec2(App::instance().getWindowSize().cx * 0.5f + 220.0f, 70.0f) };
+  const Vec2 pos[2] = { Vec2(App::instance().getWindowSize().cx * 0.5f - kTargetPos.x, kTargetPos.y),
+                        Vec2(App::instance().getWindowSize().cx * 0.5f + kTargetPos.x, kTargetPos.y) };
 
   _size = Vec2(width, height);
   _numScl = 1.0f;
@@ -30,9 +35,9 @@ bool RoundIcon::init(float width, float height)
       _roundIcon[i][j]->setVisible(false);
 
       if (i == 0){
-        _roundIcon[i][j]->setPos(Vec2(pos[i].x - (_size.x * j), pos[i].y));
+        _roundIcon[i][j]->setPos(Vec2(pos[i].x - (_size.x * j) - (kOffsetX * j), pos[i].y));
       } else{
-        _roundIcon[i][j]->setPos(Vec2(pos[i].x + (_size.x * j), pos[i].y));
+        _roundIcon[i][j]->setPos(Vec2(pos[i].x + (_size.x * j) + (kOffsetX * j), pos[i].y));
       }
       this->addChild(_roundIcon[i][j]);
     }
@@ -47,8 +52,8 @@ bool RoundIcon::init(float width, float height)
 // update
 //------------------------------------------------------------------------------
 void RoundIcon::update(void){
-  const Vec2 pos[2] = { Vec2(App::instance().getWindowSize().cx * 0.5f - 220.0f, 70.0f),
-                        Vec2(App::instance().getWindowSize().cx * 0.5f + 220.0f, 70.0f) };
+  const Vec2 pos[2] = { Vec2(App::instance().getWindowSize().cx * 0.5f - kTargetPos.x, kTargetPos.y),
+                        Vec2(App::instance().getWindowSize().cx * 0.5f + kTargetPos.x, kTargetPos.y) };
 
   for (int i = 0; i < 2; i++){
     for (int j = 0; j < RoundIcon::kROUND_MAX; j++){
@@ -73,10 +78,10 @@ void RoundIcon::update(void){
           Vec2 startPos = _roundIcon[i][curId]->getPos();
           Vec2 destPos(0.0f, 0.0f);
           if (i == 0){
-            destPos = Vec2(pos[i].x - (_size.x * curId), pos[i].y);
+            destPos = Vec2(pos[i].x - (_size.x * curId) - (kOffsetX * curId), pos[i].y);
           }
           else{
-            destPos = Vec2(pos[i].x + (_size.x * curId), pos[i].y);
+            destPos = Vec2(pos[i].x + (_size.x * curId) + (kOffsetX * curId), pos[i].y);
           }
           Vec2 movePos = Vec2((destPos - startPos) * 0.1f) + startPos;
 

@@ -88,8 +88,10 @@ void ItemBomb::update(){
         _movementRot = rotmove;
       }else{
         // Œ¸‘¬
-        posmove = accelerated(_movementPos, 0.0f, int(_nowFrame * 0.1f), int(_allFrame * 0.1f));
+//        posmove = 0.0f;
+        posmove = accelerated(_movementPos, 0.0f, int(_nowFrame), int(_allFrame));
         rotmove = accelerated(_movementRot, 0.0f, _nowFrame, _allFrame);
+        posmove *= 0.1f;
       }
       if (_nowFrame < _allFrame) _nowFrame++;
 

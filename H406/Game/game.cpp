@@ -21,6 +21,7 @@
 #include "dataManager.h"
 #include "itemManager.h"
 #include "title.h"
+#include "result.h"
 #include "BaceScene.h"
 #include "ledConnect.h"
 
@@ -378,7 +379,7 @@ void Game::update() {
   } // switch
 
   if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
-//    BaceScene::instance()->setCurScene(Title::create());
+    BaceScene::instance()->setCurScene(Result::create());
   }
 
   if (_gameMode != MODE_START){

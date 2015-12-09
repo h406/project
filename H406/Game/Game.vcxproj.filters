@@ -70,6 +70,9 @@
     <Filter Include="system\LedConnect">
       <UniqueIdentifier>{eeafa5a3-b96a-45b9-99e9-5d6e35e646df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="result">
+      <UniqueIdentifier>{2c98340d-0a9d-4a27-ab62-b8a9b37a20d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -174,6 +177,9 @@
     <ClInclude Include="ledConnect.h">
       <Filter>system\LedConnect</Filter>
     </ClInclude>
+    <ClInclude Include="result.h">
+      <Filter>result</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -260,6 +266,9 @@
     </ClCompile>
     <ClCompile Include="ledConnect.cpp">
       <Filter>system\LedConnect</Filter>
+    </ClCompile>
+    <ClCompile Include="result.cpp">
+      <Filter>result</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

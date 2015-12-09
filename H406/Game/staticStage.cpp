@@ -42,10 +42,15 @@ bool StaticStage::init() {
   //fence->setPos(Vec3(500,50,0));
   //this->addChild(fence);
 
-  XFileObject* backField = XFileObject::create("./data/model/bill.x");
-  backField->setPos(Vec3(130,-500,70));
+  XFileObject* backField = XFileObject::create("./data/model/Building.x");
+  backField->setPos(Vec3(0,-450,0));
   backField->setScl(Vec3(20,20,20));
   this->addChild(backField);
+
+  XFileObject* higthway = XFileObject::create("./data/model/hightway.x");
+  higthway->setPos(Vec3(0, -10, 0));
+  higthway->setScl(Vec3(45, 45, 45));
+  this->addChild(higthway);
 
   return true;
 }

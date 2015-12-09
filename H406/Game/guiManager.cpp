@@ -27,7 +27,8 @@ namespace{
   const D3DXVECTOR2 kSTART_TIME_SIZE = D3DXVECTOR2(256.0f, 256.0f);
   const D3DXVECTOR2 kRESULT_NUM_SIZE = D3DXVECTOR2(128.0f * 1.5f, 128.0f * 1.5f);
   const D3DXVECTOR2 kITEM_SIZE = D3DXVECTOR2(128.0f, 128.0f);
-  const D3DXVECTOR2 kOJIOBA_SIZE = D3DXVECTOR2(180 * 1.5f, 130 * 1.5f);
+//  const D3DXVECTOR2 kOJIOBA_SIZE = D3DXVECTOR2(180 * 1.5f, 130 * 1.5f);
+  const D3DXVECTOR2 kOJIOBA_SIZE = D3DXVECTOR2(256 , 256) * 0.8f;
 }
 
 //==============================================================================
@@ -42,26 +43,37 @@ bool GuiManager::init(EventManager* eventManager)
   _isResult = false;
   _isStart = false;
 
-  // ゲージ
-  _gaugeBase = Sprite2D::create("./data/texture/e.png");
-  _gaugeBase->setColor(D3DXCOLOR(1, 1, 1, 1));
-  _gaugeBase->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
-//  _gaugeBase->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
-  _gaugeBase->setPos(App::instance().getWindowSize().cx * 0.5f, 0.0f);
-  this->addChild(_gaugeBase);
+  _gaugeBack = Sprite2D::create("./data/texture/gauge_05.png");
+  _gaugeBack->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
+  _gaugeBack->setPos(App::instance().getWindowSize().cx * 0.5f, 0.0f);
+  this->addChild(_gaugeBack);
 
-  _gauge[0] = Gauge::create(520.f, 92.6667f);
-  _gauge[0]->setPos(Vec2(520.f, 92.6667f) * 0.5f);
+  // ギア
+  _gaugeGear = Sprite2D::create("./data/texture/gauge_03.png");
+  _gaugeGear->setSize(348.f / 1.5f, 348.f / 1.5f);
+  _gaugeGear->setPos(App::instance().getWindowSize().cx * 0.5f, 100.0f);
+  this->addChild(_gaugeGear);
+
+  const Vec2 kGaugeSize = Vec2(800.f, 300.f) / 1.5f;
+  _gauge[0] = Gauge::create(kGaugeSize.x, kGaugeSize.y);
+  _gauge[0]->setPos(kGaugeSize * 0.5f);
   _gauge[0]->setColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
-  _gauge[0]->setTexture("./data/texture/e1.png");
+  _gauge[0]->setTexture("./data/texture/gauge_01.png");
   this->addChild(_gauge[0]);
 
-  _gauge[1] = Gauge::create(554.f, 100.f);
-  _gauge[1]->setPos(App::instance().getWindowSize().cx - 554.f * 0.5f, 100.f * 0.5f);
+  _gauge[1] = Gauge::create(kGaugeSize.x, kGaugeSize.y);
+  _gauge[1]->setPos(App::instance().getWindowSize().cx - kGaugeSize.x * 0.5f, kGaugeSize.y * 0.5f);
   _gauge[1]->setColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
   _gauge[1]->setFlip(true);
-  _gauge[1]->setTexture("./data/texture/e2.png");
+  _gauge[1]->setTexture("./data/texture/gauge_02.png");
   this->addChild(_gauge[1]);
+
+  // ゲージ
+  _gaugeBase = Sprite2D::create("./data/texture/gauge_00.png");
+  _gaugeBase->setColor(D3DXCOLOR(1, 1, 1, 1));
+  _gaugeBase->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
+  _gaugeBase->setPos(App::instance().getWindowSize().cx * 0.5f, 0.0f);
+  this->addChild(_gaugeBase);
 
   // 数字
   _numSprite[0] = NumberSprite::create(1, "./data/texture/num.png");
@@ -165,7 +177,7 @@ bool GuiManager::init(EventManager* eventManager)
   _time._sprite->setSize(kTIME_SIZE.x, kTIME_SIZE.y);
   _time._sprite->setColor(D3DXCOLOR(1.0f, 0.0f, 0.7f, 1.0f));
   _time._sprite->setNumber(60);
-  _time._sprite->setPos(App::instance().getWindowSize().cx * 0.5f, 128.0f);
+  _time._sprite->setPos(App::instance().getWindowSize().cx * 0.5f, 108.0f);
   _time._sprite->setVisible(false);
   _time._scl = 1.0f;
   this->addChild(_time._sprite);
@@ -175,24 +187,27 @@ bool GuiManager::init(EventManager* eventManager)
   _roundNum._sprite->setSize(64, 64);
   _roundNum._sprite->setColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
   _roundNum._sprite->setNumber(1);
-  _roundNum._sprite->setPos(App::instance().getWindowSize().cx * 0.5f + 32.0f, 32.0f);
-  _roundNum._sprite->setVisible(false);
+  _roundNum._sprite->setPos(App::instance().getWindowSize().cx * 0.5f + 64.0f, 32.0f);
+  _roundNum._sprite->setVisible(false); 
   _roundNum._scl = 1.0f;
   this->addChild(_roundNum._sprite);
 
-  _roundIcon = RoundIcon::create(50.0f, 50.0f);
-  _roundIcon->setTexture(0, "./data/texture/neko000.png");
-  _roundIcon->setTexture(1, "./data/texture/neko000.png");
+  Vec2 size = Vec2(512.0f, 512.0f) * 0.1f;
+  _roundIcon = RoundIcon::create(size.x, size.y);
+  _roundIcon->setTexture(0, "./data/texture/win_icon.png");
+  _roundIcon->setTexture(1, "./data/texture/win_icon.png");
   this->addChild(_roundIcon);
 
   // おじさんおばさん
-  _oji3._sprite = Sprite2D::create("./data/texture/oji3.png");
+//  _oji3._sprite = Sprite2D::create("./data/texture/oji3.png");
+  _oji3._sprite = Sprite2D::create("./data/texture/oba3_2.png");
   _oji3._sprite->setSize(kOJIOBA_SIZE.x, kOJIOBA_SIZE.y);
   _oji3._sprite->setPos(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
   _oji3._scl = 1.0f;
   this->addChild(_oji3._sprite);
 
-  _oba3._sprite = Sprite2D::create("./data/texture/oba3.png");
+//  _oba3._sprite = Sprite2D::create("./data/texture/oba3.png");
+  _oba3._sprite = Sprite2D::create("./data/texture/oji3_2.png");
   _oba3._sprite->setSize(kOJIOBA_SIZE.x, kOJIOBA_SIZE.y);
   _oba3._sprite->setPos(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
   _oba3._scl = 1.0f;
@@ -305,6 +320,12 @@ void GuiManager::update(void)
   _gauge[1]->setRate(gaugeRate[1]);
   Vec2 gaugePos = _gaugeBase->getPos() + ((windowCenter - _gaugeBase->getPos()) * 0.07f);
   _gaugeBase->setPos(gaugePos);
+  _gaugeBack->setPos(gaugePos);
+
+//  Vec2 gearPos = _gaugeGear->getPos() + ((windowCenter - _gaugeGear->getPos()) * 0.07f);
+//  _gaugeGear->setPos(gearPos);
+
+  _gaugeGear->setRot(_gaugeGear->getRot().y + 0.01f);
 
   // タイマー更新
   int time = DataManager::instance().getData()->getTime();
@@ -382,8 +403,9 @@ void GuiManager::update(void)
     float oba3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) / (12.f * 12.f);
     Vec2 oji3vec = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
     Vec2 oba3vec = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-    _oji3._sprite->setPos(oji3vec * (1 - oji3num) + oba3vec * oji3num);
-    _oba3._sprite->setPos(oba3vec * (1 - oba3num) + oji3vec * oba3num);
+
+    _ojiobaPosDest[0] = oji3vec * (1 - oji3num) + oba3vec * oji3num;
+    _ojiobaPosDest[1] = oba3vec * (1 - oba3num) + oji3vec * oba3num;
 
     if (DataManager::instance().getData()->getTime() < 20 * 60) {
       const float t = (DataManager::instance().getData()->getTime() / 60.f - 20) / 5.f;
@@ -391,12 +413,15 @@ void GuiManager::update(void)
       _oji3._sprite->setPosY(y);
       _oba3._sprite->setPosY(y);
     }
-  }else{
-    Vec2 ojiobaPos[2] = { _oji3._sprite->getPos(), _oba3._sprite->getPos() };
-    Vec2 ojiobaMovePos[2] = { (_ojiobaPosDest[0] - ojiobaPos[0]) * 0.05f, (_ojiobaPosDest[1] - ojiobaPos[1]) * 0.05f };
-    _oji3._sprite->setPos(ojiobaPos[0] + ojiobaMovePos[0]);
-    _oba3._sprite->setPos(ojiobaPos[1] + ojiobaMovePos[1]);
   }
+  Vec2 ojiobaPos[2] = { _oji3._sprite->getPos(), _oba3._sprite->getPos() };
+  Vec2 ojiobaMovePos[2] = { (_ojiobaPosDest[0] - ojiobaPos[0]) * 0.05f, (_ojiobaPosDest[1] - ojiobaPos[1]) * 0.05f };
+  _oji3._sprite->setPos(ojiobaPos[0] + ojiobaMovePos[0]);
+  _oba3._sprite->setPos(ojiobaPos[1] + ojiobaMovePos[1]);
+
+  // hack
+  _itemBase[0]._sprite->setVisible(false);
+  _itemBase[1]._sprite->setVisible(false);
 }
 
 //==============================================================================

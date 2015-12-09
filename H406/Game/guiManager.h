@@ -44,6 +44,8 @@ private:
 
   Gauge* _gauge[2];
   Sprite2D* _gaugeBase;
+  Sprite2D* _gaugeBack;
+  Sprite2D* _gaugeGear;
 
   float _numSpriteScl[2];
   NumberSprite* _numSprite[2];
