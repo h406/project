@@ -32,7 +32,6 @@ bool Controller::init() {
 
   _websocket = nullptr;
 
-  // �h���C���ƃ|�[�g�͎����̃T�[�o�[�ɍ��킹��
   createWebsocket();
 
   Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -45,12 +44,10 @@ bool Controller::init() {
   _sprite->setScale(x < y? x : y);
   this->addChild(_sprite);
 
-  // �A�N�Z�����[�V����
   Device::setAccelerometerEnabled(true);
   auto acclistener = EventListenerAcceleration::create(CC_CALLBACK_2(Controller::onAcceleration,this));
   Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(acclistener,this);
 
-  // update���ĂԂ悤�ɂ���
   this->scheduleUpdate();
 
   _sendData.isPush = false;
@@ -119,6 +116,7 @@ bool Controller::init() {
 }
 
 void Controller::update(float delta) {
+  static int f = 0;
   Size visibleSize = Director::getInstance()->getVisibleSize();
   if(_key[0]) {
     _sendData.rot.x = -1;
@@ -139,9 +137,10 @@ void Controller::update(float delta) {
     _sprite->setPosition(visibleSize * 0.5f);
   }
 
-  if(_websocket->getReadyState() == WebSocket::State::OPEN) {
+  if(_websocket->getReadyState() == WebSocket::State::OPEN && (++f) % 10 == 0) {
     _websocket->send((unsigned char*)&_sendData,sizeof(SendData));
     _sendData.rot = Vec3(0,0,0);
+    f = 0;
   }
 }
 
@@ -173,6 +172,7 @@ void Controller::onAcceleration(cocos2d::Acceleration* acc,cocos2d::Event* event
   _sendData.rot.x = acc->x;
   _sendData.rot.y = acc->y;
   _sendData.rot.z = acc->z;
+  acc->timestamp;
 }
 
 void Controller::onOpen(WebSocket* ws) {
