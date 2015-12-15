@@ -129,6 +129,7 @@
     <ClInclude Include="result.h" />
     <ClInclude Include="roundIcon.h" />
     <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="shadow.h" />
     <ClInclude Include="ShuchuSen.h" />
     <ClInclude Include="ssaoEffect.h" />
     <ClInclude Include="staticStage.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="result.cpp" />
     <ClCompile Include="roundIcon.cpp" />
     <ClCompile Include="SelectScene.cpp" />
+    <ClCompile Include="shadow.cpp" />
     <ClCompile Include="ssaoEffect.cpp" />
     <ClCompile Include="staticStage.cpp" />
     <ClCompile Include="stage.cpp" />

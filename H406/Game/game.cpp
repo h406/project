@@ -24,6 +24,7 @@
 #include "result.h"
 #include "BaceScene.h"
 #include "ledConnect.h"
+#include "shadow.h"
 
 namespace{
   const Vec2 bordSize = Vec2(1000 / (float)Stage::kNUM_X, 1000 / (float)Stage::kNUM_Y);
@@ -110,6 +111,15 @@ bool Game::init() {
   _guiManger->setMaxDripNum(1, _player[1]->getMaxDripNum());
   this->addChild(_guiManger);
 
+  // 影
+  _playerShadow[0] = Shadow::create();
+  _playerShadow[0]->setOwner((XFileObject*)_player[0]);
+  this->addChild(_playerShadow[0]);
+
+  _playerShadow[1] = Shadow::create();
+  _playerShadow[1]->setOwner((XFileObject*)_player[1]);
+  this->addChild(_playerShadow[1]);
+
   // イベントセット
   _eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET, bind(&Game::EventListener,this,placeholders::_1));
   _eventManager->addEventListener(EventList::PLAYER_2_DRIP_GET, bind(&Game::EventListener,this,placeholders::_1));
@@ -178,6 +188,10 @@ void Game::update() {
   _mainCamera->setPosR(camvec + Vec3(0, 50.0f, 0));
 
   switch (_gameMode){
+  // レディ？
+  case Game::MODE_START_SETUP:
+    break;
+
   // スタート時
   case Game::MODE_START:
   {
@@ -379,6 +393,7 @@ void Game::update() {
   } // switch
 
   if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
+    _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
     BaceScene::instance()->setCurScene(Result::create());
   }
 

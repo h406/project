@@ -73,6 +73,9 @@
     <Filter Include="result">
       <UniqueIdentifier>{2c98340d-0a9d-4a27-ab62-b8a9b37a20d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\shadow">
+      <UniqueIdentifier>{e873bafe-e19d-48a1-934b-8127e71a3312}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="title.h">
@@ -180,6 +183,9 @@
     <ClInclude Include="result.h">
       <Filter>result</Filter>
     </ClInclude>
+    <ClInclude Include="shadow.h">
+      <Filter>object\shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -269,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="result.cpp">
       <Filter>result</Filter>
+    </ClCompile>
+    <ClCompile Include="shadow.cpp">
+      <Filter>object\shadow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

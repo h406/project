@@ -73,12 +73,12 @@ bool SelectScene::init() {
   },_isEnd,_QRreader);
 #endif
 
-  _oji = Sprite2D::create("./data/texture/oji.png");
+  _oji = Sprite2D::create("./data/texture/vs_oji.png");
   _oji->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
   _oji->setPos(App::instance().getWindowSize().cx*0.5f,-App::instance().getWindowSize().cy*0.5f);
   this->addChild(_oji);
 
-  _oba = Sprite2D::create("./data/texture/oba.png");
+  _oba = Sprite2D::create("./data/texture/vs_oba.png");
   _oba->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
   _oba->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
   this->addChild(_oba);

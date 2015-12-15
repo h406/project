@@ -149,7 +149,7 @@ void ItemBomb::use(){
 // effectStop
 //------------------------------------------------------------------------------
 void ItemBomb::effectStop(){
-  if (_effectID > 0) return;
+  if (_effectID < 0) return;
   auto _effect = BaceScene::instance()->getEffect();
   _effect->stop(_effectID);
 }
@@ -166,8 +166,6 @@ float ItemBomb::accelerated(float start, float dest, int nowFrame, int allFrame)
   float ret = (float(start) + float(dest - start) * rate);
   return ret;
 }
-
-
 
 
 //EOF

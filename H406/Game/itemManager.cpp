@@ -191,6 +191,7 @@ void ItemManager::addPlayer(Player* player) {
 void ItemManager::EventListener(EventData* eventData) {
   const D3DXVECTOR2 windowCenter = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
   auto _effect = BaceScene::instance()->getEffect();
+  bool itmeGet[2] = { false, false };
 
   switch (eventData->getEvent()) {
 
@@ -200,7 +201,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0] = (ItemBomb*)eventData->getUserData();
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
-      _effect->play("GetItem.efk", _playerList[0]->getPos());
+      itmeGet[0] = true;
     }
     break;
 
@@ -209,7 +210,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1] = (ItemBomb*)eventData->getUserData();
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
-      _effect->play("GetItem.efk", _playerList[1]->getPos());
+      itmeGet[1] = true;
     }
     break;
 
@@ -219,7 +220,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0] = (ItemAccel*)eventData->getUserData();
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
-      _effect->play("GetItem.efk", _playerList[0]->getPos());
+      itmeGet[0] = true;
     }
     break;
 
@@ -228,7 +229,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1] = (ItemAccel*)eventData->getUserData();
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
-      _effect->play("GetItem.efk", _playerList[1]->getPos());
+      itmeGet[1] = true;
     }
     break;
 
@@ -239,7 +240,6 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
       _event->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
-      _effect->play("GetItem.efk", _playerList[0]->getPos());
     }
     break;
 
@@ -249,7 +249,6 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
       _event->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
-      _effect->play("GetItem.efk", _playerList[1]->getPos());
     }
     break;
 
@@ -270,10 +269,12 @@ void ItemManager::EventListener(EventData* eventData) {
     }
     break;
 
+  // アイテムのリセット
   case EventList::ITEM_RESET:
     {
       for (int i = 0; i < ItemManager::kBombMax; i++){
         if (_bombList[i] != nullptr){
+          _bombList[i]->effectStop();
           _bombList[i]->release();
           _bombList[i] = nullptr;
         }
@@ -304,6 +305,16 @@ void ItemManager::EventListener(EventData* eventData) {
       }
     }
     break;
+  }
+
+  // エフェクト
+  if (itmeGet[0] == true){
+    int id = _effect->play("GetItemBlue.efk", _playerList[0]->getPos());
+    _effect->setEffectScl(id, Vec3(0.7f, 0.7f, 0.7f));
+  }
+  if (itmeGet[1] == true){
+    int id = _effect->play("GetItemYellow.efk", _playerList[1]->getPos());
+    _effect->setEffectScl(id, Vec3(0.7f, 0.7f, 0.7f));
   }
 
 }

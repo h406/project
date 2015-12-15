@@ -42,7 +42,6 @@ bool Title::init() {
   // サウンドロード
   App::instance().getSound()->load("./data/sound/se/system_ok.wav");
 
-
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveTitle);
 
   return true;
@@ -61,7 +60,6 @@ void Title::update() {
     BaceScene::instance()->setCurScene(SelectScene::create());
     App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
   }
-
 
   if(App::instance().getInput()->isRelease(0,VK_INPUT::_2)) {
     BaceScene::instance()->getLedConnect()->sendText("ああああああああああああああああああ");

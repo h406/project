@@ -21,6 +21,7 @@ class EventManager;
 class EventData;
 class GuiManager;
 class ItemManager;
+class Shadow;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -36,6 +37,7 @@ public:
 
   enum GAME_MODE{
     MODE_NONE = -1,
+    MODE_START_SETUP,
     MODE_START,
     MODE_PLAY,
     MODE_ROUND_FINISH,
@@ -53,6 +55,8 @@ private:
   Sprite3D* _backField;
 
   CameraBace* _mainCamera;
+
+  Shadow* _playerShadow[kPlayerNum];
 
   EventManager* _eventManager;
   GuiManager* _guiManger;

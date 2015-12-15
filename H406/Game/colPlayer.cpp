@@ -136,6 +136,8 @@ bool CalcParticleColliAfterPos(
 //------------------------------------------------------------------------------
 void ColPlayer::update() {
 
+  if (_playerList[0]->getFreeze() == true || _playerList[1]->getFreeze() == true) return;
+
   // ƒvƒŒƒCƒ„[“¯Žm‚Ì“–‚½‚è”»’è
   if(_playerList[0] != nullptr && _playerList[1] != nullptr) {
     const Vec3 p1 = _playerList[0]->getPos() - _playerList[0]->getMoveVec();

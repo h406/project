@@ -42,20 +42,28 @@ public:
 
 private:
 
+  // ゲージ関係
+  Sprite2D* _gaugeLayer;
   Gauge* _gauge[2];
   Sprite2D* _gaugeBase;
   Sprite2D* _gaugeBack;
   Sprite2D* _gaugeGear;
 
+  // 塗るやつ系
   float _numSpriteScl[2];
   NumberSprite* _numSprite[2];
-
   Sprite2D* _plus[2];
   Sprite2D* _plusHighLight[2];
   NumberSprite* _plusNum[2];
 
+  // タイマー
   GUI_NUMBER_2D _time;
+
+  // ラウンド
   GUI_NUMBER_2D _roundNum;
+  RoundIcon* _roundIcon; // 勝ち星
+
+  // リザルト関連
   GUI_NUMBER_2D _resultNum[2];
   float _resultNumScl[2];
   Vec2 _resultNumPosDest[2];
@@ -63,6 +71,7 @@ private:
   // 文字系
   GUI_SPRITE_2D _finish;
   GUI_SPRITE_2D _start;
+  GUI_SPRITE_2D _roundString;
 
   // リザルト
   int _resultNumCount;
@@ -70,8 +79,6 @@ private:
   bool _isResult;
   bool _isStart;
   bool _isPlay;
-
-  RoundIcon* _roundIcon;
 
   // アイテム
   GUI_SPRITE_2D _item[2];

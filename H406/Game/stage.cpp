@@ -10,6 +10,10 @@
 //******************************************************************************
 #include "stage.h"
 
+namespace{
+  const D3DXCOLOR kColorNone(0.9f, 0.9f, 0.9f, 1.0f);
+}
+
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
@@ -50,10 +54,10 @@ void Stage::update() {
         _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,0,255));
         break;
       case FIELD_ID::ITEM:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));
+        _fieldMap[x][y]->setColor(kColorNone);
         break;
       case FIELD_ID::NONE:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(1,1,1,1));
+        _fieldMap[x][y]->setColor(kColorNone);
         break;
       }
     }
@@ -94,7 +98,7 @@ void Stage::reset(void){
 
   for (int x = 0; x < kNUM_X; x++) {
     for (int y = 0; y < kNUM_Y; y++) {
-      _fieldMap[x][y]->setColor(D3DXCOLOR(1, 1, 1, 1));
+      _fieldMap[x][y]->setColor(kColorNone);
     }
   }
 }

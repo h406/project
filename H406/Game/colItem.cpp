@@ -13,6 +13,7 @@
 #include "player.h"
 #include "EventList.h"
 #include "eventManager.h"
+#include "BaceScene.h"
 #include "itemManager.h"
 #include "itemBomb.h"
 #include "itemAccel.h"
@@ -33,6 +34,7 @@ bool ColItem::init(Stage* stage, EventManager *event, ItemManager* item) {
 // update
 //------------------------------------------------------------------------------
 void ColItem::update() {
+  auto _effect = BaceScene::instance()->getEffect();
   const Vec2& stageSize = _stage->getStageSize();
   const float halfSizeX = stageSize.x * 0.5f;
   const float halfSizeZ = stageSize.y * 0.5f;
@@ -102,6 +104,15 @@ void ColItem::update() {
         _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()));
         bombList[i]->addDripNum(-1);
         App::instance().getSound()->play("./data/sound/se/paint.wav", false);
+
+        // 塗るエフェクト
+        Vec3 effectPos = _stage->getFieldMapPos(idX, idY);
+        if (bombList[i]->getOwner()->getPlayerID() == 0){
+          _effect->play("DrawFloorBlue.efk", effectPos);
+        }
+        else if (bombList[i]->getOwner()->getPlayerID() == 1){
+          _effect->play("DrawFloorYellow.efk", effectPos);
+        } // effect
       }
     }
   }

@@ -88,6 +88,9 @@
     <Filter Include="renderer\posteffect">
       <UniqueIdentifier>{dbd9efa1-b2b5-46e6-a9c6-5acf27387941}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\drawObject\Sprite3DSubtractive">
+      <UniqueIdentifier>{f68c4fd3-6a4c-4845-9e6d-b0666da64edb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -164,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="postEffect.cpp">
       <Filter>renderer\posteffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite3DSubtractive.cpp">
+      <Filter>object\drawObject\Sprite3DSubtractive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="iPostEffect.h">
       <Filter>renderer\posteffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite3DSubtractive.h">
+      <Filter>object\drawObject\Sprite3DSubtractive</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

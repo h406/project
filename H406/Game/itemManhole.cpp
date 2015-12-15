@@ -85,16 +85,9 @@ void ItemManhole::use(){
   _is_use = true;
   _frameCount = 0;
 
-  const int is_plus = rand() % 2;
+  const int is_plus = rand() % 3;
   if (is_plus == 0){
-    _is_death = true;
-    int plus = _owner->getMaxDripNum();
-    _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + _owner->getPlayerID()), (void*)plus);
-    _owner->addDripNum(plus);
-    _owner->jump(kPlayerJumpPower);
-    App::instance().getSound()->play("./data/sound/se/manhole_ok.wav", false);
-  }
-  else{
+    // Ž¸”s
     const Vec3 pos(_owner->getPos().x, 0.0f, _owner->getPos().z);
     _owner->setFreezePos(pos);
     _owner->setMoveVec(Vec3(0.0f, 0.0f, 0.0f));
@@ -102,7 +95,15 @@ void ItemManhole::use(){
     _moveVec.y += kJumpPower;
     App::instance().getSound()->play("./data/sound/se/manhole_ng.wav", false);
     int id = _effect->play("Manhole.efk", _pos);
-    _effect->setEffectScl(id, Vec3(1.5f, 3.0f, 1.5f));
+    _effect->setEffectScl(id, Vec3(1.5f, 1.5f, 1.5f));
+  } else{
+    // ¬Œ÷
+    _is_death = true;
+    int plus = _owner->getMaxDripNum();
+    _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + _owner->getPlayerID()), (void*)plus);
+    _owner->addDripNum(plus);
+    _owner->jump(kPlayerJumpPower);
+    App::instance().getSound()->play("./data/sound/se/manhole_ok.wav", false);
   }
 }
 

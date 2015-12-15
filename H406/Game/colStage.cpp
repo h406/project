@@ -13,6 +13,7 @@
 #include "player.h"
 #include "EventList.h"
 #include "eventManager.h"
+#include "BaceScene.h"
 
 //==============================================================================
 // init
@@ -28,6 +29,7 @@ bool ColStage::init(Stage* stage,EventManager* event) {
 // update
 //------------------------------------------------------------------------------
 void ColStage::update() {
+  auto _effect = BaceScene::instance()->getEffect();
   const Vec2& stageSize = _stage->getStageSize();
   const float halfSizeX = stageSize.x * 0.5f;
   const float halfSizeZ = stageSize.y * 0.5f;
@@ -96,6 +98,14 @@ void ColStage::update() {
 
         // HACK どこでやるか？？
         player->addDripNum(-1);
+
+        // 塗るエフェクト
+        Vec3 effectPos = _stage->getFieldMapPos(idX, idY);
+        if (player->getPlayerID() == 0){
+          _effect->play("DrawFloorBlue.efk", effectPos);
+        } else if (player->getPlayerID() == 1){
+          _effect->play("DrawFloorYellow.efk", effectPos);
+        }
         // se
         App::instance().getSound()->play("./data/sound/se/paint.wav", false);
       }

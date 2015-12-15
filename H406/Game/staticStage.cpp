@@ -45,6 +45,7 @@ bool StaticStage::init() {
   XFileObject* backField = XFileObject::create("./data/model/Building.x");
   backField->setPos(Vec3(0,-450,0));
   backField->setScl(Vec3(20,20,20));
+  backField->setVisible(false);
   this->addChild(backField);
 
   XFileObject* higthway = XFileObject::create("./data/model/hightway.x");
