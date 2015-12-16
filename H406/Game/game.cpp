@@ -152,7 +152,9 @@ bool Game::init() {
   _nextModeTime = 120;
   _gameMode = Game::MODE_START;
 
+  float gaugeRate = 0.5f;
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveGame);
+  BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &gaugeRate);
 
   return true;
 }
@@ -387,6 +389,9 @@ void Game::update() {
 
       _gameMode = Game::MODE_START;
       _nextModeTime = 120;
+
+      float gaugeRate = 0.5f;
+      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &gaugeRate);
     }
   }
   break;
@@ -399,6 +404,33 @@ void Game::update() {
 
   if (_gameMode != MODE_START){
     DataManager::instance().update();
+  }
+
+  // LED‚É‘—‚éˆ—
+  if (_gameMode != MODE_PLAY) return;
+  static int showGauge = 1;
+
+  int time = DataManager::instance().getData()->getTime();
+  const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
+                                  _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+  const int map_num_max = player_map_num[0] + player_map_num[1];
+  float rate = 0.5f;
+  if (map_num_max != 0){
+    rate = (float)player_map_num[0] / (float)map_num_max;
+  }
+
+  // 1P‚Ì“h‚Á‚Ä‚éƒ}ƒX‚ÌŠ„‡‘—‚é
+  if (time % 20 == 0 && showGauge == 1){
+    BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &rate);
+  }
+  // 4•b‚É1‰ñØ‚è‘Ö‚¦‚é
+  if (time % (4 * 60) == 0){
+    if (showGauge == 1){
+      // ‚Ç‚Á‚¿‚ª—D¨
+      int win = rate > 0.5 ? 0 : (rate == 0.5 ? 3 : 1);
+      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowLead, &win);
+    }
+    showGauge *= -1;
   }
 }
 

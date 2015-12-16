@@ -42,11 +42,17 @@ bool StaticStage::init() {
   //fence->setPos(Vec3(500,50,0));
   //this->addChild(fence);
 
+//  auto sky = MeshDome::create(20, 20, 300.f, 300.f);
+//  sky->setTexture("./data/texture/sky.jpg");
+//  sky->setPosY(-450.f);
+//  this->addChild(sky);
+
+#ifndef _DEBUG
   XFileObject* backField = XFileObject::create("./data/model/Building.x");
   backField->setPos(Vec3(0,-450,0));
   backField->setScl(Vec3(20,20,20));
-  backField->setVisible(false);
   this->addChild(backField);
+#endif
 
   XFileObject* higthway = XFileObject::create("./data/model/hightway.x");
   higthway->setPos(Vec3(0, -10, 0));

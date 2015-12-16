@@ -62,7 +62,9 @@ void Title::update() {
   }
 
   if(App::instance().getInput()->isRelease(0,VK_INPUT::_2)) {
-    BaceScene::instance()->getLedConnect()->sendText("‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+//    BaceScene::instance()->getLedConnect()->sendText("‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
+    float a = 0.3f;
+    BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &a);
   }
 }
 

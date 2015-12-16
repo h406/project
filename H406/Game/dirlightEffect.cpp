@@ -40,15 +40,15 @@ void DirlightEffect::draw(Renderer *renderer,Sprite2D* sprite) {
   Vec3 dir[3];
 
   color[0] = Vec4(1.f,1.f,1.f,1);
-  power[0] = 1.0f;
+  power[0] = 3.0f;
   dir[0] = Vec3(0.5f,-1,2);
 
   color[1] = Vec4(1.f,1.f,1.f,1);
-  power[1] = 0.4f;
+  power[1] = 0.5f;
   dir[1] = Vec3(-0.5f,-1,-2);
 
   color[2] = Vec4(1.f,1.f,1.f,1);
-  power[2] = 0.5f;
+  power[2] = 0.3f;
   dir[2] = Vec3(0.5f,3.f,0);
 
   for(int i = 0; i < 3; i++) {
