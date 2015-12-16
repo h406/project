@@ -37,7 +37,7 @@ namespace LEDs
 
   public partial class MainWindow : Window
   {
-    public const string kURL = "ws://192.168.11.205:7682/led";
+    public const string kURL = "ws://192.168.11.200:7682/led";
 
     public Image image = null;
     public Vector Pos = new Vector(0, 0);
@@ -76,7 +76,7 @@ namespace LEDs
         "game.bmp",
         "LED_BBAwin.png",
         "LED_GGEwin.png",
-        "noneconnect.bmp",
+        "white.bmp",
       };
 
       for (int i = 0; i < imageFile.Length; i++)
@@ -141,6 +141,40 @@ namespace LEDs
             GaugeTimer = 0;
           }
         break;
+        case LedEvent.ShowSec:
+        if(!LeadIsShow){
+          // 新しいテキストを生成
+          TextBlock textBlock = new TextBlock();
+          textBlock.FontSize = 20;
+          textBlock.Text = "のこり" + recvData._s32 + "秒！！";
+          textBlock.Foreground = Brushes.White;
+          this.TextCanvas.Children.Add(textBlock);
+
+          // テキストに影をつける
+          DropShadowEffect effect = new DropShadowEffect();
+          effect.ShadowDepth = 4;
+          effect.Direction = 330;
+          effect.Color = (Color)ColorConverter.ConvertFromString("black");
+          textBlock.Effect = effect;
+
+          // テキストの位置を指定
+          // verticalPosition += (int)fontsize;
+          // if (verticalPosition + (int)fontsize >= this.Height) verticalPosition = 0;
+          float verticalPosition = 0;
+          TranslateTransform transform = new TranslateTransform(0, verticalPosition);
+
+          // テキストのアニメーション
+          textBlock.RenderTransform = transform;
+          Duration duration = new Duration(TimeSpan.FromMilliseconds(1000));
+          DoubleAnimation animationX = new DoubleAnimation(0, duration);
+          animationX.Completed += new EventHandler(animationX_Completed);
+          animationX.Name = textBlock.Name;
+          transform.BeginAnimation(TranslateTransform.XProperty, animationX);
+          LeadIsShow = true;
+          image.Source = BitmapImages[(int)recvData.events];
+        }
+        break;
+
         default:
           image.Source = BitmapImages[(int)recvData.events];
           GaugeTimer = 0;
@@ -225,6 +259,7 @@ namespace LEDs
         IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(e.Data, 0);
         recvData = (RecvData)Marshal.PtrToStructure(ptr, typeof(RecvData));
         string test = recvData.ToString();
+        LeadIsShow = false;
       };
 
       /// サーバ接続完了
