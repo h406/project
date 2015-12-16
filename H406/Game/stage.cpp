@@ -11,7 +11,10 @@
 #include "stage.h"
 
 namespace{
-  const D3DXCOLOR kColorNone(0.5f, 0.5f, 0.5f, 1.0f);
+  const D3DXCOLOR kColorNone(1.0f, 1.0f, 1.0f, 1.0f);
+  const D3DXCOLOR kColorDrip(1.0f, 1.0f, 1.0f, 1.0f);
+  const D3DXCOLOR kColorPlayer1(0.4f, 0.7f, 1, 1);
+  const D3DXCOLOR kColorPlayer2(1.0f, 0.8f, 0.3f, 1);
 }
 
 //==============================================================================
@@ -27,6 +30,8 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
       _fieldMap[x][y]->setSize(bordSize.x - 5,bordSize.y - 5);
       _fieldMap[x][y]->setPos(Vec3(x * bordSize.x - stageSizeX * 0.5f + bordSize.x * 0.5f,00.1f,y * bordSize.y - stageSizeZ * 0.5f + bordSize.y * 0.5f));
       _fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);
+      _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
+//      _fieldMap[x][y]->setVisible(false);
       this->addChild(_fieldMap[x][y]);
     }
   }
@@ -42,16 +47,16 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
 void Stage::update() {
 
   for(int x = 0; x < kNUM_X; ++x) {
-    for(int y = 0; y < kNUM_X; ++y) {
+    for(int y = 0; y < kNUM_Y; ++y) {
       switch(_field[x][y]) {
       case FIELD_ID::PLAYER_1:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(0.4f, 0.7f, 1, 1));
+        _fieldMap[x][y]->setColor(kColorPlayer1);
         break;
       case FIELD_ID::PLAYER_2:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(1.0f,0.8f,0.3f,1));
+        _fieldMap[x][y]->setColor(kColorPlayer2);
         break;
       case FIELD_ID::DRIP:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255, 255, 255, 255));
+        _fieldMap[x][y]->setColor(kColorDrip);
         break;
       case FIELD_ID::ITEM:
         _fieldMap[x][y]->setColor(kColorNone);
@@ -71,11 +76,23 @@ void Stage::setFieldID(int x,int y,Stage::FIELD_ID fieldid) {
   if(x >= 0 && x < kNUM_X && y >= 0 && y < kNUM_Y)
     _field[x][y] = fieldid;
 
-  if (_field[x][y] == FIELD_ID::DRIP){
-    _fieldMap[x][y]->setTexture("./data/texture/drip.png");
-  }
-  else{
+  switch (_field[x][y]) {
+  case FIELD_ID::PLAYER_1:
     _fieldMap[x][y]->setTexture((unsigned int)0);
+    _fieldMap[x][y]->setColor(kColorPlayer1);
+    break;
+  case FIELD_ID::PLAYER_2:
+    _fieldMap[x][y]->setTexture((unsigned int)0);
+    _fieldMap[x][y]->setColor(kColorPlayer2);
+    break;
+  case FIELD_ID::DRIP:
+    _fieldMap[x][y]->setTexture("./data/texture/field_drip.png");
+    _fieldMap[x][y]->setColor(kColorDrip);
+    break;
+  case FIELD_ID::NONE:
+    _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
+    _fieldMap[x][y]->setColor(kColorNone);
+    break;
   }
 }
 
@@ -106,7 +123,7 @@ void Stage::reset(void){
   for (int x = 0; x < kNUM_X; x++) {
     for (int y = 0; y < kNUM_Y; y++) {
       _fieldMap[x][y]->setColor(kColorNone);
-      _fieldMap[x][y]->setTexture((unsigned int)0);
+      _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
     }
   }
 }

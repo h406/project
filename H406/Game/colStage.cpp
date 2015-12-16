@@ -83,8 +83,9 @@ void ColStage::update() {
         _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + player->getPlayerID()), (void*) plus);
 
         // HACK ‚Ç‚±‚Å‚â‚é‚©HH
+        const float jump = plus * 1.5f + 6.0f;
         player->addDripNum(plus);
-        player->jump(10.f);
+        player->jump(jump);
         // se
         App::instance().getSound()->play("./data/sound/se/get_ink.wav", false);
         App::instance().getSound()->play("./data/sound/se/supply_ink.wav", false);

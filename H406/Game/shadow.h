@@ -23,14 +23,19 @@ public:
   void uninit();
 
   void setOwner(XFileObject* owner){ _owner = owner; }
+  void setColor(const D3DXCOLOR& col);
+  void setOffsetY(float y){ _offsetY = y; }
 
 private:
 
   // âe
-  Sprite3DSubtractive* _sprite;
+//  Sprite3DSubtractive* _sprite;
+  Sprite3D* _sprite;
 
   // éùÇøéÂ
   XFileObject* _owner;
+
+  float _offsetY;
 };
 
 

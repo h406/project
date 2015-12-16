@@ -60,7 +60,7 @@ namespace PlayerStatus{
   const Status kStickHandleStatus[] = {
     {(int)StickHandle::Normal,  0.5f,  1.f,  5.f,  9,"./data/model/hand.x"},
     {(int)StickHandle::Elephant,1.f,  1.f,  3.f,  9,"./data/model/Elephant_handle.x"},
-    {(int)StickHandle::Bird,    0.2f,  0.2f,  20.f,  4,"./data/model/Bird_handle.x"},
+    {(int)StickHandle::Bird,    0.2f,  0.2f,  20.f,  20,"./data/model/Bird_handle.x"},
     {(int)StickHandle::Dolphin, 0.5f,  0.5f,  10.f,  6,"./data/model/Dolphin_handle.x"},
   };
 

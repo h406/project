@@ -131,9 +131,9 @@ void ItemBomb::uninit(){
 void ItemBomb::use(){
   auto _effect = BaceScene::instance()->getEffect();
   _is_use = true;
-  _dripNum = _owner->getDripNum();
-  _pos = _owner->getPos();
-  _pos.y = 0.0f;
+  _dripNum = _owner->getDripNum() + 3;
+//  _pos = _owner->getPos();
+//  _pos.y = 0.0f;
   _item->setPosY(kOffsetPosY * 0.5f);
   _item->setRotX(D3DX_PI * 0.5f);
 

@@ -54,6 +54,7 @@ void ColItem::update() {
         if (isHit){
           _event->dispatchEvent(EventList(int(EventList::PLAYER_1_GET_BOMB) + player->getPlayerID()), (void*)bombList[i]);
           App::instance().getSound()->play("./data/sound/se/get_item.wav", false);
+          bombList[i]->getOwner()->jump(10.0f);
         }
       }
     } // bomb
@@ -95,12 +96,17 @@ void ColItem::update() {
     if (bombList[i] == nullptr) continue;
     if (bombList[i]->getUse() && bombList[i]->getDeath() == false){
 
-      const int idX = int((bombList[i]->getPos().x + halfSizeX) / (stageSize.x / (float)Stage::kNUM_X));
-      const int idY = int((bombList[i]->getPos().z + halfSizeZ) / (stageSize.y / (float)Stage::kNUM_Y));
+      int idX = int((bombList[i]->getPos().x + halfSizeX) / (stageSize.x / (float)Stage::kNUM_X));
+      int idY = int((bombList[i]->getPos().z + halfSizeZ) / (stageSize.y / (float)Stage::kNUM_Y));
+      if (idX > 11) idX = 11;
+      if (idX < 0) idX = 0;
+      if (idY > 11) idY = 11;
+      if (idY < 0) idY = 0;
+
       const Stage::FIELD_ID fieldID = _stage->getFieldID(idX, idY);
 
       // “h‚é
-      if (fieldID != Stage::FIELD_ID::ITEM && fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()) && bombList[i]->getDripNum() > 0) {
+      if (fieldID != Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()) && bombList[i]->getDripNum() > 0) {
         _stage->setFieldID(idX, idY, Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + bombList[i]->getOwner()->getPlayerID()));
         bombList[i]->addDripNum(-1);
         App::instance().getSound()->play("./data/sound/se/paint.wav", false);

@@ -125,7 +125,7 @@ void LedConnect::wsConnect(LedConnect* instance) {
     }
     instance->_mutex.unlock();
 
-    int n = libwebsocket_service(context,10);
+    int n = libwebsocket_service(context,1000);
     if(n >= 0 && instance->_isEnd) {
       break;
     }
