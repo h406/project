@@ -25,13 +25,15 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   // タイトル
   app.setTitle("H406");
 
+#ifndef _DEBUG
   // シェーダ適用
   //app.getRenderer()->getPostEffect()->addPostEffect(new FxaaEffect());
-  //app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
-  //app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
+  app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
+  app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
   //app.getRenderer()->getPostEffect()->addPostEffect(new EdgeEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());
+#endif
 
   auto scene = BaceScene::create();
   scene->setCurScene(Title::create());

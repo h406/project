@@ -11,7 +11,7 @@
 #include "stage.h"
 
 namespace{
-  const D3DXCOLOR kColorNone(0.9f, 0.9f, 0.9f, 1.0f);
+  const D3DXCOLOR kColorNone(0.5f, 0.5f, 0.5f, 1.0f);
 }
 
 //==============================================================================
@@ -45,13 +45,13 @@ void Stage::update() {
     for(int y = 0; y < kNUM_X; ++y) {
       switch(_field[x][y]) {
       case FIELD_ID::PLAYER_1:
-        _fieldMap[x][y]->setColor(D3DXCOLOR(0,0,1,1));
+        _fieldMap[x][y]->setColor(D3DXCOLOR(0.4f, 0.7f, 1, 1));
         break;
       case FIELD_ID::PLAYER_2:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,183,76,255));
+        _fieldMap[x][y]->setColor(D3DXCOLOR(1.0f,0.8f,0.3f,1));
         break;
       case FIELD_ID::DRIP:
-        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255,3,0,255));
+        _fieldMap[x][y]->setColor(D3DCOLOR_RGBA(255, 255, 255, 255));
         break;
       case FIELD_ID::ITEM:
         _fieldMap[x][y]->setColor(kColorNone);
@@ -70,6 +70,13 @@ void Stage::update() {
 void Stage::setFieldID(int x,int y,Stage::FIELD_ID fieldid) {
   if(x >= 0 && x < kNUM_X && y >= 0 && y < kNUM_Y)
     _field[x][y] = fieldid;
+
+  if (_field[x][y] == FIELD_ID::DRIP){
+    _fieldMap[x][y]->setTexture("./data/texture/drip.png");
+  }
+  else{
+    _fieldMap[x][y]->setTexture((unsigned int)0);
+  }
 }
 
 //==============================================================================
@@ -99,6 +106,7 @@ void Stage::reset(void){
   for (int x = 0; x < kNUM_X; x++) {
     for (int y = 0; y < kNUM_Y; y++) {
       _fieldMap[x][y]->setColor(kColorNone);
+      _fieldMap[x][y]->setTexture((unsigned int)0);
     }
   }
 }
