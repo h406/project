@@ -16,6 +16,8 @@
 #pragma comment(lib, "R/websockets_static.lib")
 #endif
 
+//#define _IS_Calibration_
+
 WsInput* WsInput::_instance = nullptr;
 
 //==============================================================================
@@ -32,6 +34,8 @@ void WsInput::init(Input* input) {
   memset(_release,0,sizeof(_release));
   memset(_repeat,0,sizeof(_repeat));
   memset(_recvData,0,sizeof(_recvData));
+  memset(_cavRot,0,sizeof(_cavRot));
+  memset(_cavCnt,0,sizeof(_cavCnt));
 
   thread tmp = thread(WsInput::wsConnect,this);
   _thread.swap(tmp);
@@ -54,12 +58,33 @@ void WsInput::uninit() {
 void WsInput::update() {
   memset(_press,0,sizeof(_press));
   bool press[14] = {false};
+  char title[256] = {0};
+
+  sprintf_s(title,"x=%1.5f y=%1.5f z=%1.5f push=%d",_recvData[0].rot.x,_recvData[0].rot.y,_recvData[0].rot.z,_recvData[0].isPush ? 1 : 0);
+  //sprintf_s(title,"x=%f y=%f z=%f push=%d",_rot[0].x,_rot[0].y,_rot[0].z,_recvData[0].isPush ? 1 : 0);
+  //sprintf_s(title,"x=%f y=%f z=%f push=%d",_cavRot[0].x - _recvData[0].rot.x,_cavRot[0].y - _recvData[0].rot.y,_cavRot[0].z - _recvData[0].rot.z,_recvData[0].isPush ? 1 : 0);
+  App::instance().setTitle(title);
 
   for(int i = 0; i < 4; i++) {
-    press[(int)VK_INPUT::LEFT]  = _recvData[i].rot.x < 0;
-    press[(int)VK_INPUT::RIGHT] = _recvData[i].rot.x > 0;
-    press[(int)VK_INPUT::UP]    = _recvData[i].rot.y < 0;
-    press[(int)VK_INPUT::DOWN]  = _recvData[i].rot.y > 0;
+#ifdef _IS_Calibration_
+    if(D3DXVec3Length(&_recvData[i].rot) == 0) {
+      //continue;
+    }
+    if(_cavCnt[i] < 60) {
+      _cavCnt[i]++;
+      _cavRot[i] += _recvData[i].rot;
+      continue;
+    }
+    else if(_cavCnt[i] == 60) {
+      _cavRot[i] = _cavRot[i] / 60.f;
+      _cavCnt[i]++;
+    }
+#endif
+
+    press[(int)VK_INPUT::LEFT]  = _cavRot[i].x + _recvData[i].rot.x < -0.15f;
+    press[(int)VK_INPUT::RIGHT] = _cavRot[i].x + _recvData[i].rot.x >  0.15f;
+    press[(int)VK_INPUT::DOWN]  = _cavRot[i].y + _recvData[i].rot.y < -0.15f;
+    press[(int)VK_INPUT::UP]    = _cavRot[i].y + _recvData[i].rot.y >  0.15f;
     press[(int)VK_INPUT::_1]    = _recvData[i].isPush;
 
     for(int nCntKey = 0; nCntKey < 14; nCntKey++) {
@@ -114,7 +139,7 @@ void WsInput::wsConnect(WsInput* wsinput) {
   context = libwebsocket_create_context(&info);
 
   for(;;) {
-    int n = libwebsocket_service(context,50);
+    int n = libwebsocket_service(context,20);
     if(n >= 0 && wsinput->_isend) {
       break;
     }
@@ -158,6 +183,7 @@ int WsInput::wsCallBackData(
   // ŽóMˆ—
   case LWS_CALLBACK_RECEIVE:
   {
+    const char* test = (const char*)in;
     RecvData* data = (RecvData*)in;
     _instance->_mutex.lock();
     memcpy(&_instance->_recvData[data->playerID],data,sizeof(RecvData));
@@ -167,6 +193,7 @@ int WsInput::wsCallBackData(
   }
 
   return 0;
+
 }
 
 bool WsInput::isPress(int id, VK_INPUT vk) const {
