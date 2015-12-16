@@ -16,7 +16,7 @@
 
 namespace{
   const int kFreezTime = 60 * 2;
-  const float kPlayerJumpPower = 20.0f;
+  const float kPlayerJumpPower = 15.0f;
   const float kJumpPower = 40.0f;
 }
 

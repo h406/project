@@ -51,9 +51,7 @@ private:
 
   // 塗るやつ系
   float _numSpriteScl[2];
-  NumberSprite* _numSprite[2];
   Sprite2D* _plus[2];
-  Sprite2D* _plusHighLight[2];
   NumberSprite* _plusNum[2];
 
   // タイマー
@@ -79,10 +77,6 @@ private:
   bool _isResult;
   bool _isStart;
   bool _isPlay;
-
-  // アイテム
-  GUI_SPRITE_2D _item[2];
-  GUI_SPRITE_2D _itemBase[2];
 
   int _maxDripNum[2];
 

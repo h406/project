@@ -107,11 +107,11 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
 
   //---- レンダーステートの設定 ----
   _pD3DDevice->SetRenderState(D3DRS_CULLMODE,D3DCULL_CCW);	// カリングの設定
-  _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);			// アルファブレンドの有効化
+  _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);			// アルファブレンドの有効化
   _pD3DDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);		// ソース
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// デスト
   _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
-  _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,TRUE);
+  _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
   _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0x66);
   _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
   _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
@@ -289,8 +289,14 @@ bool Renderer::draw(node* baceNode) {
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace.cso");
 
+      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+
       // エフェクト
       baceNode->drawChild(this,NodeType::effect);
+
+      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
       //---- サンプラーステートの設定 ----
       for(int i = 0; i < 4; ++i) {
@@ -301,12 +307,8 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MIPFILTER,D3DTEXF_NONE);
       }
 
-      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
-      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
       // 普通の2D
       baceNode->drawChild(this,NodeType::normal2D);
-      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
-      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,TRUE);
     }
 
     // フェード用

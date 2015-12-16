@@ -114,11 +114,27 @@ bool Game::init() {
   // ‰e
   _playerShadow[0] = Shadow::create();
   _playerShadow[0]->setOwner((XFileObject*)_player[0]);
+  _playerShadow[0]->setColor(D3DXCOLOR(0.6f, 0.8f, 1.0f, 1));
   this->addChild(_playerShadow[0]);
+
+  auto shadow1 = Shadow::create();
+  shadow1->setOwner((XFileObject*)_player[0]);
+  shadow1->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
+  shadow1->setScl(0.5f, 1.0f, 0.5f);
+  shadow1->setOffsetY(1.5f);
+  this->addChild(shadow1);
 
   _playerShadow[1] = Shadow::create();
   _playerShadow[1]->setOwner((XFileObject*)_player[1]);
+  _playerShadow[1]->setColor(D3DXCOLOR(1.0f, 0.9f, 0.6f, 1));
   this->addChild(_playerShadow[1]);
+
+  auto shadow2 = Shadow::create();
+  shadow2->setOwner((XFileObject*)_player[1]);
+  shadow2->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
+  shadow2->setScl(0.5f, 1.0f, 0.5f);
+  shadow2->setOffsetY(1.5f);
+  this->addChild(shadow2);
 
   // ƒCƒxƒ“ƒgƒZƒbƒg
   _eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET, bind(&Game::EventListener,this,placeholders::_1));
@@ -258,29 +274,6 @@ void Game::update() {
         int id = _effect->play("stage_lightup.efk", Vec3(randx * fieldSize.x - 500 + fieldSize.x * 0.5f, 0, randy * fieldSize.y - 500 + fieldSize.y * 0.5f));
         _effect->setEffectScl(id, Vec3(50, 50, 50));
       }
-
-      if (input->isTrigger(0, VK_INPUT::_2)) {
-        _freezeTime = 75;
-      }
-    }
-
-    if (_freezeTime != 0) {
-      switch (_freezeTime) {
-      case 75:
-        App::instance().getRenderer()->getCamera()->setCamera(_playerCam[0], 30);
-        break;
-
-      case 60:
-        _effect->play("test2.efk", playerPos[0] + Vec3(0, 20, 0));
-        _bultime = 550;
-        break;
-
-      case 10:
-        App::instance().getRenderer()->getCamera()->setCamera(_mainCamera, 10);
-        break;
-      }
-
-      _freezeTime--;
     }
 
     for (int i = 0; i < 2; i++) {
@@ -288,13 +281,7 @@ void Game::update() {
       _playerCam[i]->setPosR(playerPos[i] + Vec3(0, 10, 0));
     }
 
-    if (_bultime) {
-      Vec3 ram(float(rand() % 10), float(rand() % 10), 0);
-      _mainCamera->setPosP(_mainCamera->getPosP() + ram);
-      _mainCamera->setPosR(camvec + ram);
-      _bultime--;
-    }
-
+    // finish
     if(DataManager::instance().getData()->getTime() == 60){
       const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
                                       _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
@@ -411,26 +398,34 @@ void Game::update() {
   static int showGauge = 1;
 
   int time = DataManager::instance().getData()->getTime();
-  const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
-                                  _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
-  const int map_num_max = player_map_num[0] + player_map_num[1];
-  float rate = 0.5f;
-  if (map_num_max != 0){
-    rate = (float)player_map_num[0] / (float)map_num_max;
-  }
+  if (time > 9 * 60){
 
-  // 1P‚Ì“h‚Á‚Ä‚éƒ}ƒX‚ÌŠ„‡‘—‚é
-  if (time % 20 == 0 && showGauge == 1){
-    BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &rate);
-  }
-  // 4•b‚É1‰ñØ‚è‘Ö‚¦‚é
-  if (time % (4 * 60) == 0){
-    if (showGauge == 1){
-      // ‚Ç‚Á‚¿‚ª—D¨
-      int win = rate > 0.5 ? 0 : (rate == 0.5 ? 3 : 1);
-      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowLead, &win);
+    const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
+                                    _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+    const int map_num_max = player_map_num[0] + player_map_num[1];
+    float rate = 0.5f;
+    if (map_num_max != 0){
+      rate = (float)player_map_num[0] / (float)map_num_max;
     }
-    showGauge *= -1;
+
+    // 1P‚Ì“h‚Á‚Ä‚éƒ}ƒX‚ÌŠ„‡‘—‚é
+    if (time % 20 == 0 && showGauge == 1){
+      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &rate);
+    }
+    // 4•b‚É1‰ñØ‚è‘Ö‚¦‚é
+    if (time % (4 * 60) == 0){
+      if (showGauge == 1){
+        // ‚Ç‚Á‚¿‚ª—D¨
+        int win = rate > 0.5 ? 0 : (rate == 0.5 ? 3 : 1);
+        BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowLead, &win);
+      }
+      showGauge *= -1;
+    }
+  }else{
+    if (time % 60 == 0){
+      int cur_time = time / 60;
+      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowSec, &cur_time);
+    }
   }
 }
 
@@ -441,21 +436,18 @@ void Game::EventListener(EventData* eventData) {
   auto _effect = BaceScene::instance()->getEffect();
 
   switch(eventData->getEvent()) {
-  // ƒAƒCƒeƒ€Žæ“¾‚µ‚½
+  // “h‚éƒ}ƒX“¥‚ñ‚¾
   case EventList::PLAYER_1_DRIP_GET:
-    _effect->play("get.efk",_player[0]->getPos());
+    _effect->play("DripGetBlue.efk",_player[0]->getPos());
     break;
-
   case EventList::PLAYER_2_DRIP_GET:
     _effect->play("get.efk",_player[1]->getPos());
     break;
 
+  // Žg‚Á‚Ä‚È‚¢
   case EventList::PLAYER_1_ITEM_GET:
-    _effect->play("get.efk", _player[0]->getPos());
     break;
-
   case EventList::PLAYER_2_ITEM_GET:
-    _effect->play("get.efk", _player[1]->getPos());
     break;
 
   case EventList::PLAYER_1_DRIP_RESET:

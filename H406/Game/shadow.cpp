@@ -12,7 +12,7 @@
 #include "dataManager.h"
 
 namespace{
-  const Vec2 kShadowSize(50.f, 50.f);
+  const Vec2 kShadowSize(100.f, 100.f);
 }
 
 //==============================================================================
@@ -20,12 +20,13 @@ namespace{
 //------------------------------------------------------------------------------
 bool Shadow::init(void)
 {
-  _sprite = Sprite3DSubtractive::create("./data/texture/shadow.jpg");
+  _sprite = Sprite3D::create("./data/texture/shadow.png");
   _sprite->setSize(kShadowSize.x, kShadowSize.y) ;
   _sprite->setRotX(D3DX_PI * 0.5f);
   this->addChild(_sprite);
 
   _owner = nullptr;
+  _offsetY = 1.0f;
 
   return true;
 }
@@ -38,7 +39,7 @@ void Shadow::update(void)
   if (_owner == nullptr) return;
 
   Vec3 pos = _owner->getPos();
-  pos.y = 2.f;
+  pos.y = _offsetY;
   _pos = pos;
 }
 
@@ -47,6 +48,14 @@ void Shadow::update(void)
 //------------------------------------------------------------------------------
 void Shadow::uninit(void)
 {
+}
+
+//==============================================================================
+// setColor
+//------------------------------------------------------------------------------
+void Shadow::setColor(const D3DXCOLOR& col)
+{
+  _sprite->setColor(col);
 }
 
 

@@ -202,6 +202,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[0]->setOwner(_playerList[0]);
       _playerGetItem[0]->setTarget(_playerList[1]);
       itmeGet[0] = true;
+      _event->dispatchEvent(EventList(int(EventList::PLAYER_1_USE_ITEM)), nullptr);
     }
     break;
 
@@ -211,6 +212,7 @@ void ItemManager::EventListener(EventData* eventData) {
       _playerGetItem[1]->setOwner(_playerList[1]);
       _playerGetItem[1]->setTarget(_playerList[0]);
       itmeGet[1] = true;
+      _event->dispatchEvent(EventList(int(EventList::PLAYER_2_USE_ITEM)), nullptr);
     }
     break;
 
