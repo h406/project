@@ -30,7 +30,7 @@ App::App(int width,int height)
   : Window(width,height)
   ,_baceScene(nullptr)
   ,_sound(new Sound())
-  ,_input(new Input())
+  ,_input(nullptr)
   ,_fadeTime(0){
   _renderer = new Renderer();
   _renderer->init(this);
@@ -40,6 +40,8 @@ App::App(int width,int height)
   fadeBG->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f);
   fadeBG->setColor(D3DXCOLOR(1,1,1,1));
   _renderer->setFadeBG(fadeBG);
+
+  _input = new Input();
 }
 
 //==============================================================================

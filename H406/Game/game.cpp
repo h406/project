@@ -182,7 +182,7 @@ void Game::update() {
   auto _effect = BaceScene::instance()->getEffect();
   char fps[3];
   sprintf_s(fps, "%d", App::instance().getFps());
-  App::instance().setTitle(fps);
+  //App::instance().setTitle(fps);
 
   auto input = App::instance().getInput();
   auto _stage = BaceScene::instance()->getStage();

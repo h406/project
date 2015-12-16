@@ -47,6 +47,9 @@ private:
   mutex _mutex;
   thread _thread;
 
+  int _cavCnt[4];
+  Vec3 _cavRot[4];
+
   RecvData _recvData[4];
 
   bool _press[4][(int)VK_INPUT::MAX];
