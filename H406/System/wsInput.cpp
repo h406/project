@@ -90,9 +90,9 @@ void WsInput::update() {
 
     for(int nCntKey = 0; nCntKey < 14; nCntKey++) {
       // トリガー作成
-      _trigger[i][nCntKey] = (press[nCntKey] ^ _press[i][nCntKey]) & press[nCntKey];
+      _trigger[i][nCntKey] = (press[nCntKey] != _press[i][nCntKey]) && press[nCntKey];
       // リリース作成
-      _release[i][nCntKey] = (press[nCntKey] ^ _press[i][nCntKey]) & !press[nCntKey];
+      _release[i][nCntKey] = (press[nCntKey] != _press[i][nCntKey]) && !press[nCntKey];
       // プレス作成
       _press[i][nCntKey] = press[nCntKey];
     }
