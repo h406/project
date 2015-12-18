@@ -87,6 +87,8 @@ private:
   GUI_SPRITE_2D _oba3;
   GUI_SPRITE_2D _oji3;
   Vec2 _ojiobaPosDest[2];
+
+  float _windowScl;
 };
 
 #endif
