@@ -22,9 +22,12 @@ namespace LEDs
     MoveTitle,
     MoveSelect,
     MoveGame,
+    MoveResult,
     ShowGauge,
     ShowLead,
     ShowSec,
+    ShowFinish,
+    ShowRoundWin,
   };
 
   [StructLayout(LayoutKind.Explicit)]
@@ -37,7 +40,7 @@ namespace LEDs
 
   public partial class MainWindow : Window
   {
-    public const string kURL = "ws://192.168.11.200:7682/led";
+    public static string URL = "ws://192.168.11.200:7682/led";
 
     public Image image = null;
     public Vector Pos = new Vector(0, 0);
@@ -244,7 +247,7 @@ namespace LEDs
 
     private void SockUpdate()
     {
-      ws = new WebSocket(kURL);
+      ws = new WebSocket(URL);
 
       /// 文字列受信
       ws.MessageReceived += (s, e) =>
