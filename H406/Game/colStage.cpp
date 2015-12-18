@@ -87,8 +87,8 @@ void ColStage::update() {
         player->addDripNum(plus);
         player->jump(jump);
         // se
-        App::instance().getSound()->play("./data/sound/se/get_ink.wav", false);
-        App::instance().getSound()->play("./data/sound/se/supply_ink.wav", false);
+//        App::instance().getSound()->play("./data/sound/se/get_ink.wav", false);
+//        App::instance().getSound()->play("./data/sound/se/supply_ink.wav", false);
       }
       // ITEM
       else if (fieldID == Stage::FIELD_ID::ITEM) {

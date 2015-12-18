@@ -42,6 +42,7 @@ void ColItem::update() {
   // プレイヤーとアイテム
   for (Player* player : _playerList) {
     if (player == nullptr) continue;
+    if (player->getHitEnable() == false) continue;
 
     // ボム
     ItemBomb** bombList = _itemManager->getBombList();

@@ -89,18 +89,16 @@ bool SelectScene::init() {
   this->addChild(_vs);
 
   _s = ShuchuSen::create("./data/texture/image.png");
-  _s->setSize(1500.f,1500.f);
-  _s->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
+  _s->setSize(1500.f * 1.5f, 1500.f * 1.5f);
+  _s->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
   this->addChild(_s);
 
   // サウンドのロード
   // SE
-  App::instance().getSound()->load("./data/sound/se/fanfare.wav");
-  App::instance().getSound()->load("./data/sound/se/rod_select.wav");
+//  App::instance().getSound()->load("./data/sound/se/fanfare.wav");
+//  App::instance().getSound()->load("./data/sound/se/rod_select.wav");
   App::instance().getSound()->load("./data/sound/se/qr_ok.wav");
-  App::instance().getSound()->load("./data/sound/se/vs.wav");
-  // BGM
-  App::instance().getSound()->play("./data/sound/bgm/select_mode.wav", true);
+//  App::instance().getSound()->load("./data/sound/se/vs.wav");
 
 
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveSelect);
@@ -168,7 +166,7 @@ void SelectScene::update() {
     break;
 
   case SELECT_MODE::MAX:
-    App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
+//    App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
     App::instance().getSound()->stop("./data/sound/bgm/select_mode.wav");
     BaceScene::instance()->setCurScene(Game::create());
     break;
