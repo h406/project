@@ -16,9 +16,12 @@ enum LedEvent {
   MoveTitle,
   MoveSelect,
   MoveGame,
+  MoveResult,
   ShowGauge,
   ShowLead,
   ShowSec,
+  ShowFinish,
+  ShowRoundWin,
 };
 
 struct SendData {

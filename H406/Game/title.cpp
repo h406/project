@@ -27,7 +27,7 @@ bool Title::init() {
   camera->setCamera(_camera, 100);
   
   _LogoSprite = Sprite2D::create("./data/texture/title.png");
-  _LogoSprite->setSize(1280 * 1.0f,720 *1.0f);
+  _LogoSprite->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
   _LogoSprite->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.45f);
   _LogoSprite->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_LogoSprite);
@@ -40,7 +40,11 @@ bool Title::init() {
   f = -D3DX_PI * 0.5f;
 
   // サウンドロード
+  // BGM
+  App::instance().getSound()->play("./data/sound/bgm/select_mode.wav", true);
+  // SE
   App::instance().getSound()->load("./data/sound/se/system_ok.wav");
+
 
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveTitle);
 

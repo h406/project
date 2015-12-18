@@ -20,7 +20,7 @@
 // WinMain
 //------------------------------------------------------------------------------
 int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
-  App& app = App::instance(1280,720);
+  App& app = App::instance(1920,1080);
 
   // ƒ^ƒCƒgƒ‹
   app.setTitle("H406");

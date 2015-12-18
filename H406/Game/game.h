@@ -37,11 +37,11 @@ public:
 
   enum GAME_MODE{
     MODE_NONE = -1,
-    MODE_START_SETUP,
     MODE_START,
     MODE_PLAY,
     MODE_ROUND_FINISH,
-    MODE_NEXT_ROUND_SETUP
+    MODE_NEXT_ROUND_SETUP,
+    MODE_GAME_END,
   };
 
 private:

@@ -44,10 +44,10 @@ private:
 
   // ƒQ[ƒWŠÖŒW
   Sprite2D* _gaugeLayer;
-  Gauge* _gauge[2];
   Sprite2D* _gaugeBase;
   Sprite2D* _gaugeBack;
   Sprite2D* _gaugeGear;
+  Gauge* _gauge[2];
 
   // “h‚é‚â‚ÂŒn
   float _numSpriteScl[2];
@@ -70,6 +70,9 @@ private:
   GUI_SPRITE_2D _finish;
   GUI_SPRITE_2D _start;
   GUI_SPRITE_2D _roundString;
+  GUI_SPRITE_2D _roundStringBack;
+  Vec2 _roundStringPosDest;
+  float _roundStringSclDest;
 
   // ƒŠƒUƒ‹ƒg
   int _resultNumCount;

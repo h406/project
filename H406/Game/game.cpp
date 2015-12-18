@@ -152,20 +152,21 @@ bool Game::init() {
   // SE
   App::instance().getSound()->load("./data/sound/se/get_item.wav");
   App::instance().getSound()->load("./data/sound/se/paint.wav");
-  App::instance().getSound()->load("./data/sound/se/get_ink.wav");
-  App::instance().getSound()->load("./data/sound/se/supply_ink.wav");
-  App::instance().getSound()->load("./data/sound/se/hurry_up.wav");
-  App::instance().getSound()->load("./data/sound/se/round_finish.wav");
-  App::instance().getSound()->load("./data/sound/se/round_start.wav");
-  App::instance().getSound()->load("./data/sound/se/item_bomb.wav");
-  App::instance().getSound()->load("./data/sound/se/item_beam.wav");
-  App::instance().getSound()->load("./data/sound/se/manhole_ok.wav");
-  App::instance().getSound()->load("./data/sound/se/manhole_ng.wav");
-  App::instance().getSound()->load("./data/sound/se/round_count.wav");
+//  App::instance().getSound()->load("./data/sound/se/get_ink.wav");
+//  App::instance().getSound()->load("./data/sound/se/supply_ink.wav");
+//  App::instance().getSound()->load("./data/sound/se/hurry_up.wav");
+//  App::instance().getSound()->load("./data/sound/se/round_finish.wav");
+//  App::instance().getSound()->load("./data/sound/se/round_start.wav");
+//  App::instance().getSound()->load("./data/sound/se/item_bomb.wav");
+//  App::instance().getSound()->load("./data/sound/se/item_beam.wav");
+//  App::instance().getSound()->load("./data/sound/se/manhole_ok.wav");
+//  App::instance().getSound()->load("./data/sound/se/manhole_ng.wav");
+//  App::instance().getSound()->load("./data/sound/se/round_count.wav");
+  App::instance().getSound()->play("./data/sound/bgm/game_main.wav", true);
 
   _freezeTime = 0;
   _bultime = 0;
-  _nextModeTime = 120;
+  _nextModeTime = 200;
   _gameMode = Game::MODE_START;
 
   float gaugeRate = 0.5f;
@@ -205,19 +206,27 @@ void Game::update() {
   _mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec + Vec3(0, 50.0f, 0));
 
-  switch (_gameMode){
-  // レディ？
-  case Game::MODE_START_SETUP:
-    break;
+  // データマネージャーののアップデート
+  if (_gameMode != MODE_START){
+    DataManager::instance().update();
+  }
 
+  //---------------------------------------------------------------------------
+  // caseの処理
+  //---------------------------------------------------------------------------
+  switch (_gameMode){
   // スタート時
   case Game::MODE_START:
   {
     _nextModeTime--;
-    if (_nextModeTime == 0){
+    if (_nextModeTime == 100){
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_SHOW_BEGIN)), nullptr);
+    }else if(_nextModeTime == 40){
+      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_SHOW_END)), nullptr);
+    }else if(_nextModeTime == 0){
       _gameMode = Game::MODE_PLAY;
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_START)), nullptr);
-      App::instance().getSound()->play("./data/sound/se/round_start.wav", false);
+//      App::instance().getSound()->play("./data/sound/se/round_start.wav", false);
     }
   }
   break;
@@ -302,11 +311,12 @@ void Game::update() {
       _player[1]->setDripNum(0);
       _player[0]->setHitEnable(false);
       _player[1]->setHitEnable(false);
-      App::instance().getSound()->play("./data/sound/se/round_finish.wav", false);
+//      App::instance().getSound()->play("./data/sound/se/round_finish.wav", false);
+      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowFinish);
     }
     // 焦らすSE
     if (DataManager::instance().getData()->getTime() == 15 * 60){
-      App::instance().getSound()->play("./data/sound/se/hurry_up.wav", false);
+//      App::instance().getSound()->play("./data/sound/se/hurry_up.wav", false);
     }
 
   } // case MODE_PLAY
@@ -327,25 +337,33 @@ void Game::update() {
       // 勝敗判定
       const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
                                       _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
-      if (player_map_num[0] == player_map_num[1]){
-        _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_ROUND_WIN)), nullptr);
-        _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_ROUND_WIN)), nullptr);
-      } else if (player_map_num[0] > player_map_num[1]){
+      int winner = 0;
+
+      if (player_map_num[0] >= player_map_num[1]){
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_ROUND_WIN)), nullptr);
       } else {
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_ROUND_WIN)), nullptr);
+        winner = 1;
       }
+      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowRoundWin, &winner);
     }
     if(_nextModeTime == 0){
-      // ステージと塗り数リセット
-      _stage->reset();
-      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
-      _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
-      _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
+      const int win[2] = { DataManager::instance().getData()->getPlayerRoundWin(0),
+                           DataManager::instance().getData()->getPlayerRoundWin(1) };
+      // ゲーム終わった？
+      if (win[0] >= 2 || win[1] >= 2){
+        _gameMode = Game::MODE_GAME_END;
+      }else{
+        // ステージと塗り数リセット
+        _stage->reset();
+        _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
+        _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
+        _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
 
-      _nextModeTime = 120;
-      _gameMode = Game::MODE_NEXT_ROUND_SETUP;
-      _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_END)), nullptr);
+        _nextModeTime = 120;
+        _gameMode = Game::MODE_NEXT_ROUND_SETUP;
+        _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_END)), nullptr);
+        }
     }
   } // case MODE_ROUND_FINISH
   break;
@@ -375,23 +393,28 @@ void Game::update() {
       camera->setCamera(_mainCamera, 90);
 
       _gameMode = Game::MODE_START;
-      _nextModeTime = 120;
+      _nextModeTime = 200;
 
       float gaugeRate = 0.5f;
       BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &gaugeRate);
     }
   }
   break;
-  } // switch
 
-  if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
+  // ゲーム終了
+  case Game::MODE_GAME_END:
+  {
     _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
     BaceScene::instance()->setCurScene(Result::create());
   }
+  break;
+  } // switch
 
-  if (_gameMode != MODE_START){
-    DataManager::instance().update();
+//#ifdef _DEBUG
+  if(App::instance().getInput()->isTrigger(0,VK_INPUT::_3)) {
+    _gameMode = Game::MODE_GAME_END;
   }
+//#endif
 
   // LEDに送る処理
   if (_gameMode != MODE_PLAY) return;
@@ -414,7 +437,7 @@ void Game::update() {
     }
     // 4秒に1回切り替える
     if (time % (4 * 60) == 0){
-      if (showGauge == 1){
+      if (showGauge > 0){
         // どっちが優勢
         int win = rate > 0.5 ? 0 : (rate == 0.5 ? 3 : 1);
         BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowLead, &win);

@@ -120,9 +120,6 @@
     <ClInclude Include="dataManager.h">
       <Filter>system\data</Filter>
     </ClInclude>
-    <ClInclude Include="gameConfig.h">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="edgeEffect.h">
       <Filter>effect</Filter>
     </ClInclude>
@@ -185,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="shadow.h">
       <Filter>object\shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="gameConfig.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

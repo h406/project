@@ -12,8 +12,8 @@
 #include "dataManager.h"
 
 namespace{
-  const Vec2 kTargetPos(220.0f, 120.0f);
-  const float kOffsetX = 10.0f;
+  const Vec2 kTargetPos = Vec2(220.0f, 120.0f) * 1.5f;
+  const float kOffsetX = 20.0f;
 }
 
 //==============================================================================
