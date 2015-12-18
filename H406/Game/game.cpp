@@ -461,10 +461,16 @@ void Game::EventListener(EventData* eventData) {
   switch(eventData->getEvent()) {
   // “h‚éƒ}ƒX“¥‚ñ‚¾
   case EventList::PLAYER_1_DRIP_GET:
-    _effect->play("DripGetBlue.efk",_player[0]->getPos());
+    {
+    int id = _effect->play("DripGetBlue.efk",_player[0]->getPos());
+    _effect->setEffectScl(id, Vec3(1.5f, 1.5f, 1.5f));
+    }
     break;
   case EventList::PLAYER_2_DRIP_GET:
-    _effect->play("get.efk",_player[1]->getPos());
+    {
+    int id = _effect->play("DripGetYellow.efk", _player[1]->getPos());
+    _effect->setEffectScl(id, Vec3(1.5f, 1.5f, 1.5f));
+    }
     break;
 
   // Žg‚Á‚Ä‚È‚¢
