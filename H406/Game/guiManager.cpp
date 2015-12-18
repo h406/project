@@ -211,7 +211,7 @@ bool GuiManager::init(EventManager* eventManager)
   _roundStringBack._scl = 1.0f;
   this->addChild(_roundStringBack._sprite);
 
-  _roundString._sprite = Sprite2D::create("./data/texture/start.png");
+  _roundString._sprite = Sprite2D::create("./data/texture/round1.png");
   _roundString._sprite->setSize(kSTRIN_ROUND_SIZE.x, kSTRIN_ROUND_SIZE.y);
   _roundString._sprite->setPos(windowSizeHalf.x, windowSizeHalf.y);
   _roundString._sprite->setVisible(false);
@@ -480,6 +480,13 @@ void GuiManager::EventListener(EventData* eventData) {
   case EventList::ROUND_SHOW_BEGIN:
     _roundStringBack._sprite->setVisible(true);
     _roundString._sprite->setVisible(true);
+    if (DataManager::instance().getData()->getRound() == 1){
+      _roundString._sprite->setTexture("./data/texture/round1.png");
+    } else if (DataManager::instance().getData()->getRound() == 2){
+      _roundString._sprite->setTexture("./data/texture/round2.png");
+    } else {
+      _roundString._sprite->setTexture("./data/texture/round1.png");
+    }
     // •¶Žš—¬‚·
     _roundString._sprite->setPos(windowSizeHalf.x * 3.0f, windowSizeHalf.y);
     _roundStringPosDest = Vec2(windowSizeHalf.x, windowSizeHalf.y);
