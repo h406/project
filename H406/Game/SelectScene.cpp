@@ -26,6 +26,8 @@ ShuchuSen* _s;
 // init
 //------------------------------------------------------------------------------
 bool SelectScene::init() {
+  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+
   auto camera = App::instance().getRenderer()->getCamera();
   _camera = camera->createCamera();
   _camera->setPosP({-1581.44543f,145.f,692.873657f});
@@ -55,7 +57,7 @@ bool SelectScene::init() {
   _select = true;
 
   _nowReading = Sprite2D::create("./data/texture/now_reading.png");
-  _nowReading->setSize(670,101);
+  _nowReading->setSize(670 * _windowScl, 101 * _windowScl);
   _nowReading->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
   _nowReading->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_nowReading);
@@ -89,7 +91,7 @@ bool SelectScene::init() {
   this->addChild(_vs);
 
   _s = ShuchuSen::create("./data/texture/image.png");
-  _s->setSize(1500.f * 1.5f, 1500.f * 1.5f);
+  _s->setSize(1500.f * _windowScl, 1500.f * _windowScl);
   _s->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
   this->addChild(_s);
 

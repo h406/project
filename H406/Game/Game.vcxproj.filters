@@ -28,9 +28,6 @@
     <Filter Include="object\player">
       <UniqueIdentifier>{accd9dfe-c150-473b-a2ff-16c465ac8cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="object\staticStage">
-      <UniqueIdentifier>{be349677-35a9-46dc-a2c7-a393d55478f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="object\stage">
       <UniqueIdentifier>{3cdc9425-d5a9-49c0-ae03-eb6037a342cc}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,9 @@
     </Filter>
     <Filter Include="object\shadow">
       <UniqueIdentifier>{e873bafe-e19d-48a1-934b-8127e71a3312}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\staticStage">
+      <UniqueIdentifier>{be349677-35a9-46dc-a2c7-a393d55478f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

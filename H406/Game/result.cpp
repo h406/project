@@ -26,6 +26,7 @@ static float f =  D3DX_PI * 0.5f;
 //------------------------------------------------------------------------------
 bool Result::init() {
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
 
   auto camera = App::instance().getRenderer()->getCamera();
   _camera = camera->createCamera();
@@ -66,7 +67,7 @@ bool Result::init() {
   this->addChild(hitcheck, INT_MAX);
 
   auto _s = ShuchuSen::create("./data/texture/image.png");
-  _s->setSize(1500.f * 1.5f, 1500.f * 1.5f);
+  _s->setSize(1500.f * _windowScl, 1500.f * _windowScl);
   _s->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
   this->addChild(_s);
 

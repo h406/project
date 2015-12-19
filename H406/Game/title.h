@@ -30,6 +30,7 @@ private:
   Sprite2D* _LogoSprite;
 
   Sprite2D* _touch_start;
+  float _windowScl;
 };
 
 #endif
