@@ -21,7 +21,7 @@ static float f =  D3DX_PI * 0.5f;
 //------------------------------------------------------------------------------
 bool Title::init() {
   auto camera = App::instance().getRenderer()->getCamera();
-  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
 
   _camera = camera->createCamera();
   _camera->setPosP({0,10,0});

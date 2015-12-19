@@ -26,7 +26,7 @@ static float f =  D3DX_PI * 0.5f;
 //------------------------------------------------------------------------------
 bool Result::init() {
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
-  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
 
   auto camera = App::instance().getRenderer()->getCamera();
   _camera = camera->createCamera();
