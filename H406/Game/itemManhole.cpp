@@ -17,7 +17,7 @@
 namespace{
   const int kFreezTime = 60 * 2;
   const float kPlayerJumpPower = 15.0f;
-  const float kJumpPower = 40.0f;
+  const float kJumpPower = 50.0f;
 }
 
 //==============================================================================
@@ -60,7 +60,7 @@ void ItemManhole::update(){
         _owner->setFreeze(true);
       }
 
-      _moveDest.y -= 5.0f;
+      _moveDest.y -= 4.0f;
       _moveVec.y += (_moveDest.y - _moveVec.y) * 0.1f;
       _pos.y += _moveVec.y;
       _rot.x += 0.25f;

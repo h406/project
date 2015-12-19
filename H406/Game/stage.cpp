@@ -45,7 +45,7 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
 // update
 //------------------------------------------------------------------------------
 void Stage::update() {
-
+  return;
   for(int x = 0; x < kNUM_X; ++x) {
     for(int y = 0; y < kNUM_Y; ++y) {
       switch(_field[x][y]) {

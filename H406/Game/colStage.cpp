@@ -78,12 +78,13 @@ void ColStage::update() {
     // DRIP
     if(idX >= 0 && idX < Stage::kNUM_X && idY >= 0 && idY < Stage::kNUM_Y) {
       if(fieldID == Stage::FIELD_ID::DRIP) {
-        const int plus = rand() % 4 + 1;
+        const int maxDripNum = (player->getMaxDripNum() / 2) + 2;
+        const int plus = rand() % maxDripNum + 2;
         _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
         _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + player->getPlayerID()), (void*) plus);
 
         // HACK ‚Ç‚±‚Å‚â‚é‚©HH
-        const float jump = plus * 1.5f + 6.0f;
+        const float jump = plus * 1.5f + 5.0f;
         player->addDripNum(plus);
         player->jump(jump);
         // se

@@ -21,7 +21,7 @@ namespace{
 //------------------------------------------------------------------------------
 bool RoundIcon::init(float width, float height)
 {
-  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
   const Vec2 pos[2] = { Vec2(App::instance().getWindowSize().cx * 0.5f - (kTargetPos.x * _windowScl), (kTargetPos.y * _windowScl)),
                         Vec2(App::instance().getWindowSize().cx * 0.5f + (kTargetPos.x * _windowScl), (kTargetPos.y * _windowScl)) };
 

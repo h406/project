@@ -71,6 +71,26 @@ bool Result::init() {
   _s->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
   this->addChild(_s);
 
+
+  _playerSprite = Sprite2D::create();
+
+  const char* fileName[2] = { "./data/texture/oji_pic.png", "./data/texture/oba_pic.png" };
+  const Vec2 spriteSize = Vec2(222.0f, 512.0f);
+  const Vec2 spritePos[2] = { Vec2(spriteSize.x * _windowScl, (float)App::instance().getWindowSize().cy - (spriteSize.y * _windowScl)),
+                              Vec2((float)App::instance().getWindowSize().cx - (spriteSize.x * _windowScl), (float)App::instance().getWindowSize().cy - (spriteSize.y * _windowScl)) };
+
+  _playerSprite->setSize(spriteSize.x * _windowScl, spriteSize.y * _windowScl);
+  _playerSprite->setPos(spritePos[winPlayerId]);
+  _playerSprite->setTexture(fileName[winPlayerId]);
+  _playerSprite->setNumU(4);
+  _playerSprite->setNumV(1);
+  _playerSprite->setAnimID(0);
+  this->addChild(_playerSprite);
+
+  _playerSpritePosDest = spritePos[winPlayerId];
+
+
+
   // サウンドロード
 //  App::instance().getSound()->load("./data/sound/se/system_ok.wav");
 

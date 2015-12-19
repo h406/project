@@ -43,8 +43,8 @@ void DataManager::init()
   _data->setPlayerStatus(0,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
   _data->setPlayerStatus(1,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
 
-  _data->setPlayerStatus(0, PlayerStatus::PlayerStatus(2,2));
-  _data->setPlayerStatus(1, PlayerStatus::PlayerStatus(3,3));
+  _data->setPlayerStatus(0, PlayerStatus::PlayerStatus(3,3));
+  _data->setPlayerStatus(1, PlayerStatus::PlayerStatus(2,2));
 
   for (int i = 0; i < GameConfig::kPLAYER_MAX; i++){
     _data->setPlayerDripNum(i, 0);

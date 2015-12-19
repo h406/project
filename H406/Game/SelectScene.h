@@ -64,6 +64,9 @@ private:
 
   int _backTex[2];
   float _windowScl;
+
+  XFileObject* _stickHandle[3];
+  XFileObject* _stickBar[3];
 };
 
 

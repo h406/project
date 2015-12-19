@@ -43,7 +43,6 @@ namespace{
 bool GuiManager::init(EventManager* eventManager)
 {
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
-//  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
   _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
 
   memset(_maxDripNum, 0, sizeof(_maxDripNum));
@@ -258,7 +257,7 @@ void GuiManager::update(void)
 {
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
   const auto deta = DataManager::instance().getData();
-  const int playerDripNum[2] = { deta->getPlayerDripNum(0),deta->getPlayerDripNum(1) };
+  const int playerDripNum[2] = { deta->getPlayerDripNum(0), deta->getPlayerDripNum(1) };
 
   // 数字
   for (int i = 0; i < 2; i++) {
@@ -298,7 +297,7 @@ void GuiManager::update(void)
   // スタート文字
   if (_isStart){
     if (time > (GameConfig::kONE_ROUND_TIME * 60) - (1 * 60)){
-      _start._scl += (1.0f - _start._scl) * 0.15f;
+      _start._scl += (1.0f - _start._scl) * 0.1f;
       _start._sprite->setSize((kSTRIN_START_SIZE.x * _windowScl) *_start._scl, (kSTRIN_START_SIZE.y * _windowScl) * _start._scl);
     }
     else {
@@ -310,10 +309,10 @@ void GuiManager::update(void)
   // [ラウンド1]の処理
   if (_isPlay == false){
     Vec2 roundPos = _roundString._sprite->getPos();
-    Vec2 roundMovePos = (_roundStringPosDest - roundPos) * 0.15f;
+    Vec2 roundMovePos = (_roundStringPosDest - roundPos) * 0.1f;
     _roundString._sprite->setPos(roundPos + roundMovePos);
 
-    _roundStringBack._scl += (_roundStringSclDest - _roundStringBack._scl) * 0.15f;
+    _roundStringBack._scl += (_roundStringSclDest - _roundStringBack._scl) * 0.1f;
     _roundStringBack._sprite->setSize((float)App::instance().getWindowSize().cx, (320.0f * _windowScl) * _roundStringBack._scl);
   }
 
@@ -336,9 +335,9 @@ void GuiManager::update(void)
         _resultNum[1]._scl = 1.5f;
       }
     }
-    _resultNum[0]._scl += (_resultNumScl[0] - _resultNum[0]._scl) * 0.2f;
+    _resultNum[0]._scl += (_resultNumScl[0] - _resultNum[0]._scl) * 0.15f;
     _resultNum[0]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl)*_resultNum[0]._scl, (kRESULT_NUM_SIZE.y * _windowScl)* _resultNum[0]._scl);
-    _resultNum[1]._scl += (_resultNumScl[1] - _resultNum[1]._scl) * 0.2f;
+    _resultNum[1]._scl += (_resultNumScl[1] - _resultNum[1]._scl) * 0.15f;
     _resultNum[1]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl) *_resultNum[1]._scl, (kRESULT_NUM_SIZE.y * _windowScl) * _resultNum[1]._scl);
   }
 
@@ -347,7 +346,7 @@ void GuiManager::update(void)
   _resultNum[0]._sprite->setPos(rNumPos[0] + movePos[0]);
   _resultNum[1]._sprite->setPos(rNumPos[1] + movePos[1]);
 
-  _finish._scl += (1.0f - _finish._scl) * 0.15f;
+  _finish._scl += (1.0f - _finish._scl) * 0.1f;
   _finish._sprite->setSize((kSTRIN_FINISH_SIZE.x * _windowScl) *_finish._scl, (kSTRIN_FINISH_SIZE.y * _windowScl) * _finish._scl);
 
   // おじさんおばさん
@@ -360,6 +359,20 @@ void GuiManager::update(void)
 
     _ojiobaPosDest[0] = oji3vec * (1 - oji3num) + oba3vec * oji3num;
     _ojiobaPosDest[1] = oba3vec * (1 - oba3num) + oji3vec * oba3num;
+
+    const int mapNum[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
+                            _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+    const int leadOffset = 5;
+    if (mapNum[0] > mapNum[1] + leadOffset){
+      _oji3._sprite->setAnimID(3);
+      _oba3._sprite->setAnimID(2);
+    } else if (mapNum[1] > mapNum[0] + leadOffset){
+      _oba3._sprite->setAnimID(3);
+      _oji3._sprite->setAnimID(2);
+    } else {
+      _oba3._sprite->setAnimID(0);
+      _oji3._sprite->setAnimID(0);
+    }
 
     if (DataManager::instance().getData()->getTime() < 20 * 60) {
       const float t = (DataManager::instance().getData()->getTime() / 60.f - 20) / 5.f;

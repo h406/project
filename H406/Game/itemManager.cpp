@@ -19,6 +19,7 @@
 #include "EventData.h"
 #include "stage.h"
 #include "BaceScene.h"
+#include "shadow.h"
 
 //==============================================================================
 // init
@@ -31,6 +32,8 @@ bool ItemManager::init(EventManager* event){
   memset(_accelList, 0, sizeof(_accelList));
   memset(_manholeList, 0, sizeof(_manholeList));
   memset(_playerGetItem, 0, sizeof(_playerGetItem));
+  memset(_bombShadow, 0, sizeof(_bombShadow));
+  memset(_manholeShadow, 0, sizeof(_manholeShadow));
   memset(_field, 0, sizeof(_field));
 
   // イベントセット
@@ -114,6 +117,13 @@ void ItemManager::createBomb(){
       _item->addEventManager(_event);
       this->addChild(_item);
 
+      //auto shadow = Shadow::create();
+      //shadow->setOwner((XFileObject*)_item);
+      //shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
+      //shadow->setOffsetY(1.0f);
+      //shadow->setScl(0.5f, 0.5f, 0.5f);
+      //this->addChild(shadow);
+
       _effect->play("ItemPut.efk", pos);
       break;
     }
@@ -166,6 +176,13 @@ void ItemManager::createManhole(){
       _item->addEventManager(_event);
       _item->setFieldID(randx, randy);
       this->addChild(_item);
+
+      //auto shadow = Shadow::create();
+      //shadow->setOwner((XFileObject*)_item);
+      //shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
+      //shadow->setOffsetY(1.0f);
+      //shadow->setScl(0.5f, 0.5f, 0.5f);
+      //this->addChild(shadow);
 
       _effect->play("ItemPut.efk", pos);
       break;

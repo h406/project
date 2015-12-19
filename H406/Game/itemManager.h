@@ -19,6 +19,7 @@ class ItemManhole;
 
 class EventManager;
 class EventData;
+class shadow;
 
 //==============================================================================
 // class
@@ -46,9 +47,9 @@ public:
   void EventListener(EventData* eventData);
 
   const static int kMaxPlayers = 2;
-  const static int kBombMax = 6;
+  const static int kBombMax = 3;
   const static int kAccelMax = 3;
-  const static int kManholeMax = 6;
+  const static int kManholeMax = 3;
   // stage
   static const int kNUM_X = 12;
   static const int kNUM_Y = 12;
@@ -62,6 +63,10 @@ private:
   ItemAccel* _accelList[kAccelMax];
   ItemManhole* _manholeList[kManholeMax];
 
+  // 影
+  shadow* _bombShadow[kBombMax];
+  shadow* _manholeShadow[kManholeMax];
+
   // プレイヤー
   Player* _playerList[kMaxPlayers];
   // プレイヤーの所持アイテム情報
@@ -69,6 +74,7 @@ private:
 
   // フィールド
   bool _field[kNUM_X][kNUM_Y];
+
 };
 
 #endif

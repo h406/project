@@ -12,7 +12,6 @@
 #include "game.h"
 #include "BaceScene.h"
 #include "ShuchuSen.h"
-
 #include "ledConnect.h"
 #include "BaceScene.h"
 
@@ -30,9 +29,9 @@ bool SelectScene::init() {
 
   auto camera = App::instance().getRenderer()->getCamera();
   _camera = camera->createCamera();
-  _camera->setPosP({-1581.44543f,145.f,692.873657f});
+  //_camera->setPosP({-1581.44543f,145.f,692.873657f});
   //_camera->setPosR({-1488.66626f,145.f,655.563721f});
-  //_camera->setPosP({1226.09229f,395.000000f,-968.748413f});
+  _camera->setPosP({1226.09229f,395.000000f,-968.748413f});
   _camera->setPosR({0,0,0});
   camera->setCamera(_camera, 100);
   
@@ -61,6 +60,10 @@ bool SelectScene::init() {
   _nowReading->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
   _nowReading->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_nowReading);
+
+  // ñ’B
+//  _stickHandle[0] = XFileObject
+
 
 #ifndef _QR_DISABLE__
   _isEnd = new bool;
@@ -164,7 +167,7 @@ void SelectScene::update() {
       _oji->setPos(_oji->getPos() + (pos - _oji->getPos()) * 0.2f);
       _oba->setPos(_oba->getPos() + (pos - _oba->getPos()) * 0.2f);
       _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.1f);
-  }
+    }
     break;
 
   case SELECT_MODE::MAX:

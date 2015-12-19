@@ -51,17 +51,17 @@ namespace PlayerStatus{
   // ステータスリスト
   const Status kStickBarStatus[] = {
     {(int)StickBar::Normal,     0.5f,  0.2f,  5.f,  0,"./data/model/bar.x"},
-    {(int)StickBar::Elephant,   1.f,  0.9f,  5.f,  0,"./data/model/Elephant_bar.x"},
-    {(int)StickBar::Bird,       0.2f,  0.1f,  20.f,  0,"./data/model/Bird_bar.x"},
-    {(int)StickBar::Dolphin,    0.2f,  0.5f,  10.f,  0,"./data/model/Dolphin_bar.x"},
+    {(int)StickBar::Elephant,   1.0f,  0.9f,  5.f,  0,"./data/model/Elephant_bar.x"},
+    {(int)StickBar::Bird,       0.2f,  0.15f, 8.f,  0,"./data/model/Bird_bar.x"},
+    {(int)StickBar::Dolphin,    0.2f,  0.3f,  5.f,  0,"./data/model/Dolphin_bar.x"},
   };
 
   // ステータスリスト
   const Status kStickHandleStatus[] = {
     {(int)StickHandle::Normal,  0.5f,  1.f,  5.f,  9,"./data/model/hand.x"},
-    {(int)StickHandle::Elephant,1.f,  1.f,  3.f,  9,"./data/model/Elephant_handle.x"},
-    {(int)StickHandle::Bird,    0.2f,  0.2f,  20.f,  10,"./data/model/Bird_handle.x"},
-    {(int)StickHandle::Dolphin, 0.5f,  0.5f,  10.f,  6,"./data/model/Dolphin_handle.x"},
+    {(int)StickHandle::Elephant,1.f,   1.f,  5.f,  9,"./data/model/Elephant_handle.x"},
+    {(int)StickHandle::Bird,    0.3f,  0.3f, 8.f,  8,"./data/model/Bird_handle.x"},
+    {(int)StickHandle::Dolphin, 0.5f,  0.5f, 6.f,  7,"./data/model/Dolphin_handle.x"},
   };
 
   const unsigned int kStickBarNum = (int)StickBar::Max;

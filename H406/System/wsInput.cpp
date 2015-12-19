@@ -64,7 +64,7 @@ void WsInput::update() {
   //sprintf_s(title,"x=%1.5f y=%1.5f z=%1.5f push=%d",_recvData[0].rot.x,_recvData[0].rot.y,_recvData[0].rot.z,_recvData[0].isPush ? 1 : 0);
   //sprintf_s(title,"x=%f y=%f z=%f push=%d",_rot[0].x,_rot[0].y,_rot[0].z,_recvData[0].isPush ? 1 : 0);
   sprintf_s(title,"x=%1.5f y=%1.5f z=%1.5f push=%d",_cavRot[0].x - _recvData[0].rot.x,_cavRot[0].y - _recvData[0].rot.y,_cavRot[0].z - _recvData[0].rot.z,_recvData[0].isPush ? 1 : 0);
-  App::instance().setTitle(title);
+  //App::instance().setTitle(title);
 
   for(int i = 0; i < 4; i++) {
 #ifdef _IS_Calibration_
