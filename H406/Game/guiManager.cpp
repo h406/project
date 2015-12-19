@@ -43,7 +43,8 @@ namespace{
 bool GuiManager::init(EventManager* eventManager)
 {
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
-  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+//  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
 
   memset(_maxDripNum, 0, sizeof(_maxDripNum));
   _isPlay = false;
@@ -130,7 +131,7 @@ bool GuiManager::init(EventManager* eventManager)
 
   // ƒ‰ƒEƒ“ƒh
   _roundNum._sprite = NumberSprite::create(1, "./data/texture/num2.png");
-  _roundNum._sprite->setSize(kROUND_SIZE.x, kROUND_SIZE.y);
+  _roundNum._sprite->setSize(kROUND_SIZE.x * _windowScl, kROUND_SIZE.y * _windowScl);
   _roundNum._sprite->setColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
   _roundNum._sprite->setNumber(1);
   _roundNum._sprite->setPos(100.0f * _windowScl, -320.0f * _windowScl);
@@ -336,9 +337,9 @@ void GuiManager::update(void)
       }
     }
     _resultNum[0]._scl += (_resultNumScl[0] - _resultNum[0]._scl) * 0.2f;
-    _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x *_resultNum[0]._scl, kRESULT_NUM_SIZE.y * _resultNum[0]._scl);
+    _resultNum[0]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl)*_resultNum[0]._scl, (kRESULT_NUM_SIZE.y * _windowScl)* _resultNum[0]._scl);
     _resultNum[1]._scl += (_resultNumScl[1] - _resultNum[1]._scl) * 0.2f;
-    _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x *_resultNum[1]._scl, kRESULT_NUM_SIZE.y * _resultNum[1]._scl);
+    _resultNum[1]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl) *_resultNum[1]._scl, (kRESULT_NUM_SIZE.y * _windowScl) * _resultNum[1]._scl);
   }
 
   Vec2 rNumPos[2] = { _resultNum[0]._sprite->getPos(), _resultNum[1]._sprite->getPos() };

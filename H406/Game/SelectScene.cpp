@@ -26,7 +26,7 @@ ShuchuSen* _s;
 // init
 //------------------------------------------------------------------------------
 bool SelectScene::init() {
-  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
 
   auto camera = App::instance().getRenderer()->getCamera();
   _camera = camera->createCamera();
