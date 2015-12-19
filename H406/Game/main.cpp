@@ -22,14 +22,15 @@
 int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   const int windowWidth  = int(1280 * 0.5f);
   const int windowHeight = int(720  * 0.5f);
-    App& app = App::instance(windowWidth, windowHeight);
-//  App& app = App::instance(1920, 1080);
+ //   App& app = App::instance(windowWidth, windowHeight);
+  App& app = App::instance(1920, 1080);
 
   // タイトル
   app.setTitle("H406");
 
 #ifndef _DEBUG
   // シェーダ適用
+  //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new FxaaEffect());
   app.getRenderer()->getPostEffect()->addPostEffect(new DirlightEffect());
   app.getRenderer()->getPostEffect()->addPostEffect(new Parpix());
@@ -37,6 +38,7 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   //app.getRenderer()->getPostEffect()->addPostEffect(new SsaoEffect());
   //app.getRenderer()->getPostEffect()->addPostEffect(new TestEffect());
 #endif
+
 
   auto scene = BaceScene::create();
   scene->setCurScene(Title::create());

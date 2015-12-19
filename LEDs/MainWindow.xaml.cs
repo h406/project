@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -30,6 +31,8 @@ namespace LEDs
     ShowRoundWin,
   };
 
+
+
   [StructLayout(LayoutKind.Explicit)]
   struct RecvData
   {
@@ -40,7 +43,7 @@ namespace LEDs
 
   public partial class MainWindow : Window
   {
-    public static string URL = "ws://192.168.11.200:7682/led";
+    public static string URL = "ws://localhost:7682/led";
 
     public Image image = null;
     public Vector Pos = new Vector(0, 0);
@@ -57,7 +60,19 @@ namespace LEDs
     private BitmapImage[] BitmapImages = new BitmapImage[Enum.GetNames(typeof(LedEvent)).Length];
     private RecvData recvData;
     private string recvText = "";
+    
+    string[] kImageFile = {
+      "noneconnect.bmp",
+      "connect.bmp",
+      "title.bmp",
+      "select.bmp",
+      "game.bmp",
+      "LED_BBAwin.png",
+      "LED_GGEwin.png",
+      "white.bmp",
+    };
 
+    private Hashtable Images = new Hashtable();
 
     public MainWindow()
     {
@@ -71,21 +86,11 @@ namespace LEDs
       SockThread = new Thread(SockUpdate);
       SockThread.Start();
 
-      string[] imageFile = {
-        "noneconnect.bmp",
-        "connect.bmp",
-        "title.bmp",
-        "select.bmp",
-        "game.bmp",
-        "LED_BBAwin.png",
-        "LED_GGEwin.png",
-        "white.bmp",
-      };
-
-      for (int i = 0; i < imageFile.Length; i++)
+      for (int i = 0; i < kImageFile.Length; i++)
       {
-        Uri uri = new Uri(AppDomain.CurrentDomain.BaseDirectory + imageFile[i], UriKind.Absolute);
+        Uri uri = new Uri(AppDomain.CurrentDomain.BaseDirectory + kImageFile[i], UriKind.Absolute);
         BitmapImages[i] = new BitmapImage(uri);
+        Images.Add(kImageFile[i], i);
       }
       image.Source = BitmapImages[0];
 
@@ -112,6 +117,7 @@ namespace LEDs
         recvText = "";
       }
 
+      // イベントによって分ける
       switch (recvData.events)
       {
         // ゲージを表示する
@@ -125,65 +131,48 @@ namespace LEDs
             LeadIsShow = false;
           }
         break;
+        // リード
         case LedEvent.ShowLead:
           if(!LeadIsShow){
-            image.Source = BitmapImages[(int)recvData.events - recvData._s32];
 
-            if(recvData._s32 == 0){
+            if (recvData._s32 == 0)
+            {
+              image.Source = BitmapImages[(int)Images["LED_GGEwin.png"]];
               MakeText("1Pリード中！！", Brushes.White);
             }
             else if (recvData._s32 == 1)
             {
+              image.Source = BitmapImages[(int)Images["LED_BBAwin.png"]];
               MakeText("2Pリード中！！", Brushes.White);
             }
             else
             {
+              image.Source = BitmapImages[(int)Images["white.bmp"]];
               MakeText("接戦！！", Brushes.Black);
             }
             LeadIsShow = true;
             GaugeTimer = 0;
           }
         break;
+        // カウントダウン 無くなった
         case LedEvent.ShowSec:
         if(!LeadIsShow){
-          // 新しいテキストを生成
-          TextBlock textBlock = new TextBlock();
-          textBlock.FontSize = 20;
-          textBlock.Text = "のこり" + recvData._s32 + "秒！！";
-          textBlock.Foreground = Brushes.White;
-          this.TextCanvas.Children.Add(textBlock);
-
-          // テキストに影をつける
-          DropShadowEffect effect = new DropShadowEffect();
-          effect.ShadowDepth = 4;
-          effect.Direction = 330;
-          effect.Color = (Color)ColorConverter.ConvertFromString("black");
-          textBlock.Effect = effect;
-
-          // テキストの位置を指定
-          // verticalPosition += (int)fontsize;
-          // if (verticalPosition + (int)fontsize >= this.Height) verticalPosition = 0;
-          float verticalPosition = 0;
-          TranslateTransform transform = new TranslateTransform(0, verticalPosition);
-
-          // テキストのアニメーション
-          textBlock.RenderTransform = transform;
-          Duration duration = new Duration(TimeSpan.FromMilliseconds(1000));
-          DoubleAnimation animationX = new DoubleAnimation(0, duration);
-          animationX.Completed += new EventHandler(animationX_Completed);
-          animationX.Name = textBlock.Name;
-          transform.BeginAnimation(TranslateTransform.XProperty, animationX);
+          //なし
           LeadIsShow = true;
-          image.Source = BitmapImages[(int)recvData.events];
+          GaugeTimer = 0;
         }
         break;
-
+        // その他
         default:
+        if (!LeadIsShow)
+        {
+          //なし
           image.Source = BitmapImages[(int)recvData.events];
+          LeadIsShow = true;
           GaugeTimer = 0;
-          break;
+        }
+        break;
       }
-
       // 非表示にする
       if (recvData.events != LedEvent.ShowGauge)
       {
