@@ -162,9 +162,33 @@ namespace LEDs
           GaugeTimer = 0;
         }
         break;
+        case LedEvent.ShowFinish:
+        if (!LeadIsShow)
+        {
+          image.Source = BitmapImages[(int)Images["white.bmp"]];
+          MakeText("フィニッシュ！！", Brushes.Black);
+          LeadIsShow = true;
+        }
+        break;
+        case LedEvent.ShowRoundWin:
+        if (!LeadIsShow)
+        {
+          image.Source = BitmapImages[(int)Images["white.bmp"]];
+          MakeText((recvData._s32 + 1) + "P WIN　！！", Brushes.Black);
+          LeadIsShow = true;
+          if (recvData._s32 == 0)
+          {
+            image.Source = BitmapImages[(int)Images["LED_GGEwin.png"]];
+          }
+          else if (recvData._s32 == 1)
+          {
+            image.Source = BitmapImages[(int)Images["LED_BBAwin.png"]];
+          }
+        }
+        break;
         // その他
         default:
-        if (!LeadIsShow)
+        //if (!LeadIsShow)
         {
           //なし
           image.Source = BitmapImages[(int)recvData.events];
