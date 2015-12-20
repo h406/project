@@ -17,8 +17,10 @@ namespace {
   enum class SELECT_MODE {
     PLAYER1_SELECT,
     PLAYER1_QR,
+    PLAYER1_DECISION,
     PLAYER2_SELECT,
     PLAYER2_QR,
+    PLAYER2_DECISION,
     // ââèo
     Production,
     MAX,
@@ -64,6 +66,12 @@ private:
 
   int _backTex[2];
   float _windowScl;
+
+  XFileObject* _stickHandle[3];
+  XFileObject* _stickBar[3];
+
+  int _curSelectPlayer = 0;
+  bool _inputPermit;
 };
 
 

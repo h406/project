@@ -13,11 +13,12 @@
 #include "eventManager.h"
 #include "EventList.h"
 #include "BaceScene.h"
+#include "shadow.h"
 
 namespace{
   const int kFreezTime = 60 * 2;
   const float kPlayerJumpPower = 15.0f;
-  const float kJumpPower = 40.0f;
+  const float kJumpPower = 50.0f;
 }
 
 //==============================================================================
@@ -40,6 +41,11 @@ bool ItemManhole::init(){
   _fieldID.x = -1;
   _fieldID.y = -1;
 
+  auto shadow = Shadow::create();
+  shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.55f));
+  shadow->setScl(1.0f, 1.0f, 1.0f);
+  this->addChild(shadow);
+
   return true;
 }
 
@@ -50,8 +56,11 @@ void ItemManhole::update(){
   if (_is_death == false){
     if (_is_use && _owner){
 
+      Vec3 pos = _item->getPos();
+      Vec3 rot = _item->getRot();
+
       _frameCount--;
-      if (_frameCount < 0 && _pos.y <= -1.0f){
+      if (_frameCount < 0 && pos.y <= -100.0f){
           _is_death = true;
         return;
       }
@@ -60,11 +69,16 @@ void ItemManhole::update(){
         _owner->setFreeze(true);
       }
 
-      _moveDest.y -= 5.0f;
+      _moveDest.y -= 4.0f;
       _moveVec.y += (_moveDest.y - _moveVec.y) * 0.1f;
-      _pos.y += _moveVec.y;
-      _rot.x += 0.25f;
-      _rot.y += 0.1f;
+//      _pos.y += _moveVec.y;
+//      _rot.x += 0.25f;
+//      _rot.y += 0.1f;
+      pos.y += _moveVec.y;
+      rot.x += 0.25f;
+      rot.y += 0.1f;
+      _item->setPos(pos);
+      _item->setRot(rot);
     }
   }
   _moveDest = Vec3(0.0f, 0.0f, 0.0f);

@@ -95,8 +95,8 @@ void Player::update(void)
       _player[0]->setRotY(rot);
       _player[1]->setRotY(rot);
 
-      _playerRotDest.x = -cosf(rot) * (D3DX_PI * 0.06f);
-      _playerRotDest.z =  sinf(rot) * (D3DX_PI * 0.06f);
+      _playerRotDest.x = -cosf(rot) * (D3DX_PI * 0.1f);
+      _playerRotDest.z =  sinf(rot) * (D3DX_PI * 0.1f);
       _rot.x += (_playerRotDest.x - _rot.x) * 0.1f;
       _rot.z += (_playerRotDest.z - _rot.z) * 0.1f;
     }
@@ -104,8 +104,8 @@ void Player::update(void)
       // ê√é~íÜ
       _playerRotDest.x = 0.0f;
       _playerRotDest.z = 0.0f;
-      _rot.x += (_playerRotDest.x - _rot.x) * 0.2f;
-      _rot.z += (_playerRotDest.z - _rot.z) * 0.2f;
+      _rot.x += (_playerRotDest.x - _rot.x) * 0.1f;
+      _rot.z += (_playerRotDest.z - _rot.z) * 0.1f;
     }
   }
   else{
@@ -114,8 +114,8 @@ void Player::update(void)
     _playerRotDest.x = -cosf(rot) * (D3DX_PI * 0.4f);
     _playerRotDest.z = sinf(rot) * (D3DX_PI * 0.4f);
     _playerRotDest.y = rot;
-    _rot.x += (_playerRotDest.x - _rot.x) * 0.5f;
-    _rot.z += (_playerRotDest.z - _rot.z) * 0.5f;
+    _rot.x += (_playerRotDest.x - _rot.x) * 0.3f;
+    _rot.z += (_playerRotDest.z - _rot.z) * 0.3f;
     // èdóÕ
     _playerMoveDest.y -= kGRAVITY;
     _playerMoveVec.y += (_playerMoveDest.y - _playerMoveVec.y) * 0.1f;

@@ -33,8 +33,13 @@ private:
   float _winSpriteScl;
 
   Player* _player;
+  Sprite2D* _playerSprite;
+  Vec2 _playerSpritePosDest;
 
   float _windowScl;
+  float _frameCount;
+  int _winPlayerId;
+  bool _isVisible;
 };
 
 #endif

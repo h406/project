@@ -66,7 +66,7 @@ bool Game::init() {
   _mainCamera = camera->createCamera();
   _mainCamera->setPosP({0,600,-900});
   _mainCamera->setPosR({0,0,-70});
-  camera->setCamera(_mainCamera, 100);
+  camera->setCamera(_mainCamera, 120);
 
   _playerCam[0] = camera->createCamera();
   _playerCam[0]->setPosP({0,0,0});
@@ -149,6 +149,8 @@ bool Game::init() {
   // サウンドのロード
   // BGM
   App::instance().getSound()->load("./data/sound/bgm/game_main.wav");
+  //  App::instance().getSound()->play("./data/sound/bgm/game_main.wav", true);
+  App::instance().getSound()->play("./data/sound/bgm/game_main_loop.wav", true);
   // SE
   App::instance().getSound()->load("./data/sound/se/get_item.wav");
   App::instance().getSound()->load("./data/sound/se/paint.wav");
@@ -162,11 +164,10 @@ bool Game::init() {
 //  App::instance().getSound()->load("./data/sound/se/manhole_ok.wav");
 //  App::instance().getSound()->load("./data/sound/se/manhole_ng.wav");
 //  App::instance().getSound()->load("./data/sound/se/round_count.wav");
-  App::instance().getSound()->play("./data/sound/bgm/game_main.wav", true);
 
   _freezeTime = 0;
   _bultime = 0;
-  _nextModeTime = 200;
+  _nextModeTime = 220;
   _gameMode = Game::MODE_START;
 
   float gaugeRate = 0.5f;
@@ -183,7 +184,7 @@ void Game::update() {
   auto _effect = BaceScene::instance()->getEffect();
   char fps[3];
   sprintf_s(fps, "%d", App::instance().getFps());
-  //App::instance().setTitle(fps);
+  App::instance().setTitle(fps);
 
   auto input = App::instance().getInput();
   auto _stage = BaceScene::instance()->getStage();
@@ -219,14 +220,16 @@ void Game::update() {
   case Game::MODE_START:
   {
     _nextModeTime--;
-    if (_nextModeTime == 100){
+    if (_nextModeTime == 130){
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_SHOW_BEGIN)), nullptr);
-    }else if(_nextModeTime == 40){
+    }else if(_nextModeTime == 50){
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_SHOW_END)), nullptr);
     }else if(_nextModeTime == 0){
       _gameMode = Game::MODE_PLAY;
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_START)), nullptr);
 //      App::instance().getSound()->play("./data/sound/se/round_start.wav", false);
+      App::instance().getSound()->stop("./data/sound/bgm/game_main_loop.wav");
+      App::instance().getSound()->play("./data/sound/bgm/game_main.wav", false);
     }
   }
   break;
@@ -258,22 +261,26 @@ void Game::update() {
       }
     }
 
-    // ボムちゃん生成
-    if ((rand() % (60 * 1)) == 0){
-      _itemManager->createBomb();
-    }
-    // スピードアップ生成
-    if ((rand() % (60 * 1)) == 0){
-      //_itemManager->createAccel();
-    }
-    // マンホール生成
-    if ((rand() % (60 * 1)) == 0){
-      _itemManager->createManhole();
+    // 開始15秒間は出ないよ
+    if (GameConfig::kTIME_MAX - DataManager::instance().getData()->getTime() >= 15 * 60)
+    {
+      // ボムちゃん生成
+      if ((rand() % (100 * 1)) == 0){
+        _itemManager->createBomb();
+      }
+      // スピードアップ生成
+      if ((rand() % (120 * 1)) == 0){
+        //_itemManager->createAccel();
+      }
+      // マンホール生成
+      if ((rand() % (100 * 1)) == 0){
+        _itemManager->createManhole();
+      }
     }
 
     // 塗るマス生成
     if (_nextModeTime == 0){
-      if ((rand() % (60 * 1)) == 0) {
+      if ((rand() % (70 * 1)) == 0) {
         int randx = rand() % Stage::kNUM_X;
         int randy = rand() % Stage::kNUM_Y;
         _stage->setFieldID(randx, randy, Stage::FIELD_ID::DRIP);
@@ -299,7 +306,7 @@ void Game::update() {
       }else{
         _mapToTime = 3 * player_map_num[0];
       }
-      _mapToTime += 350;
+      _mapToTime += 400;
       _nextModeTime = _mapToTime;
       _gameMode = Game::MODE_ROUND_FINISH;
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_FINISH)), nullptr);
@@ -311,7 +318,9 @@ void Game::update() {
       _player[1]->setDripNum(0);
       _player[0]->setHitEnable(false);
       _player[1]->setHitEnable(false);
-//      App::instance().getSound()->play("./data/sound/se/round_finish.wav", false);
+      App::instance().getSound()->play("./data/sound/se/hoissle.wav", false);
+      App::instance().getSound()->play("./data/sound/bgm/game_main_loop.wav", true);
+      App::instance().getSound()->stop("./data/sound/bgm/game_main.wav");
       BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowFinish);
     }
     // 焦らすSE
@@ -325,12 +334,12 @@ void Game::update() {
   case Game::MODE_ROUND_FINISH:
   {
     _nextModeTime--;
-    if(_nextModeTime == _mapToTime - 100){
+    if(_nextModeTime == _mapToTime - 130){
       auto camera = App::instance().getRenderer()->getCamera();
-      camera->setCamera(_roundChangeCam, 90);
+      camera->setCamera(_roundChangeCam, 120);
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_START)), nullptr);
     }
-    if (_nextModeTime == _mapToTime - 200){
+    if (_nextModeTime == _mapToTime - 250){
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT)), nullptr);
     }
     if (_nextModeTime == 80){
@@ -390,10 +399,10 @@ void Game::update() {
       _eventManager->dispatchEvent(EventList(int(EventList::NEXT_ROUND)), nullptr);
 
       auto camera = App::instance().getRenderer()->getCamera();
-      camera->setCamera(_mainCamera, 90);
+      camera->setCamera(_mainCamera, 120);
 
       _gameMode = Game::MODE_START;
-      _nextModeTime = 200;
+      _nextModeTime = 240;
 
       float gaugeRate = 0.5f;
       BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &gaugeRate);
@@ -404,6 +413,8 @@ void Game::update() {
   // ゲーム終了
   case Game::MODE_GAME_END:
   {
+    App::instance().getSound()->stop("./data/sound/bgm/game_main.wav");
+    App::instance().getSound()->stop("./data/sound/bgm/game_main_loop.wav");
     _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
     BaceScene::instance()->setCurScene(Result::create());
   }
@@ -443,7 +454,6 @@ void Game::update() {
       }
       showGauge *= -1;
     }
-
     //  }else{
 //    if (time % 60 == 0){
 //      int cur_time = time / 60;

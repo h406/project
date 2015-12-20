@@ -19,6 +19,11 @@
 #include "EventData.h"
 #include "stage.h"
 #include "BaceScene.h"
+#include "shadow.h"
+
+namespace{
+  const Vec3 kEffetSclItemPut = Vec3(2, 2, 2);
+}
 
 //==============================================================================
 // init
@@ -31,6 +36,8 @@ bool ItemManager::init(EventManager* event){
   memset(_accelList, 0, sizeof(_accelList));
   memset(_manholeList, 0, sizeof(_manholeList));
   memset(_playerGetItem, 0, sizeof(_playerGetItem));
+  memset(_bombShadow, 0, sizeof(_bombShadow));
+  memset(_manholeShadow, 0, sizeof(_manholeShadow));
   memset(_field, 0, sizeof(_field));
 
   // イベントセット
@@ -114,7 +121,8 @@ void ItemManager::createBomb(){
       _item->addEventManager(_event);
       this->addChild(_item);
 
-      _effect->play("ItemPut.efk", pos);
+      int id = _effect->play("ItemPut.efk", pos);
+      _effect->setEffectScl(id, kEffetSclItemPut);
       break;
     }
   }
@@ -140,7 +148,8 @@ void ItemManager::createAccel(){
       _item->setFieldID(randx, randy);
       this->addChild(_item);
 
-      _effect->play("ItemPut.efk", pos);
+      int id = _effect->play("ItemPut.efk", pos);
+      _effect->setEffectScl(id, kEffetSclItemPut);
       break;
     }
   }
@@ -167,7 +176,8 @@ void ItemManager::createManhole(){
       _item->setFieldID(randx, randy);
       this->addChild(_item);
 
-      _effect->play("ItemPut.efk", pos);
+      int id = _effect->play("ItemPut.efk", pos);
+      _effect->setEffectScl(id, kEffetSclItemPut);
       break;
     }
   }

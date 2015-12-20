@@ -13,6 +13,7 @@
 #include "eventManager.h"
 #include "EventList.h"
 #include "BaceScene.h"
+#include "shadow.h"
 
 namespace{
   const float kMovement = 3.0f;
@@ -44,6 +45,11 @@ bool ItemBomb::init(){
   _nowFrame = 0;
   _allFrame = 90;
   _effectID = -1;
+
+  auto shadow = Shadow::create();
+  shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
+  shadow->setScl(0.6f, 0.6f, 0.6f);
+  this->addChild(shadow);
 
   return true;
 }

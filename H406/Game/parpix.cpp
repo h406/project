@@ -49,10 +49,10 @@ void Parpix::draw(Renderer *renderer,Sprite2D* sprite) {
 
   f += 0.02f;
 
-  col[0] = Vec3(1,0,0);
-  col[1] = Vec3(0,1,0);
-  col[2] = Vec3(0,0,1);
-  col[3] = Vec3(1,1,1);
+  col[0] = Vec3(1, 1, 0.1f);
+  col[1] = Vec3(0.1f, 0.1f, 1);
+  col[2] = Vec3(1, 1, 0.1f);
+  col[3] = Vec3(0.3f, 0.3f, 1);
 
   for(int i = 0; i < 4; i++) {
     dir[i] = Vec3(cosf(f + D3DX_PI * 0.5f * i),1,sinf(f + D3DX_PI * 0.5f * i));
