@@ -78,7 +78,7 @@ void ColStage::update() {
     // DRIP
     if(idX >= 0 && idX < Stage::kNUM_X && idY >= 0 && idY < Stage::kNUM_Y) {
       if(fieldID == Stage::FIELD_ID::DRIP) {
-        const int maxDripNum = (player->getMaxDripNum() / 2) + 2;
+        const int maxDripNum = (player->getMaxDripNum() / 2) + 1;
         const int plus = rand() % maxDripNum + 2;
         _stage->setFieldID(idX,idY,Stage::FIELD_ID(int(Stage::FIELD_ID::PLAYER_1) + player->getPlayerID()));
         _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_GET) + player->getPlayerID()), (void*) plus);
@@ -90,6 +90,7 @@ void ColStage::update() {
         // se
 //        App::instance().getSound()->play("./data/sound/se/get_ink.wav", false);
 //        App::instance().getSound()->play("./data/sound/se/supply_ink.wav", false);
+        App::instance().getSound()->play("./data/sound/se/get_item.wav", false);
       }
       // ITEM
       else if (fieldID == Stage::FIELD_ID::ITEM) {

@@ -47,12 +47,12 @@ bool StaticStage::init() {
 //  sky->setPosY(-450.f);
 //  this->addChild(sky);
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
   XFileObject* backField = XFileObject::create("./data/model/Building.x");
-  backField->setPos(Vec3(0,-450,0));
+  backField->setPos(Vec3(0,-420,0));
   backField->setScl(Vec3(20,20,20));
   this->addChild(backField);
-#endif
+//#endif
 
   XFileObject* higthway = XFileObject::create("./data/model/hightway.x");
   higthway->setPos(Vec3(0, -10, 0));

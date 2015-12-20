@@ -21,6 +21,10 @@
 #include "BaceScene.h"
 #include "shadow.h"
 
+namespace{
+  const Vec3 kEffetSclItemPut = Vec3(2, 2, 2);
+}
+
 //==============================================================================
 // init
 //------------------------------------------------------------------------------
@@ -117,14 +121,8 @@ void ItemManager::createBomb(){
       _item->addEventManager(_event);
       this->addChild(_item);
 
-      //auto shadow = Shadow::create();
-      //shadow->setOwner((XFileObject*)_item);
-      //shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
-      //shadow->setOffsetY(1.0f);
-      //shadow->setScl(0.5f, 0.5f, 0.5f);
-      //this->addChild(shadow);
-
-      _effect->play("ItemPut.efk", pos);
+      int id = _effect->play("ItemPut.efk", pos);
+      _effect->setEffectScl(id, kEffetSclItemPut);
       break;
     }
   }
@@ -150,7 +148,8 @@ void ItemManager::createAccel(){
       _item->setFieldID(randx, randy);
       this->addChild(_item);
 
-      _effect->play("ItemPut.efk", pos);
+      int id = _effect->play("ItemPut.efk", pos);
+      _effect->setEffectScl(id, kEffetSclItemPut);
       break;
     }
   }
@@ -177,14 +176,8 @@ void ItemManager::createManhole(){
       _item->setFieldID(randx, randy);
       this->addChild(_item);
 
-      //auto shadow = Shadow::create();
-      //shadow->setOwner((XFileObject*)_item);
-      //shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
-      //shadow->setOffsetY(1.0f);
-      //shadow->setScl(0.5f, 0.5f, 0.5f);
-      //this->addChild(shadow);
-
-      _effect->play("ItemPut.efk", pos);
+      int id = _effect->play("ItemPut.efk", pos);
+      _effect->setEffectScl(id, kEffetSclItemPut);
       break;
     }
   }

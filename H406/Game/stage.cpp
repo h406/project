@@ -45,28 +45,27 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
 // update
 //------------------------------------------------------------------------------
 void Stage::update() {
-  return;
-  for(int x = 0; x < kNUM_X; ++x) {
-    for(int y = 0; y < kNUM_Y; ++y) {
-      switch(_field[x][y]) {
-      case FIELD_ID::PLAYER_1:
-        _fieldMap[x][y]->setColor(kColorPlayer1);
-        break;
-      case FIELD_ID::PLAYER_2:
-        _fieldMap[x][y]->setColor(kColorPlayer2);
-        break;
-      case FIELD_ID::DRIP:
-        _fieldMap[x][y]->setColor(kColorDrip);
-        break;
-      case FIELD_ID::ITEM:
-        _fieldMap[x][y]->setColor(kColorNone);
-        break;
-      case FIELD_ID::NONE:
-        _fieldMap[x][y]->setColor(kColorNone);
-        break;
-      }
-    }
-  }
+//  for(int x = 0; x < kNUM_X; ++x) {
+//    for(int y = 0; y < kNUM_Y; ++y) {
+//      switch(_field[x][y]) {
+//      case FIELD_ID::PLAYER_1:
+//        _fieldMap[x][y]->setColor(kColorPlayer1);
+//        break;
+//      case FIELD_ID::PLAYER_2:
+//        _fieldMap[x][y]->setColor(kColorPlayer2);
+//        break;
+//      case FIELD_ID::DRIP:
+//        _fieldMap[x][y]->setColor(kColorDrip);
+//        break;
+//      case FIELD_ID::ITEM:
+//        _fieldMap[x][y]->setColor(kColorNone);
+//        break;
+//      case FIELD_ID::NONE:
+//        _fieldMap[x][y]->setColor(kColorNone);
+//        break;
+//      }
+//    }
+//  }
 }
 
 //==============================================================================

@@ -36,6 +36,7 @@ bool Shadow::init(void)
 //------------------------------------------------------------------------------
 void Shadow::update(void)
 {
+  _pos.y = _offsetY;
   if (_owner == nullptr) return;
 
   Vec3 pos = _owner->getPos();
