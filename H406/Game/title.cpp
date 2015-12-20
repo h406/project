@@ -22,6 +22,7 @@ static float f =  D3DX_PI * 0.5f;
 bool Title::init() {
   auto camera = App::instance().getRenderer()->getCamera();
   _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
+  _inputPermit = false;
 
   _camera = camera->createCamera();
   _camera->setPosP({0,10,0});
@@ -49,7 +50,6 @@ bool Title::init() {
   // SE
   App::instance().getSound()->load("./data/sound/se/system_ok.wav");
 
-
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveTitle);
 
   return true;
@@ -64,16 +64,12 @@ void Title::update() {
 
   _touch_start->setColor(D3DXCOLOR(1,1,1,min(1.f,sinf(f*10) * 10.f)));
 
-  if(App::instance().getInput()->isRelease(0,VK_INPUT::_1)) {
+  if (App::instance().getInput()->isTrigger(0, VK_INPUT::_1) && _inputPermit == true) {
     BaceScene::instance()->setCurScene(SelectScene::create());
     App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
   }
 
-  if(App::instance().getInput()->isRelease(0,VK_INPUT::_2)) {
-//    BaceScene::instance()->getLedConnect()->sendText("‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-    float a = 0.3f;
-    BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &a);
-  }
+  _inputPermit = true;
 }
 
 void Title::uninit() {

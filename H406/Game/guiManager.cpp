@@ -30,9 +30,9 @@ namespace{
   const Vec2 kOJIOBA_SIZE          = Vec2(222, 256);
   const float kRESULT_NUM_OFFSETX  = 300.f;
 
-  const Vec2 kSTRIN_START_SIZE     = Vec2(512 * 1.5f, 128 * 1.5f);
-  const Vec2 kSTRIN_FINISH_SIZE    = Vec2(512 * 1.5f, 128 * 1.5f);
-  const Vec2 kSTRIN_ROUND_SIZE     = Vec2(512 * 1.5f, 128 * 1.5f);
+  const Vec2 kSTRIN_START_SIZE     = Vec2(512 * 1.6f, 128 * 1.6f);
+  const Vec2 kSTRIN_FINISH_SIZE    = Vec2(1920 * 0.5f, 480 * 0.5f);
+  const Vec2 kSTRIN_ROUND_SIZE     = Vec2(1920 * 0.45f, 480 * 0.45f);
   const Vec2 kNumSize              = Vec2(128.f, 128.f) * 1.5f;
 }
 
@@ -131,7 +131,7 @@ bool GuiManager::init(EventManager* eventManager)
   _roundNum._sprite->setSize(kROUND_SIZE.x * _windowScl, kROUND_SIZE.y * _windowScl);
   _roundNum._sprite->setColor(D3DXCOLOR(1.0f, 0.5f, 0.2f, 1.0f));
   _roundNum._sprite->setNumber(1);
-  _roundNum._sprite->setPos(80.0f * _windowScl, -320.0f * _windowScl);
+  _roundNum._sprite->setPos(80.0f * _windowScl, -312.0f * _windowScl);
   _roundNum._scl = 1.0f;
   _gaugeLayer->addChild(_roundNum._sprite);
 
@@ -503,7 +503,7 @@ void GuiManager::EventListener(EventData* eventData) {
     } else if (DataManager::instance().getData()->getRound() == 2){
       _roundString._sprite->setTexture("./data/texture/round2.png");
     } else {
-      _roundString._sprite->setTexture("./data/texture/round1.png");
+      _roundString._sprite->setTexture("./data/texture/round3.png");
     }
     // •¶Žš—¬‚·
     _roundString._sprite->setPos(windowSizeHalf.x * 3.0f, windowSizeHalf.y);

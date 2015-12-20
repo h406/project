@@ -31,6 +31,7 @@ private:
 
   Sprite2D* _touch_start;
   float _windowScl;
+  bool _inputPermit;
 };
 
 #endif
