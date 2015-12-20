@@ -23,18 +23,18 @@
 
 namespace{
   const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
-  const D3DXVECTOR2 kTIME_SIZE = D3DXVECTOR2(128.0f, 128.0f) * 0.75f;
-  const D3DXVECTOR2 kSTART_TIME_SIZE = D3DXVECTOR2(256.0f, 256.0f);
-  const D3DXVECTOR2 kRESULT_NUM_SIZE = D3DXVECTOR2(128.0f * 1.5f, 128.0f * 1.5f) * 1.5f;
-  const D3DXVECTOR2 kITEM_SIZE = D3DXVECTOR2(128.0f, 128.0f) * 1.5f;
-  const D3DXVECTOR2 kROUND_SIZE = D3DXVECTOR2(64.0f, 64.0f) * 1.2f;
-  const D3DXVECTOR2 kOJIOBA_SIZE = D3DXVECTOR2(222, 256) * 1.2f;
-  const float kRESULT_NUM_OFFSETX = 300.f * 1.5f;
+  const Vec2 kTIME_SIZE            = Vec2(128.0f, 128.0f) * 0.5f;
+  const Vec2 kSTART_TIME_SIZE      = Vec2(256.0f, 256.0f);
+  const Vec2 kRESULT_NUM_SIZE      = Vec2(128.0f * 1.5f, 128.0f * 1.5f);
+  const Vec2 kITEM_SIZE            = Vec2(128.0f, 128.0f);
+  const Vec2 kROUND_SIZE           = Vec2(64.0f, 64.0f);
+  const Vec2 kOJIOBA_SIZE          = Vec2(222, 256);
+  const float kRESULT_NUM_OFFSETX  = 300.f;
 
-  const D3DXVECTOR2 kSTRIN_START_SIZE = D3DXVECTOR2(512 * 1.5f, 128 * 1.5f) * 1.5f;
-  const D3DXVECTOR2 kSTRIN_FINISH_SIZE = D3DXVECTOR2(512 * 1.5f, 128 * 1.5f) * 1.5f;
-  const D3DXVECTOR2 kSTRIN_ROUND_SIZE = D3DXVECTOR2(512 * 1.5f, 128 * 1.5f) * 1.5f;
-  const Vec2 kNumSize = Vec2(128.f, 128.f) * 2.0f;
+  const Vec2 kSTRIN_START_SIZE     = Vec2(512 * 1.5f, 128 * 1.5f);
+  const Vec2 kSTRIN_FINISH_SIZE    = Vec2(512 * 1.5f, 128 * 1.5f);
+  const Vec2 kSTRIN_ROUND_SIZE     = Vec2(512 * 1.5f, 128 * 1.5f);
+  const Vec2 kNumSize              = Vec2(128.f, 128.f) * 1.5f;
 }
 
 //==============================================================================
@@ -43,6 +43,8 @@ namespace{
 bool GuiManager::init(EventManager* eventManager)
 {
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
+//  _windowScl = App::instance().getWindowSize().cx > 1280 ? 1.5f : 1.0f;
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
 
   memset(_maxDripNum, 0, sizeof(_maxDripNum));
   _isPlay = false;
@@ -60,26 +62,28 @@ bool GuiManager::init(EventManager* eventManager)
   _gaugeLayer->addChild(_gaugeBack);
 
   // ギア
+  const Vec2 kGEAR_SIZE = Vec2(256.f, 256.f);
   _gaugeGear = Sprite2D::create("./data/texture/gauge_03.png");
-  _gaugeGear->setSize(348.f/* / 1.5f*/, 348.f/* / 1.5f*/);
-  _gaugeGear->setPos(0.0f, -_gaugeGear->getScl().y - 100.0f);
+  _gaugeGear->setSize(kGEAR_SIZE.x * _windowScl, kGEAR_SIZE.y * _windowScl);
+  _gaugeGear->setPos(0.0f, -_gaugeGear->getScl().y - (50.0f * _windowScl));
   _gaugeLayer->addChild(_gaugeGear);
 
-  const Vec2 kGaugeSize = Vec2(800.f, 300.f)/* / 1.5f*/;
-  _gauge[0] = Gauge::create(kGaugeSize.x, kGaugeSize.y);
-  _gauge[0]->setPos((kGaugeSize.x * 0.5f) - windowSizeHalf.x, (kGaugeSize.y * 0.5f) - windowSizeHalf.y);
+  // 動くゲージ
+  const Vec2 kGaugeSize = Vec2(800.f, 300.f) / 1.5f /* / 1.5f*/;
+  _gauge[0] = Gauge::create(kGaugeSize.x * _windowScl, kGaugeSize.y * _windowScl);
+  _gauge[0]->setPos(((kGaugeSize.x * _windowScl) * 0.5f) - windowSizeHalf.x, ((kGaugeSize.y * _windowScl) * 0.5f) - windowSizeHalf.y);
   _gauge[0]->setColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
   _gauge[0]->setTexture("./data/texture/gauge_01.png");
   _gaugeLayer->addChild(_gauge[0]);
 
-  _gauge[1] = Gauge::create(kGaugeSize.x, kGaugeSize.y);
-  _gauge[1]->setPos(windowSizeHalf.x - kGaugeSize.x * 0.5f, (kGaugeSize.y * 0.5f) - windowSizeHalf.y);
+  _gauge[1] = Gauge::create(kGaugeSize.x * _windowScl, kGaugeSize.y * _windowScl);
+  _gauge[1]->setPos(windowSizeHalf.x - (kGaugeSize.x * _windowScl) * 0.5f, ((kGaugeSize.y * _windowScl) * 0.5f) - windowSizeHalf.y);
   _gauge[1]->setColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
   _gauge[1]->setFlip(true);
   _gauge[1]->setTexture("./data/texture/gauge_02.png");
   _gaugeLayer->addChild(_gauge[1]);
 
-  // ゲージ
+  // ゲージ本体
   _gaugeBase = Sprite2D::create("./data/texture/gauge_00.png");
   _gaugeBase->setColor(D3DXCOLOR(1, 1, 1, 1));
   _gaugeBase->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
@@ -87,8 +91,8 @@ bool GuiManager::init(EventManager* eventManager)
 
   // 数字
   _plus[0] = Sprite2D::create("./data/texture/num2.png");
-  _plus[0]->setSize(kNumSize.x, kNumSize.y);
-  _plus[0]->setPos(kNumSize.x, windowSizeHalf.y);
+  _plus[0]->setSize(kNumSize.x * _windowScl, kNumSize.y * _windowScl);
+  _plus[0]->setPos(kNumSize.x * _windowScl, windowSizeHalf.y);
   _plus[0]->setNumU(11);
   _plus[0]->setNumV(1);
   _plus[0]->setAnimID(10);
@@ -96,8 +100,8 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_plus[0]);
 
   _plus[1] = Sprite2D::create("./data/texture/num2.png");
-  _plus[1]->setSize(kNumSize.x, kNumSize.y);
-  _plus[1]->setPos(App::instance().getWindowSize().cx - (kNumSize.x * 2.f), windowSizeHalf.y);
+  _plus[1]->setSize(kNumSize.x * _windowScl, kNumSize.y * _windowScl);
+  _plus[1]->setPos(App::instance().getWindowSize().cx - ((kNumSize.x * _windowScl) * 2.f), windowSizeHalf.y);
   _plus[1]->setNumU(11);
   _plus[1]->setNumV(1);
   _plus[1]->setAnimID(10);
@@ -105,45 +109,45 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_plus[1]);
 
   _plusNum[0] = NumberSprite::create(1, "./data/texture/num2.png");
-  _plusNum[0]->setSize(kNumSize.x, kNumSize.y);
-  _plusNum[0]->setPos(kNumSize.x * 2.f, windowSizeHalf.y);
+  _plusNum[0]->setSize(kNumSize.x * _windowScl, kNumSize.y * _windowScl);
+  _plusNum[0]->setPos((kNumSize.x * _windowScl) * 2.f, windowSizeHalf.y);
   this->addChild(_plusNum[0]);
 
   _plusNum[1] = NumberSprite::create(1, "./data/texture/num2.png");
   _plusNum[1]->setSize(kNumSize.x, kNumSize.y);
-  _plusNum[1]->setPos(App::instance().getWindowSize().cx - kNumSize.x, windowSizeHalf.y);
+  _plusNum[1]->setPos(App::instance().getWindowSize().cx - (kNumSize.x * _windowScl), windowSizeHalf.y);
   this->addChild(_plusNum[1]);
 
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
 
   // タイマー
   _time._sprite = NumberSprite::create(2, "./data/texture/num2.png");
-  _time._sprite->setSize(kTIME_SIZE.x, kTIME_SIZE.y);
+  _time._sprite->setSize(kTIME_SIZE.x * _windowScl, kTIME_SIZE.y * _windowScl);
   _time._sprite->setColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
   _time._sprite->setNumber(GameConfig::kONE_ROUND_TIME);
-  _time._sprite->setPos(0.0f, -260.0f * 1.5f);
+  _time._sprite->setPos(0.0f, -260.0f * _windowScl);
   _time._scl = 1.0f;
   _gaugeLayer->addChild(_time._sprite);
 
   // ラウンド
   _roundNum._sprite = NumberSprite::create(1, "./data/texture/num2.png");
-  _roundNum._sprite->setSize(kROUND_SIZE.x, kROUND_SIZE.y);
+  _roundNum._sprite->setSize(kROUND_SIZE.x * _windowScl, kROUND_SIZE.y * _windowScl);
   _roundNum._sprite->setColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
   _roundNum._sprite->setNumber(1);
-  _roundNum._sprite->setPos(160.0f, -480.0f);
+  _roundNum._sprite->setPos(100.0f * _windowScl, -320.0f * _windowScl);
   _roundNum._scl = 1.0f;
   _gaugeLayer->addChild(_roundNum._sprite);
 
-  Vec2 size = Vec2(512.0f, 512.0f) * 0.2f;
-  _roundIcon = RoundIcon::create(size.x, size.y);
+  const Vec2 kROUND_ICON_SIZE = Vec2(512.0f, 512.0f) * 0.1f;
+  _roundIcon = RoundIcon::create(kROUND_ICON_SIZE.x * _windowScl, kROUND_ICON_SIZE.y * _windowScl);
   _roundIcon->setTexture(0, "./data/texture/win_icon.png");
   _roundIcon->setTexture(1, "./data/texture/win_icon.png");
   this->addChild(_roundIcon);
 
   // おじさんおばさん
   _oji3._sprite = Sprite2D::create("./data/texture/oji_face.png");
-  _oji3._sprite->setSize(kOJIOBA_SIZE.x, kOJIOBA_SIZE.y);
-  _oji3._sprite->setPos(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _oji3._sprite->setSize(kOJIOBA_SIZE.x * _windowScl, kOJIOBA_SIZE.y * _windowScl);
+  _oji3._sprite->setPos((kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
   _oji3._sprite->setAnimID(0);
   _oji3._sprite->setNumU(4);
   _oji3._sprite->setNumV(1);
@@ -151,43 +155,43 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_oji3._sprite);
 
   _oba3._sprite = Sprite2D::create("./data/texture/oba_face.png");
-  _oba3._sprite->setSize(kOJIOBA_SIZE.x, kOJIOBA_SIZE.y);
-  _oba3._sprite->setPos(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _oba3._sprite->setSize(kOJIOBA_SIZE.x * _windowScl, kOJIOBA_SIZE.y * _windowScl);
+  _oba3._sprite->setPos(App::instance().getWindowSize().cx - (kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
   _oba3._sprite->setAnimID(0);
   _oba3._sprite->setNumU(4);
   _oba3._sprite->setNumV(1);
   _oba3._scl = 1.0f;
   this->addChild(_oba3._sprite);
 
-  _ojiobaPosDest[0] = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-  _ojiobaPosDest[1] = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-  _oji3._sprite->setPos(-kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-  _oba3._sprite->setPos(App::instance().getWindowSize().cx + kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+  _ojiobaPosDest[0] = Vec2((kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
+  _ojiobaPosDest[1] = Vec2(App::instance().getWindowSize().cx - (kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
+  _oji3._sprite->setPos(-(kOJIOBA_SIZE.x * _windowScl), App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
+  _oba3._sprite->setPos(App::instance().getWindowSize().cx + (kOJIOBA_SIZE.x * _windowScl), App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
 
   // ラウンド結果数字
   _resultNumCount = 0;
   _isResult = false;
   _resultNum[0]._sprite = NumberSprite::create(2, "./data/texture/num2.png");
-  _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x, kRESULT_NUM_SIZE.y);
+  _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x * _windowScl, kRESULT_NUM_SIZE.y * _windowScl);
   _resultNum[0]._sprite->setColor(kPLAYER_COLOR[0]);
   _resultNum[0]._sprite->setNumber(0);
-  _resultNum[0]._sprite->setPos(windowSizeHalf.x - kRESULT_NUM_OFFSETX, windowSizeHalf.y);
+  _resultNum[0]._sprite->setPos(windowSizeHalf.x - (kRESULT_NUM_OFFSETX * _windowScl), windowSizeHalf.y);
   _resultNum[0]._sprite->setVisible(false);
   _resultNum[0]._scl = 1.0f;
   this->addChild(_resultNum[0]._sprite);
 
   _resultNum[1]._sprite = NumberSprite::create(2, "./data/texture/num2.png");
-  _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x, kRESULT_NUM_SIZE.y);
+  _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x * _windowScl, kRESULT_NUM_SIZE.y * _windowScl);
   _resultNum[1]._sprite->setColor(kPLAYER_COLOR[1]);
   _resultNum[1]._sprite->setNumber(0);
-  _resultNum[1]._sprite->setPos(windowSizeHalf.x + kRESULT_NUM_OFFSETX, windowSizeHalf.y);
+  _resultNum[1]._sprite->setPos(windowSizeHalf.x + (kRESULT_NUM_OFFSETX * _windowScl), windowSizeHalf.y);
   _resultNum[1]._sprite->setVisible(false);
   _resultNum[1]._scl = 1.0f;
   this->addChild(_resultNum[1]._sprite);
 
   // [フィニッシュ！]
   _finish._sprite = Sprite2D::create("./data/texture/finish.png");
-  _finish._sprite->setSize(kSTRIN_FINISH_SIZE.x, kSTRIN_FINISH_SIZE.y);
+  _finish._sprite->setSize(kSTRIN_FINISH_SIZE.x * _windowScl, kSTRIN_FINISH_SIZE.y * _windowScl);
   _finish._sprite->setPos(windowSizeHalf.x, windowSizeHalf.y);
   _finish._sprite->setVisible(false);
   _finish._scl = 0.0f;
@@ -195,7 +199,7 @@ bool GuiManager::init(EventManager* eventManager)
 
   // [スタート！]
   _start._sprite = Sprite2D::create("./data/texture/start.png");
-  _start._sprite->setSize(kSTRIN_START_SIZE.x, kSTRIN_START_SIZE.y);
+  _start._sprite->setSize(kSTRIN_START_SIZE.x * _windowScl, kSTRIN_START_SIZE.y * _windowScl);
   _start._sprite->setPos(windowSizeHalf.x, windowSizeHalf.y);
   _start._sprite->setVisible(false);
   _start._scl = 0.0f;
@@ -204,7 +208,7 @@ bool GuiManager::init(EventManager* eventManager)
 
   // [ラウンド1]
   _roundStringBack._sprite = Sprite2D::create();
-  _roundStringBack._sprite->setSize((float)App::instance().getWindowSize().cx, 350.0f * 1.5f);
+  _roundStringBack._sprite->setSize((float)App::instance().getWindowSize().cx, 330.0f * _windowScl);
   _roundStringBack._sprite->setPos(windowSizeHalf.x, windowSizeHalf.y);
   _roundStringBack._sprite->setColor(D3DXCOLOR(0, 0, 0, 0.5f));
   _roundStringBack._sprite->setVisible(false);
@@ -212,7 +216,7 @@ bool GuiManager::init(EventManager* eventManager)
   this->addChild(_roundStringBack._sprite);
 
   _roundString._sprite = Sprite2D::create("./data/texture/round1.png");
-  _roundString._sprite->setSize(kSTRIN_ROUND_SIZE.x, kSTRIN_ROUND_SIZE.y);
+  _roundString._sprite->setSize(kSTRIN_ROUND_SIZE.x * _windowScl, kSTRIN_ROUND_SIZE.y * _windowScl);
   _roundString._sprite->setPos(windowSizeHalf.x, windowSizeHalf.y);
   _roundString._sprite->setVisible(false);
   _roundString._scl = 1.0f;
@@ -262,8 +266,8 @@ void GuiManager::update(void)
     _plusNum[i]->setColor(D3DXCOLOR(kPLAYER_COLOR[i].r, kPLAYER_COLOR[i].g, kPLAYER_COLOR[i].b, min((_numSpriteScl[i] - 1) * 2, 1)));
     _plus[i]->setColor(D3DXCOLOR(kPLAYER_COLOR[i].r, kPLAYER_COLOR[i].g, kPLAYER_COLOR[i].b, min((_numSpriteScl[i] - 1) * 2, 1)));
 
-    _plusNum[i]->setSize(kNumSize.x * _numSpriteScl[i], kNumSize.y * _numSpriteScl[i]);
-    _plus[i]->setSize(kNumSize.x * _numSpriteScl[i], kNumSize.y * _numSpriteScl[i]);
+    _plusNum[i]->setSize((kNumSize.x * _windowScl) * _numSpriteScl[i], (kNumSize.y * _windowScl) * _numSpriteScl[i]);
+    _plus[i]->setSize((kNumSize.x * _windowScl) * _numSpriteScl[i], (kNumSize.y * _windowScl) * _numSpriteScl[i]);
   }
 
   // ゲージ更新
@@ -289,13 +293,13 @@ void GuiManager::update(void)
     _time._scl = 2.5f;
   }
   _time._scl += (1 - _time._scl) * 0.07f;
-  _time._sprite->setSize(kTIME_SIZE.x * _time._scl, kTIME_SIZE.y * _time._scl);
+  _time._sprite->setSize((kTIME_SIZE.x * _windowScl) * _time._scl, (kTIME_SIZE.y * _windowScl) * _time._scl);
 
   // スタート文字
   if (_isStart){
     if (time > (GameConfig::kONE_ROUND_TIME * 60) - (1 * 60)){
-      _start._scl += (1.5f - _start._scl) * 0.15f;
-      _start._sprite->setSize(kSTRIN_START_SIZE.x *_start._scl, kSTRIN_START_SIZE.y * _start._scl);
+      _start._scl += (1.0f - _start._scl) * 0.15f;
+      _start._sprite->setSize((kSTRIN_START_SIZE.x * _windowScl) *_start._scl, (kSTRIN_START_SIZE.y * _windowScl) * _start._scl);
     }
     else {
       _start._sprite->setVisible(false);
@@ -310,7 +314,7 @@ void GuiManager::update(void)
     _roundString._sprite->setPos(roundPos + roundMovePos);
 
     _roundStringBack._scl += (_roundStringSclDest - _roundStringBack._scl) * 0.15f;
-    _roundStringBack._sprite->setSize((float)App::instance().getWindowSize().cx, (350.0f * 1.5f) * _roundStringBack._scl);
+    _roundStringBack._sprite->setSize((float)App::instance().getWindowSize().cx, (320.0f * _windowScl) * _roundStringBack._scl);
   }
 
   if (_isResult){
@@ -319,19 +323,23 @@ void GuiManager::update(void)
     if (_frameCount > 2){
       _resultNumCount++;
       _frameCount = 0;
-      if (DataManager::instance().getData()->getPlayerMapNum(0) >= _resultNumCount){
+
+      // 数字設定
+      const int mapNum[2] = { DataManager::instance().getData()->getPlayerMapNum(0),
+                              DataManager::instance().getData()->getPlayerMapNum(1) };
+      if (mapNum[0] >= _resultNumCount && mapNum[0] != 0){
         _resultNum[0]._sprite->setNumber(_resultNumCount);
         _resultNum[0]._scl = 1.5f;
       }
-      if (DataManager::instance().getData()->getPlayerMapNum(1) >= _resultNumCount){
+      if (mapNum[1] >= _resultNumCount && mapNum[1] != 0){
         _resultNum[1]._sprite->setNumber(_resultNumCount);
         _resultNum[1]._scl = 1.5f;
       }
     }
     _resultNum[0]._scl += (_resultNumScl[0] - _resultNum[0]._scl) * 0.2f;
-    _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x *_resultNum[0]._scl, kRESULT_NUM_SIZE.y * _resultNum[0]._scl);
+    _resultNum[0]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl)*_resultNum[0]._scl, (kRESULT_NUM_SIZE.y * _windowScl)* _resultNum[0]._scl);
     _resultNum[1]._scl += (_resultNumScl[1] - _resultNum[1]._scl) * 0.2f;
-    _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x *_resultNum[1]._scl, kRESULT_NUM_SIZE.y * _resultNum[1]._scl);
+    _resultNum[1]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl) *_resultNum[1]._scl, (kRESULT_NUM_SIZE.y * _windowScl) * _resultNum[1]._scl);
   }
 
   Vec2 rNumPos[2] = { _resultNum[0]._sprite->getPos(), _resultNum[1]._sprite->getPos() };
@@ -340,22 +348,22 @@ void GuiManager::update(void)
   _resultNum[1]._sprite->setPos(rNumPos[1] + movePos[1]);
 
   _finish._scl += (1.0f - _finish._scl) * 0.15f;
-  _finish._sprite->setSize(kSTRIN_FINISH_SIZE.x *_finish._scl, kSTRIN_FINISH_SIZE.y * _finish._scl);
+  _finish._sprite->setSize((kSTRIN_FINISH_SIZE.x * _windowScl) *_finish._scl, (kSTRIN_FINISH_SIZE.y * _windowScl) * _finish._scl);
 
   // おじさんおばさん
   if (_isPlay){
     auto _stage = BaceScene::instance()->getStage();
     float oji3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1) / (12.f * 12.f);
     float oba3num = _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) / (12.f * 12.f);
-    Vec2 oji3vec = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-    Vec2 oba3vec = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    Vec2 oji3vec = Vec2((kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
+    Vec2 oba3vec = Vec2(App::instance().getWindowSize().cx - (kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
 
     _ojiobaPosDest[0] = oji3vec * (1 - oji3num) + oba3vec * oji3num;
     _ojiobaPosDest[1] = oba3vec * (1 - oba3num) + oji3vec * oba3num;
 
     if (DataManager::instance().getData()->getTime() < 20 * 60) {
       const float t = (DataManager::instance().getData()->getTime() / 60.f - 20) / 5.f;
-      const float y = (App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * 0.5f)) - (kOJIOBA_SIZE.y)* t;
+      const float y = (App::instance().getWindowSize().cy - ((kOJIOBA_SIZE.y * _windowScl) * 0.5f)) - (kOJIOBA_SIZE.y * _windowScl)* t;
       _oji3._sprite->setPosY(y);
       _oba3._sprite->setPosY(y);
     }
@@ -426,15 +434,15 @@ void GuiManager::EventListener(EventData* eventData) {
     _resultNumScl[1] = 1.0f;
     _resultNum[0]._sprite->setPos(-_resultNum[0]._sprite->getScl().x, windowSizeHalf.y);
     _resultNum[1]._sprite->setPos(App::instance().getWindowSize().cx + _resultNum[1]._sprite->getScl().x, windowSizeHalf.y);
-    _resultNum[0]._sprite->setSize(kRESULT_NUM_SIZE.x * _resultNumScl[0], kRESULT_NUM_SIZE.y * _resultNumScl[0]);
-    _resultNum[1]._sprite->setSize(kRESULT_NUM_SIZE.x * _resultNumScl[1], kRESULT_NUM_SIZE.y * _resultNumScl[1]);
-    _resultNumPosDest[0] = Vec2(windowSizeHalf.x - kRESULT_NUM_OFFSETX, windowSizeHalf.y);
-    _resultNumPosDest[1] = Vec2(windowSizeHalf.x + kRESULT_NUM_OFFSETX, windowSizeHalf.y);
+    _resultNum[0]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl) * _resultNumScl[0], (kRESULT_NUM_SIZE.y * _windowScl) * _resultNumScl[0]);
+    _resultNum[1]._sprite->setSize((kRESULT_NUM_SIZE.x * _windowScl) * _resultNumScl[1], (kRESULT_NUM_SIZE.y * _windowScl) * _resultNumScl[1]);
+    _resultNumPosDest[0] = Vec2(windowSizeHalf.x - (kRESULT_NUM_OFFSETX * _windowScl), windowSizeHalf.y);
+    _resultNumPosDest[1] = Vec2(windowSizeHalf.x + (kRESULT_NUM_OFFSETX * _windowScl), windowSizeHalf.y);
       break;
 
   case EventList::ROUND_RESULT_END:
-    _resultNumPosDest[0] = Vec2(-400.0f, _resultNum[0]._sprite->getPos().y);
-    _resultNumPosDest[1] = Vec2(App::instance().getWindowSize().cx + 400.0f, _resultNum[1]._sprite->getPos().y);
+    _resultNumPosDest[0] = Vec2(-300.0f * _windowScl, _resultNum[0]._sprite->getPos().y);
+    _resultNumPosDest[1] = Vec2(App::instance().getWindowSize().cx + (300.0f* _windowScl), _resultNum[1]._sprite->getPos().y);
     break;
 
   case EventList::ROUND_RESULT:
@@ -455,10 +463,10 @@ void GuiManager::EventListener(EventData* eventData) {
     _roundIcon->setPlayerWin(0, false);
     _roundIcon->setPlayerWin(1, false);
 
-    _ojiobaPosDest[0] = Vec2(kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-    _ojiobaPosDest[1] = Vec2(App::instance().getWindowSize().cx - kOJIOBA_SIZE.x * 0.5f, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    _ojiobaPosDest[0] = Vec2((kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
+    _ojiobaPosDest[1] = Vec2(App::instance().getWindowSize().cx - (kOJIOBA_SIZE.x * _windowScl) * 0.5f, App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
     _oji3._sprite->setPos(-kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
-    _oba3._sprite->setPos(App::instance().getWindowSize().cx + kOJIOBA_SIZE.x, App::instance().getWindowSize().cy - kOJIOBA_SIZE.y * 0.5f);
+    _oba3._sprite->setPos(App::instance().getWindowSize().cx + (kOJIOBA_SIZE.x * _windowScl), App::instance().getWindowSize().cy - (kOJIOBA_SIZE.y * _windowScl) * 0.5f);
     break;
 
   case EventList::ROUND_START:

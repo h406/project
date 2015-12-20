@@ -21,6 +21,8 @@ static float f =  D3DX_PI * 0.5f;
 //------------------------------------------------------------------------------
 bool Title::init() {
   auto camera = App::instance().getRenderer()->getCamera();
+  _windowScl = (float)(App::instance().getWindowSize().cx / 1280.f);
+
   _camera = camera->createCamera();
   _camera->setPosP({0,10,0});
   _camera->setPosR({0,0,0});
@@ -33,7 +35,7 @@ bool Title::init() {
   this->addChild(_LogoSprite);
 
   _touch_start = Sprite2D::create("./data/texture/touch_start.png");
-  _touch_start->setSize(906,140);
+  _touch_start->setSize(906 * _windowScl, 140 * _windowScl);
   _touch_start->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.85f);
   this->addChild(_touch_start);
 

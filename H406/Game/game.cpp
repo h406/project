@@ -421,8 +421,7 @@ void Game::update() {
   static int showGauge = 1;
 
   int time = DataManager::instance().getData()->getTime();
-  if (time > 9 * 60){
-
+//  if (time > 9 * 60){
     const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
                                     _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
     const int map_num_max = player_map_num[0] + player_map_num[1];
@@ -436,7 +435,7 @@ void Game::update() {
       BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &rate);
     }
     // 4•b‚É1‰ñØ‚è‘Ö‚¦‚é
-    if (time % (4 * 60) == 0){
+    if (time % (4 * 60) == 0 && time != GameConfig::kTIME_MAX){
       if (showGauge > 0){
         // ‚Ç‚Á‚¿‚ª—D¨
         int win = rate > 0.5 ? 0 : (rate == 0.5 ? 3 : 1);
@@ -444,12 +443,13 @@ void Game::update() {
       }
       showGauge *= -1;
     }
-  }else{
-    if (time % 60 == 0){
-      int cur_time = time / 60;
-      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowSec, &cur_time);
-    }
-  }
+
+    //  }else{
+//    if (time % 60 == 0){
+//      int cur_time = time / 60;
+//      BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowSec, &cur_time);
+//    }
+//  }
 }
 
 //==============================================================================

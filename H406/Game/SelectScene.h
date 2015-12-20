@@ -63,6 +63,7 @@ private:
   bool _select;
 
   int _backTex[2];
+  float _windowScl;
 };
 
 

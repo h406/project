@@ -57,7 +57,6 @@ void WsInput::uninit() {
 // update
 //------------------------------------------------------------------------------
 void WsInput::update() {
-  memset(_press,0,sizeof(_press));
   bool press[14] = {false};
   char title[256] = {0};
 

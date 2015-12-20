@@ -33,6 +33,8 @@ private:
   float _winSpriteScl;
 
   Player* _player;
+
+  float _windowScl;
 };
 
 #endif

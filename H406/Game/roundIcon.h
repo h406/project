@@ -37,6 +37,7 @@ private:
   float _numScl;
   bool _prevPlayerWin[2];
   bool _is_move;
+  float _windowScl;
 };
 
 #endif
