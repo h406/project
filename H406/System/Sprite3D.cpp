@@ -77,6 +77,13 @@ bool Sprite3D::init() {
   // F
   _color = D3DXCOLOR(1,1,1,1);
 
+  // FX‰Šú‰»
+  _numU = 1;
+  _numV = 1;
+  _animID = 0;
+  _texPos = {0,0};
+  _texScl = {1.f,1.f};
+
   return true;
 }
 

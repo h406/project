@@ -183,14 +183,23 @@ void Instancing3D::updateMtxChild() {
   _InstancingBuff->Lock(0,0,(void **)&pData,0);
   // update
   for(node* obj : this->getChildList()) {
+    Sprite3D* sprite = (Sprite3D*)obj;
+    const float uvAnims[4] = {
+      sprite->getTexScl().x / sprite->getNumU(),
+      sprite->getTexScl().y / sprite->getNumV(),
+      (1.f / sprite->getNumU()) * (sprite->getAnimID() % sprite->getNumU()) + (sprite->getTexPos().x),
+      (1.f / sprite->getNumV()) * (sprite->getAnimID() / sprite->getNumU()) + (sprite->getTexPos().y)
+    };
+
     if(_worldChenged) {
       obj->setWorldChenged(true);
     }
     obj->updateMtxChild();
 
     pData[i]._World = obj->getWorldMtx();
-    pData[i]._UV = Vec4(0,0,1,1);
-    pData[i]._Material = (float*)((Sprite3D*)obj)->getColor();
+
+    pData[i]._UV = uvAnims;
+    pData[i]._Material = (float*)sprite->getColor();
     ++i;
   }
   _InstancingBuff->Unlock();

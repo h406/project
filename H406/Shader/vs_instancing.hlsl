@@ -13,7 +13,6 @@
 // ビュープロジェクション行列
 uniform float4x4 gVP;
 
-
 struct InputVS {
   float3   pos      : POSITION0;
   float2   uv       : TEXCOORD0;
@@ -37,8 +36,8 @@ OutputVS main(InputVS vs) {
   ovs.posH = mul(float4(vs.pos,1.0f),wvp);
   ovs.posW = mul(float4(vs.pos,1.0f),world).xyz;
   ovs.normal = mul(float3(0.f,1.f,0.f),(float3x3)world).xyz;
-  ovs.texCoord.x = 0;
-  ovs.texCoord.y = 0;
+  ovs.texCoord.x = vs.uv.x * vs.texCoord.x + vs.texCoord.z;
+  ovs.texCoord.y = vs.uv.y * vs.texCoord.y + vs.texCoord.w;
   ovs.material = vs.material;
 
   return ovs;
