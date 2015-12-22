@@ -1,14 +1,14 @@
 //==============================================================================
 //
-// Sprite3d[Sprite3d.h]
-// Author : Yasuaki Yamashita : 2015/10/05
+// Instancing3D[Instancing3D.h]
+// Author : Yasuaki Yamashita : 2015/12/22
 //
 //==============================================================================
 
 #pragma once
 
-#ifndef _SPRITE3D_H_
-#define _SPRITE3D_H_
+#ifndef _Instancing_H_
+#define _Instancing_H_
 
 #include "DrawObject.h"
 #include "CreateFunc.h"
@@ -16,32 +16,29 @@
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Sprite3D : public DrawObject, public CreateFunc<Sprite3D> {
+class Instancing3D : public DrawObject,public CreateFunc<Instancing3D> {
 public:
   bool init();
   bool init(const char* file);
-  virtual void update();
+  virtual void update() {};
   void draw(const Renderer* renderer);
   void uninit();
 
   using CreateFunc::create;
 
-  void setSizeW(float w) { _worldChenged = true; _scl.x = w; }
-  void setSizeH(float h) { _worldChenged = true; _scl.y = h; }
-  void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
-
-  void setColor(const D3DXCOLOR& color) { _color = color; }
-  D3DXCOLOR& getColor() { return _color; }
+  void drawChild(const Renderer* renderer,NodeType type);
+  void updateMtxChild();
 
 protected:
   virtual NodeType getNodeType() const { return NodeType::normal3D; }
 
 private:
-
-  D3DXCOLOR _color;
-
   LPDIRECT3DVERTEXBUFFER9 _vtxBuff;
+  LPDIRECT3DVERTEXBUFFER9 _InstancingBuff;
+  LPDIRECT3DINDEXBUFFER9  _IndexBuff;
+
   LPDIRECT3DVERTEXDECLARATION9 _p3DDec;
+
 };
 
 #endif

@@ -92,5 +92,8 @@
     <FxCompile Include="ps_fxaa.hlsl">
       <Filter>posteffect</Filter>
     </FxCompile>
+    <FxCompile Include="vs_instancing.hlsl">
+      <Filter>vs</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

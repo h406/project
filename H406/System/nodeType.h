@@ -14,7 +14,8 @@
 // node type
 //------------------------------------------------------------------------------
 enum class NodeType {
-  normal3D = 0,
+  none = 0,
+  normal3D,
   lightOff3D,
   normal2D,
   effect,

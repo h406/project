@@ -24,6 +24,10 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
   const Vec2 bordSize = Vec2(stageSizeX / (float)kNUM_X,stageSizeZ / (float)kNUM_Y);
   _stageSize = Vec2(stageSizeX,stageSizeZ);
 
+  _instancing = Instancing3D::create();
+  _instancing->setTexture(unsigned int(0));
+  this->addChild(_instancing); 
+
   for(int x = 0; x < kNUM_X; x++) {
     for(int y = 0; y < kNUM_Y; y++) {
       _fieldMap[x][y] = Sprite3D::create();
@@ -32,7 +36,7 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
       _fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);
       _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
 //      _fieldMap[x][y]->setVisible(false);
-      this->addChild(_fieldMap[x][y]);
+      _instancing->addChild(_fieldMap[x][y]);
     }
   }
 
