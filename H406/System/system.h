@@ -34,7 +34,7 @@
 #include "meshCylinder.h"
 #include "meshDome.h"
 #include "numberSprite.h"
-#include "Sprite3DSubtractive.h"
+#include "Sprite3DAdditive.h"
 
 #include "iScene.h"
 #include "iLayer.h"

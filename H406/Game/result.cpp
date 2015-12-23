@@ -137,9 +137,6 @@ void Result::update() {
     App::instance().getSound()->stop("./data/sound/bgm/game_main_loop.wav");
   }
 
-  if(App::instance().getInput()->isRelease(0,VK_INPUT::_3)) {
-//    BaceScene::instance()->getLedConnect()->sendText("‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ‚ ");
-  }
 }
 
 //==============================================================================

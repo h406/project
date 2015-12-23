@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// Sprite3DSubtractive[Sprite3DSubtractive.h]
+// Sprite3DAdditive[Sprite3DAdditive.h]
 //
 // Author : Masato Masuda : 2015/12/14
 //
@@ -13,12 +13,12 @@
 
 #include "DrawObject.h"
 #include "CreateFunc.h"
-#include "Sprite3DSubtractive.h"
+#include "Sprite3DAdditive.h"
 
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Sprite3DSubtractive : public DrawObject, public CreateFunc<Sprite3DSubtractive> {
+class Sprite3DAdditive : public DrawObject, public CreateFunc<Sprite3DAdditive> {
 public:
   bool init();
   bool init(const char* file);
@@ -33,6 +33,7 @@ public:
   void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
 
   void setColor(const D3DXCOLOR& color) { _color = color; }
+  D3DXCOLOR getColor() { return _color; }
 
 protected:
   virtual NodeType getNodeType() const { return NodeType::normal3D; }

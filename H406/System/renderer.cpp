@@ -112,7 +112,7 @@ void Renderer::createDevice(const SIZE& windowSize, HWND hWnd) {
   _pD3DDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);	// ƒfƒXƒg
   _pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,D3DCMP_GREATEREQUAL);
   _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE,FALSE);
-  _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0x66);
+  _pD3DDevice->SetRenderState(D3DRS_ALPHAREF,0x36); // 0x66
   _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
   _pD3DDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
   _pD3DDevice->SetRenderState(D3DRS_SHADEMODE,D3DSHADE_GOURAUD);

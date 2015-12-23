@@ -49,7 +49,7 @@ bool Game::init() {
 
   // ステージのリセット
   auto _stage = BaceScene::instance()->getStage();
-  _stage->reset();
+  _stage->reset(Stage::FIELD_ID::NONE);
 
   // プレイヤー1
   _player[0] = Player::create(0);
@@ -112,29 +112,31 @@ bool Game::init() {
   this->addChild(_guiManger);
 
   // 影
-  _playerShadow[0] = Shadow::create();
-  _playerShadow[0]->setOwner((XFileObject*)_player[0]);
-  _playerShadow[0]->setColor(D3DXCOLOR(0.6f, 0.8f, 1.0f, 1));
-  this->addChild(_playerShadow[0]);
+  auto shadow1_out = Shadow::create();
+  shadow1_out->setOwner((XFileObject*)_player[0]);
+  shadow1_out->setColor(D3DXCOLOR(0.6f, 0.8f, 1.0f, 1));
+  shadow1_out->setOffsetY(0.6f);
+  this->addChild(shadow1_out);
 
-  auto shadow1 = Shadow::create();
-  shadow1->setOwner((XFileObject*)_player[0]);
-  shadow1->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
-  shadow1->setScl(0.5f, 1.0f, 0.5f);
-  shadow1->setOffsetY(1.5f);
-  this->addChild(shadow1);
+  auto shadow1_in = Shadow::create();
+  shadow1_in->setOwner((XFileObject*)_player[0]);
+  shadow1_in->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
+  shadow1_in->setScl(0.5f, 1.0f, 0.5f);
+  shadow1_in->setOffsetY(0.7f);
+  this->addChild(shadow1_in);
 
-  _playerShadow[1] = Shadow::create();
-  _playerShadow[1]->setOwner((XFileObject*)_player[1]);
-  _playerShadow[1]->setColor(D3DXCOLOR(1.0f, 0.9f, 0.6f, 1));
-  this->addChild(_playerShadow[1]);
+  auto shadow2_out = Shadow::create();
+  shadow2_out->setOwner((XFileObject*)_player[1]);
+  shadow2_out->setColor(D3DXCOLOR(1.0f, 0.9f, 0.6f, 1));
+  shadow2_out->setOffsetY(0.6f);
+  this->addChild(shadow2_out);
 
-  auto shadow2 = Shadow::create();
-  shadow2->setOwner((XFileObject*)_player[1]);
-  shadow2->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
-  shadow2->setScl(0.5f, 1.0f, 0.5f);
-  shadow2->setOffsetY(1.5f);
-  this->addChild(shadow2);
+  auto shadow2_in = Shadow::create();
+  shadow2_in->setOwner((XFileObject*)_player[1]);
+  shadow2_in->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
+  shadow2_in->setScl(0.5f, 1.0f, 0.5f);
+  shadow2_in->setOffsetY(0.7f);
+  this->addChild(shadow2_in);
 
   // イベントセット
   _eventManager->addEventListener(EventList::PLAYER_1_DRIP_GET, bind(&Game::EventListener,this,placeholders::_1));
@@ -182,7 +184,7 @@ bool Game::init() {
 //------------------------------------------------------------------------------
 void Game::update() {
   auto _effect = BaceScene::instance()->getEffect();
-  char fps[3];
+  char fps[3] = {NULL};
   sprintf_s(fps, "%d", App::instance().getFps());
   App::instance().setTitle(fps);
 
@@ -207,7 +209,7 @@ void Game::update() {
   _mainCamera->setPosP(Vec3(0, sinf(rot) * length, cosf(rot) * length) + camvec);
   _mainCamera->setPosR(camvec + Vec3(0, 50.0f, 0));
 
-  // データマネージャーののアップデート
+  // データマネージャーのアップデート
   if (_gameMode != MODE_START){
     DataManager::instance().update();
   }
@@ -341,6 +343,7 @@ void Game::update() {
     }
     if (_nextModeTime == _mapToTime - 250){
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT)), nullptr);
+      _stage->setPlay(false);
     }
     if (_nextModeTime == 80){
       // 勝敗判定
@@ -359,12 +362,22 @@ void Game::update() {
     if(_nextModeTime == 0){
       const int win[2] = { DataManager::instance().getData()->getPlayerRoundWin(0),
                            DataManager::instance().getData()->getPlayerRoundWin(1) };
+      _stage->setPlay(true);
+
       // ゲーム終わった？
       if (win[0] >= 2 || win[1] >= 2){
         _gameMode = Game::MODE_GAME_END;
       }else{
+        const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
+                                        _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+
         // ステージと塗り数リセット
-        _stage->reset();
+        if (player_map_num[0] >= player_map_num[1]){
+          _stage->reset(Stage::FIELD_ID::PLAYER_1);
+        }else{
+          _stage->reset(Stage::FIELD_ID::PLAYER_2);
+        }
+
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET)), nullptr);
         _eventManager->dispatchEvent(EventList(int(EventList::PLAYER_2_DRIP_RESET)), nullptr);
         _eventManager->dispatchEvent(EventList(int(EventList::ITEM_RESET)), nullptr);
@@ -372,7 +385,7 @@ void Game::update() {
         _nextModeTime = 120;
         _gameMode = Game::MODE_NEXT_ROUND_SETUP;
         _eventManager->dispatchEvent(EventList(int(EventList::ROUND_RESULT_END)), nullptr);
-        }
+      }
     }
   } // case MODE_ROUND_FINISH
   break;
@@ -427,7 +440,10 @@ void Game::update() {
   }
 //#endif
 
+
+  //---------------------------------------------------------------------------
   // LEDに送る処理
+  //---------------------------------------------------------------------------
   if (_gameMode != MODE_PLAY) return;
   static int showGauge = 1;
 

@@ -29,10 +29,10 @@ bool Title::init() {
   _camera->setPosR({0,0,0});
   camera->setCamera(_camera, 100);
 
-  const Vec2 kLOGO_SIZE = Vec2((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy) * 0.75f;
+  const Vec2 kLOGO_SIZE = Vec2((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy)/* * 0.75f*/;
   _LogoSprite = Sprite2D::create("./data/texture/title.png");
   _LogoSprite->setSize(kLOGO_SIZE.x, kLOGO_SIZE.y);
-  _LogoSprite->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.4f);
+  _LogoSprite->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.5f);
   _LogoSprite->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_LogoSprite);
 

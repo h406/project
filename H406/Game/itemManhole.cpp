@@ -26,7 +26,7 @@ namespace{
 //------------------------------------------------------------------------------
 bool ItemManhole::init(){
   _item = XFileObject::create("./data/model/manhole.x");
-  _item->setScl(1.3f, 1.0f, 1.3f);
+  _item->setScl(1.35f, 1.2f, 1.35f);
   _item->setPos(0.0f, 0.0f, 0.0f);
   this->addChild(_item);
 
@@ -43,7 +43,8 @@ bool ItemManhole::init(){
 
   auto shadow = Shadow::create();
   shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.55f));
-  shadow->setScl(1.0f, 1.0f, 1.0f);
+  shadow->setScl(1.2f, 1.2f, 1.2f);
+  shadow->setOffsetY(0.4f);
   this->addChild(shadow);
 
   return true;

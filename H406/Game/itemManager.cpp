@@ -22,7 +22,7 @@
 #include "shadow.h"
 
 namespace{
-  const Vec3 kEffetSclItemPut = Vec3(2, 2, 2);
+  const Vec3 kEffetSclItemPut = Vec3(2.5f, 2.5f, 2.5f);
 }
 
 //==============================================================================
@@ -322,13 +322,12 @@ void ItemManager::EventListener(EventData* eventData) {
   // エフェクト
   if (itmeGet[0] == true){
     int id = _effect->play("GetItemBlue.efk", _playerList[0]->getPos());
-    _effect->setEffectScl(id, Vec3(0.7f, 0.7f, 0.7f));
+    _effect->setEffectScl(id, Vec3(0.8f, 0.8f, 0.8f));
   }
   if (itmeGet[1] == true){
     int id = _effect->play("GetItemYellow.efk", _playerList[1]->getPos());
-    _effect->setEffectScl(id, Vec3(0.7f, 0.7f, 0.7f));
+    _effect->setEffectScl(id, Vec3(0.8f, 0.8f, 0.8f));
   }
-
 }
 
 //EOF

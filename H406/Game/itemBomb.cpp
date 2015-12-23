@@ -26,7 +26,7 @@ namespace{
 //------------------------------------------------------------------------------
 bool ItemBomb::init(){
   _item = XFileObject::create("./data/model/pet.x");
-  _item->setScl(1.3f, 1.3f, 1.3f);
+  _item->setScl(1.35f, 1.35f, 1.35f);
   _item->setPos(0.0f, kOffsetPosY, 0.0f);
   this->addChild(_item);
 
@@ -48,7 +48,8 @@ bool ItemBomb::init(){
 
   auto shadow = Shadow::create();
   shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
-  shadow->setScl(0.6f, 0.6f, 0.6f);
+  shadow->setScl(0.65f, 0.65f, 0.65f);
+  shadow->setOffsetY(0.5f);
   this->addChild(shadow);
 
   return true;

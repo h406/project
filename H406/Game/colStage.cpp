@@ -105,9 +105,11 @@ void ColStage::update() {
         // 塗るエフェクト
         Vec3 effectPos = _stage->getFieldMapPos(idX, idY);
         if (player->getPlayerID() == 0){
-          _effect->play("DrawFloorBlue.efk", effectPos);
+          int id = _effect->play("DrawFloorBlue.efk", effectPos);
+          _effect->setEffectScl(id, Vec3(1.2f, 1.2f, 1.2f));
         } else if (player->getPlayerID() == 1){
-          _effect->play("DrawFloorYellow.efk", effectPos);
+          int id = _effect->play("DrawFloorYellow.efk", effectPos);
+          _effect->setEffectScl(id, Vec3(1.2f, 1.2f, 1.2f));
         }
         // se
         App::instance().getSound()->play("./data/sound/se/paint.wav", false);

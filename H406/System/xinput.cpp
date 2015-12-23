@@ -153,7 +153,6 @@ bool xInput::isRelease(int id,VK_INPUT vk) const {
 }
 
 bool xInput::isRepeat(int id,VK_INPUT vk) const {
-	const int repeatStartTime = App::instance().getInput()->getRepeatStartTime();
 	return (_aButtonsRepeat[id][(int)vk] >= 0x20 ) ? true : false;
 }
 

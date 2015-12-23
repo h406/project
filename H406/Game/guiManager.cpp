@@ -27,7 +27,7 @@ namespace{
   const Vec2 kRESULT_NUM_SIZE      = Vec2(128.0f * 1.5f, 128.0f * 1.5f);
   const Vec2 kITEM_SIZE            = Vec2(128.0f, 128.0f);
   const Vec2 kROUND_SIZE           = Vec2(64.0f, 64.0f);
-  const Vec2 kOJIOBA_SIZE          = Vec2(222, 256);
+  const Vec2 kOJIOBA_SIZE          = Vec2(222, 256) * 0.9f;
   const float kRESULT_NUM_OFFSETX  = 300.f;
 
   const Vec2 kSTRIN_START_SIZE     = Vec2(512 * 1.6f, 128 * 1.6f);
@@ -131,7 +131,7 @@ bool GuiManager::init(EventManager* eventManager)
   _roundNum._sprite->setSize(kROUND_SIZE.x * _windowScl, kROUND_SIZE.y * _windowScl);
   _roundNum._sprite->setColor(D3DXCOLOR(1.0f, 0.5f, 0.2f, 1.0f));
   _roundNum._sprite->setNumber(1);
-  _roundNum._sprite->setPos(80.0f * _windowScl, -312.0f * _windowScl);
+  _roundNum._sprite->setPos(90.0f * _windowScl, -312.0f * _windowScl);
   _roundNum._scl = 1.0f;
   _gaugeLayer->addChild(_roundNum._sprite);
 
@@ -256,6 +256,7 @@ void GuiManager::update(void)
   const D3DXVECTOR2 windowSizeHalf = D3DXVECTOR2(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
   const auto deta = DataManager::instance().getData();
   const int playerDripNum[2] = { deta->getPlayerDripNum(0), deta->getPlayerDripNum(1) };
+  auto _stage = BaceScene::instance()->getStage();
 
   // ”š
   for (int i = 0; i < 2; i++) {
@@ -326,10 +327,12 @@ void GuiManager::update(void)
       if (mapNum[0] >= _resultNumCount && mapNum[0] != 0){
         _resultNum[0]._sprite->setNumber(_resultNumCount);
         _resultNum[0]._scl = 1.5f;
+        _stage->seekFiledMapIdNoVisible(Stage::FIELD_ID::PLAYER_1);
       }
       if (mapNum[1] >= _resultNumCount && mapNum[1] != 0){
         _resultNum[1]._sprite->setNumber(_resultNumCount);
         _resultNum[1]._scl = 1.5f;
+        _stage->seekFiledMapIdNoVisible(Stage::FIELD_ID::PLAYER_2);
       }
     }
     _resultNum[0]._scl += (_resultNumScl[0] - _resultNum[0]._scl) * 0.15f;

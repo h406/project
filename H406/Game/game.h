@@ -21,7 +21,6 @@ class EventManager;
 class EventData;
 class GuiManager;
 class ItemManager;
-class Shadow;
 
 class Game : public iScene,public CreateFunc<Game> {
 public:
@@ -55,8 +54,6 @@ private:
   Sprite3D* _backField;
 
   CameraBace* _mainCamera;
-
-  Shadow* _playerShadow[kPlayerNum];
 
   EventManager* _eventManager;
   GuiManager* _guiManger;

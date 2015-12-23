@@ -1,6 +1,6 @@
 //==============================================================================
 //
-// Sprite3DSubtractive[Sprite3DSubtractive.cpp]
+// Sprite3DAdditive[Sprite3DAdditive.cpp]
 //
 // Author : Masato Masuda : 2015/12/14
 //
@@ -9,7 +9,7 @@
 //******************************************************************************
 // include
 //******************************************************************************
-#include "Sprite3DSubtractive.h"
+#include "Sprite3DAdditive.h"
 #include "renderer.h"
 #include "app.h"
 #include "texture.h"
@@ -35,7 +35,7 @@ namespace {
 //------------------------------------------------------------------------------
 // 
 //------------------------------------------------------------------------------
-bool Sprite3DSubtractive::init() {
+bool Sprite3DAdditive::init() {
   auto renderer = App::instance().getRenderer();
   auto pDevice = renderer->getDevice();
 
@@ -81,7 +81,7 @@ bool Sprite3DSubtractive::init() {
   return true;
 }
 
-bool Sprite3DSubtractive::init(const char* file) {
+bool Sprite3DAdditive::init(const char* file) {
   _textureID = App::instance().getRenderer()->getTexture()->createTexture(file);
   return init();
 }
@@ -89,7 +89,7 @@ bool Sprite3DSubtractive::init(const char* file) {
 //==============================================================================
 //
 //------------------------------------------------------------------------------
-void Sprite3DSubtractive::draw(const  Renderer* renderer) {
+void Sprite3DAdditive::draw(const  Renderer* renderer) {
   auto pDevice = renderer->getDevice();
   auto shader = renderer->getShader();
 
@@ -120,33 +120,43 @@ void Sprite3DSubtractive::draw(const  Renderer* renderer) {
   pDevice->SetStreamSource(0,_vtxBuff,0,sizeof(VERTEX_3D));
 
   // レンダーステート
-  pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT); // 減算合成
+  // 減算合成
+  //pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_REVSUBTRACT); // 減算合成
+  //pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+  //pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+  //pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+  //pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+  // 加算合成
+  pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
   pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-  pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-  pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-  pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
   // 描画
   pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,0,2);
 
-  pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);		// デフォルト合成
+  // 減算合成
+  //pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);		// デフォルト合成
+  //pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+  //pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// ソース
+  //pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+  //pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+
+  // 加算合成
+  pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
   pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-  pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		// ソース
-  pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-  pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 }
 
 //==============================================================================
 //
 //------------------------------------------------------------------------------
-void Sprite3DSubtractive::update() {
+void Sprite3DAdditive::update() {
 
 }
 
 //==============================================================================
 //
 //------------------------------------------------------------------------------
-void Sprite3DSubtractive::uninit() {
+void Sprite3DAdditive::uninit() {
   SafeRelease(_vtxBuff);
   SafeRelease(_p3DDec);
 }

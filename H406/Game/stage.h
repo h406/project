@@ -36,7 +36,7 @@ public:
 
   FIELD_ID getFieldID(int x,int y) const;
   void setFieldID(int x,int y,FIELD_ID id);
-  void reset(void);
+  void reset(FIELD_ID id);
 
   const Vec3& getFieldMapPos(int x, int y) const { return _fieldMap[x][y]->getPos(); }
   const Vec2& getStageSize() const { return _stageSize; }
@@ -44,11 +44,24 @@ public:
   // あまり使わないでね
   int getFieldMapNum(FIELD_ID id) const;
 
+  // 指定したIDのマップ光らせるやつ
+  void seekFiledMapIdNoVisible(FIELD_ID id);
+
+  // updateのON/OFF
+  bool isPlay(){ return _play; }
+  void setPlay(bool val){ _play = val; }
+
 private:
   Sprite3D* _fieldMap[kNUM_X][kNUM_Y];
   FIELD_ID _field[kNUM_X][kNUM_Y];
 
+  // 光る床
+  Sprite3DAdditive* _fieldMapAdd[kNUM_X][kNUM_Y];;
+
   Vec2 _stageSize;
+
+  // updateのON/OFF
+  bool _play;
 };
 
 
