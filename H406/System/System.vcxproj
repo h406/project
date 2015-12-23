@@ -14,6 +14,7 @@
     <ClCompile Include="directInput.cpp" />
     <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="effect.cpp" />
+    <ClCompile Include="Instancing3D.cpp" />
     <ClCompile Include="meshCylinder.cpp" />
     <ClCompile Include="meshDome.cpp" />
     <ClCompile Include="MeshField.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="directInput.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="iLayer2D.h" />
+    <ClInclude Include="instancing3D.h" />
     <ClInclude Include="iPostEffect.h" />
     <ClInclude Include="meshCylinder.h" />
     <ClInclude Include="meshDome.h" />

@@ -28,7 +28,7 @@ public :
 
   // update
   virtual void updateChild();
-  void drawChild(const Renderer* renderer,NodeType type);
+  virtual void drawChild(const Renderer* renderer,NodeType type);
 
   // release
   void release();
@@ -71,12 +71,14 @@ public :
 
   const Matrix& getWorldMtx() { return _mtxWorld; }
 
-  void updateMtxChild();
+  virtual void updateMtxChild();
 
   void setVisible(bool visible) { _visible = visible; }
   bool isVisible() const { return _visible; }
 
   virtual NodeType getNodeType() const { return NodeType::default; }
+
+  void setWorldChenged(bool chenge) { _worldChenged = chenge; }
 
 protected:
   // node
@@ -96,12 +98,14 @@ protected:
 
   node* getParent() const { return _parent; }
 
-private:
-
   // 削除チェック
   void removeCheck();
 
   void zOderCheck();
+
+  const list<node*>& getChildList() const { return _childList; }
+
+private:
 
   // 親
   node* _parent;

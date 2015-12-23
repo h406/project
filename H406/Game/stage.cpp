@@ -24,14 +24,20 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
   const Vec2 bordSize = Vec2(stageSizeX / (float)kNUM_X,stageSizeZ / (float)kNUM_Y);
   _stageSize = Vec2(stageSizeX,stageSizeZ);
 
+  _instancing = Instancing3D::create("./data/texture/ground.png");
+  this->addChild(_instancing); 
+
   for(int x = 0; x < kNUM_X; x++) {
     for(int y = 0; y < kNUM_Y; y++) {
       _fieldMap[x][y] = Sprite3D::create();
       _fieldMap[x][y]->setSize(bordSize.x - 5,bordSize.y - 5);
       _fieldMap[x][y]->setPos(Vec3(x * bordSize.x - stageSizeX * 0.5f + bordSize.x * 0.5f,0.1f,y * bordSize.y - stageSizeZ * 0.5f + bordSize.y * 0.5f));
       _fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);
-      _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
-      this->addChild(_fieldMap[x][y]);
+//      _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
+      _fieldMap[x][y]->setNumU(3);
+      _fieldMap[x][y]->setNumV(1);
+      _fieldMap[x][y]->setAnimID(1);
+      _instancing->addChild(_fieldMap[x][y]);
 
       _fieldMapAdd[x][y] = Sprite3DAdditive::create();
       _fieldMapAdd[x][y]->setSize(bordSize.x - 5, bordSize.y - 5);
@@ -85,7 +91,7 @@ void Stage::setFieldID(int x,int y,Stage::FIELD_ID fieldid) {
 
   switch (_field[x][y]) {
   case FIELD_ID::PLAYER_1:
-    _fieldMap[x][y]->setTexture((unsigned int)0);
+    _fieldMap[x][y]->setAnimID(0);
     _fieldMap[x][y]->setColor(kColorPlayer1);
 
     _fieldMapAdd[x][y]->setColor(D3DXCOLOR(0.7f, 0.7f, 1.0f, 1.0f));
@@ -93,7 +99,7 @@ void Stage::setFieldID(int x,int y,Stage::FIELD_ID fieldid) {
     _fieldMapAdd[x][y]->setVisible(true);
     break;
   case FIELD_ID::PLAYER_2:
-    _fieldMap[x][y]->setTexture((unsigned int)0);
+    _fieldMap[x][y]->setAnimID(0);
     _fieldMap[x][y]->setColor(kColorPlayer2);
 
     _fieldMapAdd[x][y]->setColor(D3DXCOLOR(1.0f, 1.0f, 0.7f, 1.0f));
@@ -101,12 +107,12 @@ void Stage::setFieldID(int x,int y,Stage::FIELD_ID fieldid) {
     _fieldMapAdd[x][y]->setVisible(true);
     break;
   case FIELD_ID::DRIP:
-    _fieldMap[x][y]->setTexture("./data/texture/field_drip.png");
+    _fieldMap[x][y]->setAnimID(2);
     _fieldMap[x][y]->setColor(kColorDrip);
     _fieldMapAdd[x][y]->setVisible(false);
     break;
   case FIELD_ID::NONE:
-    _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
+    _fieldMap[x][y]->setAnimID(1);
     _fieldMap[x][y]->setColor(kColorNone);
     _fieldMapAdd[x][y]->setVisible(false);
     break;
@@ -141,7 +147,8 @@ void Stage::reset(FIELD_ID id){
   for (int x = 0; x < kNUM_X; x++) {
     for (int y = 0; y < kNUM_Y; y++) {
       _fieldMap[x][y]->setColor(kColorNone);
-      _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
+//      _fieldMap[x][y]->setTexture("./data/texture/field_none.png");
+      _fieldMap[x][y]->setAnimID(1);
 
       switch (id)
       {
@@ -184,27 +191,20 @@ int Stage::getFieldMapNum(FIELD_ID id) const{
 //------------------------------------------------------------------------------
 void Stage::seekFiledMapIdNoVisible(FIELD_ID id)
 {
-  if (id == FIELD_ID::PLAYER_1){
-    for (int x = 0; x < kNUM_X; x++) {
-      for (int y = 0; y < kNUM_Y; y++) {
-        if (_field[x][y] == id && _fieldMapAdd[x][y]->isVisible() == false){
-          _fieldMapAdd[x][y]->setVisible(true);
+  for (int x = 0; x < kNUM_X; x++) {
+    for (int y = 0; y < kNUM_Y; y++) {
+      if (_field[x][y] == id && _fieldMapAdd[x][y]->isVisible() == false){
+
+        _fieldMapAdd[x][y]->setVisible(true);
+        if (id == FIELD_ID::PLAYER_1){
           _fieldMapAdd[x][y]->setColor(D3DXCOLOR(0.2f, 0.5f, 1, 0.6f));
-          return;
-        }
-      }
-    }
-  }else if(id == FIELD_ID::PLAYER_2){
-    for (int x = kNUM_X - 1; x >= 0; x--) {
-      for (int y = kNUM_Y - 1; y >= 0; y--) {
-        if (_field[x][y] == id && _fieldMapAdd[x][y]->isVisible() == false){
-          _fieldMapAdd[x][y]->setVisible(true);
+        } else if (id == FIELD_ID::PLAYER_2){
           _fieldMapAdd[x][y]->setColor(D3DXCOLOR(1, 1, 0.3f, 0.6f));
-          return;
         }
+        return;
       }
     }
-  } // if
+  }
 }
 
 

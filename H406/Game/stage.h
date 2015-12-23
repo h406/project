@@ -52,6 +52,8 @@ public:
   void setPlay(bool val){ _play = val; }
 
 private:
+  Instancing3D* _instancing;
+
   Sprite3D* _fieldMap[kNUM_X][kNUM_Y];
   FIELD_ID _field[kNUM_X][kNUM_Y];
 

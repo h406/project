@@ -35,6 +35,7 @@
 #include "meshDome.h"
 #include "numberSprite.h"
 #include "Sprite3DAdditive.h"
+#include "instancing3D.h"
 
 #include "iScene.h"
 #include "iLayer.h"
