@@ -269,7 +269,6 @@ bool Renderer::draw(node* baceNode) {
     // シーンの描画開始
     if(SUCCEEDED(_pD3DDevice->BeginScene())) {
 
-      _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);
       // ポストエフェクト
       for(int i = 0; i < 4; ++i) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_CLAMP);
@@ -278,30 +277,26 @@ bool Renderer::draw(node* baceNode) {
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_POINT);
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MIPFILTER,D3DTEXF_POINT);
       }
+
+      _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);
       _postEffect->draw(this);
+      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
+      _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
 
       for(int i = 0; i < 4; ++i) {
         _pD3DDevice->SetTexture(i,nullptr);
       }
 
-      _pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE,TRUE);
-
       // ベースピクセルシェーダー
       _shader->setPixShader("ps_bace.cso");
-
-      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 
       // エフェクト
       baceNode->drawChild(this,NodeType::effect);
 
-      _pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-      _pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
       //---- サンプラーステートの設定 ----
       for(int i = 0; i < 4; ++i) {
-//        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP);
-//        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSU,D3DTADDRESS_CLAMP);
+        _pD3DDevice->SetSamplerState(i,D3DSAMP_ADDRESSV,D3DTADDRESS_CLAMP);
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MINFILTER,D3DTEXF_ANISOTROPIC);
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MAGFILTER,D3DTEXF_ANISOTROPIC);
         _pD3DDevice->SetSamplerState(i,D3DSAMP_MIPFILTER,D3DTEXF_NONE);

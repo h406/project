@@ -37,7 +37,7 @@ void Gauge::update(void)
   _gauge->setSizeW(_rate * _size.x);
 
   _gauge->setTexScl(_rate, 1.f);
-  _gauge->setTexPosRaw(1 - _rate * ((_flip - 1) * -0.5f),0);
+  _gauge->setTexPosRaw(1 * (abs(_flip - 1.f) *0.5f) -_rate * ((_flip - 1) * -0.5f),0);
 }
 
 //==============================================================================
