@@ -24,8 +24,8 @@ OutputVS main(InputVS vs) {
   ovs.pos = mul(float4(vs.pos,1.0f),gWorld);
   ovs.pos = mul(ovs.pos,gProj);
   ovs.pos /= ovs.pos.w;
-  ovs.pos.x = int(ovs.pos.x * gScreenSize.x) / gScreenSize.x;
-  ovs.pos.y = int(ovs.pos.y * gScreenSize.y) / gScreenSize.y;
+  ovs.pos.x = (ovs.pos.x * gScreenSize.x - 0.5f) / gScreenSize.x;
+  ovs.pos.y = (ovs.pos.y * gScreenSize.y + 0.5f) / gScreenSize.y;
   ovs.pos.w = 1.f;
   ovs.posH = ovs.pos;
   ovs.texCoord.x = vs.texCoord.x * gUVAnim.x + gUVAnim.z;

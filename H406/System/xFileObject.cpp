@@ -85,21 +85,10 @@ bool XFileObject::init(const char* file) {
   return true;
 }
 
-static int drawCount = 0;
-static bool draw1st = true;
-
 //==============================================================================
 // update
 //------------------------------------------------------------------------------
 void XFileObject::update() {
-  if (draw1st){
-    char str[256] = {NULL};
-    sprintf_s(str, "%d", drawCount);
-    App::instance().setTitle(str);
-  }
-
-  drawCount = 0;
-  draw1st = false;
 }
 
 //==============================================================================
@@ -142,8 +131,6 @@ void XFileObject::draw(const Renderer* renderer) {
     vtxShader->_constTable->SetFloatArray(pDevice,"gMaterial",(float*)&pD3DXMat[nCntMat].MatD3D.Diffuse,4);
     // モデルのパーツを描画
     _pD3DXMesh->DrawSubset(nCntMat);
-    drawCount++;
-//    draw1st = true;
   }
 
   // マテリアルを元に戻す
