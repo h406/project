@@ -172,37 +172,38 @@ void Instancing3D::draw(const  Renderer* renderer) {
 // updateMtxChild
 //------------------------------------------------------------------------------
 void Instancing3D::updateMtxChild() {
-  if(_worldChenged) {
-    updateWorldMtx();
-  }
+  bool _isWorldChenged = this->isWorldChenged();
 
-  int i = 0;
-  // インスタンシングデータ
-  INSTANCING_DATA *pData = nullptr;
-  //位置更新
-  _InstancingBuff->Lock(0,0,(void **)&pData,0);
-  // update
-  for(node* obj : this->getChildList()) {
-    DrawObject3D* sprite = (DrawObject3D*)obj;
-    const float uvAnims[4] = {
-      sprite->getTexScl().x / sprite->getNumU(),
-      sprite->getTexScl().y / sprite->getNumV(),
-      (1.f / sprite->getNumU()) * (sprite->getAnimID() % sprite->getNumU()) + (sprite->getTexPos().x),
-      (1.f / sprite->getNumV()) * (sprite->getAnimID() / sprite->getNumU()) + (sprite->getTexPos().y)
-    };
+  // 親呼び出し
+  node::updateMtxChild();
 
-    if(_worldChenged) {
-      obj->setWorldChenged(true);
+  // データが更新されている場合は更新
+  // todo ちゃんとやる
+  //if(_isWorldChenged)
+  {
+    // インスタンシングデータ
+    INSTANCING_DATA *pData = nullptr;
+    //位置更新
+    _InstancingBuff->Lock(0,0,(void **)&pData,0);
+    // update
+    int i = 0;
+    for(auto it = this->getChildList().begin(); it != this->getChildList().end(); it++) {
+      DrawObject3D* sprite = static_cast<DrawObject3D*>(*it);
+      const float uvAnims[4] = {
+        sprite->getTexScl().x / sprite->getNumU(),
+        sprite->getTexScl().y / sprite->getNumV(),
+        (1.f / sprite->getNumU()) * (sprite->getAnimID() % sprite->getNumU()) + (sprite->getTexPos().x),
+        (1.f / sprite->getNumV()) * (sprite->getAnimID() / sprite->getNumU()) + (sprite->getTexPos().y)
+      };
+
+      pData[i]._World = sprite->getWorldMtx();
+
+      pData[i]._UV = uvAnims;
+      pData[i]._Material = (float*)sprite->getColor();
+      ++i;
     }
-    obj->updateMtxChild();
-
-    pData[i]._World = obj->getWorldMtx();
-
-    pData[i]._UV = uvAnims;
-    pData[i]._Material = (float*)sprite->getColor();
-    ++i;
+    _InstancingBuff->Unlock();
   }
-  _InstancingBuff->Unlock();
 }
 
 //==============================================================================
@@ -213,22 +214,5 @@ void Instancing3D::uninit() {
   SafeRelease(_InstancingBuff);
   SafeRelease(_p3DDec);
   SafeRelease(_IndexBuff);
-}
-
-//==============================================================================
-// drawChild
-//------------------------------------------------------------------------------
-void Instancing3D::drawChild(const Renderer* renderer,NodeType type) {
-  if(this->isVisible() && type == this->getNodeType()) {
-    this->draw(renderer);
-  }
-
-  // 削除リストチェック
-  removeCheck();
-
-  // ドローしない
-  for(node* obj : this->getChildList()) {
-    obj->drawChild(renderer,NodeType::none);
-  }
 }
 //EOF

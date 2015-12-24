@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="directInput.cpp" />
-    <ClCompile Include="DrawObject.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="Instancing3D.cpp" />
     <ClCompile Include="meshCylinder.cpp" />
@@ -50,10 +49,12 @@
     <ClInclude Include="CreateFunc.h" />
     <ClInclude Include="directInput.h" />
     <ClInclude Include="effect.h" />
+    <ClInclude Include="iColorOption.h" />
     <ClInclude Include="iLayer2D.h" />
     <ClInclude Include="instancing3D.h" />
+    <ClInclude Include="InstancingObject3D.h" />
     <ClInclude Include="iPostEffect.h" />
-    <ClInclude Include="iTextureObject.h" />
+    <ClInclude Include="iTextureOption.h" />
     <ClInclude Include="meshCylinder.h" />
     <ClInclude Include="meshDome.h" />
     <ClInclude Include="MeshField.h" />

@@ -28,7 +28,7 @@ public :
 
   // update
   virtual void updateChild();
-  virtual void drawChild(const Renderer* renderer,NodeType type);
+  void drawChild(const Renderer* renderer,NodeType type);
 
   // release
   void release();
@@ -78,7 +78,7 @@ public :
 
   virtual NodeType getNodeType() const { return NodeType::default; }
 
-  void setWorldChenged(bool chenge) { _worldChenged = chenge; }
+  bool isWorldChenged() const { return _worldChenged; }
 
 protected:
   // node

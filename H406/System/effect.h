@@ -19,8 +19,8 @@ namespace EffekseerSound { class Sound; }
 
 class Renderer;
 
-#include "DrawObject.h"
 #include "CreateFunc.h"
+#include "iLayer.h"
 
 using EffectHandle = int;
 using EffectFileHandle = unsigned int;
@@ -28,7 +28,7 @@ using EffectFileHandle = unsigned int;
 //==============================================================================
 // class
 //------------------------------------------------------------------------------
-class Effect : public DrawObject, public CreateFunc<Effect> {
+class Effect : public iLayer, public CreateFunc<Effect> {
 public:
   using CreateFunc::create;
 

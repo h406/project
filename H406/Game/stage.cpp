@@ -29,7 +29,7 @@ bool Stage::init(float stageSizeX,float stageSizeZ) {
 
   for(int x = 0; x < kNUM_X; x++) {
     for(int y = 0; y < kNUM_Y; y++) {
-      _fieldMap[x][y] = Sprite3D::create();
+      _fieldMap[x][y] = InstancingObject3D::create();
       _fieldMap[x][y]->setSize(bordSize.x - 5,bordSize.y - 5);
       _fieldMap[x][y]->setPos(Vec3(x * bordSize.x - stageSizeX * 0.5f + bordSize.x * 0.5f,0.1f,y * bordSize.y - stageSizeZ * 0.5f + bordSize.y * 0.5f));
       _fieldMap[x][y]->setRotX(D3DX_PI * 0.5f);

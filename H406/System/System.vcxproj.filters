@@ -94,8 +94,11 @@
     <Filter Include="object\drawObject\Instancing">
       <UniqueIdentifier>{a50d507f-8af2-4a7e-af03-e5a4562d0cc0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="object\drawObject\interface">
+    <Filter Include="object\drawObject\Interface">
       <UniqueIdentifier>{05a89b97-6772-46b1-8129-280d7360cbd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object\drawObject\Instancing\3D">
+      <UniqueIdentifier>{d7191796-9fec-4343-93b8-3ce4ab7baf51}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,9 +153,6 @@
     <ClCompile Include="wsInput.cpp">
       <Filter>input\websocket</Filter>
     </ClCompile>
-    <ClCompile Include="DrawObject.cpp">
-      <Filter>object\drawObject</Filter>
-    </ClCompile>
     <ClCompile Include="directInput.cpp">
       <Filter>input\dinput</Filter>
     </ClCompile>
@@ -178,7 +178,7 @@
       <Filter>object\drawObject\Sprite3DAddutive</Filter>
     </ClCompile>
     <ClCompile Include="Instancing3D.cpp">
-      <Filter>object\drawObject\Instancing</Filter>
+      <Filter>object\drawObject\Instancing\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,11 +297,17 @@
     <ClInclude Include="Sprite3DAdditive.h">
       <Filter>object\drawObject\Sprite3DAddutive</Filter>
     </ClInclude>
-    <ClInclude Include="instancing3D.h">
-      <Filter>object\drawObject\Instancing</Filter>
+    <ClInclude Include="iTextureOption.h">
+      <Filter>object\drawObject\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="iTextureObject.h">
-      <Filter>object\drawObject\interface</Filter>
+    <ClInclude Include="iColorOption.h">
+      <Filter>object\drawObject\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="instancing3D.h">
+      <Filter>object\drawObject\Instancing\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingObject3D.h">
+      <Filter>object\drawObject\Instancing\3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

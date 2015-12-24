@@ -26,7 +26,6 @@ public:
 
   using CreateFunc::create;
 
-  void drawChild(const Renderer* renderer,NodeType type);
   void updateMtxChild();
 
 protected:
