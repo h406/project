@@ -113,26 +113,26 @@ bool Game::init() {
 
   // ‰e
   auto shadow1_out = Shadow::create();
-  shadow1_out->setOwner((XFileObject*)_player[0]);
+  shadow1_out->setOwner(_player[0]);
   shadow1_out->setColor(D3DXCOLOR(0.6f, 0.8f, 1.0f, 1));
   shadow1_out->setOffsetY(0.6f);
   this->addChild(shadow1_out);
 
   auto shadow1_in = Shadow::create();
-  shadow1_in->setOwner((XFileObject*)_player[0]);
+  shadow1_in->setOwner(_player[0]);
   shadow1_in->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
   shadow1_in->setScl(0.5f, 1.0f, 0.5f);
   shadow1_in->setOffsetY(0.7f);
   this->addChild(shadow1_in);
 
   auto shadow2_out = Shadow::create();
-  shadow2_out->setOwner((XFileObject*)_player[1]);
+  shadow2_out->setOwner(_player[1]);
   shadow2_out->setColor(D3DXCOLOR(1.0f, 0.9f, 0.6f, 1));
   shadow2_out->setOffsetY(0.6f);
   this->addChild(shadow2_out);
 
   auto shadow2_in = Shadow::create();
-  shadow2_in->setOwner((XFileObject*)_player[1]);
+  shadow2_in->setOwner(_player[1]);
   shadow2_in->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f));
   shadow2_in->setScl(0.5f, 1.0f, 0.5f);
   shadow2_in->setOffsetY(0.7f);

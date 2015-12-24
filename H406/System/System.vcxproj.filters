@@ -94,6 +94,9 @@
     <Filter Include="object\drawObject\Instancing">
       <UniqueIdentifier>{a50d507f-8af2-4a7e-af03-e5a4562d0cc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object\drawObject\interface">
+      <UniqueIdentifier>{05a89b97-6772-46b1-8129-280d7360cbd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -296,6 +299,9 @@
     </ClInclude>
     <ClInclude Include="instancing3D.h">
       <Filter>object\drawObject\Instancing</Filter>
+    </ClInclude>
+    <ClInclude Include="iTextureObject.h">
+      <Filter>object\drawObject\interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

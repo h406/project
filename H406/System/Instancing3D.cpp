@@ -183,7 +183,7 @@ void Instancing3D::updateMtxChild() {
   _InstancingBuff->Lock(0,0,(void **)&pData,0);
   // update
   for(node* obj : this->getChildList()) {
-    Sprite3D* sprite = (Sprite3D*)obj;
+    DrawObject3D* sprite = (DrawObject3D*)obj;
     const float uvAnims[4] = {
       sprite->getTexScl().x / sprite->getNumU(),
       sprite->getTexScl().y / sprite->getNumV(),

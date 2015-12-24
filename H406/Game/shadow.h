@@ -22,7 +22,7 @@ public:
   void update();
   void uninit();
 
-  void setOwner(XFileObject* owner){ _owner = owner; }
+  void setOwner(node* owner) { _owner = owner; }
   void setColor(const D3DXCOLOR& col);
   void setOffsetY(float y){ _offsetY = y; }
 
@@ -33,7 +33,7 @@ private:
   Sprite3D* _sprite;
 
   // éùÇøéÂ
-  XFileObject* _owner;
+  node* _owner;
 
   float _offsetY;
 };

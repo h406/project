@@ -32,15 +32,10 @@ public:
   void setSizeH(float h) { _worldChenged = true; _scl.y = h; }
   void setSize(float w,float h) { setSizeW(w); setSizeH(h); }
 
-  void setColor(const D3DXCOLOR& color) { _color = color; }
-  D3DXCOLOR getColor() { return _color; }
-
 protected:
   virtual NodeType getNodeType() const { return NodeType::normal3D; }
 
 private:
-
-  D3DXCOLOR _color;
 
   LPDIRECT3DVERTEXBUFFER9 _vtxBuff;
   LPDIRECT3DVERTEXDECLARATION9 _p3DDec;

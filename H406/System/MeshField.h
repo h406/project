@@ -26,14 +26,11 @@ public:
   void draw(const Renderer* renderer);
   void uninit();
 
-  void setColor(const D3DXCOLOR& color) { _color = color; }
-
 protected:
   virtual NodeType getNodeType() const { return NodeType::normal3D; }
 
 private:
   void initVtx();
-  D3DXCOLOR _color;
 
   LPDIRECT3DINDEXBUFFER9  _indexBuff;
   LPDIRECT3DVERTEXBUFFER9 _vtxBuff;

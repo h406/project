@@ -41,7 +41,7 @@ void Shadow::update(void)
 
   Vec3 pos = _owner->getPos();
   pos.y = _offsetY;
-  _pos = pos;
+  this->setPos(pos);
 }
 
 //==============================================================================

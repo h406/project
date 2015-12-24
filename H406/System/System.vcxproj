@@ -53,6 +53,7 @@
     <ClInclude Include="iLayer2D.h" />
     <ClInclude Include="instancing3D.h" />
     <ClInclude Include="iPostEffect.h" />
+    <ClInclude Include="iTextureObject.h" />
     <ClInclude Include="meshCylinder.h" />
     <ClInclude Include="meshDome.h" />
     <ClInclude Include="MeshField.h" />
