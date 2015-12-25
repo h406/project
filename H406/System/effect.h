@@ -59,8 +59,6 @@ private:
 
   map<string,EffectFileHandle> _effectMap;
   vector<Effekseer::Effect*> _effectList;
-
-  void updateWorldMtx();
 };
 #endif
 //EOF

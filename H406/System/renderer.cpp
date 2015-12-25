@@ -15,6 +15,8 @@
 #include "shader.h"
 #include "node.h"
 #include "postEffect.h"
+#include "state.h"
+#include "Sprite2D.h"
 
 namespace {
   const bool kbWindow = false;
@@ -37,6 +39,9 @@ bool Renderer::init(const App* app) {
 
   // シェーダ
   _shader = new Shader(this);
+
+  // ステートマネージャ
+  _stateManager = new StateManager(_pD3DDevice);
 
   // フェード
   _fadeBG = nullptr;
@@ -174,6 +179,7 @@ Renderer::~Renderer() {
   SafeDelete(_camera);
   SafeDelete(_shader);
   SafeDelete(_postEffect);
+  SafeDelete(_stateManager);
 
   SafeRelease(_SurNormalDepth);
   SafeRelease(_TexNormalDepth);

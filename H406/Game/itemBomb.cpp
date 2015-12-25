@@ -79,7 +79,7 @@ void ItemBomb::update(){
 
       // 移動処理
       Vec3 targetPos = _target->getPos();
-      Vec2 vec = Vec2(_pos.x - targetPos.x, _pos.z - targetPos.z);
+      Vec2 vec = Vec2(this->getPos().x - targetPos.x,this->getPos().z - targetPos.z);
 
       D3DXVec2Normalize(&vec, &vec);
       float length = D3DXVec2Length(&vec);
@@ -106,14 +106,14 @@ void ItemBomb::update(){
       float rot = atan2(vec.y, vec.x);
       _moveDest.x = cosf(rot) * length * posmove;
       _moveDest.z = sinf(rot) * length * posmove;
-      _pos -= _moveDest;
-      _rot.y += rotmove;
+      this->setPos(this->getPos() - _moveDest);
+      this->setRotY(this->getRot().y + rotmove);
 
       // エフェクト
-      Vec3 effectPos = _pos;
+      Vec3 effectPos = this->getPos();
       effectPos.y = _item->getPos().y;
       _effect->setEffectPos(_effectID, effectPos);
-      _effect->setEffectRot(_effectID, _rot);
+      _effect->setEffectRot(_effectID, this->getRot());
     }
   }
 
@@ -144,7 +144,7 @@ void ItemBomb::use(){
   _item->setPosY(kOffsetPosY * 0.5f);
   _item->setRotX(D3DX_PI * 0.5f);
 
-  _effectID = _effect->play("Bomchuu.efk", _pos);
+  _effectID = _effect->play("Bomchuu.efk",this->getPos());
   _effect->setEffectScl(_effectID, Vec3(1.5f,1.5f,1.5f));
 
   if (_event){

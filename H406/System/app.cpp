@@ -14,6 +14,7 @@
 #include "node.h"
 #include "iScene.h"
 #include "sound.h"
+#include "Sprite2D.h"
 
 //==============================================================================
 // instance

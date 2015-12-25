@@ -23,6 +23,7 @@
 #include "shader.h"
 #include "camera.h"
 #include "effect.h"
+#include "state.h"
 #include "postEffect.h"
 #include "iPostEffect.h"
 

@@ -170,29 +170,17 @@ void Effect::uninit() {
 // update
 //------------------------------------------------------------------------------
 void Effect::update() {
-
+  // 全てのエフェクトの更新
+  _effekseerManager->Update();
 }
 
 //==============================================================================
 // draw
 //------------------------------------------------------------------------------
 void Effect::draw(const Renderer* renderer) {
-  _effekseerRenderer->BeginRendering();
-  _effekseerManager->Draw();
-  _effekseerRenderer->EndRendering();
-}
-
-//==============================================================================
-// updateWorldMtx
-//------------------------------------------------------------------------------
-void Effect::updateWorldMtx() {
   Effekseer::Matrix44 proj,view;
   D3DXMATRIX temp;
-  const Renderer* renderer = App::instance().getRenderer();
   const Camera* camera = renderer->getCamera();
-
-  // 親呼び出し
-  node::updateWorldMtx();
 
   temp = _mtxWorld * camera->getViewMtx();
   memcpy(&proj,&renderer->getProjMtx(),sizeof(Effekseer::Matrix44));
@@ -203,7 +191,7 @@ void Effect::updateWorldMtx() {
   memcpy(&p,&camera->getCurrentCamera()->getPosP(),sizeof(Effekseer::Vector3D));
   memcpy(&r,&camera->getCurrentCamera()->getPosR(),sizeof(Effekseer::Vector3D));
   memcpy(&u,&camera->getCurrentCamera()->getVecU(),sizeof(Effekseer::Vector3D));
-  
+
   // 投影行列の更新
   _effekseerRenderer->SetProjectionMatrix(proj);
   // カメラ行列の更新
@@ -211,8 +199,9 @@ void Effect::updateWorldMtx() {
   // 3Dサウンド用リスナー設定の更新
   _effekseerSound->SetListener(p,r,u);
 
-  // 全てのエフェクトの更新
-  _effekseerManager->Update();
+  _effekseerRenderer->BeginRendering();
+  _effekseerManager->Draw();
+  _effekseerRenderer->EndRendering();
 }
 
 //EOF

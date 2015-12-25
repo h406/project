@@ -100,6 +100,9 @@
     <Filter Include="object\drawObject\Instancing\3D">
       <UniqueIdentifier>{d7191796-9fec-4343-93b8-3ce4ab7baf51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="renderer\state">
+      <UniqueIdentifier>{ee9578df-10cc-4f2c-9bb9-3d892bcd33e9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="window.cpp">
@@ -179,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="Instancing3D.cpp">
       <Filter>object\drawObject\Instancing\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="state.cpp">
+      <Filter>renderer\state</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,6 +314,9 @@
     </ClInclude>
     <ClInclude Include="InstancingObject3D.h">
       <Filter>object\drawObject\Instancing\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>renderer\state</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

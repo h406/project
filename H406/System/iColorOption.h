@@ -18,7 +18,7 @@ public:
   iColorOption() : _color(1,1,1,1) {};
 
   void setColor(const D3DXCOLOR& color) { _color = color; }
-  D3DXCOLOR& getColor() { return _color; }
+  const D3DXCOLOR& getColor() const { return _color; }
 protected:
   D3DXCOLOR _color;
 };

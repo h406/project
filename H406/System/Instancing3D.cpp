@@ -179,7 +179,7 @@ void Instancing3D::updateMtxChild() {
 
   // データが更新されている場合は更新
   // todo ちゃんとやる
-  //if(_isWorldChenged)
+  // if(_isWorldChenged)
   {
     // インスタンシングデータ
     INSTANCING_DATA *pData = nullptr;
@@ -187,8 +187,8 @@ void Instancing3D::updateMtxChild() {
     _InstancingBuff->Lock(0,0,(void **)&pData,0);
     // update
     int i = 0;
-    for(auto it = this->getChildList().begin(); it != this->getChildList().end(); it++) {
-      DrawObject3D* sprite = static_cast<DrawObject3D*>(*it);
+    for(const auto& obj : this->getChildList()) {
+      const DrawObject3D* sprite = static_cast<const DrawObject3D*>(obj);
       const float uvAnims[4] = {
         sprite->getTexScl().x / sprite->getNumU(),
         sprite->getTexScl().y / sprite->getNumV(),
@@ -199,7 +199,7 @@ void Instancing3D::updateMtxChild() {
       pData[i]._World = sprite->getWorldMtx();
 
       pData[i]._UV = uvAnims;
-      pData[i]._Material = (float*)sprite->getColor();
+      pData[i]._Material = (const Vec4)sprite->getColor();
       ++i;
     }
     _InstancingBuff->Unlock();

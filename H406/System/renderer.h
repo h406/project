@@ -18,6 +18,7 @@ class Shader;
 class Sprite2D;
 class PostEffect;
 class Effect;
+class StateManager;
 
 //==============================================================================
 //  class
@@ -37,6 +38,7 @@ public:
   Texture* getTexture() const { return _texture; }
   Camera* getCamera() const { return _camera; }
   Shader* getShader() const { return _shader; }
+  StateManager* getStateManager() const { return _stateManager; }
   PostEffect* getPostEffect() const { return _postEffect; }
 
   void setFadeBG(Sprite2D* sprite) { _fadeBG = sprite; }
@@ -58,6 +60,9 @@ private:
 
   // テクスチャマネージャ
   Texture* _texture;
+
+  // StateManager
+  StateManager* _stateManager;
   
   // cam
   Camera* _camera;

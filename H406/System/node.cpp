@@ -95,6 +95,8 @@ void node::updateMtxChild() {
     }
     obj->updateMtxChild();
   }
+
+  _worldChenged = false;
 }
 
 //==============================================================================

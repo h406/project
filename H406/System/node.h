@@ -69,7 +69,7 @@ public :
   void setRot(const Vec3& rot) { _worldChenged = true; _rot = rot; }
   void setScl(const Vec3& scl) { _worldChenged = true; _scl = scl; }
 
-  const Matrix& getWorldMtx() { return _mtxWorld; }
+  const Matrix& getWorldMtx() const { return _mtxWorld; }
 
   virtual void updateMtxChild();
 

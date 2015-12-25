@@ -15,6 +15,8 @@
 */
 class Renderer;
 
+#include "node.h"
+#include "node2d.h"
 #include "iColorOption.h"
 #include "iTextureOption.h"
 
