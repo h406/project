@@ -54,6 +54,7 @@ public:
 
 protected:
   void update();
+  void draw();
 
 private:
   App(int width, int height);

@@ -65,6 +65,11 @@ App::~App() {
 void App::update() {
   _input->update();
 
+  if(_nextScene != nullptr && _fadeTime == 1.f) {
+    setBaceScene(_nextScene->create());
+    SafeDelete(_nextScene);
+  }
+
   if(_nextScene != nullptr) {
     _fadeTime += 0.1f;
     if(_fadeTime > 1.f) {
@@ -85,14 +90,13 @@ void App::update() {
     _renderer->update();
     _baceScene->updateMtxChild();
   }
+}
 
+//==============================================================================
+// draw
+//------------------------------------------------------------------------------
+void App::draw() {
   _renderer->draw(_baceScene);
-
-  if(_nextScene != nullptr && _fadeTime == 1.f) {
-    setBaceScene(_nextScene->create());
-    SafeDelete(_nextScene);
-  }
-
 }
 
 //==============================================================================

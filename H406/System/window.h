@@ -18,8 +18,6 @@ public:
 
   static LRESULT CALLBACK winProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 
-  virtual void update() {}
-
   HWND getHWnd() const { return _hWnd; }
   HINSTANCE getHInst() const { return _hInst; }
   SIZE getWindowSize() const { return _WindowSize; }
@@ -38,6 +36,9 @@ protected:
 
   Window(int width,int height);
   virtual ~Window();
+
+  virtual void update() {}
+  virtual void draw() {}
 
   HWND _hWnd;
   HINSTANCE _hInst;

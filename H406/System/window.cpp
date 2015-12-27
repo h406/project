@@ -111,11 +111,15 @@ Window::~Window() {
 int Window::run() {
   // メッセージ変数を用意
   MSG msg;
-  // FPSのため変数
-  DWORD dwExecLastTime = 0; // 任意のFPS制御するために
-  DWORD dwFPSLastTime = 0;  // 現在のFPS計測するために
-  DWORD dwCurrentTime = 0;  // 現在時刻格納用
-  DWORD dwFrameCount = 0;   // 任意秒の間に更新描画がされた回数を格納
+  
+  //FPS カウント用
+  DWORD nStartTime = timeGetTime();
+  DWORD nLastUpdateTime = timeGetTime();
+  DWORD nCountFrames = 0;
+  DWORD nCurrentTime = 0;
+  // bool bAdjustFps = false;
+  bool isDrawSkip = false;
+  _nCountFPS = 0;
 
   // ウィンドウ表示
   ShowWindow(_hWnd,SW_SHOWDEFAULT);	// 非クライアント領域のみ表示
@@ -135,30 +139,53 @@ int Window::run() {
       }
     }
     else {
-      //---- DirectX プログラム ----
-      // FPS計測(500msに何回更新描画が行われたか)
-      dwCurrentTime = timeGetTime();
-      if((dwCurrentTime - dwFPSLastTime) >= 500) {
-        // FPSカウント更新
-        _nCountFPS = (dwFrameCount * 1000) / (dwCurrentTime - dwFPSLastTime);
+      nCurrentTime = timeGetTime();
+      double fps = double(nCountFrames) / (nCurrentTime - nStartTime) * 1000.0;
 
-        // 次の計測のために初期化
-        dwFPSLastTime = dwCurrentTime;
-        dwFrameCount = 0;
+      // FPS計算
+      if(nCountFrames >= 60) {
+        // 四捨五入でFPSに入れる
+        nCountFrames = 0;
+        nStartTime = nCurrentTime;
       }
+        _nCountFPS = static_cast<int>(fps + 0.5f);
 
       // 任意のFPSで更新、描画を行う
-      if((dwCurrentTime - dwExecLastTime) >= (1000 / 60.f))	// 60FPS
+      //if((nCurrentTime - nLastUpdateTime) >= DWORD(1000.f / 60.f + (bAdjustFps ? 0.5f : 0.f)))	// 60FPS
+      if(fps <= 60.0)
       {
-        dwExecLastTime = dwCurrentTime;
+        nLastUpdateTime = nCurrentTime;
+        // bAdjustFps = !bAdjustFps;
 
+        // 更新
         update();
 
-        if(_bExitApplication) {
-          DestroyWindow(_hWnd);	// WM_DESTROYメッセージを発行
+        // 描画処理
+        if(!isDrawSkip)
+        {
+          draw();
         }
 
-        dwFrameCount++;
+        // 終了フラグ
+        if(_bExitApplication) {
+          // WM_DESTROYメッセージを発行
+          DestroyWindow(_hWnd);
+          return 0;
+        }
+
+        // 時間かかりすぎ
+        if((timeGetTime() - nLastUpdateTime) >= int(1000.f / 60.f + 0.5f)) {
+          // 2回連続ではスキップしない
+          isDrawSkip = !isDrawSkip;
+        }
+        else {
+          isDrawSkip = false;
+        }
+        
+        ++nCountFrames;
+      }
+      else {
+        Sleep(1);
       }
     }
   }
