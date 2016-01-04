@@ -15,8 +15,10 @@
 // constant
 //------------------------------------------------------------------------------
 namespace {
-  static const char* kClassName = "ShaderTest";
-  static const char* kDefaultTitle = "ShaderTest";
+  const char* kClassName = "ShaderTest";
+  const char* kDefaultTitle = "ShaderTest";
+
+  const int kFPS = 60;
 };
 
 //==============================================================================
@@ -140,22 +142,22 @@ int Window::run() {
     }
     else {
       nCurrentTime = timeGetTime();
+      // FPS計算
       double fps = double(nCountFrames) / (nCurrentTime - nStartTime) * 1000.0;
 
-      // FPS計算
-      if(nCountFrames >= 60) {
-        // 四捨五入でFPSに入れる
+      // 一秒間で一回リセット
+      if(nCountFrames >= kFPS) {
         nCountFrames = 0;
         nStartTime = nCurrentTime;
       }
-        _nCountFPS = static_cast<int>(fps + 0.5f);
+
+      // FPS
+      _nCountFPS = static_cast<int>(fps + 0.5f);
 
       // 任意のFPSで更新、描画を行う
-      //if((nCurrentTime - nLastUpdateTime) >= DWORD(1000.f / 60.f + (bAdjustFps ? 0.5f : 0.f)))	// 60FPS
-      if(fps <= 60.0)
+      if(fps <= kFPS)
       {
         nLastUpdateTime = nCurrentTime;
-        // bAdjustFps = !bAdjustFps;
 
         // 更新
         update();
@@ -174,7 +176,7 @@ int Window::run() {
         }
 
         // 時間かかりすぎ
-        if((timeGetTime() - nLastUpdateTime) >= int(1000.f / 60.f + 0.5f)) {
+        if((timeGetTime() - nLastUpdateTime) >= unsigned(1000.f / float(kFPS) + 0.5f)) {
           // 2回連続ではスキップしない
           isDrawSkip = !isDrawSkip;
         }
@@ -182,10 +184,11 @@ int Window::run() {
           isDrawSkip = false;
         }
         
+        // １フレームカウント
         ++nCountFrames;
       }
       else {
-        Sleep(1);
+        Sleep(0);
       }
     }
   }

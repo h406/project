@@ -32,6 +32,9 @@ namespace{
   const Vec3 kPLAYER_2_INIT_POS = Vec3(500 - bordSize.x * 0.5f, 0, 0);
 }
 
+//hack test
+int nGameLoopFrame = 0;
+
 //------------------------------------------------------------------------------
 // init
 //------------------------------------------------------------------------------
@@ -172,6 +175,9 @@ bool Game::init() {
   _nextModeTime = 220;
   _gameMode = Game::MODE_START;
 
+  // hack
+  nGameLoopFrame = 0;
+
   float gaugeRate = 0.5f;
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveGame);
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowGauge, &gaugeRate);
@@ -214,6 +220,12 @@ void Game::update() {
     DataManager::instance().update();
   }
 
+  // hack
+  if(nGameLoopFrame >= 0) {
+    ++ nGameLoopFrame;
+  }
+
+
   //---------------------------------------------------------------------------
   // case‚Ìˆ—
   //---------------------------------------------------------------------------
@@ -226,12 +238,16 @@ void Game::update() {
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_SHOW_BEGIN)), nullptr);
     }else if(_nextModeTime == 50){
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_SHOW_END)), nullptr);
-    }else if(_nextModeTime == 0){
+    }
+    // hack
+    else if(_nextModeTime <= 0 && (nGameLoopFrame % 324) == 0) {
       _gameMode = Game::MODE_PLAY;
       _eventManager->dispatchEvent(EventList(int(EventList::ROUND_START)), nullptr);
 //      App::instance().getSound()->play("./data/sound/se/round_start.wav", false);
       App::instance().getSound()->stop("./data/sound/bgm/game_main_loop.wav");
       App::instance().getSound()->play("./data/sound/bgm/game_main.wav", false);
+      nGameLoopFrame = -1;
+      _nextModeTime = 0;
     }
   }
   break;
@@ -324,6 +340,9 @@ void Game::update() {
       App::instance().getSound()->play("./data/sound/bgm/game_main_loop.wav", true);
       App::instance().getSound()->stop("./data/sound/bgm/game_main.wav");
       BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::ShowFinish);
+      
+      // hack
+      nGameLoopFrame = 0;
     }
     // Å‚ç‚·SE
     if (DataManager::instance().getData()->getTime() == 15 * 60){

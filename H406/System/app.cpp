@@ -88,7 +88,6 @@ void App::update() {
   if(_baceScene != nullptr) {
     _baceScene->updateChild();
     _renderer->update();
-    _baceScene->updateMtxChild();
   }
 }
 
@@ -96,6 +95,8 @@ void App::update() {
 // draw
 //------------------------------------------------------------------------------
 void App::draw() {
+
+  _baceScene->updateMtxChild();
   _renderer->draw(_baceScene);
 }
 
