@@ -27,8 +27,14 @@ namespace{
 
 ShuchuSen* _s;
 
+XFileObject* _stickLayer = nullptr;
 XFileObject* _stickHandle[3] = { nullptr };
 XFileObject* _stickBar[3] = { nullptr };
+
+XFileObject* _stickHandlePlayer[2] = { nullptr };
+XFileObject* _stickBarPlayer[2] = { nullptr };
+
+CameraBace* _playerCamera = nullptr;
 
 //==============================================================================
 // init
@@ -40,15 +46,22 @@ bool SelectScene::init() {
   _inputPermit = false;
 
 #if _MODEL
+
+  _stickLayer = XFileObject::create("./data/model/Elephant_bar.x");
+  this->addChild(_stickLayer);
+
+  _stickLayer->setVisible(false);
+  _stickLayer->setPos(Vec3(200.0f, 0.0f, 0.0f));
+
   for (int i = 0; i < 3; i++){
     const auto& barStatus = PlayerStatus::kStickBarStatus[(int)i + 1];
     const auto& handStatus = PlayerStatus::kStickHandleStatus[(int)i + 1];
 
     _stickBar[i] = XFileObject::create(barStatus.fileName);
-    this->addChild(_stickBar[i]);
+    _stickLayer->addChild(_stickBar[i]);
 
     _stickHandle[i] = XFileObject::create(handStatus.fileName);
-    this->addChild(_stickHandle[i]);
+    _stickLayer->addChild(_stickHandle[i]);
 
     _stickBar[i]->setScl(Vec3(0.7f, 0.7f, 0.7f));
     _stickHandle[i]->setScl(Vec3(0.7f, 0.7f, 0.7f));
@@ -65,13 +78,18 @@ bool SelectScene::init() {
 
 #if _MODEL
   _camera->setPosP({ 0.f, 100.f, 400.f });
-  _camera->setPosR({ 0, 20, 0 });
+  _camera->setPosR({ 200, 20, 0 });
+
+  _playerCamera = camera->createCamera();
+  _playerCamera->setPosP({ 0, 0, 0 });
+  _playerCamera->setPosR({ 0, 0, 0 });
 #endif
   camera->setCamera(_camera, 100);
 
   _s = ShuchuSen::create("./data/texture/image.png");
   _s->setSize(1500.f * _windowScl, 1500.f * _windowScl);
   _s->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
+  _s->setVisible(false);
   this->addChild(_s);
 
   _waku = Sprite2D::create("./data/texture/qr_waku_00.png");
@@ -152,7 +170,6 @@ void SelectScene::update() {
   const auto color = _back->getColor();
   const auto wakuColor = _waku->getColor();
 
-
   static float f = 0;
   static float _fspeed = 0.02f;
   static int _frame = 0;
@@ -163,21 +180,32 @@ void SelectScene::update() {
   f += _fspeed;
   static float _modelLength = 200.0f;
   static float _lengthSpeed = 1.0f;
-  Vec3 pos[3] = { Vec3(0, 0, 0), Vec3(0, 0, 0), Vec3(0, 0, 0) };
+
   for (int i = 0; i < 3; i++) {
-    pos[i] = Vec3(cosf(f + D3DX_PI * (2.f/3.f) * i), 1, sinf(f + D3DX_PI * (2.f/3.f) * i));
-    pos[i] *= _modelLength;
-    pos[i].y = 10;
-  }
+    Vec3 pos = Vec3(cosf(f + D3DX_PI * (2.f / 3.f) * i), 1, sinf(f + D3DX_PI * (2.f / 3.f) * i));
+    pos *= _modelLength;
+    pos.y = 10.f;
 
-  for (int i = 0; i < 3; i++){
-    _stickBar[i]->setPos(pos[i]);
-    _stickHandle[i]->setPos(pos[i]);
+    // pos
+    _stickBar[i]->setPos(pos);
+    _stickHandle[i]->setPos(pos);
 
-    float rot = atan2(pos[i].x, pos[i].z);
+    // rot
+    const float rot = atan2(pos.x, pos.z);
     _stickBar[i]->setRotY(rot);
     _stickHandle[i]->setRotY(rot);
   }
+
+  if (_stickBarPlayer[0] != nullptr){
+    Vec3 pos = Vec3(cosf(f + D3DX_PI), 1, sinf(f + D3DX_PI));
+    pos *= _modelLength;
+
+    // rot
+    const float rot = atan2(pos.x, pos.z);
+    _stickBarPlayer[0]->setRotY(rot);
+    _stickHandlePlayer[0]->setRotY(rot);
+  }
+
 #endif
 
   if(_mode == SELECT_MODE::PLAYER1_SELECT || _mode == SELECT_MODE::PLAYER2_SELECT) {
@@ -216,32 +244,71 @@ void SelectScene::update() {
   case SELECT_MODE::PLAYER1_DECISION:
   {
 #if _MODEL
-    if(_stickDecision == false){
-      _modelLength -= _lengthSpeed; if (_modelLength < 0) _modelLength = 0;
-      if (_modelLength < 5.f){
-        Vec3 pos = Vec3(0, 0, 0);
-        int id  = _effect->play("GetItemBlue.efk", pos);
-        int id2 = _effect->play("get.efk", pos);
-        _effect->setEffectScl(id, Vec3(1.f, 1.f, 1.f));
-        _effect->setEffectScl(id2, Vec3(5.f, 5.f, 5.f));
-        _fspeed = 0.02f;
-        for (int i = 0; i < 3; i++){
-          _stickHandle[i]->setVisible(false);
-          _stickBar[i]->setVisible(false);
-          _stickDecision = true;
-          _frame = 120;
-        }
-        _stickHandle[2]->setVisible(true);
-        _stickBar[2]->setVisible(true);
-      }else{
-        _fspeed += 0.002f;
+    _modelLength -= _lengthSpeed; if (_modelLength < 0) _modelLength = 0;
+    _fspeed += 0.002f;
+
+    if (_modelLength < 2.f){
+
+      // 杖生成
+      const auto& barStatus = PlayerStatus::kStickBarStatus[3];
+      const auto& handStatus = PlayerStatus::kStickHandleStatus[3];
+
+      _stickBarPlayer[0] = XFileObject::create(barStatus.fileName);
+      this->addChild(_stickBarPlayer[0]);
+
+      _stickHandlePlayer[0] = XFileObject::create(handStatus.fileName);
+      this->addChild(_stickHandlePlayer[0]);
+
+      _stickBarPlayer[0]->setScl(Vec3(0.7f, 0.7f, 0.7f));
+      _stickHandlePlayer[0]->setScl(Vec3(0.7f, 0.7f, 0.7f));
+
+      _stickBarPlayer[0]->setPos(_stickLayer->getPos());
+      _stickHandlePlayer[0]->setPos(_stickLayer->getPos());
+
+      // 杖登場エフェクト
+      Vec3 pos = _stickLayer->getPos();
+      int id  = _effect->play("GetItemBlue.efk", pos);
+      int id2 = _effect->play("get.efk", pos);
+      _effect->setEffectScl(id, Vec3(1.f, 1.f, 1.f));
+      _effect->setEffectScl(id2, Vec3(5.f, 5.f, 5.f));
+
+      // 集中線
+      _s->setVisible(true);
+
+      // 杖消す
+      for (int i = 0; i < 3; i++){
+        _stickHandle[i]->setVisible(false);
+        _stickBar[i]->setVisible(false);
+//        _stickDecision = true;
+//        _frame = 120;
       }
-    }else{
-      _frame--;
-      if (_frame == 0){
-        _mode = (SELECT_MODE)((int)_mode + 1);
-      }
+      // 次のモードへ
+      _mode = (SELECT_MODE)((int)_mode + 1);
+
+      // カメラ
+      auto camera = App::instance().getRenderer()->getCamera();
+      _playerCamera->setPosP({ 150.f, 50.f, 150.f });
+      _playerCamera->setPosR({ 200, 50, 0 });
+      camera->setCamera(_playerCamera, 60);
     }
+
+#else
+    _mode = (SELECT_MODE)((int)_mode + 1);
+#endif
+  }
+    break;
+
+  case SELECT_MODE::PLAYER1_SHOW:
+  {
+#if _MODEL
+    _fspeed -= 0.002f;
+    if (_fspeed < 0.02f) _fspeed = 0.02f;
+
+    if (App::instance().getInput()->isTrigger(0, VK_INPUT::_1)) {
+      _mode = (SELECT_MODE)((int)_mode + 1);
+    }
+#else
+    _mode = (SELECT_MODE)((int)_mode + 1);
 #endif
   }
     break;
@@ -253,6 +320,15 @@ void SelectScene::update() {
 
   case SELECT_MODE::PLAYER2_QR:
     ReadQR(1);
+    break;
+
+  case SELECT_MODE::PLAYER2_DECISION:
+  {
+#if _MODEL
+#else
+_mode = (SELECT_MODE)((int)_mode + 1);
+#endif
+  }
     break;
 
   case SELECT_MODE::Production:
@@ -313,7 +389,11 @@ void SelectScene::SelectQR(int playerID) {
 //------------------------------------------------------------------------------
 void SelectScene::ReadQR(int playerID) {
   if(App::instance().getInput()->isTrigger(playerID,VK_INPUT::_1)) {
-    _mode = (SELECT_MODE)((int)_mode + 1 + 1);
+    _mode = (SELECT_MODE)((int)_mode + 1);
+
+#ifndef _MODEL
+    _mode = (SELECT_MODE)((int)_mode + 1);
+#endif
   }
 }
 
