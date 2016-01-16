@@ -497,17 +497,16 @@ void SelectScene::ReadQR(int playerID) {
   //}
 
   bool isRead = true;
-  int stickId = 0;
 
   switch (_QRreader->getString().c_str()[0]){
   case '0':
-    _playerStickID[playerID] = 0;
-    break;
-  case '1':
     _playerStickID[playerID] = 1;
     break;
-  case '2':
+  case '1':
     _playerStickID[playerID] = 2;
+    break;
+  case '2':
+    _playerStickID[playerID] = 3;
     break;
   default:
     isRead = false;
