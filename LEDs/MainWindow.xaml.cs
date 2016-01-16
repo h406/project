@@ -69,7 +69,10 @@ namespace LEDs
       "game.bmp",
       "LED_BBAwin.png",
       "LED_GGEwin.png",
+      "GGE_VS_BBR.png",
       "white.bmp",
+      "title.png",
+      "none.png",
     };
 
     private Hashtable Images = new Hashtable();
@@ -147,8 +150,8 @@ namespace LEDs
             }
             else
             {
-              image.Source = BitmapImages[(int)Images["white.bmp"]];
-              MakeText("接戦！！", Brushes.Black);
+              image.Source = BitmapImages[(int)Images["GGE_VS_BBR.png"]];
+              MakeText("接戦！！", Brushes.White);
             }
             LeadIsShow = true;
             GaugeTimer = 0;
@@ -165,16 +168,16 @@ namespace LEDs
         case LedEvent.ShowFinish:
         if (!LeadIsShow)
         {
-          image.Source = BitmapImages[(int)Images["white.bmp"]];
-          MakeText("フィニッシュ！！", Brushes.Black);
+          image.Source = BitmapImages[(int)Images["none.png"]];
+          MakeText("フィニッシュ！！", Brushes.White);
           LeadIsShow = true;
         }
         break;
         case LedEvent.ShowRoundWin:
+        case LedEvent.MoveResult:
         if (!LeadIsShow)
         {
-          image.Source = BitmapImages[(int)Images["white.bmp"]];
-          MakeText((recvData._s32 + 1) + "P WIN　！！", Brushes.Black);
+          MakeText((recvData._s32 + 1) + "P WIN　！！", Brushes.White);
           LeadIsShow = true;
           if (recvData._s32 == 0)
           {
@@ -184,14 +187,25 @@ namespace LEDs
           {
             image.Source = BitmapImages[(int)Images["LED_BBAwin.png"]];
           }
+          else
+          {
+            image.Source = BitmapImages[(int)Images["white.bmp"]];
+          }
         }
         break;
+        case LedEvent.NoneConect:
+        {
+          image.Source = BitmapImages[0];
+          LeadIsShow = true;
+          GaugeTimer = 0;
+        }break;
+
         // その他
         default:
         //if (!LeadIsShow)
         {
           //なし
-          image.Source = BitmapImages[(int)recvData.events];
+          image.Source = BitmapImages[(int)Images["title.png"]];
           LeadIsShow = true;
           GaugeTimer = 0;
         }
