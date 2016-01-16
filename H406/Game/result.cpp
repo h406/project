@@ -69,9 +69,10 @@ bool Result::init() {
   hitcheck->addPlayer(_player);
   this->addChild(hitcheck, INT_MAX);
 
-  auto _s = ShuchuSen::create("./data/texture/image.png");
+  _s = ShuchuSen::create("./data/texture/image.png");
   _s->setSize(1500.f * _windowScl, 1500.f * _windowScl);
   _s->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
+  _s->setVisible(false);
   this->addChild(_s);
 
   _playerSprite = Sprite2D::create();
@@ -111,7 +112,7 @@ void Result::update() {
   _camera->setPosR({ 0.0f, playerPos.y + 50.0f, 0.0f });
 
   if (_player->getPos().y < 1.0f){
-
+    _s->setVisible(true);
     _frameCount += 0.01f;
     _winSpriteScl += (1.f - _winSpriteScl) * 0.1f;
     _winSprite->setSize((float)App::instance().getWindowSize().cx * _winSpriteScl, (float)App::instance().getWindowSize().cy * _winSpriteScl);

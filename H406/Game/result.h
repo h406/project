@@ -14,6 +14,7 @@
 
 class CameraBace;
 class Player;
+class ShuchuSen;
 
 //==============================================================================
 // 
@@ -35,6 +36,8 @@ private:
   Player* _player;
   Sprite2D* _playerSprite;
   Vec2 _playerSpritePosDest;
+
+  ShuchuSen* _s;
 
   float _windowScl;
   float _frameCount;

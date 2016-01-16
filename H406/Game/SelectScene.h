@@ -22,6 +22,7 @@ namespace {
     PLAYER2_SELECT,
     PLAYER2_QR,
     PLAYER2_DECISION,
+    PLAYER2_SHOW,
     // ââèo
     Production,
     MAX,
@@ -30,6 +31,7 @@ namespace {
 }
 
 class QRreader;
+class ShuchuSen;
 
 //==============================================================================
 // class
@@ -45,8 +47,10 @@ public:
 private:
   void SelectQR(int playerID);
   void ReadQR(int playerID);
+  void CreateStick(int playerID, int sticlID);
 
   CameraBace* _camera;
+  CameraBace* _playerCamera;
 
   Sprite2D* _back;
   Sprite2D* _waku;
@@ -62,17 +66,30 @@ private:
   Sprite2D* _oji;
   Sprite2D* _oba;
   Sprite2D* _vs;
+  ShuchuSen* _s;
 
   bool _select;
 
   int _backTex[2];
   float _windowScl;
 
+  XFileObject* _stickLayer;
+  XFileObject* _stickHandlePlayer[2];
+  XFileObject* _stickBarPlayer[2];
   XFileObject* _stickHandle[3];
   XFileObject* _stickBar[3];
 
   int _curSelectPlayer = 0;
   bool _inputPermit;
+
+  int _playerStickID[2];
+
+  float _modelLength;
+  float _lengthSpeed;
+  float _gameF;
+  float _fspeed;
+  int _frame;
+  bool _stickDecision;
 };
 
 

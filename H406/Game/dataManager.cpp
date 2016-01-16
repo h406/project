@@ -40,9 +40,6 @@ void DataManager::init()
   _data->setTime(GameConfig::kTIME_MAX);
   _data->setRound(1);
 
-  _data->setPlayerStatus(0,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
-  _data->setPlayerStatus(1,PlayerStatus::PlayerStatus(rand() % PlayerStatus::kStickBarNum,rand() % PlayerStatus::kStickHandleNum));
-
   _data->setPlayerStatus(0, PlayerStatus::PlayerStatus(3,3));
   _data->setPlayerStatus(1, PlayerStatus::PlayerStatus(2,2));
 
@@ -55,6 +52,13 @@ void DataManager::init()
     const auto& handStatus = PlayerStatus::kStickHandleStatus[(int)_data->getPlayerStatus(i)._handleID];
     _data->setPlayerMaxDripNum(i, barStatus.maxdripNum + handStatus.maxdripNum);
   }
+}
+
+//==============================================================================
+// setPlayerStatus
+//------------------------------------------------------------------------------
+void DataManager::setPlayerStatus(int playerId, int stickId){
+  _data->setPlayerStatus(playerId, PlayerStatus::PlayerStatus(stickId, stickId));
 }
 
 //==============================================================================

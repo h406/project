@@ -46,7 +46,7 @@ private:
   Sprite2D* _gaugeLayer;
   Sprite2D* _gaugeBase;
   Sprite2D* _gaugeBack;
-  Sprite2D* _gaugeGear;
+  Sprite2D* _gaugeRound;
   Gauge* _gauge[2];
 
   // “h‚é‚â‚ÂŒn
