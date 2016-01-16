@@ -37,7 +37,7 @@ bool Title::init() {
   this->addChild(_LogoSprite);
 
   const Vec2 kTOUCH_START_SIZE = Vec2(906.f, 140.f) * 0.75f;
-  _touch_start = Sprite2D::create("./data/texture/touch_start.png");
+  _touch_start = Sprite2D::create("./data/texture/touch_start_01.png");
   _touch_start->setSize(kTOUCH_START_SIZE.x * _windowScl, kTOUCH_START_SIZE.y * _windowScl);
   _touch_start->setPos(App::instance().getWindowSize().cx * 0.5f,App::instance().getWindowSize().cy * 0.87f);
   this->addChild(_touch_start);

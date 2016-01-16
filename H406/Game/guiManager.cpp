@@ -22,8 +22,9 @@
 #include "BaceScene.h"
 
 namespace{
-  const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
-  const Vec2 kTIME_SIZE            = Vec2(128.0f, 128.0f) * 0.6f;
+//  const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(0.0f, 0.3f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) };
+  const D3DXCOLOR kPLAYER_COLOR[2] = { D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f) };
+  const Vec2 kTIME_SIZE = Vec2(128.0f, 128.0f) * 0.6f;
   const Vec2 kRESULT_NUM_SIZE      = Vec2(128.0f * 1.5f, 128.0f * 1.5f);
   const Vec2 kITEM_SIZE            = Vec2(128.0f, 128.0f);
   const Vec2 kROUND_SIZE           = Vec2(64.0f, 64.0f);
@@ -68,14 +69,17 @@ bool GuiManager::init(EventManager* eventManager)
 //  _gaugeLayer->addChild(_gaugeGear);
 
   // 動くゲージ
-  const Vec2 kGaugeSize = Vec2(800.f, 300.f) / 1.5f /* / 1.5f*/;
-  _gauge[0] = Gauge::create(kGaugeSize.x * _windowScl, kGaugeSize.y * _windowScl);
-  _gauge[0]->setPos(((kGaugeSize.x * _windowScl) * 0.5f) - windowSizeHalf.x, ((kGaugeSize.y * _windowScl) * 0.5f) - windowSizeHalf.y);
+  const float _gaugeScl = (float)(App::instance().getWindowSize().cx / 1920.f);
+  const Vec2 kGaugeSize = Vec2(649.f, 127.f) * _gaugeScl;
+  const Vec2 kGaugeOffset = Vec2(165.f, 22.f) * _gaugeScl;
+
+  _gauge[0] = Gauge::create(kGaugeSize.x, kGaugeSize.y);
+  _gauge[0]->setPos((kGaugeSize.x * 0.5f) - windowSizeHalf.x + kGaugeOffset.x, (kGaugeSize.y * 0.5f) - windowSizeHalf.y + kGaugeOffset.y);
   _gauge[0]->setTexture("./data/texture/gauge_01.png");
   _gaugeLayer->addChild(_gauge[0]);
 
-  _gauge[1] = Gauge::create(kGaugeSize.x * _windowScl, kGaugeSize.y * _windowScl);
-  _gauge[1]->setPos(windowSizeHalf.x - (kGaugeSize.x * _windowScl) * 0.5f, ((kGaugeSize.y * _windowScl) * 0.5f) - windowSizeHalf.y);
+  _gauge[1] = Gauge::create(kGaugeSize.x, kGaugeSize.y);
+  _gauge[1]->setPos(windowSizeHalf.x - (kGaugeSize.x * 0.5f) - kGaugeOffset.x, (kGaugeSize.y * 0.5f) - windowSizeHalf.y + kGaugeOffset.y);
   _gauge[1]->setFlip(true);
   _gauge[1]->setTexture("./data/texture/gauge_02.png");
   _gaugeLayer->addChild(_gauge[1]);
@@ -87,7 +91,7 @@ bool GuiManager::init(EventManager* eventManager)
   _gaugeLayer->addChild(_gaugeBase);
 
   // 数字
-  _plus[0] = Sprite2D::create("./data/texture/num2.png");
+  _plus[0] = Sprite2D::create("./data/texture/num_02.png");
   _plus[0]->setSize(kNumSize.x * _windowScl, kNumSize.y * _windowScl);
   _plus[0]->setPos(kNumSize.x * _windowScl, windowSizeHalf.y);
   _plus[0]->setNumU(11);
@@ -96,7 +100,7 @@ bool GuiManager::init(EventManager* eventManager)
   _plus[0]->setColor(kPLAYER_COLOR[0]);
   this->addChild(_plus[0]);
 
-  _plus[1] = Sprite2D::create("./data/texture/num2.png");
+  _plus[1] = Sprite2D::create("./data/texture/num_03.png");
   _plus[1]->setSize(kNumSize.x * _windowScl, kNumSize.y * _windowScl);
   _plus[1]->setPos(App::instance().getWindowSize().cx - ((kNumSize.x * _windowScl) * 2.f), windowSizeHalf.y);
   _plus[1]->setNumU(11);
@@ -105,12 +109,12 @@ bool GuiManager::init(EventManager* eventManager)
   _plus[1]->setColor(kPLAYER_COLOR[1]);
   this->addChild(_plus[1]);
 
-  _plusNum[0] = NumberSprite::create(1, "./data/texture/num2.png");
+  _plusNum[0] = NumberSprite::create(1, "./data/texture/num_02.png");
   _plusNum[0]->setSize(kNumSize.x * _windowScl, kNumSize.y * _windowScl);
   _plusNum[0]->setPos((kNumSize.x * _windowScl) * 2.f, windowSizeHalf.y);
   this->addChild(_plusNum[0]);
 
-  _plusNum[1] = NumberSprite::create(1, "./data/texture/num2.png");
+  _plusNum[1] = NumberSprite::create(1, "./data/texture/num_03.png");
   _plusNum[1]->setSize(kNumSize.x, kNumSize.y);
   _plusNum[1]->setPos(App::instance().getWindowSize().cx - (kNumSize.x * _windowScl), windowSizeHalf.y);
   this->addChild(_plusNum[1]);
@@ -118,7 +122,7 @@ bool GuiManager::init(EventManager* eventManager)
   _numSpriteScl[0] = _numSpriteScl[1] = 1.f;
 
   // タイマー
-  _time._sprite = NumberSprite::create(2, "./data/texture/num2.png");
+  _time._sprite = NumberSprite::create(2, "./data/texture/num_01.png");
   _time._sprite->setSize(kTIME_SIZE.x * _windowScl, kTIME_SIZE.y * _windowScl);
   _time._sprite->setColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
   _time._sprite->setNumber(GameConfig::kONE_ROUND_TIME);

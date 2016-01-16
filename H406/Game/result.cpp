@@ -40,7 +40,7 @@ bool Result::init() {
 
   _winSprite = Sprite2D::create();
   _winSprite->setSize(0.0f,0.0f);
-  _winSprite->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.45f);
+  _winSprite->setPos(App::instance().getWindowSize().cx * 0.5f, App::instance().getWindowSize().cy * 0.5f);
   _winSprite->setColor(D3DXCOLOR(1, 1, 1, 1));
   this->addChild(_winSprite);
   _winSpriteScl = 0.0f;
@@ -93,7 +93,7 @@ bool Result::init() {
 //  App::instance().getSound()->load("./data/sound/se/system_ok.wav");
   App::instance().getSound()->play("./data/sound/bgm/game_main.wav",true);
 
-  BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveResult);
+  BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveResult, &_winPlayerId);
 
   return true;
 }

@@ -144,9 +144,6 @@
     <ClInclude Include="fxaa.h">
       <Filter>effect</Filter>
     </ClInclude>
-    <ClInclude Include="SelectScene.h">
-      <Filter>select</Filter>
-    </ClInclude>
     <ClInclude Include="colPlayer.h">
       <Filter>system\collision</Filter>
     </ClInclude>
@@ -185,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="gameConfig.h">
       <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectScene.h">
+      <Filter>select</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -246,9 +246,6 @@
     <ClCompile Include="fxaa.cpp">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="SelectScene.cpp">
-      <Filter>select</Filter>
-    </ClCompile>
     <ClCompile Include="colPlayer.cpp">
       <Filter>system\collision</Filter>
     </ClCompile>
@@ -278,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="shadow.cpp">
       <Filter>object\shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectScene.cpp">
+      <Filter>select</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

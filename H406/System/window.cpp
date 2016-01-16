@@ -188,7 +188,6 @@ int Window::run() {
         ++nCountFrames;
       }
       else {
-        Sleep(0);
       }
     }
   }

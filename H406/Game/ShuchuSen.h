@@ -21,6 +21,7 @@ public:
   bool init(const char* imageName);
   void update();
   void uninit();
+  void setVisible(bool visible){ _sprite->setVisible(visible); }
 
 private:
   Sprite2D* _sprite;

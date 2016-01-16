@@ -48,6 +48,7 @@ private:
   int _bultime;
   int _nextModeTime;
   int _mapToTime; // カウントアップに使う
+  int _gameLoopFrame; // 音同期用のフレームカウンタ
 
   Player* _player[kPlayerNum];
   CameraBace* _playerCam[kPlayerNum];

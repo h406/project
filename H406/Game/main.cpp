@@ -23,7 +23,8 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int) {
   const int windowWidth  = int(1280 * 0.5f);
   const int windowHeight = int(720  * 0.5f);
   //App& app = App::instance(windowWidth, windowHeight);
-  App& app = App::instance(1280, 720);
+  //App& app = App::instance(1280, 720);
+  App& app = App::instance(1920, 1080);
 
   // ƒ^ƒCƒgƒ‹
   app.setTitle("H406");
