@@ -20,7 +20,7 @@
 #include "ShuchuSen.h"
 
 namespace{
-  const Vec2 kPlayerSpriteSIze = Vec2(222.0f, 512.0f) * 1.2f;
+  const Vec2 kPlayerSpriteSIze = Vec2(222.0f, 512.0f) * 1.3f;
 }
 
 //==============================================================================
@@ -60,10 +60,10 @@ bool Result::init() {
   const int win[2] = { DataManager::instance().getData()->getPlayerRoundWin(0),
                        DataManager::instance().getData()->getPlayerRoundWin(1) };
   if (win[0] >= win[1]){
-    _winSprite->setTexture("./data/texture/win_00.png");
+    _winSprite->setTexture("./data/texture/win_0.png");
   } else{
     _winPlayerId = 1;
-    _winSprite->setTexture("./data/texture/win_01.png");
+    _winSprite->setTexture("./data/texture/win_1.png");
   }
 
   // ƒvƒŒƒCƒ„[

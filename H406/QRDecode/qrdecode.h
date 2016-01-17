@@ -24,6 +24,7 @@ public:
 
   const std::string& getString() { return _string; }
   void clear(){ _string.clear(); }
+  void charSet(const char* str){ _string = str; }
 
 private:
   // カメラからのビデオキャプチャを初期化

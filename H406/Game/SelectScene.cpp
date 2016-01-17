@@ -19,7 +19,7 @@
 
 #include "../QRDecode/qrdecode.h"
 
-#define _QR_DISABLE__
+//#define _QR_DISABLE__
 #define _SIMPLE_SELECT__
 #define _DEBUG_MODEL__
 
@@ -172,7 +172,6 @@ bool SelectScene::init() {
 #else
 #endif
 
-
 #ifndef _QR_DISABLE__
   _isEnd = new bool;
   *_isEnd = false;
@@ -185,6 +184,7 @@ bool SelectScene::init() {
     SafeDelete(isEnd);
   },_isEnd,_QRreader);
   _QRreader->clear();
+  _QRreader->charSet("9");
 #endif
 
   _oji = Sprite2D::create("./data/texture/vs_oji.png");
@@ -407,6 +407,12 @@ void SelectScene::update() {
       // 次のプレイヤー
       _curSelectPlayer++;
       if (_curSelectPlayer > 1) _curSelectPlayer = 1;
+
+      // QRのクリア
+#ifndef _QR_DISABLE__
+      _QRreader->clear();
+      _QRreader->charSet("9");
+#endif
 
       // サウンド
       App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
@@ -649,6 +655,8 @@ void SelectScene::ReadQR(int playerID) {
 
   if (isRead){
     _QRreader->clear();
+    _QRreader->charSet("9");
+
     _mode = (SELECT_MODE)((int)_mode + 1);
     App::instance().getSound()->play("./data/sound/se/qr_ok.wav", false);
   }
