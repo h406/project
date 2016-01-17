@@ -19,7 +19,7 @@
 
 #include "../QRDecode/qrdecode.h"
 
-//#define _QR_DISABLE__
+#define _QR_DISABLE__
 #define _SIMPLE_SELECT__
 #define _DEBUG_MODEL__
 
@@ -187,6 +187,7 @@ bool SelectScene::init() {
   _QRreader->charSet("9");
 #endif
 
+  // VS‰æ–Ê
   _oji = Sprite2D::create("./data/texture/vs_oji.png");
   _oji->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
   _oji->setPos(App::instance().getWindowSize().cx*0.5f,-App::instance().getWindowSize().cy*0.5f);
@@ -197,8 +198,9 @@ bool SelectScene::init() {
   _oba->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
   this->addChild(_oba);
 
+  const Vec2 kVsSize = Vec2(1920.0f, 1080.0f) * 0.43f;
   _vs = Sprite2D::create("./data/texture/vs.png");
-  _vs->setSize((float)App::instance().getWindowSize().cx * 0.5f, (float)App::instance().getWindowSize().cy * 0.5f);
+  _vs->setSize(kVsSize.x * _windowScl, kVsSize.y * _windowScl);
   _vs->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
   this->addChild(_vs);
 
@@ -287,11 +289,13 @@ void SelectScene::update() {
   // UI QR or ƒiƒV
   if(_mode == SELECT_MODE::PLAYER1_SELECT || _mode == SELECT_MODE::PLAYER2_SELECT) {
     _back->setColor(color + (D3DXCOLOR(1,1,1,1) - color) * 0.1f);
-    _waku->setColor(wakuColor + (kPlayerColor[_curSelectPlayer] - wakuColor) * 0.1f);
+//    _waku->setColor(wakuColor + (kPlayerColor[_curSelectPlayer] - wakuColor) * 0.1f);
+    _waku->setColor(wakuColor + (D3DXCOLOR(1, 1, 1, 1) - wakuColor) * 0.1f);
   } else {
     const D3DXCOLOR col = kPlayerColor[_curSelectPlayer];
     _back->setColor(color + (D3DXCOLOR(1,1,1,0) - color) * 0.1f);
-    _waku->setColor(wakuColor + (D3DXCOLOR(col.r, col.g, col.b, 0) - wakuColor) * 0.1f);
+//    _waku->setColor(wakuColor + (D3DXCOLOR(col.r, col.g, col.b, 0) - wakuColor) * 0.1f);
+    _waku->setColor(wakuColor + (D3DXCOLOR(1, 1, 1, 0) - wakuColor) * 0.1f);
   }
 #endif
 
@@ -315,7 +319,7 @@ void SelectScene::update() {
 
   // UI Touch
   if (_mode == SELECT_MODE::PLAYER1_SHOW || _mode == SELECT_MODE::PLAYER2_SHOW) {
-    if (_fspeed < 0.035f){
+    if (_fspeed < 0.1f){
       _touchFrame += 0.01f;
       const auto col = kTouchColor[_curSelectPlayer];
       _touch->setColor(D3DXCOLOR(col.x, col.y, col.z, min(1.f, sinf(_touchFrame * 10) * 15.f)));
@@ -618,7 +622,8 @@ void SelectScene::SelectQR(int playerID) {
   }
 
   f += 0.1f;
-  const D3DXCOLOR col = kPlayerColor[_curSelectPlayer];
+//  const D3DXCOLOR col = kPlayerColor[_curSelectPlayer];
+  const D3DXCOLOR col = D3DXCOLOR(1,1,1,1);
   _waku->setColor(D3DXCOLOR(col.r, col.g, col.b, min(col.a, sinf(f) * 10.f)));
 #endif
 }
