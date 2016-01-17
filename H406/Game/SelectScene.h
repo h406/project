@@ -59,6 +59,7 @@ private:
   Sprite2D* _nowReading;
   Sprite2D* _touch;
   Sprite2D* _touchVs;
+  Sprite2D* _simpleTouch;
 
   SELECT_MODE _mode;
 
@@ -76,9 +77,10 @@ private:
   int _backTex[2];
   int _backTexPlayer[2];
   float _windowScl;
-  float _touchFrame;
   float _nowReadingFrame;
+  float _touchFrame;
   float _touchVsFrame;
+  float _touchSimFrame;
 
   XFileObject* _stickLayer;
   XFileObject* _stickHandlePlayer[2];

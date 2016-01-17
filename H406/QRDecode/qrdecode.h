@@ -23,6 +23,7 @@ public:
   void update();
 
   const std::string& getString() { return _string; }
+  void clear(){ _string.clear(); }
 
 private:
   // カメラからのビデオキャプチャを初期化
