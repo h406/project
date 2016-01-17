@@ -82,9 +82,9 @@ bool GuiManager::init(EventManager* eventManager)
   _gaugeBase->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
   _gaugeLayer->addChild(_gaugeBase);
 
-  // ラウンド
-  const Vec2 kGEAR_SIZE = Vec2(1920, 480.f) * 0.08f;
-  _gaugeRound = Sprite2D::create("./data/texture/round1.png");
+  // ラウンド文字
+  const Vec2 kGEAR_SIZE = Vec2(192, 48.f) * 0.9f;
+  _gaugeRound = Sprite2D::create("./data/texture/mini_round1.png");
   _gaugeRound->setSize(kGEAR_SIZE.x * _windowScl, kGEAR_SIZE.y * _windowScl);
   _gaugeRound->setPos(0.0f, -210.0f * _windowScl);
   _gaugeLayer->addChild(_gaugeRound);
@@ -129,16 +129,8 @@ bool GuiManager::init(EventManager* eventManager)
   _time._scl = 1.0f;
   _gaugeLayer->addChild(_time._sprite);
 
-  // ラウンド
-  //_roundNum._sprite = NumberSprite::create(1, "./data/texture/num2.png");
-  //_roundNum._sprite->setSize(kROUND_SIZE.x * _windowScl, kROUND_SIZE.y * _windowScl);
-  //_roundNum._sprite->setColor(D3DXCOLOR(1.0f, 0.5f, 0.2f, 1.0f));
-  //_roundNum._sprite->setNumber(1);
-  //_roundNum._sprite->setPos(90.0f * _windowScl, -312.0f * _windowScl);
-  //_roundNum._scl = 1.0f;
-  //_gaugeLayer->addChild(_roundNum._sprite);
-
-  const Vec2 kROUND_ICON_SIZE = Vec2(512.0f, 512.0f) * 0.1f;
+  // ラウンドのアイコン
+  const Vec2 kROUND_ICON_SIZE = Vec2(512.0f, 512.0f) * 0.095f;
   _roundIcon = RoundIcon::create(kROUND_ICON_SIZE.x * _windowScl, kROUND_ICON_SIZE.y * _windowScl);
   _roundIcon->setTexture(0, "./data/texture/win_icon.png");
   _roundIcon->setTexture(1, "./data/texture/win_icon.png");
@@ -470,11 +462,11 @@ void GuiManager::EventListener(EventData* eventData) {
 
   case EventList::NEXT_ROUND:
     if (DataManager::instance().getData()->getRound() == 1){
-      _gaugeRound->setTexture("./data/texture/round1.png");
+      _gaugeRound->setTexture("./data/texture/mini_round1.png");
     } else if (DataManager::instance().getData()->getRound() == 2){
-      _gaugeRound->setTexture("./data/texture/round2.png");
+      _gaugeRound->setTexture("./data/texture/mini_round2.png");
     } else {
-      _gaugeRound->setTexture("./data/texture/round3.png");
+      _gaugeRound->setTexture("./data/texture/mini_round3.png");
     }
 
     _time._sprite->setVisible(true);

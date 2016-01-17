@@ -197,9 +197,9 @@ void Stage::seekFiledMapIdNoVisible(FIELD_ID id)
 
         _fieldMapAdd[x][y]->setVisible(true);
         if (id == FIELD_ID::PLAYER_1){
-          _fieldMapAdd[x][y]->setColor(D3DXCOLOR(0.2f, 0.5f, 1, 0.6f));
+          _fieldMapAdd[x][y]->setColor(D3DXCOLOR(0.2f, 0.5f, 1, 0.55f));
         } else if (id == FIELD_ID::PLAYER_2){
-          _fieldMapAdd[x][y]->setColor(D3DXCOLOR(1, 1, 0.3f, 0.6f));
+          _fieldMapAdd[x][y]->setColor(D3DXCOLOR(1, 1, 0.3f, 0.55f));
         }
         return;
       }

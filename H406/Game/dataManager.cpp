@@ -55,6 +55,21 @@ void DataManager::init()
 }
 
 //==============================================================================
+// setupPlayerStatus
+//------------------------------------------------------------------------------
+void DataManager::setupPlayerStatus(void){
+  for (int i = 0; i < GameConfig::kPLAYER_MAX; i++){
+    _data->setPlayerDripNum(i, 0);
+    _data->setPlayerRoundWin(i, 0);
+    _data->setPlayerMapNum(i, 0);
+
+    const auto& barStatus = PlayerStatus::kStickBarStatus[(int)_data->getPlayerStatus(i)._barID];
+    const auto& handStatus = PlayerStatus::kStickHandleStatus[(int)_data->getPlayerStatus(i)._handleID];
+    _data->setPlayerMaxDripNum(i, barStatus.maxdripNum + handStatus.maxdripNum);
+  }
+}
+
+//==============================================================================
 // setPlayerStatus
 //------------------------------------------------------------------------------
 void DataManager::setPlayerStatus(int playerId, int stickId){

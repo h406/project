@@ -52,18 +52,18 @@ namespace PlayerStatus{
   const Status kStickBarStatus[] = {
     //                          重さ   慣性   速度   塗量
     {(int)StickBar::Normal,     0.5f,  0.2f,  5.0f,  0,"./data/model/bar.x"},
-    {(int)StickBar::Elephant,   1.0f,  0.9f,  5.0f,  0,"./data/model/Elephant_bar.x"},
-    {(int)StickBar::Bird,       0.2f,  0.15f, 7.0f,  0,"./data/model/Bird_bar.x"},
-    {(int)StickBar::Dolphin,    0.2f,  0.3f,  4.7f,  0,"./data/model/Dolphin_bar.x"},
+    {(int)StickBar::Elephant,   1.0f,  0.9f,  4.0f,  0,"./data/model/Elephant_bar.x"},
+    {(int)StickBar::Bird,       0.2f,  0.2f,  6.5f,  0,"./data/model/Bird_bar.x"},
+    {(int)StickBar::Dolphin,    0.2f,  0.35f, 4.5f,  0,"./data/model/Dolphin_bar.x"},
   };
 
   // ステータスリスト
   const Status kStickHandleStatus[] = {
     //                          重さ   慣性   速度   塗量
     { (int)StickHandle::Normal, 0.5f,  1.0f,  5.0f,  9, "./data/model/hand.x" },
-    {(int)StickHandle::Elephant,1.f,   1.0f,  5.0f,  9,"./data/model/Elephant_handle.x"},
-    {(int)StickHandle::Bird,    0.3f,  0.3f,  7.0f,  8,"./data/model/Bird_handle.x"},
-    {(int)StickHandle::Dolphin, 0.5f,  0.5f,  4.7f,  7,"./data/model/Dolphin_handle.x"},
+    {(int)StickHandle::Elephant,1.f,   0.9f,  2.8f,  9,"./data/model/Elephant_handle.x"},
+    {(int)StickHandle::Bird,    0.3f,  0.25f, 6.3f,  7,"./data/model/Bird_handle.x"},
+    {(int)StickHandle::Dolphin, 0.5f,  0.35f, 4.5f,  6,"./data/model/Dolphin_handle.x"},
   };
 
   const unsigned int kStickBarNum = (int)StickBar::Max;

@@ -44,7 +44,7 @@ bool ItemManhole::init(){
   auto shadow = Shadow::create();
   shadow->setColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.55f));
   shadow->setScl(1.2f, 1.2f, 1.2f);
-  shadow->setOffsetY(0.4f);
+  shadow->setOffsetY(0.35f);
   this->addChild(shadow);
 
   return true;

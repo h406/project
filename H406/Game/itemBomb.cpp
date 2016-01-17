@@ -147,6 +147,8 @@ void ItemBomb::use(){
   _effectID = _effect->play("Bomchuu.efk",this->getPos());
   _effect->setEffectScl(_effectID, Vec3(1.5f,1.5f,1.5f));
 
+  App::instance().getSound()->play("./data/sound/se/item_bomb.wav", false);
+
   if (_event){
     _event->dispatchEvent(EventList(int(EventList::PLAYER_1_DRIP_RESET) + _owner->getPlayerID()), nullptr);
   }

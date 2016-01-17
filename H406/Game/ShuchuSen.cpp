@@ -16,6 +16,7 @@
 bool ShuchuSen::init(const char* imageName) {
   _sprite = Sprite2D::create(imageName);
   _sprite->setSize(1.f,1.f);
+  _sprite->setColor(D3DXCOLOR(1.f, 1.f, 1.f, 0.5f));
   this->addChild(_sprite);
   _frame = 0;
   return true;

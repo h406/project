@@ -69,6 +69,7 @@ public:
 
   void setEventManager(EventManager* eventManager);
   void setPlayerStatus(int playerId, int stickId);
+  void setupPlayerStatus(void);
 
   Data* getData() { return _data; }
   void event(EventData* eventData);

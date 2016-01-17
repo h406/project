@@ -52,10 +52,13 @@ private:
   CameraBace* _camera;
   CameraBace* _playerCamera;
 
+  Sprite2D* _backPlayer;
   Sprite2D* _back;
   Sprite2D* _waku;
 
   Sprite2D* _nowReading;
+  Sprite2D* _touch;
+  Sprite2D* _touchVs;
 
   SELECT_MODE _mode;
 
@@ -71,7 +74,11 @@ private:
   bool _select;
 
   int _backTex[2];
+  int _backTexPlayer[2];
   float _windowScl;
+  float _touchFrame;
+  float _nowReadingFrame;
+  float _touchVsFrame;
 
   XFileObject* _stickLayer;
   XFileObject* _stickHandlePlayer[2];

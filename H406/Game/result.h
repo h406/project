@@ -42,6 +42,7 @@ private:
   float _windowScl;
   float _frameCount;
   int _winPlayerId;
+  int _resultFrame;
   bool _isVisible;
 };
 

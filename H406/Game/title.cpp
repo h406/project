@@ -64,9 +64,10 @@ void Title::update() {
 
   _touch_start->setColor(D3DXCOLOR(1,1,1,min(1.f,sinf(f*10) * 10.f)));
 
-  if (App::instance().getInput()->isTrigger(0, VK_INPUT::_1) && _inputPermit == true) {
+  if ((App::instance().getInput()->isTrigger(0, VK_INPUT::_1) || App::instance().getInput()->isTrigger(1, VK_INPUT::_1))
+       && _inputPermit == true) {
     BaceScene::instance()->setCurScene(SelectScene::create());
-    App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
+    App::instance().getSound()->play("./data/sound/se/title_start.wav", false);
   }
 
   _inputPermit = true;

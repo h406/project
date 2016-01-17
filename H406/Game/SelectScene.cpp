@@ -19,10 +19,12 @@
 
 #include "../QRDecode/qrdecode.h"
 
-//#define _QR_DISABLE__
+#define _QR_DISABLE__
+#define _DEBUG_MODEL__
 
 namespace{
   const D3DXCOLOR kPlayerColor[2] = { D3DXCOLOR(0.2f, 0.5f, 1, 0.6f), D3DXCOLOR(1, 0.8f, 0.3f, 0.6f) };
+  const Vec3 kTouchColor[2] = { Vec3(80, 170, 255) / 256, Vec3(255, 215, 60) / 256};
 
   const float kModelLength       = 200.0;
   const float kModelLengthSpeed  = 1.2f;
@@ -30,8 +32,11 @@ namespace{
   const float kFspeedAdd         = 0.0023f;
 
   const Vec3 kModelPos           = Vec3(250.f,0,0);
-  const Vec3 kMainCameraPos      = Vec3(0, 120.f, 130.f);
-  const Vec3 kPlayerCameraOffset = Vec3(100.f, 0.f, 100.f);
+  const Vec3 kMainCameraPos      = Vec3(0, 110.f, 75.f);
+//  const Vec3 kPlayerCameraOffset = Vec3(110.f, 0.f, 110.f);
+  const Vec3 kPlayerCameraOffset = Vec3(100.f, 0.f, 120.f);
+
+  const int kDebugStickID[2]     = { 2, 3 };
 }
 
 //==============================================================================
@@ -46,8 +51,8 @@ bool SelectScene::init() {
   DataManager::instance().init();
 
   _curSelectPlayer = 0;
-  _playerStickID[0] = 1;
-  _playerStickID[1] = 2;
+  _playerStickID[0] = 3;
+  _playerStickID[1] = 1;
   _inputPermit = false;
 
   _modelLength = kModelLength;
@@ -56,6 +61,9 @@ bool SelectScene::init() {
   _frame = 0;
   _gameF = 0;
   _stickDecision = false;
+  _touchFrame = -D3DX_PI * 0.5f;
+  _touchVsFrame = -D3DX_PI * 0.5f;
+  _nowReadingFrame = 0;
 
   _stickLayer = nullptr;
   for (int i = 0; i < 2; i++){
@@ -93,7 +101,7 @@ bool SelectScene::init() {
   _camera = camera->createCamera();
 //  _camera->setPosP({ 0.f, 100.f, 400.f });
   _camera->setPosP({ 0.f, kMainCameraPos.y, kModelPos.x + kMainCameraPos.z });
-  _camera->setPosR({ kModelPos.x, 20, 0 });
+  _camera->setPosR({ kModelPos.x, 40, 0 });
 
   _playerCamera = camera->createCamera();
   _playerCamera->setPosP({ 0, 0, 0 });
@@ -112,25 +120,43 @@ bool SelectScene::init() {
   _waku->setColor(D3DXCOLOR(1, 1, 1, 0));
   this->addChild(_waku);
 
-  _back = Sprite2D::create("./data/texture/select_01.png");
+  _backPlayer = Sprite2D::create("./data/texture/select_player_01.png");
+  _backPlayer->setSize((float)App::instance().getWindowSize().cx, (float)App::instance().getWindowSize().cy);
+  _backPlayer->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy*0.5f);
+  _backPlayer->setColor(D3DXCOLOR(1, 1, 1, 0));
+  this->addChild(_backPlayer);
+
+  _back = Sprite2D::create("./data/texture/select_001.png");
   _back->setSize((float)App::instance().getWindowSize().cx,(float)App::instance().getWindowSize().cy);
   _back->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
   _back->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_back);
 
   // てくすちゃーよみこみ
-  _backTex[0] = App::instance().getRenderer()->getTexture()->createTexture("./data/texture/select_01.png");
-  _backTex[1] = App::instance().getRenderer()->getTexture()->createTexture("./data/texture/select_02.png");
+  _backTex[0] = App::instance().getRenderer()->getTexture()->createTexture("./data/texture/select_001.png");
+  _backTex[1] = App::instance().getRenderer()->getTexture()->createTexture("./data/texture/select_002.png");
+  _backTexPlayer[0] = App::instance().getRenderer()->getTexture()->createTexture("./data/texture/select_player_01.png");
+  _backTexPlayer[1] = App::instance().getRenderer()->getTexture()->createTexture("./data/texture/select_player_02.png");
   App::instance().getRenderer()->getTexture()->createTexture("./data/texture/nasi_waku_00.png");
 
   _mode = SELECT_MODE::PLAYER1_SELECT;
   _select = true;
 
+  // now reading
+  const Vec2 kNowReadingSize = Vec2(1920.0f, 480.0f) * 0.35f;
   _nowReading = Sprite2D::create("./data/texture/now_reading.png");
-  _nowReading->setSize(670 * _windowScl, 101 * _windowScl);
+  _nowReading->setSize(kNowReadingSize.x * _windowScl, kNowReadingSize.y * _windowScl);
   _nowReading->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
   _nowReading->setColor(D3DXCOLOR(1,1,1,0));
   this->addChild(_nowReading);
+
+  // touch
+  const Vec2 kTouchSize = Vec2(400.0f, 140.0f) * 0.8f;
+  _touch = Sprite2D::create("./data/texture/touch_00.png");
+  _touch->setSize(kTouchSize.x * _windowScl, kTouchSize.y * _windowScl);
+  _touch->setPos(App::instance().getWindowSize().cx - ((kTouchSize.x * _windowScl) * 0.65f),App::instance().getWindowSize().cy -((kTouchSize.y * _windowScl) * 0.7f));
+  _touch->setColor(D3DXCOLOR(1,1,1,0));
+  this->addChild(_touch);
 
 #ifndef _QR_DISABLE__
   _isEnd = new bool;
@@ -160,12 +186,19 @@ bool SelectScene::init() {
   _vs->setPos(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*1.5f);
   this->addChild(_vs);
 
+  // touchVS
+  const Vec2 kTouchVsSize = Vec2(906.0f, 140.0f) * 0.5f;
+  _touchVs = Sprite2D::create("./data/texture/touch_start.png");
+  _touchVs->setSize(kTouchVsSize.x * _windowScl, kTouchVsSize.y * _windowScl);
+  _touchVs->setPos(App::instance().getWindowSize().cx*0.5f, App::instance().getWindowSize().cy - ((kTouchVsSize.y * _windowScl) * 0.7f));
+  _touchVs->setColor(D3DXCOLOR(1, 1, 1, 0));
+  this->addChild(_touchVs);
+
   // サウンドのロード
   // SE
-//  App::instance().getSound()->load("./data/sound/se/fanfare.wav");
-//  App::instance().getSound()->load("./data/sound/se/rod_select.wav");
+  App::instance().getSound()->load("./data/sound/se/system_ok.wav");
   App::instance().getSound()->load("./data/sound/se/qr_ok.wav");
-//  App::instance().getSound()->load("./data/sound/se/vs.wav");
+  App::instance().getSound()->load("./data/sound/se/item_bomb.wav");
 
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveSelect);
 
@@ -177,8 +210,11 @@ bool SelectScene::init() {
 //------------------------------------------------------------------------------
 void SelectScene::update() {
   const auto color = _back->getColor();
+  const auto colorPlayer = _backPlayer->getColor();
   const auto wakuColor = _waku->getColor();
+  const auto touchColor = _touch->getColor();
 
+  // 杖系
   _gameF += _fspeed;
 
   for (int i = 0; i < 3; i++) {
@@ -218,31 +254,52 @@ void SelectScene::update() {
     _stickHandlePlayer[1]->setRotY(rot);
   }
 
-  // UI系
+  // UI QR or ナシ
   if(_mode == SELECT_MODE::PLAYER1_SELECT || _mode == SELECT_MODE::PLAYER2_SELECT) {
     _back->setColor(color + (D3DXCOLOR(1,1,1,1) - color) * 0.1f);
     _waku->setColor(wakuColor + (kPlayerColor[_curSelectPlayer] - wakuColor) * 0.1f);
-  }
-  else {
+  } else {
     const D3DXCOLOR col = kPlayerColor[_curSelectPlayer];
     _back->setColor(color + (D3DXCOLOR(1,1,1,0) - color) * 0.1f);
     _waku->setColor(wakuColor + (D3DXCOLOR(col.r, col.g, col.b, 0) - wakuColor) * 0.1f);
   }
 
+  // UI 選択中プレイヤー
+  if (_mode != SELECT_MODE::Production || _mode != SELECT_MODE::MAX) {
+    _backPlayer->setColor(colorPlayer + (D3DXCOLOR(1, 1, 1, 1) - colorPlayer) * 0.1f);
+  } else {
+    _backPlayer->setColor(colorPlayer + (D3DXCOLOR(1, 1, 1, 0) - colorPlayer) * 0.1f);
+  }
+
+  // UI NowReading
   if(_mode == SELECT_MODE::PLAYER1_QR || _mode == SELECT_MODE::PLAYER2_QR) {
     static float f = 0;
     f += 0.01f;
+    _nowReadingFrame += 0.01f;
     _nowReading->setColor(D3DXCOLOR(1,1,1,1));
-    _nowReading->setRotY(f);
-  }
-  else {
+    _nowReading->setRotY(_nowReadingFrame);
+  } else {
     _nowReading->setColor(D3DXCOLOR(1,1,1,0));
+  }
+
+  // UI Touch
+  if (_mode == SELECT_MODE::PLAYER1_SHOW || _mode == SELECT_MODE::PLAYER2_SHOW) {
+    if (_fspeed < 0.035f){
+      _touchFrame += 0.01f;
+      const auto col = kTouchColor[_curSelectPlayer];
+      _touch->setColor(D3DXCOLOR(col.x, col.y, col.z, min(1.f, sinf(_touchFrame * 10) * 15.f)));
+    }
+  } else {
+    _touchFrame = -D3DX_PI * 0.5f;
+    const auto col = kTouchColor[_curSelectPlayer];
+    _touch->setColor(touchColor + (D3DXCOLOR(col.x, col.y, col.z, 0) - touchColor) * 0.1f);
   }
 
   // モードの処理
   switch(_mode) {
   case SELECT_MODE::PLAYER1_SELECT:
     _back->setTexture(_backTex[0]);
+    _backPlayer->setTexture(_backTexPlayer[0]);
     SelectQR(0);
     break;
 
@@ -276,8 +333,8 @@ void SelectScene::update() {
       // カメラ
       auto camera = App::instance().getRenderer()->getCamera();
       _playerCamera->setPosP({ kModelPos.x - kPlayerCameraOffset.x, 50.f, kPlayerCameraOffset.z });
-      _playerCamera->setPosR({ kModelPos.x, 50, 0 });
-      camera->setCamera(_playerCamera, 60);
+      _playerCamera->setPosR({ kModelPos.x, 55, 0 });
+      camera->setCamera(_playerCamera, 50);
     }
   }
     break;
@@ -294,10 +351,9 @@ void SelectScene::update() {
       auto camera = App::instance().getRenderer()->getCamera();
 
       // メインカメラ
-//      _camera->setPosP({ 0.f, 100.f, 400.f });
       _camera->setPosP({ 0.f, kMainCameraPos.y, kModelPos.x + kMainCameraPos.z });
-      _camera->setPosR({ -kModelPos.x, 20, 0 });
-      camera->setCamera(_camera, 60);
+      _camera->setPosR({ -kModelPos.x, 40, 0 });
+      camera->setCamera(_camera, 90);
 
       // モデル
       _stickLayer->setPos(Vec3(-kModelPos.x, 0.0f, 0.0f));
@@ -316,12 +372,20 @@ void SelectScene::update() {
 
       // 集中線
       _s->setVisible(false);
+
+      // 次のプレイヤー
+      _curSelectPlayer++;
+      if (_curSelectPlayer > 1) _curSelectPlayer = 1;
+
+      // サウンド
+      App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
     }
   }
     break;
 
   case SELECT_MODE::PLAYER2_SELECT:
     _back->setTexture(_backTex[1]);
+    _backPlayer->setTexture(_backTexPlayer[1]);
     SelectQR(1);
     break;
 
@@ -352,8 +416,8 @@ void SelectScene::update() {
       // カメラ
       auto camera = App::instance().getRenderer()->getCamera();
       _playerCamera->setPosP({ -(kModelPos.x - kPlayerCameraOffset.x), 50.f, kPlayerCameraOffset.z });
-      _playerCamera->setPosR({ -kModelPos.x, 50, 0 });
-      camera->setCamera(_playerCamera, 60);
+      _playerCamera->setPosR({ -kModelPos.x, 55, 0 });
+      camera->setCamera(_playerCamera, 50);
     }
   }
     break;
@@ -368,26 +432,41 @@ void SelectScene::update() {
 
       // カメラ
       auto camera = App::instance().getRenderer()->getCamera();
-      _camera->setPosP({ -300.f, 1000.f, 0.f });
+      _camera->setPosP({ -300.f, 1300.f, 0.f });
       _camera->setPosR({ 0, 0, 0 });
       camera->setCamera(_camera, 60);
+
+      // サウンド
+      App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
     }
   }
     break;
 
   case SELECT_MODE::Production:
     {
-      if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1)) {
+      if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1) || App::instance().getInput()->isTrigger(1,VK_INPUT::_1)) {
+        App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
         _mode = (SELECT_MODE)((int)_mode + 1);
       }
       const Vec2 pos = Vec2(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
       _oji->setPos(_oji->getPos() + (pos - _oji->getPos()) * 0.2f);
       _oba->setPos(_oba->getPos() + (pos - _oba->getPos()) * 0.2f);
       _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.1f);
-    }
+
+      // UI Touch
+      const float distance = abs(pos.y - _vs->getPos().y);
+      if (distance < 5.0){
+        _touchVsFrame += 0.01f;
+        _touchVs->setColor(D3DXCOLOR(1, 1, 1, min(1.f, sinf(_touchVsFrame * 10) * 15.f)));
+      }
+  }
     break;
 
   case SELECT_MODE::MAX:
+#ifndef _DEBUG_MODEL__
+    _playerStickID[0] = kDebugStickID[0];
+    _playerStickID[1] = kDebugStickID[1];
+#endif
     // 杖登録
     DataManager::instance().setPlayerStatus(0, _playerStickID[0]);
     DataManager::instance().setPlayerStatus(1, _playerStickID[1]);
@@ -405,6 +484,11 @@ void SelectScene::update() {
 void SelectScene::CreateStick(int playerID, int sticlID)
 {
   if (playerID >= 2 || sticlID >= 4) return;
+
+#ifndef _DEBUG_MODEL__
+  _playerStickID[playerID] = kDebugStickID[playerID];
+  sticlID = kDebugStickID[playerID];
+#endif
 
   auto _effect = BaceScene::instance()->getEffect();
   const auto& barStatus = PlayerStatus::kStickBarStatus[sticlID];
@@ -436,6 +520,8 @@ void SelectScene::CreateStick(int playerID, int sticlID)
 
   _effect->setEffectScl(id, Vec3(1.f, 1.f, 1.f));
   _effect->setEffectScl(id2, Vec3(5.f, 5.f, 5.f));
+
+  App::instance().getSound()->play("./data/sound/se/item_bomb.wav", false);
 }
 
 //==============================================================================
@@ -461,15 +547,19 @@ void SelectScene::SelectQR(int playerID) {
       _playerStickID[playerID] = (rand() % 3) + 1;
     }
 
-    _waku->setTexture("./data/texture/qr_waku_00.png");
+    // 次のモード
     _mode = (SELECT_MODE)((int)_mode + 1 + (_select ? 0 : 1));
+
+    // 設定初期化
+    _waku->setTexture("./data/texture/qr_waku_00.png");
     _select = true;
+    _inputPermit = false;
+    _nowReadingFrame = 0;
     f = D3DX_PI;
 
-    _curSelectPlayer++;
-    if (_curSelectPlayer > 1) _curSelectPlayer = 1;
-    _inputPermit = false;
+    App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
   }
+
   f += 0.1f;
   const D3DXCOLOR col = kPlayerColor[_curSelectPlayer];
   _waku->setColor(D3DXCOLOR(col.r, col.g, col.b, min(col.a, sinf(f) * 10.f)));
@@ -481,23 +571,15 @@ void SelectScene::SelectQR(int playerID) {
 void SelectScene::ReadQR(int playerID) {
 
   if(App::instance().getInput()->isTrigger(playerID,VK_INPUT::_1)) {
-    // とりあえず進む
-    _mode = (SELECT_MODE)((int)_mode + 1);
-
-    // hack
-    // QRが読み込めない場合のキャンセル（前のモードに戻る）
-    //_mode = (SELECT_MODE)((int)_mode - 1);
-    //_inputPermit = false;
+    // 戻る
+    _mode = (SELECT_MODE)((int)_mode - 1);
+    _inputPermit = false;
   }
 
-  // hack
-  // if( QRが読めた場合 ){
-  //   _playerStickID[playerID] = [QRの番号] + 1;
-  //   _mode = (SELECT_MODE)((int)_mode + 1);
-  //}
-
+#ifndef _QR_DISABLE__
   bool isRead = true;
 
+  // 杖選択
   switch (_QRreader->getString().c_str()[0]){
   case '0':
     _playerStickID[playerID] = 1;
@@ -515,7 +597,9 @@ void SelectScene::ReadQR(int playerID) {
 
   if (isRead){
     _mode = (SELECT_MODE)((int)_mode + 1);
+    App::instance().getSound()->play("./data/sound/se/qr_ok.wav", false);
   }
+#endif
 }
 
 //==============================================================================
