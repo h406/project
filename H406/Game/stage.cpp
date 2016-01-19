@@ -9,6 +9,7 @@
 // include
 //******************************************************************************
 #include "stage.h"
+#include "BaceScene.h"
 
 namespace{
   const D3DXCOLOR kColorNone(1.0f, 1.0f, 1.0f, 1.0f);
@@ -207,6 +208,27 @@ void Stage::seekFiledMapIdNoVisible(FIELD_ID id)
   }
 }
 
+//==============================================================================
+// seekSetFieldIDtoDrip
+//------------------------------------------------------------------------------
+void Stage::seekSetFieldIDtoDrip(FIELD_ID id){
+  for (int x = 0; x < kNUM_X; x++) {
+    for (int y = 0; y < kNUM_Y; y++) {
+      if (_field[x][y] == id){
+        _field[x][y] = FIELD_ID::DRIP;
+        _fieldMap[x][y]->setAnimID(2);
+        _fieldMap[x][y]->setColor(kColorDrip);
+        _fieldMapAdd[x][y]->setVisible(false);
+
+        auto _effect = BaceScene::instance()->getEffect();
+        const Vec3 pos = Vec3(_fieldMap[x][y]->getPos().x, 0.0f, _fieldMap[x][y]->getPos().z);
+        int id = _effect->play("stage_lightup.efk", pos);
+        _effect->setEffectScl(id, Vec3(50, 50, 50));
+        return;
+      }
+    }
+  }
+}
 
 
 //EOF

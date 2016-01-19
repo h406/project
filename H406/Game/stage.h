@@ -47,6 +47,10 @@ public:
   // 指定したIDのマップ光らせるやつ
   void seekFiledMapIdNoVisible(FIELD_ID id);
 
+  // 指定したIDのマップを検索してどれか1つを補充マスに変更する
+  void seekSetFieldIDtoDrip(FIELD_ID id);
+
+
   // updateのON/OFF
   bool isPlay(){ return _play; }
   void setPlay(bool val){ _play = val; }

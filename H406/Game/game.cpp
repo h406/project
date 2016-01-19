@@ -314,8 +314,24 @@ void Game::update() {
 
     // finish
     if(DataManager::instance().getData()->getTime() == 60){
+
+      // ƒhƒ[–³—–î—‰ñ”ð
+      const int draw_Judge[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
+                                  _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+
+      if (draw_Judge[0] == draw_Judge[1] && (draw_Judge[0] != 0 && draw_Judge[1] != 0)){
+        const int win = rand() % 2;
+        if (win == 0){
+          _stage->seekSetFieldIDtoDrip(Stage::FIELD_ID::PLAYER_2);
+        }else{
+          _stage->seekSetFieldIDtoDrip(Stage::FIELD_ID::PLAYER_1);
+        }
+      }
+
+      // ’Êí‚Ì”»’è
       const int player_map_num[2] = { _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_1),
                                       _stage->getFieldMapNum(Stage::FIELD_ID::PLAYER_2) };
+
       if (player_map_num[0] < player_map_num[1]){
         _mapToTime = 3 * player_map_num[1];
       }else{

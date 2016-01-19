@@ -152,7 +152,7 @@ bool SelectScene::init() {
   this->addChild(_nowReading);
 
   // touch
-  const Vec2 kTouchSize = Vec2(400.0f, 140.0f) * 1.0f;
+  const Vec2 kTouchSize = Vec2(400.0f, 140.0f) * 0.9f;
   _touch = Sprite2D::create("./data/texture/touch_00.png");
   _touch->setSize(kTouchSize.x * _windowScl, kTouchSize.y * _windowScl);
   _touch->setPos(App::instance().getWindowSize().cx - ((kTouchSize.x * _windowScl) * 0.65f),App::instance().getWindowSize().cy -((kTouchSize.y * _windowScl) * 0.7f));
@@ -217,6 +217,7 @@ bool SelectScene::init() {
   App::instance().getSound()->load("./data/sound/se/system_ok.wav");
   App::instance().getSound()->load("./data/sound/se/qr_ok.wav");
   App::instance().getSound()->load("./data/sound/se/item_bomb.wav");
+  App::instance().getSound()->load("./data/sound/se/VS.wav");
 
   BaceScene::instance()->getLedConnect()->sendEvent(LedEvent::MoveSelect);
 
@@ -482,6 +483,7 @@ void SelectScene::update() {
 
       // VSŽ©“®‘JˆÚ
       _frame = 2 * 60;
+      _stickDecision = false;
     }
   }
     break;
@@ -491,7 +493,7 @@ void SelectScene::update() {
       const Vec2 pos = Vec2(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
       _oji->setPos(_oji->getPos() + (pos - _oji->getPos()) * 0.2f);
       _oba->setPos(_oba->getPos() + (pos - _oba->getPos()) * 0.2f);
-      _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.1f);
+      _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.15f);
 
       // UI Touch
       //const float distance = abs(pos.y - _vs->getPos().y);
@@ -500,9 +502,15 @@ void SelectScene::update() {
       //  _touchVs->setColor(D3DXCOLOR(1, 1, 1, min(1.f, sinf(_touchVsFrame * 10) * 15.f)));
       //}
 
+      const float distance = abs(pos.y - _vs->getPos().y);
+      if (distance < 10.0 && _stickDecision == false){
+        _stickDecision = true;
+        App::instance().getSound()->play("./data/sound/se/VS.wav", false);
+      }
+
       if ((App::instance().getInput()->isTrigger(0, VK_INPUT::_1) || App::instance().getInput()->isTrigger(1, VK_INPUT::_1))
         || _frame <= 0) {
-        App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
+//        App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
         _mode = (SELECT_MODE)((int)_mode + 1);
       }
 
