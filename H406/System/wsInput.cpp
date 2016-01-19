@@ -81,10 +81,11 @@ void WsInput::update() {
     }
 #endif
 
-    press[(int)VK_INPUT::LEFT]  = _cavRot[i].x + _recvData[i].rot.x < -0.15f;
-    press[(int)VK_INPUT::RIGHT] = _cavRot[i].x + _recvData[i].rot.x >  0.15f;
-    press[(int)VK_INPUT::DOWN]  = _cavRot[i].y + _recvData[i].rot.y < -0.15f;
-    press[(int)VK_INPUT::UP]    = _cavRot[i].y + _recvData[i].rot.y >  0.15f;
+    const float slope = 0.85f; // 0.15f
+    press[(int)VK_INPUT::LEFT]  = _cavRot[i].x + _recvData[i].rot.x < -slope;
+    press[(int)VK_INPUT::RIGHT] = _cavRot[i].x + _recvData[i].rot.x >  slope;
+    press[(int)VK_INPUT::DOWN]  = _cavRot[i].y + _recvData[i].rot.y < -slope;
+    press[(int)VK_INPUT::UP]    = _cavRot[i].y + _recvData[i].rot.y >  slope;
     press[(int)VK_INPUT::_1]    = _recvData[i].isPush;
 
     for(int nCntKey = 0; nCntKey < 14; nCntKey++) {

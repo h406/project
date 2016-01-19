@@ -19,7 +19,7 @@
 
 #include "../QRDecode/qrdecode.h"
 
-#define _QR_DISABLE__
+//#define _QR_DISABLE__
 #define _SIMPLE_SELECT__
 #define _DEBUG_MODEL__
 
@@ -152,7 +152,7 @@ bool SelectScene::init() {
   this->addChild(_nowReading);
 
   // touch
-  const Vec2 kTouchSize = Vec2(400.0f, 140.0f) * 0.8f;
+  const Vec2 kTouchSize = Vec2(400.0f, 140.0f) * 1.0f;
   _touch = Sprite2D::create("./data/texture/touch_00.png");
   _touch->setSize(kTouchSize.x * _windowScl, kTouchSize.y * _windowScl);
   _touch->setPos(App::instance().getWindowSize().cx - ((kTouchSize.x * _windowScl) * 0.65f),App::instance().getWindowSize().cy -((kTouchSize.y * _windowScl) * 0.7f));
@@ -319,7 +319,7 @@ void SelectScene::update() {
 
   // UI Touch
   if (_mode == SELECT_MODE::PLAYER1_SHOW || _mode == SELECT_MODE::PLAYER2_SHOW) {
-    if (_fspeed < 0.1f){
+    if (_fspeed < 0.25f){
       _touchFrame += 0.01f;
       const auto col = kTouchColor[_curSelectPlayer];
       _touch->setColor(D3DXCOLOR(col.x, col.y, col.z, min(1.f, sinf(_touchFrame * 10) * 15.f)));
@@ -479,27 +479,34 @@ void SelectScene::update() {
 
       // ƒTƒEƒ“ƒh
       App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
+
+      // VSŽ©“®‘JˆÚ
+      _frame = 2 * 60;
     }
   }
     break;
 
   case SELECT_MODE::Production:
     {
-      if(App::instance().getInput()->isTrigger(0,VK_INPUT::_1) || App::instance().getInput()->isTrigger(1,VK_INPUT::_1)) {
-        App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
-        _mode = (SELECT_MODE)((int)_mode + 1);
-      }
       const Vec2 pos = Vec2(App::instance().getWindowSize().cx*0.5f,App::instance().getWindowSize().cy*0.5f);
       _oji->setPos(_oji->getPos() + (pos - _oji->getPos()) * 0.2f);
       _oba->setPos(_oba->getPos() + (pos - _oba->getPos()) * 0.2f);
       _vs->setPos(_vs->getPos() + (pos - _vs->getPos()) * 0.1f);
 
       // UI Touch
-      const float distance = abs(pos.y - _vs->getPos().y);
-      if (distance < 5.0){
-        _touchVsFrame += 0.01f;
-        _touchVs->setColor(D3DXCOLOR(1, 1, 1, min(1.f, sinf(_touchVsFrame * 10) * 15.f)));
+      //const float distance = abs(pos.y - _vs->getPos().y);
+      //if (distance < 5.0){
+      //  _touchVsFrame += 0.01f;
+      //  _touchVs->setColor(D3DXCOLOR(1, 1, 1, min(1.f, sinf(_touchVsFrame * 10) * 15.f)));
+      //}
+
+      if ((App::instance().getInput()->isTrigger(0, VK_INPUT::_1) || App::instance().getInput()->isTrigger(1, VK_INPUT::_1))
+        || _frame <= 0) {
+        App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
+        _mode = (SELECT_MODE)((int)_mode + 1);
       }
+
+      _frame--;
   }
     break;
 
@@ -652,6 +659,9 @@ void SelectScene::ReadQR(int playerID) {
     break;
   case '2':
     _playerStickID[playerID] = 3;
+    break;
+  case '3':
+    _playerStickID[playerID] = 0;
     break;
   default:
     isRead = false;
