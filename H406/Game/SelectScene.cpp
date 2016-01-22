@@ -19,7 +19,7 @@
 
 #include "../QRDecode/qrdecode.h"
 
-//#define _QR_DISABLE__
+#define _QR_DISABLE__
 #define _SIMPLE_SELECT__
 #define _DEBUG_MODEL__
 
@@ -482,7 +482,7 @@ void SelectScene::update() {
       App::instance().getSound()->play("./data/sound/se/system_ok.wav", false);
 
       // VSŽ©“®‘JˆÚ
-      _frame = 2 * 60;
+      _frame = 3 * 60;
       _stickDecision = false;
     }
   }
